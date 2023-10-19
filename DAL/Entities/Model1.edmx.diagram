@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2a06653830a2412bb15cfb1c26157a8b" Name="Diagram1" ZoomLevel="60">
+        <EntityTypeShape EntityType="TMSDbContext.Approve_Status" Width="1.5" PointX="7.75" PointY="6.75" />
+        <EntityTypeShape EntityType="TMSDbContext.AspNet_SqlCacheTablesForChangeNotification" Width="1.5" PointX="2.75" PointY="12.75" />
+        <EntityTypeShape EntityType="TMSDbContext.ASPStateTempApplication" Width="1.5" PointX="14.75" PointY="14.75" />
+        <EntityTypeShape EntityType="TMSDbContext.ASPStateTempSession" Width="1.5" PointX="0.75" PointY="15.75" />
+        <EntityTypeShape EntityType="TMSDbContext.CallApproveService" Width="1.5" PointX="15.75" PointY="5.75" />
+        <EntityTypeShape EntityType="TMSDbContext.CAT_CERTIFICATE" Width="1.5" PointX="33" PointY="181.5" />
+        <EntityTypeShape EntityType="TMSDbContext.CAT_CERTIFICATE_ITEM" Width="1.5" PointX="35.25" PointY="185.125" />
+        <EntityTypeShape EntityType="TMSDbContext.CAT_CONTRACTOR" Width="1.5" PointX="0.75" PointY="10" />
+        <EntityTypeShape EntityType="TMSDbContext.CAT_CONTRACTS_STATUS" Width="1.5" PointX="0.75" PointY="6.875" />
+        <EntityTypeShape EntityType="TMSDbContext.CAT_CONTRACTS_TYPE" Width="1.5" PointX="0.75" PointY="2.625" />
+        <EntityTypeShape EntityType="TMSDbContext.CAT_COSTS" Width="1.5" PointX="6" PointY="148.875" />
+        <EntityTypeShape EntityType="TMSDbContext.CAT_GROUPCOST" Width="1.5" PointX="3.75" PointY="149.125" />
+        <EntityTypeShape EntityType="TMSDbContext.CAT_GROUPSUBJECT" Width="1.5" PointX="0.75" PointY="122.5" />
+        <EntityTypeShape EntityType="TMSDbContext.CAT_GROUPSUBJECT_ITEM" Width="1.5" PointX="8.25" PointY="119" />
+        <EntityTypeShape EntityType="TMSDbContext.CAT_MAIL" Width="1.5" PointX="33" PointY="166.125" />
+        <EntityTypeShape EntityType="TMSDbContext.CAT_MAIL_KEY" Width="1.5" PointX="16.75" PointY="14.75" />
+        <EntityTypeShape EntityType="TMSDbContext.CAT_NATIONALITY" Width="1.5" PointX="17.75" PointY="0.75" />
+        <EntityTypeShape EntityType="TMSDbContext.CAT_PARTNER" Width="1.5" PointX="17.75" PointY="4.75" />
+        <EntityTypeShape EntityType="TMSDbContext.CAT_PROVINCES" Width="1.5" PointX="17.75" PointY="8.75" />
+        <EntityTypeShape EntityType="TMSDbContext.CAT_UNITS" Width="1.5" PointX="6" PointY="153.25" />
+        <EntityTypeShape EntityType="TMSDbContext.CAT_USER_GENDER" Width="1.5" PointX="17.75" PointY="11.75" />
+        <EntityTypeShape EntityType="TMSDbContext.CAT_USER_TYPE" Width="1.5" PointX="12.75" PointY="17.75" />
+        <EntityTypeShape EntityType="TMSDbContext.Company" Width="1.5" PointX="0.75" PointY="130.875" />
+        <EntityTypeShape EntityType="TMSDbContext.CONFIG" Width="1.5" PointX="14.75" PointY="17.75" />
+        <EntityTypeShape EntityType="TMSDbContext.Course" Width="1.5" PointX="3" PointY="133.25" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_Attendance" Width="1.5" PointX="22.5" PointY="128.625" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_Blended_Learning" Width="1.5" PointX="28.5" PointY="134.75" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_Cost" Width="1.5" PointX="8.25" PointY="136.75" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_Detail" Width="1.5" PointX="11.25" PointY="127.75" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_Detail_Course_Ingredients" Width="1.5" PointX="13.5" PointY="122.25" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_Detail_Instructor" Width="1.5" PointX="22.5" PointY="141.875" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_Detail_Room" Width="1.5" PointX="13.5" PointY="126.625" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_Detail_Room_Global" Width="1.5" PointX="13.5" PointY="219.75" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_Detail_Score" Width="1.5" PointX="13.5" PointY="217" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_Detail_Subject_Note" Width="1.5" PointX="16.5" PointY="133.625" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_Ingredients_Learning" Width="1.5" PointX="11.25" PointY="122.375" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_LMS_STATUS" Width="1.5" PointX="5.25" PointY="204.25" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_Result" Width="1.5" PointX="25.5" PointY="133.375" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_Result_Course_Detail_Ingredient" Width="1.5" PointX="30.75" PointY="130.625" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_Result_Final" Width="1.5" PointX="19.5" PointY="136" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_Result_Summary" Width="1.5" PointX="25.5" PointY="129" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_Result_Temp" Width="1.5" PointX="22.5" PointY="133.75" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_Subject_Item" Width="1.5" PointX="5.25" PointY="132" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_TrainingCenter" Width="1.5" PointX="5.25" PointY="135" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_Type" Width="1.5" PointX="0.75" PointY="128" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_Type_Result" Width="1.5" PointX="0.75" PointY="143.25" />
+        <EntityTypeShape EntityType="TMSDbContext.CourseRemarkCheckFail" Width="1.5" PointX="33.75" PointY="137.75" />
+        <EntityTypeShape EntityType="TMSDbContext.CourseRemarkCheckFail_LMS" Width="1.5" PointX="16.75" PointY="17.75" />
+        <EntityTypeShape EntityType="TMSDbContext.Department" Width="1.5" PointX="16.5" PointY="143.625" />
+        <EntityTypeShape EntityType="TMSDbContext.Examiner_Ability" Width="1.5" PointX="28.5" PointY="130.625" />
+        <EntityTypeShape EntityType="TMSDbContext.Examiner_Ability_LOG" Width="1.5" PointX="18.75" PointY="14.75" />
+        <EntityTypeShape EntityType="TMSDbContext.Function" Width="1.5" PointX="5.75" PointY="8.625" />
+        <EntityTypeShape EntityType="TMSDbContext.Group_Certificate" Width="1.5" PointX="35.25" PointY="180.625" />
+        <EntityTypeShape EntityType="TMSDbContext.Group_Certificate_Schedule" Width="1.5" PointX="37.5" PointY="155.5" />
+        <EntityTypeShape EntityType="TMSDbContext.Group_Certificate_Schedule_Detail" Width="1.5" PointX="39.75" PointY="156.625" />
+        <EntityTypeShape EntityType="TMSDbContext.Group_Certificate_Subjects" Width="1.5" PointX="37.5" PointY="186.5" />
+        <EntityTypeShape EntityType="TMSDbContext.Group_Roles" Width="1.5" PointX="16.5" PointY="180" />
+        <EntityTypeShape EntityType="TMSDbContext.GroupFunction" Width="1.5" PointX="5.75" PointY="12.125" />
+        <EntityTypeShape EntityType="TMSDbContext.GroupPermissionFunction" Width="1.5" PointX="8" PointY="10.75" />
+        <EntityTypeShape EntityType="TMSDbContext.GroupTrainee" Width="1.5" PointX="17.25" PointY="172.25" />
+        <EntityTypeShape EntityType="TMSDbContext.GroupTrainee_Item" Width="1.5" PointX="19.5" PointY="149.375" />
+        <EntityTypeShape EntityType="TMSDbContext.GroupUser" Width="1.5" PointX="33.75" PointY="122.25" />
+        <EntityTypeShape EntityType="TMSDbContext.GroupUserAccess" Width="1.5" PointX="36" PointY="146.5" />
+        <EntityTypeShape EntityType="TMSDbContext.GroupUserMenu" Width="1.5" PointX="36" PointY="67.25" />
+        <EntityTypeShape EntityType="TMSDbContext.GroupUserPermission" Width="1.5" PointX="24.75" PointY="151.875" />
+        <EntityTypeShape EntityType="TMSDbContext.IMAGECONFIG" Width="1.5" PointX="18.75" PointY="18.75" />
+        <EntityTypeShape EntityType="TMSDbContext.INFO_CONTACT" Width="1.5" PointX="12.75" PointY="11" />
+        <EntityTypeShape EntityType="TMSDbContext.INFO_REPLY_CONTACT" Width="1.5" PointX="15" PointY="11.625" />
+        <EntityTypeShape EntityType="TMSDbContext.Instructor" Width="1.5" PointX="17.25" PointY="122.125" />
+        <EntityTypeShape EntityType="TMSDbContext.Instructor_Ability" Width="1.5" PointX="36" PointY="138" />
+        <EntityTypeShape EntityType="TMSDbContext.Instructor_Ability_LOG" Width="1.5" PointX="19.75" PointY="0.75" />
+        <EntityTypeShape EntityType="TMSDbContext.JobTitle" Width="1.5" PointX="0.75" PointY="136.125" />
+        <EntityTypeShape EntityType="TMSDbContext.JobtitleHeader" Width="1.5" PointX="15" PointY="1" />
+        <EntityTypeShape EntityType="TMSDbContext.JobtitleLevel" Width="1.5" PointX="12.75" PointY="1.125" />
+        <EntityTypeShape EntityType="TMSDbContext.JobtitlePosition" Width="1.5" PointX="0.75" PointY="19.75" />
+        <EntityTypeShape EntityType="TMSDbContext.LMS_Assign" Width="1.5" PointX="19.75" PointY="4.75" />
+        <EntityTypeShape EntityType="TMSDbContext.LMS_Expiredate" Width="1.5" PointX="27.75" PointY="126.125" />
+        <EntityTypeShape EntityType="TMSDbContext.LMS_REQUEST" Width="1.5" PointX="19.75" PointY="7.75" />
+        <EntityTypeShape EntityType="TMSDbContext.Management_Room" Width="1.5" PointX="24.75" PointY="125.5" />
+        <EntityTypeShape EntityType="TMSDbContext.Management_Room_Item" Width="1.5" PointX="27" PointY="122.125" />
+        <EntityTypeShape EntityType="TMSDbContext.Meeting" Width="1.5" PointX="16.5" PointY="127.375" />
+        <EntityTypeShape EntityType="TMSDbContext.Meeting_Participants" Width="1.5" PointX="30.75" PointY="127" />
+        <EntityTypeShape EntityType="TMSDbContext.MENU" Width="1.5" PointX="8" PointY="13.75" />
+        <EntityTypeShape EntityType="TMSDbContext.MenuName" Width="1.5" PointX="10.25" PointY="15.5" />
+        <EntityTypeShape EntityType="TMSDbContext.Monitor_Ability" Width="1.5" PointX="16.5" PointY="151" />
+        <EntityTypeShape EntityType="TMSDbContext.Monitor_Ability_LOG" Width="1.5" PointX="19.75" PointY="10.75" />
+        <EntityTypeShape EntityType="TMSDbContext.Nation" Width="1.5" PointX="7.75" PointY="20.75" />
+        <EntityTypeShape EntityType="TMSDbContext.Notification" Width="1.5" PointX="33.75" PointY="125.625" />
+        <EntityTypeShape EntityType="TMSDbContext.Notification_Detail" Width="1.5" PointX="36" PointY="133.625" />
+        <EntityTypeShape EntityType="TMSDbContext.Orientation" Width="1.5" PointX="33" PointY="132.375" />
+        <EntityTypeShape EntityType="TMSDbContext.Orientation_Item" Width="1.5" PointX="35.25" PointY="130.375" />
+        <EntityTypeShape EntityType="TMSDbContext.Orientation_Kind_Of_Successor" Width="1.5" PointX="30.75" PointY="124.375" />
+        <EntityTypeShape EntityType="TMSDbContext.Payment" Width="1.5" PointX="19.5" PointY="142.75" />
+        <EntityTypeShape EntityType="TMSDbContext.Payment_Status" Width="1.5" PointX="17.25" PointY="166.625" />
+        <EntityTypeShape EntityType="TMSDbContext.PostNew_GroupTrainee" Width="1.5" PointX="19.5" PointY="87.375" />
+        <EntityTypeShape EntityType="TMSDbContext.Postnew" Width="1.5" PointX="10" PointY="1.125" />
+        <EntityTypeShape EntityType="TMSDbContext.Postnews_Category" Width="1.5" PointX="7.75" PointY="1.125" />
+        <EntityTypeShape EntityType="TMSDbContext.PotentialSuccessor" Width="1.5" PointX="36" PointY="141.625" />
+        <EntityTypeShape EntityType="TMSDbContext.PotentialSuccessors_Item" Width="1.5" PointX="38.25" PointY="135.125" />
+        <EntityTypeShape EntityType="TMSDbContext.PROCESS_Approver" Width="1.5" PointX="33" PointY="157.625" />
+        <EntityTypeShape EntityType="TMSDbContext.PROCESS_StepRequirement" Width="1.5" PointX="20.75" PointY="14.75" />
+        <EntityTypeShape EntityType="TMSDbContext.PROCESS_Steps" Width="1.5" PointX="20.75" PointY="17.75" />
+        <EntityTypeShape EntityType="TMSDbContext.Rec_Account" Width="1.5" PointX="10.75" PointY="7" />
+        <EntityTypeShape EntityType="TMSDbContext.Rec_AdvertisingPartner" Width="1.5" PointX="20.75" PointY="20.75" />
+        <EntityTypeShape EntityType="TMSDbContext.Rec_Company" Width="1.5" PointX="10.75" PointY="18.625" />
+        <EntityTypeShape EntityType="TMSDbContext.Rec_Company_Account" Width="1.5" PointX="13" PointY="7.375" />
+        <EntityTypeShape EntityType="TMSDbContext.Rec_Level" Width="1.5" PointX="21.75" PointY="0.75" />
+        <EntityTypeShape EntityType="TMSDbContext.ROLE" Width="1.5" PointX="36.75" PointY="125.875" />
+        <EntityTypeShape EntityType="TMSDbContext.ROLE_FUNCTION" Width="1.5" PointX="39" PointY="126.125" />
+        <EntityTypeShape EntityType="TMSDbContext.ROLE2" Width="1.5" PointX="21.75" PointY="4.75" />
+        <EntityTypeShape EntityType="TMSDbContext.ROLEMENU" Width="1.5" PointX="39" PointY="69.5" />
+        <EntityTypeShape EntityType="TMSDbContext.Room" Width="1.5" PointX="9" PointY="122" />
+        <EntityTypeShape EntityType="TMSDbContext.Room_Booking" Width="1.5" PointX="19.5" PointY="125.375" />
+        <EntityTypeShape EntityType="TMSDbContext.Room_Type" Width="1.5" PointX="6.75" PointY="124.125" />
+        <EntityTypeShape EntityType="TMSDbContext.Schedule" Width="1.5" PointX="35.25" PointY="166.625" />
+        <EntityTypeShape EntityType="TMSDbContext.Schedules_destination" Width="1.5" PointX="37.5" PointY="150" />
+        <EntityTypeShape EntityType="TMSDbContext.Schedules_Method" Width="1.5" PointX="37.5" PointY="177.25" />
+        <EntityTypeShape EntityType="TMSDbContext.Schedules_Type" Width="1.5" PointX="37.5" PointY="169.125" />
+        <EntityTypeShape EntityType="TMSDbContext.SentMailUser" Width="1.5" PointX="21.75" PointY="8.75" />
+        <EntityTypeShape EntityType="TMSDbContext.Subject" Width="1.5" PointX="0.75" PointY="116.375" />
+        <EntityTypeShape EntityType="TMSDbContext.Subject_Score" Width="1.5" PointX="5.25" PointY="120.625" />
+        <EntityTypeShape EntityType="TMSDbContext.Subject_TrainingCenter" Width="1.5" PointX="21.75" PointY="154.875" />
+        <EntityTypeShape EntityType="TMSDbContext.SubjectDetail" Width="1.5" PointX="3" PointY="117.75" />
+        <EntityTypeShape EntityType="TMSDbContext.Survey" Width="1.5" PointX="12.75" PointY="21.75" />
+        <EntityTypeShape EntityType="TMSDbContext.SurveyLM" Width="1.5" PointX="13.5" PointY="222.5" />
+        <EntityTypeShape EntityType="TMSDbContext.SurveyLMS_Item" Width="1.5" PointX="16.5" PointY="176.875" />
+        <EntityTypeShape EntityType="TMSDbContext.SurveyLMS_Question" Width="1.5" PointX="15.75" PointY="225.375" />
+        <EntityTypeShape EntityType="TMSDbContext.SYS_LogEvent" Width="1.5" PointX="33" PointY="160.625" />
+        <EntityTypeShape EntityType="TMSDbContext.Title_Standard" Width="1.5" PointX="6" PointY="138" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_Approval_Type" Width="1.5" PointX="21.75" PointY="11.75" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_Approve_Department" Width="1.5" PointX="21.75" PointY="151.875" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_APPROVES" Width="1.5" PointX="22.5" PointY="145.75" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_APPROVES_HISTORY" Width="1.5" PointX="24.75" PointY="154.625" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_APPROVES_LOG" Width="1.5" PointX="19.5" PointY="131.75" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_CertificateApproved" Width="1.5" PointX="35.25" PointY="155.375" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_CONTRACTS" Width="1.5" PointX="3" PointY="1.125" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_Course_History" Width="1.5" PointX="5.25" PointY="141.125" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_Course_History_Detail" Width="1.5" PointX="7.5" PointY="142" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_Course_History_Member" Width="1.5" PointX="10.5" PointY="143.25" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_Course_History_Result" Width="1.5" PointX="28.5" PointY="148.375" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_Course_Member" Width="1.5" PointX="25.5" PointY="142.375" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_Course_Member_new" Width="1.5" PointX="14.75" PointY="21.75" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_Course_Member_Remark" Width="1.5" PointX="16.5" PointY="137.875" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_EMPLOYEE" Width="1.5" PointX="3" PointY="8.25" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_EMPLOYEE_DETAIL" Width="1.5" PointX="5.25" PointY="16.25" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_EXTERNAL_EDUCATION" Width="1.5" PointX="16.75" PointY="21.75" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_Grade" Width="1.5" PointX="20.25" PointY="122" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_INSTRUTOR_CONTRACT" Width="1.5" PointX="5.25" PointY="2.875" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_ROLE" Width="1.5" PointX="22.75" PointY="14.75" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_ROOM_SUBJECT" Width="1.5" PointX="11.25" PointY="119" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_SCHEDULE" Width="1.5" PointX="13.5" PointY="213.5" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_SentEmail" Width="1.5" PointX="37.5" PointY="164.25" />
+        <EntityTypeShape EntityType="TMSDbContext.TMS_Subject_Grade" Width="1.5" PointX="22.5" PointY="124.875" />
+        <EntityTypeShape EntityType="TMSDbContext.Trainee" Width="1.5" PointX="14.25" PointY="130.875" />
+        <EntityTypeShape EntityType="TMSDbContext.Trainee_Contract" Width="1.5" PointX="16.5" PointY="156.375" />
+        <EntityTypeShape EntityType="TMSDbContext.Trainee_Portal" Width="1.5" PointX="22.75" PointY="17.75" />
+        <EntityTypeShape EntityType="TMSDbContext.Trainee_Record" Width="1.5" PointX="16.5" PointY="159.875" />
+        <EntityTypeShape EntityType="TMSDbContext.Trainee_TrainingCenter" Width="1.5" PointX="27.75" PointY="145.5" />
+        <EntityTypeShape EntityType="TMSDbContext.Trainee_Type" Width="1.5" PointX="16.5" PointY="153.875" />
+        <EntityTypeShape EntityType="TMSDbContext.Trainee_Upload_Files" Width="1.5" PointX="18.75" PointY="161.25" />
+        <EntityTypeShape EntityType="TMSDbContext.TraineeFuture" Width="1.5" PointX="28.5" PointY="141.125" />
+        <EntityTypeShape EntityType="TMSDbContext.TraineeFuture_Item" Width="1.5" PointX="33.75" PointY="141.875" />
+        <EntityTypeShape EntityType="TMSDbContext.TraineeHistory" Width="1.5" PointX="25.5" PointY="147.5" />
+        <EntityTypeShape EntityType="TMSDbContext.TraineeHistory_Item" Width="1.5" PointX="30.75" PointY="148.875" />
+        <EntityTypeShape EntityType="TMSDbContext.TrainingProgam_Cost" Width="1.5" PointX="5.25" PointY="201.625" />
+        <EntityTypeShape EntityType="TMSDbContext.Transaction_Course_Trainee" Width="1.5" PointX="8.25" PointY="132.375" />
+        <EntityTypeShape EntityType="TMSDbContext.Transaction_Type" Width="1.5" PointX="6" PointY="129.125" />
+        <EntityTypeShape EntityType="TMSDbContext.USER" Width="1.5" PointX="30.75" PointY="135.25" />
+        <EntityTypeShape EntityType="TMSDbContext.USER_HIS" Width="1.5" PointX="33" PointY="152" />
+        <EntityTypeShape EntityType="TMSDbContext.UserPermission" Width="1.5" PointX="33" PointY="145.75" />
+        <EntityTypeShape EntityType="TMSDbContext.UserProfile" Width="1.5" PointX="18.75" PointY="154" />
+        <EntityTypeShape EntityType="TMSDbContext.UserRole" Width="1.5" PointX="39" PointY="140.5" />
+        <EntityTypeShape EntityType="TMSDbContext.webpages_OAuthMembership" Width="1.5" PointX="22.75" PointY="21.75" />
+        <EntityTypeShape EntityType="TMSDbContext.webpages_Roles" Width="1.5" PointX="16.5" PointY="169.625" />
+        <AssociationConnector Association="TMSDbContext.FK_CAT_CERTIFICATE_ITEM_CAT_CERTIFICATE" />
+        <AssociationConnector Association="TMSDbContext.FK_CAT_CERTIFICATE_USER" />
+        <AssociationConnector Association="TMSDbContext.FK_CAT_CERTIFICATE_USER1" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Result_CAT_CERTIFICATE" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Result_Final_CAT_CERTIFICATE" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Result_Temp_CAT_CERTIFICATE" />
+        <AssociationConnector Association="TMSDbContext.FK_Group_Certificate_CAT_CERTIFICATE" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_CertificateApproved_CAT_CERTIFICATE" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_CONTRACTS_CAT_CONTRACTOR" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_CONTRACTS_CAT_CONTRACTS_STATUS" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_CONTRACTS_CAT_CONTRACTS_TYPE" />
+        <AssociationConnector Association="TMSDbContext.FK_CAT_COSTS_CAT_GROUPCOST" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Cost_CAT_COSTS" />
+        <AssociationConnector Association="TMSDbContext.FK_CAT_GROUPSUBJECT_ITEM_CAT_GROUPSUBJECT" />
+        <AssociationConnector Association="TMSDbContext.FK_Subject_CAT_GROUPSUBJECT" />
+        <AssociationConnector Association="TMSDbContext.FK_SubjectDetail_CAT_GROUPSUBJECT" />
+        <AssociationConnector Association="TMSDbContext.FK_CAT_GROUPSUBJECT_ITEM_SubjectDetail" />
+        <AssociationConnector Association="TMSDbContext.FK_CAT_MAIL_USER" />
+        <AssociationConnector Association="TMSDbContext.FK_CAT_MAIL_USER1" />
+        <AssociationConnector Association="TMSDbContext.FK_Schedules_CAT_MAIL" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_SentEmail_CAT_MAIL" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Cost_CAT_UNITS" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Company" />
+        <AssociationConnector Association="TMSDbContext.FK_Trainee_Company" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Cost_Course" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Course_Type_Result" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Detail_Course" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Detail_Instructor_Course" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_JobTitle" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_LMS_STATUS_Course" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Result_Final_Course" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Subject_Item_Course" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_TrainingCenter_Course" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_APPROVES_Course" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_APPROVES_LOG_Course" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_Course_History_Course" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_COURSE_MEMBER_REMARK_Course" />
+        <AssociationConnector Association="TMSDbContext.FK_TrainingProgam_Cost_Course" />
+        <AssociationConnector Association="TMSDbContext.FK_Transaction_Course_Trainee_Course" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Attendance_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Attendance_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Attendance_USER" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Blended_Learning_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Blended_Learning_Room" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Blended_Learning_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Blended_Learning_USER" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Blended_Learning_USER1" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Cost_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Cost_SubjectDetail" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Detail_Course_Ingredients_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Detail_Instructor_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Detail_Room" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Detail_Room_Global_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Detail_Score_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Detail_Subject_Note_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Detail_SubjectDetail" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Detail_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Result_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Result_Summary_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Result_Temp_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_CourseDetail_Room_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_Management_Room_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_Meeting_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_Payment_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_Room_Booking_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_SurveyLMS_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_APPROVES_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_APPROVES_LOG_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_Course_Member_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_SCHEDULE_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_Subject_Grade_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Detail_Course_Ingredients_Course_Ingredients_Learning" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Result_Course_Detail_Ingredient_Course_Detail_Course_Ingredients" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Detail_Instructor_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_CourseDetail_Room_Room" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Detail_Subject_Note_SubjectDetail" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Result_Course_Detail_Ingredient_Course_Result" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Result_SubjectDetail" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Result_TMS_Course_Member" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Result_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_CourseRemarkCheckFail_Course_Result" />
+        <AssociationConnector Association="TMSDbContext.FK_LMS_Expiredate_Course_Result" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_CertificateApproved_Course_Result" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Result_Final_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_CertificateAppoved_Course_Result_Final" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Result_Summary_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Result_Temp_SubjectDetail" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Result_Temp_TMS_Course_Member" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Result_Temp_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Subject_Item_Subject" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_TrainingCenter_Department" />
+        <AssociationConnector Association="TMSDbContext.FK_SubjectDetail_Course_Type" />
+        <AssociationConnector Association="TMSDbContext.FK_CourseRemarkCheckFail_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_Department_Department" />
+        <AssociationConnector Association="TMSDbContext.FK_Department_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_GroupUserPermission_Department" />
+        <AssociationConnector Association="TMSDbContext.FK_Subject_TrainingCenter_Department" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_Approve_Department_Department" />
+        <AssociationConnector Association="TMSDbContext.FK_Trainee_Department" />
+        <AssociationConnector Association="TMSDbContext.FK_Trainee_TrainingCenter_Department" />
+        <AssociationConnector Association="TMSDbContext.FK_USER_Department" />
+        <AssociationConnector Association="TMSDbContext.FK_UserPermission_Department" />
+        <AssociationConnector Association="TMSDbContext.FK_UserProfile_Department" />
+        <AssociationConnector Association="TMSDbContext.FK_Examiner_Ability_SubjectDetail" />
+        <AssociationConnector Association="TMSDbContext.FK_Examiner_Ability_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_MenuFunction_Function" />
+        <AssociationConnector Association="TMSDbContext.FK_Group_Certificate_Subjects_Group_Certificate" />
+        <AssociationConnector Association="TMSDbContext.FK_Schedule_Group_Certificate_Group_Certificate" />
+        <AssociationConnector Association="TMSDbContext.FK_Schedule_Group_Certificate_Detail_Schedule_Group_Certificate" />
+        <AssociationConnector Association="TMSDbContext.FK_Schedule_Group_Certificate_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_Schedule_Group_Certificate_Detail_SubjectDetail" />
+        <AssociationConnector Association="TMSDbContext.FK_UserProfile_Group_Roles" />
+        <AssociationConnector Association="TMSDbContext.FK_GroupPermissionFunction_GroupFunction" />
+        <AssociationConnector Association="TMSDbContext.FK_GroupUserMenu_GroupFunction" />
+        <AssociationConnector Association="TMSDbContext.FK_MENU_GroupFunction" />
+        <AssociationConnector Association="TMSDbContext.FK_ROLEMENU_GroupFunction" />
+        <AssociationConnector Association="TMSDbContext.FK_GroupTrainee_Item_GroupTrainee" />
+        <AssociationConnector Association="TMSDbContext.FK_PostNew_GroupTrainee_GroupTrainee" />
+        <AssociationConnector Association="TMSDbContext.FK_GroupTrainee_Item_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_GropuUserPermission_GroupUser" />
+        <AssociationConnector Association="TMSDbContext.FK_GroupUserAccess_GroupUser" />
+        <AssociationConnector Association="TMSDbContext.FK_GroupUserMenu_GroupUser" />
+        <AssociationConnector Association="TMSDbContext.FK_GroupUserAccess_USER" />
+        <AssociationConnector Association="TMSDbContext.FK_INFO_REPLY_CONTACT_INFO_CONTACT" />
+        <AssociationConnector Association="TMSDbContext.FK_Room_Booking_Instructor" />
+        <AssociationConnector Association="TMSDbContext.FK_Room_Booking_Instructor1" />
+        <AssociationConnector Association="TMSDbContext.FK_Instructor_Ability_SubjectDetail1" />
+        <AssociationConnector Association="TMSDbContext.FK_Instructor_Ability_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_Instructor_Ability_USER" />
+        <AssociationConnector Association="TMSDbContext.FK_Orientation_JobTitle" />
+        <AssociationConnector Association="TMSDbContext.FK_PotentialSuccessors_Item_JobTitle" />
+        <AssociationConnector Association="TMSDbContext.FK_PotentialSuccessors_JobTitle" />
+        <AssociationConnector Association="TMSDbContext.FK_Title_Standard_JobTitle" />
+        <AssociationConnector Association="TMSDbContext.FK_Trainee_JobTitle" />
+        <AssociationConnector Association="TMSDbContext.FK_TraineeFuture_JobTitle" />
+        <AssociationConnector Association="TMSDbContext.FK_TraineeHistory_JobTitle" />
+        <AssociationConnector Association="TMSDbContext.FK_JobtitleHeader_JobtitleLevel" />
+        <AssociationConnector Association="TMSDbContext.FK_Management_Room_Item_Management_Room" />
+        <AssociationConnector Association="TMSDbContext.FK_Management_Room_Meeting" />
+        <AssociationConnector Association="TMSDbContext.FK_Management_Room_Item_Room" />
+        <AssociationConnector Association="TMSDbContext.FK_Meeting_Participants_Meeting" />
+        <AssociationConnector Association="TMSDbContext.FK_Meeting_Room" />
+        <AssociationConnector Association="TMSDbContext.FK_Meeting_Participants_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_MENU_MENU" />
+        <AssociationConnector Association="TMSDbContext.FK_MenuName_MENU" />
+        <AssociationConnector Association="TMSDbContext.FK_Monitor_Ability_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_Notification_Detail_Notification" />
+        <AssociationConnector Association="TMSDbContext.FK_Notification_Detail_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_Notification_Detail_USER1" />
+        <AssociationConnector Association="TMSDbContext.FK_Orientation_Item_Orientation" />
+        <AssociationConnector Association="TMSDbContext.FK_Orientation_Orientation_Kind_Of_Successor" />
+        <AssociationConnector Association="TMSDbContext.FK_Orientation_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_Orientation_USER" />
+        <AssociationConnector Association="TMSDbContext.FK_Orientation_Item_SubjectDetail" />
+        <AssociationConnector Association="TMSDbContext.FK_Payment_Payment_Status" />
+        <AssociationConnector Association="TMSDbContext.FK_Payment_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_PostNew_GroupTrainee_Postnews" />
+        <AssociationConnector Association="TMSDbContext.FK_Postnews_Postnews_Category" />
+        <AssociationConnector Association="TMSDbContext.FK_INTRO_CATEGORY_INTRO_CATEGORY1" />
+        <AssociationConnector Association="TMSDbContext.FK_PotentialSuccessors_Item_PotentialSuccessors" />
+        <AssociationConnector Association="TMSDbContext.FK_PotentialSuccessors_USER" />
+        <AssociationConnector Association="TMSDbContext.FK_PotentialSuccessors_USER1" />
+        <AssociationConnector Association="TMSDbContext.FK_PotentialSuccessors_Item_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_PotentialSuccessors_Item_USER" />
+        <AssociationConnector Association="TMSDbContext.FK_PotentialSuccessors_Item_USER1" />
+        <AssociationConnector Association="TMSDbContext.FK_PROCESS_Approver_USER" />
+        <AssociationConnector Association="TMSDbContext.FK_Rec_Company_Account_Rec_Account" />
+        <AssociationConnector Association="TMSDbContext.FK_Rec_Company_Account_Rec_Company" />
+        <AssociationConnector Association="TMSDbContext.FK_ROLE_FUNCTION_ROLE" />
+        <AssociationConnector Association="TMSDbContext.FK_ROLEMENU_ROLE" />
+        <AssociationConnector Association="TMSDbContext.FK_UserRole_ROLE" />
+        <AssociationConnector Association="TMSDbContext.FK_Room_Booking_Room" />
+        <AssociationConnector Association="TMSDbContext.FK_Room_Room_Type" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_ROOM_SUBJECT_Room" />
+        <AssociationConnector Association="TMSDbContext.FK_Schedule_Method_Schedules" />
+        <AssociationConnector Association="TMSDbContext.FK_Schedules_destination_Schedules" />
+        <AssociationConnector Association="TMSDbContext.FK_Schedules_Method_Schedules" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_SentEmail_Schedules" />
+        <AssociationConnector Association="TMSDbContext.FK_Schedules_destination_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_Schedules_destination_USER" />
+        <AssociationConnector Association="TMSDbContext.FK_Subject_Subject" />
+        <AssociationConnector Association="TMSDbContext.FK_SubjectDetail_Subject" />
+        <AssociationConnector Association="TMSDbContext.FK_Subject_Score_SubjectDetail" />
+        <AssociationConnector Association="TMSDbContext.FK_Subject_TrainingCenter_SubjectDetail" />
+        <AssociationConnector Association="TMSDbContext.FK_SubjectDetail_SubjectDetail" />
+        <AssociationConnector Association="TMSDbContext.FK_Title_Standard_SubjectDetail" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_Course_History_Detail_Subject" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_Course_History_Result_Subject" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_ROOM_SUBJECT_Subject" />
+        <AssociationConnector Association="TMSDbContext.FK_TraineeFuture_Item_SubjectDetail" />
+        <AssociationConnector Association="TMSDbContext.FK_TraineeHistory_Item_SubjectDetail" />
+        <AssociationConnector Association="TMSDbContext.FK_SurveyLMS_Detail_SurveyLMS" />
+        <AssociationConnector Association="TMSDbContext.FK_SurveyLMS_Question_SurveyLMS" />
+        <AssociationConnector Association="TMSDbContext.FK_SurveyLMS_Detail_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_SYS_LogEvent_USER" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_Approve_Department_USER" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_APPROVES_HISTORY_TMS_APPROVES" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_APPROVES_USER" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_APPROVES_USER1" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_CertificateAppoved_USER" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_CertificateApproved_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_CertificateApproved_Trainee1" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_CertificateApproved_USER1" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_INSTRUTOR_CONTRACT_TMS_CONTRACTS" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_Course_History_Detail_TMS_Course_History" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_Course_History_Member_TMS_Course_History" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_Course_History_Result_Course_Detail" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_Course_History_Member_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_Course_History_Result_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_Course_Member_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_COURSE_MEMBER_REMARK_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_EMPLOYEE_DETAIL_TMS_EMPLOYEE" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_INSTRUTOR_CONTRACT_TMS_EMPLOYEE" />
+        <AssociationConnector Association="TMSDbContext.FK_TMS_Subject_Grade_TMS_Grade" />
+        <AssociationConnector Association="TMSDbContext.FK_Trainee_Contract_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_Trainee_Record_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_Trainee_TrainingCenter_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_Trainee_Type_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_TraineeFuture_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_TraineeHistory_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_Transaction_Course_Trainee_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_USER_Trainee" />
+        <AssociationConnector Association="TMSDbContext.FK_Trainee_Upload_Files_Trainee_Record" />
+        <AssociationConnector Association="TMSDbContext.FK_TraineeFuture_Item_TraineeFuture" />
+        <AssociationConnector Association="TMSDbContext.FK_TraineeHistory_Item_TraineeHistory" />
+        <AssociationConnector Association="TMSDbContext.FK_Transaction_Course_Trainee_Transaction_Type" />
+        <AssociationConnector Association="TMSDbContext.FK_USER_HIS_USER" />
+        <AssociationConnector Association="TMSDbContext.FK_UserPermission_USER" />
+        <AssociationConnector Association="TMSDbContext.FK_UserRole_USER" />
+        <AssociationConnector Association="TMSDbContext.Course_Member" />
+        <AssociationConnector Association="TMSDbContext.webpages_UsersInRoles" />
+        <EntityTypeShape EntityType="TMSDbContext.Course_Result_Final_Temp" Width="1.5" PointX="22.5" PointY="116.5" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Result_Final_Temp_Course" />
+        <AssociationConnector Association="TMSDbContext.FK_Course_Result_Final_Temp_Trainee" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
