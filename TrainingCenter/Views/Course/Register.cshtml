@@ -1,0 +1,72 @@
+﻿@using DAL.Entities
+@model Course_Detail
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout_Register.cshtml";
+
+}
+<div class="content-wrapper ">
+    <div  style="overflow-y: scroll; height: 650px">
+        <!-- Simple login form -->
+        <form action="@Url.Action("Register", "Course")" method="post" style="width: 80%; margin: 0 auto;">
+            @*<div class="panel panel-body login-form">*@
+
+            <br />
+            <div class="form-group text-center">
+                <img src="~/Content/assets/img/home/logo_VJ.png" style="width: 50%;" />
+            </div>
+            <div class="form-group">
+                <div class="text-center">
+                    <div class="icon-object border-slate-300 text-slate-300">
+                        <i class="icon-reading"></i>
+                    </div>
+                </div>
+            </div>
+            <br />
+            @if (TempData["fail"] != null)
+            {
+                <div class="alert alert-warning">
+
+                    <p>@TempData["fail"]</p>
+                </div>
+            }
+
+            @if (TempData["success"] != null)
+            {
+                <div class="alert alert-success">
+
+                    <p>@TempData["success"]</p>
+                </div>
+            }
+
+
+
+            <input type="hidden" name="staffCode" value="@ViewBag.staff"/>
+            <input type="hidden" name="CourseDetailID" value="@(Model.CourseId)"/>
+            <div class="form-group col-lg-12">
+                <label>Course Name</label>
+                <input type="text" class="form-control" readonly="readonly"  value="@(Model?.SubjectDetail?.Name)" placeholder="Course Name" required autofocus>
+            </div>
+            <div class="form-group col-lg-12">
+                <label>Start Date</label>
+                <input type="text" class="form-control" readonly="readonly" value="@(Model?.dtm_time_from.Value.ToString("dd/MM/yyyy"))" placeholder="Start Date" required autofocus>
+            </div>
+            <div class="form-group col-lg-12">
+                <label>End Date</label>
+                <input type="text" class="form-control" readonly="readonly" value="@(Model?.dtm_time_to.Value.ToString("dd/MM/yyyy"))" placeholder="End Date" required autofocus>
+            </div>
+            <div class="form-group col-lg-12">
+                <label>Description</label>
+                <textarea class="form-control" readonly="readonly"  placeholder="Description">@(Model?.Course?.Note)</textarea>
+            </div>
+
+            <br />
+            <div class="form-group">
+                <button type="submit" class="btn btn-danger btn-block font-vietjet-light color-yellow-vietjet">Resgister<i class="icon-circle-right2 position-right"></i></button>
+            </div>
+
+            @*</div>*@
+        </form>
+    </div>
+    <!-- /simple login form -->
+</div>

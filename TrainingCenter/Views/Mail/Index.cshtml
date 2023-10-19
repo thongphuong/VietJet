@@ -1,0 +1,132 @@
+﻿@using TMS.Core.App_GlobalResources;
+@model DAL.Entities.CAT_MAIL
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fas fa-database"></i> @Resource.lblMasterData - Mail Template</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblMasterData</li>
+                <li class="active">Mail Template</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12" style="margin-top: 10px;">
+        <div class="panel list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title">
+                    <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> @Resource.lblList
+                    <p class="btn-group pull-right">
+                        @*<a id="btnExport" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-download" aria-hidden="true"></i> @Resource.lblEXPORT</a>*@
+                        @if (User.IsInRole(Url.Action("Modify", "Mail")))
+                        {
+                            <a href="/Mail/Modify" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-plus" aria-hidden="true"></i> @Resource.lblCreate</a>
+                        }
+                    </p>
+                </h1>
+            </div>
+            <div class="panel-body table-responsive">
+                <div id="panel-search" class="collapse panel">
+                    <form action="@Url.Action("AjaxHandler", "Mail")" method="POST" id="frmFilter">
+                        <div class="panel-body">
+                            <div class="col--md-12">
+                                <div class="col-md-5">
+                                    <label>@Resource.lblEmailTo</label>
+                                    <input type="text" name="MailName" id="MailName" class="form-control frmFilter" placeholder="@Resource.lblEmailTo..." />
+                                </div>
+                                <div class="col-md-6">
+                                    <label>@Resource.lblSubjectMail</label>
+                                    <input type="text" name="MailSubject" id="MailSubject" class="form-control frmFilter" placeholder="@Resource.lblSubjectMail" />
+                                </div>
+                                <div class="col-md-1 pull-right">
+                                    <label>&nbsp;</label>
+                                    <button type="submit" class="btn btn-primary pull-right legitRipple" id="btFilter">
+                                        <i class="fa fa-search"></i> @Resource.lblSearch
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <br />
+                </div>
+                <p class="pull-right" data-toggle="collapse" data-target="#panel-search" style="cursor:pointer;" id="call-panel-search"><i class="fa fa-search"></i> @Messege.Search</p>
+                <table class="table table-bordered table-striped" id="datatable">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%;">@Resource.lblStt</th>
+                            <th>@Resource.lblEmailTo</th>
+                            @*<th>@Resource.lblCode</th>*@
+                            <th>@Resource.lblSubjectMail</th>
+                            <th>@Resource.lblContent</th>
+                            <th>@Resource.lblOptions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var sTable;
+        $(function () {
+            $('#frmFilter').submit(function (e) {
+                sTable.draw();
+                e.preventDefault();
+            });
+            var customRow = [
+                {
+                    "targets": 0,
+                    "className": "text-center",
+                },
+                {
+                    "targets": 4,
+                    "className": "text-center",
+                }
+            ];
+            $(".line_50").addClass("active");
+            sTable = initDataTable('#datatable', '/Mail/AjaxHandler', customRow);
+        });
+
+       function calldelete(id) {
+                notify.confirm('@Messege.DELETE_MAILTEMPLATE', "warning", 2, deletesubmit, id);
+        };
+
+        function deletesubmit(id) {
+                spinner.open();
+                $.ajax({
+                    type: 'POST',
+                    url: "/Mail/Delete",
+                    datatype: 'json',
+                    data: { id: id },
+                    success: function (data) {
+                        if (data.result) {
+                            notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                        } else {
+                            notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                        }
+                    }, complete: function () {
+                        sTable.draw();
+                        spinner.close();
+
+                    }
+                });
+        };
+
+
+
+
+    </script>
+}

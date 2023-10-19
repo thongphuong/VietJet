@@ -1,0 +1,113 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.ReportModels.InstructorSubjectModel
+@{
+    ViewBag.Title = "InstructorPrint";
+  
+    
+    int count = 0;
+}
+<style>
+    #reportpage table > thead > tr > th,
+    #reportpage .table > thead > tr > th,
+    #reportpage table > tbody > tr > th,
+    #reportpage .table > tbody > tr > th,
+    #reportpage table > tfoot > tr > th,
+    #reportpage .table > tfoot > tr > th,
+    #reportpage table > thead > tr > td,
+    #reportpage .table > thead > tr > td,
+    #reportpage table > tbody > tr > td,
+    #reportpage .table > tbody > tr > td,
+    #reportpage table > tfoot > tr > td,
+    #reportpage .table > tfoot > tr > td {
+        border: 1px solid #000;
+        color: black;
+    }
+
+    .text-left {
+        text-align: left;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-right {
+        text-align: right;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-center {
+        text-align: center;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .header-title {
+        color: black;
+        font-weight: bold;
+    }
+
+    .td_course {
+        padding-left: 10px;
+        background: #ccc;
+    }
+
+    .footer_date {
+        color: black;
+        padding-top: 20px;
+        font-style: italic;
+    }
+
+    h4 {
+        color: black;
+    }
+</style>
+
+<link href="~/Content/assets/css/vietjet-print.css" rel="stylesheet" media="print" />
+
+<div class="col-sm-12 text-center">
+    <table width="100%" border="1">
+        <tr>
+            <td width="20%">
+                <div class="col-sm-12 text-center">
+                    <img src="~/Content/assets/img/report/logoreport.png" style="width: 40%;" />
+                </div>
+            </td>
+            <td colspan="1">
+                <div class="col-sm-12 text-center" style="margin-bottom:50px">
+                    <h2 class="header-title">@Resource.lblInstructorSubjectReport</h2>
+                </div>
+            </td>
+            <td width="20%">
+                <div class="col-sm-12 text-right pull-right">
+                    FORM: VJC-VTC-F-010 <br />
+                    ISS 01/REV 02<br />
+                    1/1/2017
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="col-sm-12 text-center" style="margin-top: 20px;">
+    <table width="100%" border="1">
+        <tr>
+            <th class="text-center" width="5%">@Resource.lblStt</th>
+            <th class="text-center" width="10%">@Messege.EID</th>
+            <th class="text-center" width="30%">@Resource.lblName</th>
+            <th class="text-center" width="20%">@Resource.lblJobTitle</th>
+            <th class="text-center" width="20%">@Resource.lblDepartment</th>
+            <th class="text-center" width="15%">@Resource.lblSubject</th>
+            <th class="text-center" width="15%">Type</th>
+        </tr>
+
+        @foreach (var item in Model.InstructorSubjectModelRps)
+        {
+            ++count;
+            <tr>
+                <td class="text-center">@(count)</td>
+                <td class="text-center"> @(item.Eid)</td>
+                <td class="text-left">@(item.Name)</td>
+                <td class="text-center">@(item.Job)</td>
+                <td class="text-center">@(item.Department )</td>
+                <td class="text-center">@(item.SubjectName)</td>
+                <td class="text-center">@(item.Type)</td>
+            </tr>
+        }
+    </table>
+</div>

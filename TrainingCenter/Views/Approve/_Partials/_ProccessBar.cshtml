@@ -1,0 +1,25 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Approve.ProccessBarModel
+
+
+@Html.Raw(Model.Html)
+
+
+<div class="hidden">
+    <div style="float: right; width: 50%;">
+        <table class="table table-bordered table-striped" id="MyApproval2ss">
+            <thead>
+                <tr role="row">
+                    <th>@Resource.lblStt</th>
+                    <th class="text-brown">@Resource.lblSubject</th>
+                    <th>@Resource.lblFromDate - @Resource.lblToDate</th>
+                    @*<th>@Resource.lblRequestBy</th>*@
+                    <th>@Resource.lblRemark</th>
+                    <th>@Resource.lblActions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+        </table>
+    </div>
+</div>

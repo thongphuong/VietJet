@@ -1,0 +1,224 @@
+﻿@using TMS.Core.App_GlobalResources
+@using System.Globalization;
+
+@model TMS.Core.ViewModels.ReportModels.CourseDetailModelRp
+
+@{
+    ViewBag.Title = "SubjectResultPrint";
+    //List<sp_GetSubjectResult_Result> course = ViewBag.returnreport;
+    // List<ResultViewModels> course = ViewBag.returnreport;
+
+
+    //  var courseDetails = ViewBag.course_details as Course_Detail;
+
+    int count = 0;
+}
+
+
+<style>
+    #reportpage table > thead > tr > th,
+    #reportpage .table > thead > tr > th,
+    #reportpage table > tbody > tr > th,
+    #reportpage .table > tbody > tr > th,
+    #reportpage table > tfoot > tr > th,
+    #reportpage .table > tfoot > tr > th,
+    #reportpage table > thead > tr > td,
+    #reportpage .table > thead > tr > td,
+    #reportpage table > tbody > tr > td,
+    #reportpage .table > tbody > tr > td,
+    #reportpage table > tfoot > tr > td,
+    #reportpage .table > tfoot > tr > td {
+        border: 1px solid #000;
+        color: black;
+    }
+
+    .text-left {
+        text-align: left;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-right {
+        text-align: right;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-center {
+        text-align: center;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .header-title {
+        color: black;
+        font-weight: bold;
+    }
+
+    .td_course {
+        padding-left: 10px;
+        background: #ccc;
+    }
+
+    .footer_date {
+        color: black;
+        padding-top: 20px;
+        font-style: italic;
+        margin-bottom: -20px;
+    }
+
+    h4 {
+        color: black;
+    }
+</style>
+
+<link href="~/Content/assets/css/vietjet-print.css" rel="stylesheet" media="print" />
+
+@{ NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
+    nfi.CurrencyDecimalSeparator = ".";
+    nfi.CurrencyGroupSeparator = ",";
+    nfi.CurrencySymbol = ""; }
+<div class="col-sm-12 text-center">
+    <table width="100%" border="1">
+        <tr>
+            <td width="20%">
+                <div class="col-sm-12 text-center">
+                    <img src="~/Content/assets/img/report/logoreport.png" style="width: 80%;margin-top: 12px;" />
+                </div>
+            </td>
+            <td colspan="1">
+                <div class="col-sm-12 text-center">
+                    <h2 class="header-title" style="text-transform: uppercase;">@Resource.lblSubjectResult</h2>
+                </div>
+            </td>
+            <td width="20%">
+                <div class="col-sm-12 text-left pull-left" style="text-align:left">
+                    @Model.header[0] <br />
+                    @Model.header[1] <br />
+                    @Model.header[2]
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="col-sm-12">
+    <div class="col-sm-1">
+        <h4>@Resource.lblCourseName:</h4>
+    </div>
+    <div class="col-sm-5 text-left pull-left">
+        <h4><b>@(Model.CourseName)</b></h4>
+    </div>
+    <div class="col-sm-1">
+        <h4>@Resource.lblCourseCode:</h4>
+    </div>
+    <div class="col-sm-5 text-left pull-left">
+        <h4><b>@(Model.CourseCode)</b></h4>
+    </div>
+</div>
+<div class="col-sm-12">
+    <div class="col-sm-1">
+        <h4>@Resource.lblSubjectName:</h4>
+    </div>
+    <div class="col-sm-5 text-left pull-left">
+        <h4><b>@(Model.SubjectActive != true ? "(DeActive) " : "") @(Model.SubjectDetailName)</b></h4>
+    </div>
+    <div class="col-sm-1">
+        <h4>Duration (hours):</h4>
+    </div>
+    <div class="col-sm-5 text-left pull-left">
+        <h4><b>@(Model.SubjectDetailDuration)</b></h4>
+    </div>
+</div>
+<div class="col-sm-12">
+    <div class="col-sm-1">
+        <h4>Venue:</h4>
+    </div>
+    <div class="col-sm-5 text-left pull-left">
+        <h4><b>@(Model.RoomName)</b></h4>
+    </div>
+    <div class="col-sm-1">
+        <h4>@Resource.lblDate:</h4>
+    </div>
+    <div class="col-sm-5 text-left pull-left">
+        <h4><b>@(Model.TimeFrom) - @(Model.TimeTo)</b></h4>
+    </div>
+</div>
+<div class="col-sm-12">
+    <div class="col-sm-1">
+        <h4>@Resource.lblTypeLearning:</h4>
+    </div>
+    <div class="col-sm-5 text-left pull-left">
+        <h4><b>@(Model.TypeLearning)</b></h4>
+    </div>
+</div>
+<div class="col-sm-12 text-center">
+    <table width="100%" border="1">
+        <tr>
+            <th rowspan="2" class="text-center" width="5%">@Resource.lblStt</th>
+            <th rowspan="2" class="text-center" width="25%">@Resource.lblFullName</th>
+            <th rowspan="2" class="text-center" width="10%">@Messege.EID</th>
+            <th rowspan="2" class="text-center" width="10%">Dept.</th>
+            <th colspan="2" class="text-center" width="20%">@Resource.lblRESULT</th>
+            <th rowspan="2" class="text-center" width="10%">@Resource.lblGrade</th>
+            <th rowspan="2" class="text-center" width="20%">@Resource.lblRemark</th>
+        </tr>
+        <tr>
+            <th class="text-center">First Attempt</th>
+            <th class="text-center">Second Attempt</th>
+        </tr>
+
+        @foreach (var item in Model.TraineeRps)
+        {
+            count++;
+            <tr>
+                <td class="text-center">@(count)</td>
+                <td class="text-left">@(item.FullName)</td>
+                <td class="text-center">@(item.StaffId)</td>
+                <td class="text-center">@(item.DepartmentCode)</td>
+                <td class="text-center" width="10%">
+                    @( item.bit_Average_Calculate == true ? (item.FirstCheck != null ? ((double)item.FirstCheck % 1 == 0 ? item.FirstCheck.ToString() : Convert.ToDecimal(item.FirstCheck).ToString("f1",
+    nfi)) : "") : item.FirstCheck)
+                </td>
+                <td class="text-center" width="10%">
+                    @(item.bit_Average_Calculate == true ? (item.Recheck != null ? ((double)item.Recheck % 1 == 0 ? item.Recheck.ToString() : Convert.ToDecimal(item.Recheck).ToString("f1",
+nfi)) : "") : item.Recheck)
+                </td>
+                <td class="text-center">@(item.Grace)</td>
+                <td class="text-center">@Html.Raw(item.ReMark)</td>
+            </tr>
+        }
+    </table>
+</div>
+<div class="col-sm-12 text-left">
+    <p>
+        <b>Note: eL: e-Learning, cR: Classroom Learning, cRo: Classroom and Online Learning.</b>
+    </p>
+</div>
+<div class="col-sm-4 text-center">
+    <p>
+        <h5 class="header-title">
+            Approved by
+        </h5>
+    </p>
+    <p>
+        <h4 class="header-title">
+            HEAD OF TRAINING
+        </h4>
+    </p>
+    <p>Date .....................................</p>
+</div>
+<div class="col-sm-4 text-center">
+
+
+</div>
+<div class="col-sm-4 text-center">
+    <p>
+        <h5 class="header-title">
+            Prepared by
+        </h5>
+    </p>
+    <p>
+        <h4 class="header-title">
+            <font color="red">INSTRUCTOR</font>
+        </h4>
+    </p>
+    <p>Date .....................................</p>
+</div>
+

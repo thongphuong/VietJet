@@ -1,0 +1,250 @@
+﻿@using TMS.Core.App_GlobalResources
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fas fa-database"></i>  @Resource.lblMasterData - @Resource.lblScheduleManagement</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblMasterData</li>
+                <li class="active">@Resource.lblScheduleManagement</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title">
+                    <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i>
+                    @Resource.lblList
+                    <p class="btn-group pull-right">
+                        @*<a id="btnExport" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-download" aria-hidden="true"></i> @Resource.lblEXPORT</a>*@
+                        @if (User.IsInRole(Url.Action("Modify", "Employee")))
+                        {
+                            <a href="/Schedule/Modify" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-plus" aria-hidden="true"></i> @Resource.lblCreate</a>
+                        }
+                    </p>
+                </h1>
+            </div>
+            <div class="panel-body">
+                <div class=" table-responsive" style="margin-top: 10px;">
+                    <div id="panel-search" class="collapse panel">
+                        <form action="/Role/AjaxHandlerRole" id="frmFilter">
+                            <div class="panel-body">
+                                <div class="row col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <input type="text" name="Name" class="form-control frmFilter" placeholder="@Resource.lblReminderTitle" />
+                                        </div>
+                                        <div class="col-md-1">
+                                            <button type="submit" class="btn btn-primary pull-right" id="btFilter">
+                                                <i class="fa fa-search"></i> @Resource.lblSearch
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <br />
+                    </div>
+                    <p class="pull-right" data-toggle="collapse" data-target="#panel-search" style="cursor:pointer;" id="call-panel-search"><i class="fa fa-search"></i> @Messege.Search</p>
+                    <table id="schedule" class="table table-striped table-bordered" style="width: 100%">
+                        <thead class="cf">
+                            <tr role="row">
+                                <th style="width: 5%;">@Resource.lblStt</th>
+                                <th>@Resource.lblReminderTitle</th>
+                                <th>@Resource.lblDescription</th>
+                                <th>@Resource.lblStatus</th>
+                                <th>State</th>
+                                <th>@Resource.lblOptions</th>
+                            </tr>
+                        </thead>
+                        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="hidden table-responsive">
+    <table id="listmail" class="table table-striped table-bordered">
+        <thead>
+            <tr role="row">
+                <th>@Resource.lblStt</th>
+                <th>Mail Receiver</th>
+                <th>Content</th>
+                <th>Option</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+    </table>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        var sTable;
+        $(document).ready(function () {
+
+            $("#frmFilter").submit(function (e) {
+                sTable.draw();
+                e.preventDefault();
+            });
+
+            var customRow = [{ "targets": 0 },
+                        {
+                            "targets": 3,
+                            "className": "text-center",
+                        },
+                        {
+                            "targets": 4,
+                            "className": "text-center",
+                        },                        {
+                            "targets": -1,
+                            "className": "text-center",
+                        }];
+            sTable = initDataTable('#schedule', '/Schedule/AjaxHandler', customRow);
+            var detailRows = [];
+            $('#schedule tbody').on('click', 'tr td span.expand', function () {
+
+                var id = $(this).data('value');
+                var tr = $(this).closest('tr');
+                var row = sTable.row(tr);
+                var idx = $.inArray(tr.attr('id'), detailRows);
+                if (row.child.isShown()) {
+                    tr.removeClass('details');
+                    row.child.hide();
+
+                    // Remove from the 'open' array
+                    detailRows.splice(idx, 1);
+                } else {
+                    tr.addClass('details');
+
+                    row.child(format(id)).show();
+
+                    // Add to the 'open' array
+                    if (idx === -1) {
+                        detailRows.push(tr.attr('id'));
+                    }
+                }
+            });
+            sTable.on('draw', function () {
+                $.each(detailRows, function (i, id) {
+                    $('#' + id + ' td.details-control').trigger('click');
+                });
+            });
+            $('#myModal').on('hidden.bs.modal', function () {
+                sTable.draw();
+            });
+        });
+
+        $(".line_1").addClass("active");
+        function calldelete(id) {
+            notify.confirm('@(Messege.DELETE_SCHEDULE)', 'Confirm', TITLE_STATUS_WARNING, deletesubmit, id);
+        }
+        function deletesubmit(id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/Schedule/Delete",
+                datatype: 'json',
+                data: { id: id },
+                success: function (data) {
+                    if (data.result) {
+                        sTable.draw();
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                    }
+                    else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+
+                }, complete: function () {
+                    spinner.close();
+                }
+            });
+        }
+        function Set_Participate_Schedule(isParticipate, id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/Schedule/SubmitSetParticipateSchedule",
+                datatype: 'json',
+                data: { isParticipate: isParticipate, id: id },
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, "ERROR", TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    sTable.draw();
+                    spinner.close();
+                }
+            });
+        }
+
+
+        function calldelete(id) {
+            notify.confirm('@Messege.DELETE_SCHEDULE', 'Confirm', TITLE_STATUS_WARNING, deletesubmit, id);
+        }
+        function deletesubmit(id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/Schedule/Delete",
+                datatype: 'json',
+                data: { id: id },
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, 'SUCCESS', TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, 'ERROR', TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    sTable.draw();
+                    spinner.close();
+
+                }
+            });
+        }
+
+        function format(id) {
+            var table = $("#listmail").clone();
+            var ssTable;
+            var customRow = [{ "targets": 0 }];
+            ssTable = initDataTableMaxPageLength(table, "/Schedule/AjaxHandlerListMail/" + id, customRow);
+            return table;
+        }
+
+        function ReSendMail(id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/Schedule/ReSendMail",
+                datatype: 'json',
+                data: { id: id },
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, "ERROR", TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    sTable.draw();
+                    spinner.close();
+                }
+            });
+        }
+    </script>
+}

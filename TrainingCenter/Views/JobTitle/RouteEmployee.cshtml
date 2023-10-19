@@ -1,0 +1,190 @@
+﻿@model TMS.Core.ViewModels.Jobtitles.JobTitleOptionsViewModel
+@{
+    ViewBag.Title = "RouteEmployee";
+}
+@section breadcrumb
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                <i class="fa fa-graduation-cap"></i>Job Title
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li>Course Management</li>
+                <li class="active">List</li>
+            </ol>
+        </div>
+    </div>
+}
+<form action="/JobTitle/AjaxHandlerListJobTitle" id="frmFilter">
+    <div class="panel panel-primary  list-panel" id="list-panel">
+        <div class="panel-body row">
+            <div class="col-md-12">
+                <div class="row form-group">
+                    <div class="col-md-4">
+                        <select name="jobLevel" id="JobLevel" class="form-control frmFilter" data-placeholder="Job level">
+                            <option value=""></option>
+                            @foreach (var jobLevel in Model.JobLevels)
+                            {
+                                <option value="@jobLevel.Key">@jobLevel.Value</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <select name="jobHeader" id="JobHeader" class="form-control frmFilter" data-placeholder="Job Header">
+                            <option value=""></option>
+                            @foreach (var jobHeader in Model.JobHeaders)
+                            {
+                                <option data-level="@jobHeader.Key" value="@jobHeader.Value">@jobHeader.Title</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <select name="jobPosition" id="JobPosition" class="form-control frmFilter" data-placeholder="Job Potition">
+                            <option value=""></option>
+                            @foreach (var jobPosition in Model.JobPositions)
+                            {
+                                <option value="@jobPosition.Value">@jobPosition.Title</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <button type="button" id="btFilter" class="btn btn-primary pull-right">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="panel panel-primary ">
+    <div class="panel-heading">
+        <i class="fa fa-group"></i> List JobTitle
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-4">
+                <p>Job titles</p>
+                <ul class="tree" id="tree">
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul id="employee" class="list-height-300" >
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <ul id="subjects" class="list-height-300">
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/Scripts/js/app.js"></script>
+    <script>
+        $(function() {
+            $('#tree').tree();
+            $('#JobLevel').change(function() {
+                var $this = $(this);
+                var lvl = $this.val();
+                $('#JobHeader').val('');
+                var $options = $('#JobHeader').find('option');
+                $.each($options, function(i, o) {
+                    var $option = $(this);
+                    var dataLvl = $option.data('level');
+                    if (dataLvl == undefined) return;
+                    if (dataLvl == lvl) {
+                        $option.removeClass('hidden');
+                    } else {
+                        $option.addClass('hidden');
+                    }
+                });
+            });
+
+            $('#btFilter').click(function() {
+                spinner.open();
+                var formData = $('#frmFilter').serializeArray();
+                var data = mergArrayObject(formData);
+                $.ajax({
+                    url: '/JobTitle/AjaxHandlerListJobTitle',
+                    type: 'POST',
+                    data: data,
+                    success: function(response) {
+                        if (response.result) {
+                            var options = response.data;
+                            $.each(options, function(i, o) {
+                                $('#tree').append('<li data-value="' + o.Id + '" class="action jobTitleOption" > <span >' + o.Name + ' </span> </li>');
+                            });
+                        } else {
+                            notify.alert(response.message, 'Warning', TITLE_STATUS_DANGER);
+                        }
+                    },
+                    complete: function() {
+                        spinner.close();
+                    }
+                });
+            });
+            $('#tree').on('click', '.jobTitleOption', function(e) {
+                var $this = $(this);
+                $this.addClass('active').siblings().removeClass('active');
+                spinner.open();
+                var id = $this.data('value');
+                $('#employee').html('');
+                $('#subjects').html('');
+                $.ajax({
+                    url: '/Jobtitle/AjaxHandlerListValidEmployee',
+                    data: { id: id },
+                    type: 'POST',
+                    success: function(response) {
+                        if (response.result) {
+                            var options = response.data;
+                            $.each(options.TrainedEmployee, function (i, o) {
+                                $('#employee').append('<li data-value="' + o.Id + '" class="action EmployeeOption"> <span >' + o.FullName + ' <span class="badge">' + o.AmountSubjects + '</span> </span> </li>');
+                            });
+                            $.each(options.Subjects, function (i, o) {
+                                $('#subjects').append('<li data-value="' + o.Key + '" class=""> <span >' + o.Value +' </span> </li>');
+                            });
+                        } else {
+                            notify.alert(response.message, 'Warning', TITLE_STATUS_DANGER);
+                        }
+                    },
+                    complete: function() {
+                        spinner.close();
+                    }
+                });
+            });
+            $('#employee').on('click', '.EmployeeOption', function (e) {
+                var $this = $(this);
+                var $subject = $('#subjects');
+                $subject.find('li').attr('class', '');
+                spinner.open();
+                var id = $this.data('value');
+                $.ajax({
+                    url: '/Jobtitle/AjaxHandlerTrainedSubject',
+                    data: { id: id, jobtitleId: $('#tree').find('.active').data('value') },
+                    type: 'POST',
+                    success: function (response) {
+                        if (response.result) {
+                            var data = response.data;
+                            $.each($subject.find('li'), function (i, o) {
+                                var val = $(o).data('value');
+                                $.each(data, function(index, item) {
+                                    if (val == item.SubjectId) {
+                                        $(o).addClass(item.Status ? "active-success" : "active-default");
+                                    }
+                                });
+                            });
+                        } else {
+                            notify.alert(response.message, 'Warning', TITLE_STATUS_DANGER);
+                        }
+                    },
+                    complete: function () {
+                        spinner.close();
+                    }
+                });
+            });
+        })
+    </script>
+}

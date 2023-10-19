@@ -1,0 +1,200 @@
+﻿@using TMS.Core.App_GlobalResources
+@model  TMS.Core.ViewModels.Subjects.GroupSubjectViewModel
+@{
+    ViewBag.Title = "Modify";
+}
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fas fa-database"></i> @Resource.lblSubjectManagement - @Resource.lblGroupCourse @Resource.lblEdit</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li> @Resource.lblSubjectManagement</li>
+                <li class="active">@Resource.lblGroupCourse @Resource.lblEdit - @Model.Name </li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="panel list-panel" id="list-panel">
+    <div class="panel-heading list-panel-heading">
+        <h1 class="panel-title list-panel-title"><i class="fas fa-pencil-alt font-small-byhoa" aria-hidden="true"></i> Edit </h1>
+    </div>
+    <div class="panel-body center-block">
+        @using (Html.BeginForm("Modify", "MCourse", FormMethod.Post, new { id = "createform" }))
+        {
+            <div class="row">
+                @Html.HiddenFor(m => m.Id)
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4 ">
+                                <label>@Resource.lblName <font color="red">(*)</font></label>
+                            </div>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4 ">
+                                <label>@Resource.lblCode <font color="red">(*)</font></label>
+                            </div>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.Code, new { @class = "form-control", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(m => m.Code, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4 ">
+                                <label>@Resource.lblCertificateName</label>
+                            </div>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.CertificateName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4 ">
+                                <label>@Resource.lblCertificateCode</label>
+                            </div>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.CertificateCode, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Code, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        @*<div class="form-group row">
+            <div class="col-md-4 ">
+                @Html.LabelFor(m => m.SubjectType)
+            </div>
+            <div class="col-md-8">
+                @Html.DropDownListFor(m => m.SubjectType, new SelectList(Model.SubjectTypes, "Key", "Value", Model.SubjectType), new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.SubjectType, null, new { @class = "text-danger" })
+            </div>
+        </div>*@
+                        <div class="form-group row">
+                            <div class="col-md-4 ">
+                                <label>Subject Type <font color="red">(*)</font></label>
+                            </div>
+                            <div class="col-md-8">
+                                <select class="form-control select2-hidden-accessible searchText1" name="int_subject_type_" id="int_subject_type_" data-index="1" data-placeholder="-- Subject Type --" onchange="Changetype(this.value,@Model.Id)" tabindex="-1" aria-hidden="true">
+                                    <option></option> @Html.Raw(Model.HtmlSubjectType)
+                                </select>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4 ">
+                                @Html.LabelFor(m => m.AssignedSubjects)
+                            </div>
+                            <div class="col-md-8">
+                                <select class="form-control" multiple="multiple" id="AssignedSubjects" name="AssignedSubjects">
+                                    <optgroup id="showsubject"></optgroup>
+                                </select>
+
+
+
+                                @*<select class="form-control" multiple="multiple" id="AssignedSubjects" name="AssignedSubjects">
+                                    <option value=""></option>
+                                    @foreach (var subject in Model.AvailableSubjects.OrderByDescending(a => a.Key))
+                                    {
+                                        <option value="@subject.Key" @(Model.AssignedSubjects.Contains(subject.Key) ? "selected" : "")>@subject.Value</option>
+
+                                    }
+                                </select>*@
+                                @Html.ValidationMessageFor(m => m.AssignedSubjects, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-2 ">
+                                @Html.LabelFor(m => m.Description)
+                            </div>
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @col = 3 })
+                                @Html.ValidationMessageFor(m => m.Description, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="action-form text-right">
+                    @{if (User.IsInRole("/MCourse/Modify")) // neu co
+                        {
+                            <a href="javascript:void(0)" class="btn btn-primary  legitRipple" id="submit" onclick="actionSubmit()"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                        }
+                    }
+                    <a onclick="goBack()" class="btn btn-default legitRipple"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#int_subject_type_").change();
+        })
+        function actionSubmit() {
+            $('#submit').hide();
+            spinner.open();
+            var form = $("#createform").serialize();
+            $.ajax({
+                type: 'POST',
+                url: "/MCourse/Modify",
+                datatype: 'json',
+                data: form,
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                        window.location.href = '/MCourse';
+                    } else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                },
+                complete: function () {
+                    $('#submit').show();
+                    spinner.close();
+                }
+            });
+        }
+        function Changetype(val, id) {
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "/MCourse/ChangetypeReturnSubject",
+                dataType: "json",
+                data: { id_type: val, id: id, iscreate: 0 },
+                success: function (result) {
+                    $("#showsubject").empty();
+                    $("#showsubject").append(result.htmlout);
+                    $('select:not([name$="_length" ])').select2({
+                        width: '100%',
+                        allowClear: true
+                    }).addClass('form-control searchText1');
+                }
+            });
+        }
+    </script>
+}

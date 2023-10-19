@@ -1,0 +1,47 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.GroupUserModels.GroupUserModel
+<div class="modal fade" id="modal-editor" role="dialog">
+    <div class="modal-dialog modal-md">
+        @using (Html.BeginForm("CreateGroupUser", "GroupUser", FormMethod.Post))
+        {
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="panel-heading list-panel-heading">
+                        <h5 class="modal-title panel-title list-panel-title" id="modal-header">@Resource.lblCreate @Resource.lblGroupUser </h5>
+                    </div>
+                </div>
+                <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="col-md-12 control-label">
+                                <label>@Resource.lblName</label> <span class="text-danger">(*)</span>
+                            </div>
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = Resource.GROUPUSER_NAME })
+                                @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12 control-label">
+                               <label>@Resource.lblTitle</label> <span class="text-danger">(*)</span>
+                            </div>
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(m => m.Title, new { @class = "form-control", placeholder = Resource.GROUPUSER_TITLE })
+                                @Html.ValidationMessageFor(m => m.Title, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    <div class="form-group row">
+                        <div class="col-md-12 text-right">
+                            @{
+                                if (User.IsInRole("/GroupUser/Modify"))
+                                {
+                                    <input type="submit" class="btn btn-primary" value=" @Resource.lblSave" />
+                                }
+                            }
+                            <button type="button" class="btn btn-secondary btn-default" data-dismiss="modal">@Resource.lblCancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                                }
+    </div>
+</div>

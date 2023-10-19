@@ -1,0 +1,210 @@
+﻿@using DAL.Entities
+@using TMS.Core.App_GlobalResources;
+@model CAT_COSTS
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Cost";
+}
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fas fa-database"></i>   @Resource.lblMasterData - @Resource.lblCost</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li> @Resource.lblMasterData</li>
+                <li class="active">@Resource.lblCost</li>
+            </ol>
+        </div>
+    </div>
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title">
+                    <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> @Resource.lblList
+                    <p class="btn-group pull-right">
+
+                        @if (User.IsInRole("/Cost/Modify"))
+                    {
+                        <a href="~/Cost/Modify" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-plus" aria-hidden="true"></i> @Resource.lblADDNEW</a>
+                }
+                    </p>
+
+                </h1>
+            </div>
+            <div class="panel-body table-responsive">
+                <div id="panel-search" class="collapse panel">
+                    @using (Html.BeginForm("AjaxHandler", "Cost", FormMethod.Post, new { id = "frmFilter" }))
+                {
+                    <div class="panel-body">
+                        <div class="col-md-12">
+                            <div class="col-md-5">
+                                <label class="col-md-3">@Resource.lblCode</label>
+                                <div class="col-md-9">
+                                    <input type="text" name="code" id="Code" class="form-control frmFilter" placeholder="@Resource.lblCode" />
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="col-md-3">@Resource.lblName</label>
+                                <div class="col-md-9">
+                                    <input type="text" name="fullname" id="Name" class="form-control frmFilter" placeholder="@Resource.lblCostName" />
+                                </div>
+                            </div>
+                            <div class="col-md-1 pull-right">
+                                <button type="submit" class="btn btn-primary pull-right" id="btFilter">
+                                    <i class="fa fa-search"></i> @Resource.lblSearch
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+            }
+                    <br />
+                </div>
+                <p class="pull-right" data-toggle="collapse" data-target="#panel-search" style="cursor:pointer;"  id="call-panel-search"><i class="fa fa-search"></i> @Messege.Search</p>
+
+                <table id="Cost" class="table table-striped table-bordered">
+                    <thead>
+                        <tr role="row">
+                            <th style="width:5%;">@Resource.lblStt</th>
+                            <th>@Resource.lblCode</th>
+                            <th>@Resource.lblCostName</th>
+                            @*<th>@Resource.COST_GROUPCOST</th>*@
+                            <th>@Resource.lblDescription</th>
+                            <th>@Resource.lblStatus</th>
+                            @*<th style="width:15%;">Created Date</th>
+                            <th style="width:15%;">Last Updated Date</th>*@
+                            <th>@*@Resource.lblOptions*@</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*<div class="col-md-4" style="margin-top: 10px;">
+        <div id="showdetail">
+
+        </div>
+
+    </div>*@
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            @*<div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>*@
+            <div class="modal-body">
+                <label>@Messege.DELETE_COST</label>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div id="messageout2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="Modal_Footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        var sTable;
+        $(document).ready(function() {
+            var customRows = [{ "targets": 0 }, {
+                "targets": 4,
+                "className": "text-center",
+            }, {
+                    "targets": 5,
+                    "className": "text-center",
+                }];
+            sTable = initDataTable("#Cost", "/Cost/AjaxHandler", customRows);
+
+
+            $('#frmFilter').submit(function(e) {
+                e.preventDefault();
+                sTable.draw();
+            });
+
+            $('#btFilter').click(function(e) {
+                e.preventDefault();
+                sTable.draw();
+            });
+            $('#myModal').on('hidden.bs.modal', function() {
+                sTable.draw();
+            });
+        });
+
+
+        function active(id, type) {
+            $.ajax({
+                type: "GET",
+                url: "/Cost/Modify/",
+                data: { id: id, type: type },
+                datatype: 'json',
+                success: function(data) {
+                    $('#showdetail').html(data);
+                }
+            });
+        }
+
+        function calldelete(id) {
+            notify.confirm('@Messege.DELETE_COST', 'Confirm', TITLE_STATUS_DANGER, deletesubmit, id);
+        }
+
+
+        function deletesubmit(id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/Cost/delete",
+                datatype: 'json',
+                data: { id: id },
+                success: function(data) {
+                    if (data.result) {
+                        sTable.draw();
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                },
+                complete: function() {
+                    spinner.close();
+                }
+            });
+        }
+
+        function SetStatusCost(isStatus, id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/Cost/SubmitSetStatusCost",
+                datatype: 'json',
+                data: { isStatus: isStatus, id: id },
+                success: function(data) {
+                    if (data.result) {
+                        sTable.draw();
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                },
+                complete: function() {
+                    spinner.close();
+                }
+            });
+        }
+    </script>
+}

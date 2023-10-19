@@ -1,0 +1,1929 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ADD_ROLE" xml:space="preserve">
+    <value>Add Role</value>
+  </data>
+  <data name="ALERT_APPROVAL_REMOVE" xml:space="preserve">
+    <value>Remove approval successfully!</value>
+  </data>
+  <data name="BRANCH" xml:space="preserve">
+    <value>Branch</value>
+  </data>
+  <data name="BUTTON_SEARCH" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="DELETE_COURSE_COST" xml:space="preserve">
+    <value>Delete Course Cost</value>
+  </data>
+  <data name="DEPARTMENT" xml:space="preserve">
+    <value>Master Data - Department</value>
+  </data>
+  <data name="DEPARTMENT_ACTIOR" xml:space="preserve">
+    <value>Actior</value>
+  </data>
+  <data name="DEPARTMENT_ADD" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="DEPARTMENT_CODE" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="DEPARTMENT_CREATE" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="DEPARTMENT_CREATEDBY" xml:space="preserve">
+    <value>Created By</value>
+  </data>
+  <data name="DEPARTMENT_CREATEDDATETIME" xml:space="preserve">
+    <value>Created Date Time</value>
+  </data>
+  <data name="DEPARTMENT_DELETE" xml:space="preserve">
+    <value>InActive</value>
+  </data>
+  <data name="DEPARTMENT_DETAIL" xml:space="preserve">
+    <value>Detail</value>
+  </data>
+  <data name="DEPARTMENT_EDIT" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="DEPARTMENT_EMAIL" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="DEPARTMENT_HEADNAME" xml:space="preserve">
+    <value>Head Name</value>
+  </data>
+  <data name="DEPARTMENT_LASTUPDATEDBY" xml:space="preserve">
+    <value>Last Updated By</value>
+  </data>
+  <data name="DEPARTMENT_LASTUPDATEDDATETIME" xml:space="preserve">
+    <value>Last Updated Date Time</value>
+  </data>
+  <data name="DEPARTMENT_LIST" xml:space="preserve">
+    <value>List</value>
+  </data>
+  <data name="DEPARTMENT_MODYFY" xml:space="preserve">
+    <value>Modify</value>
+  </data>
+  <data name="DEPARTMENT_NAME" xml:space="preserve">
+    <value>Department Name</value>
+  </data>
+  <data name="DEPARTMENT_PARENT" xml:space="preserve">
+    <value>Parent Department</value>
+  </data>
+  <data name="DISTRIBUTOR" xml:space="preserve">
+    <value>Distributor</value>
+  </data>
+  <data name="GROUPUSER_NAME" xml:space="preserve">
+    <value>Group Name</value>
+  </data>
+  <data name="GROUPUSER_TITLE" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="HOME" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="INVALIDDATA" xml:space="preserve">
+    <value>Invalid data</value>
+  </data>
+  <data name="INVALIDURL" xml:space="preserve">
+    <value>Url is not found</value>
+  </data>
+  <data name="LISTING_DATA_NOT_FOUND" xml:space="preserve">
+    <value>"Data not found"</value>
+  </data>
+  <data name="LISTING_FIRST" xml:space="preserve">
+    <value>"First"</value>
+  </data>
+  <data name="LISTING_INFO" xml:space="preserve">
+    <value>Showing _START_ to _END_ of _TOTAL_ entries</value>
+  </data>
+  <data name="LISTING_INFO_EMPTY" xml:space="preserve">
+    <value>"Showing 0 to 0 of 0 row(s)"</value>
+  </data>
+  <data name="LISTING_INFO_FILTER" xml:space="preserve">
+    <value>"(Filter from _MAX_ row(s))"</value>
+  </data>
+  <data name="LISTING_LAST" xml:space="preserve">
+    <value>"End"</value>
+  </data>
+  <data name="LISTING_LINES_PER_PAGE" xml:space="preserve">
+    <value>_MENU_ row(s) in page</value>
+  </data>
+  <data name="LISTING_NEXT" xml:space="preserve">
+    <value>"After"</value>
+  </data>
+  <data name="LISTING_PREVIOUS" xml:space="preserve">
+    <value>"Before"</value>
+  </data>
+  <data name="LISTING_SEARCH" xml:space="preserve">
+    <value>Search:</value>
+  </data>
+  <data name="LIST_ROLE" xml:space="preserve">
+    <value>List Role</value>
+  </data>
+  <data name="MASTER_DATA" xml:space="preserve">
+    <value>Master Data</value>
+  </data>
+  <data name="NATIONALITY" xml:space="preserve">
+    <value>Master Data - Nationality</value>
+  </data>
+  <data name="NATIONALITY_ACTION" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="NATIONALITY_CODE" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="NATIONALITY_CREATE" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="NATIONALITY_CREATEDBY" xml:space="preserve">
+    <value>Created By</value>
+  </data>
+  <data name="NATIONALITY_CREATEDDATETIME" xml:space="preserve">
+    <value>Created Date Time</value>
+  </data>
+  <data name="NATIONALITY_DESCRIPTION" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="NATIONALITY_DETAIL" xml:space="preserve">
+    <value>Detail</value>
+  </data>
+  <data name="NATIONALITY_EDIT" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="NATIONALITY_FULLNAME" xml:space="preserve">
+    <value>Full Name</value>
+  </data>
+  <data name="NATIONALITY_ISACTIVE" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="NATIONALITY_LIST" xml:space="preserve">
+    <value>List</value>
+  </data>
+  <data name="ROLE_NAME" xml:space="preserve">
+    <value>Role Name</value>
+  </data>
+  <data name="SYS_DEPARTMENT_MODIFY_CREATE" xml:space="preserve">
+    <value>Creat Deparment</value>
+  </data>
+  <data name="SYS_DEPARTMENT_MODIFY_MODIFY" xml:space="preserve">
+    <value>Modify Department</value>
+  </data>
+  <data name="SYS_FIRSTNAME" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="SYS_LASTNAME" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="SYS_LASTONLINEAT" xml:space="preserve">
+    <value>Last Online At</value>
+  </data>
+  <data name="SYS_OFFLINE" xml:space="preserve">
+    <value>Classroom</value>
+  </data>
+  <data name="SYS_ONLINE" xml:space="preserve">
+    <value>Online</value>
+  </data>
+  <data name="SYS_ROLE" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="SYS_STATUS" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="SYS_USER" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="SYS_USERNAME" xml:space="preserve">
+    <value>User Name</value>
+  </data>
+  <data name="SYS_USERSTATE" xml:space="preserve">
+    <value>User state</value>
+  </data>
+  <data name="SYS_USER_MODIFY_CREATE" xml:space="preserve">
+    <value>Create User</value>
+  </data>
+  <data name="SYS_USER_MODIFY_MODIFY" xml:space="preserve">
+    <value>Modify User</value>
+  </data>
+  <data name="TEST" xml:space="preserve">
+    <value>test</value>
+  </data>
+  <data name="USER_ADDRESS" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="USER_COMFRIMPASS" xml:space="preserve">
+    <value>Password Confirm</value>
+  </data>
+  <data name="USER_EMAIL" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="USER_FIRSTNAME" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="USER_GROUPUSER" xml:space="preserve">
+    <value>Group User</value>
+  </data>
+  <data name="USER_LASTNAME" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="USER_PASSWORD" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="USER_PHONENO" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="USER_ROLE" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="USER_TYPE" xml:space="preserve">
+    <value>User Type</value>
+  </data>
+  <data name="USER_UNACTIVE" xml:space="preserve">
+    <value>InActive</value>
+  </data>
+  <data name="USER_USERMAIL" xml:space="preserve">
+    <value>User Name</value>
+  </data>
+  <data name="BACK" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="SAVE" xml:space="preserve">
+    <value>SAVE</value>
+  </data>
+  <data name="blSave" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="btnBack" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="btnSave" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="lblACTION" xml:space="preserve">
+    <value>ACTION</value>
+  </data>
+  <data name="lblActions" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="lblActive" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="lblADDNEW" xml:space="preserve">
+    <value>ADD NEW</value>
+  </data>
+  <data name="lblAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="lblApproval" xml:space="preserve">
+    <value>Approval</value>
+  </data>
+  <data name="lblAssignTrainee" xml:space="preserve">
+    <value>Assign Trainee </value>
+  </data>
+  <data name="lblAvailableTrainee" xml:space="preserve">
+    <value>Available Trainee</value>
+  </data>
+  <data name="lblAverageCalculate" xml:space="preserve">
+    <value>Average Calculate</value>
+  </data>
+  <data name="lblBack" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="lblCertificate" xml:space="preserve">
+    <value>Certificate</value>
+  </data>
+  <data name="lblCode" xml:space="preserve">
+    <value>Code </value>
+  </data>
+  <data name="lblCompany" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="lblComplete" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="lblCompletedExpectationDate" xml:space="preserve">
+    <value>Completed Expectation Date</value>
+  </data>
+  <data name="lblCONDUCTEDCOURSES" xml:space="preserve">
+    <value>Conducted Course</value>
+  </data>
+  <data name="lblContract" xml:space="preserve">
+    <value>Contract</value>
+  </data>
+  <data name="lblContractNo" xml:space="preserve">
+    <value>Contract No.</value>
+  </data>
+  <data name="lblCost" xml:space="preserve">
+    <value>Cost</value>
+  </data>
+  <data name="lblCostCode" xml:space="preserve">
+    <value>Cost Code</value>
+  </data>
+  <data name="lblCostName" xml:space="preserve">
+    <value>Cost Name</value>
+  </data>
+  <data name="lblCourse" xml:space="preserve">
+    <value>Course</value>
+  </data>
+  <data name="lblCourseCode" xml:space="preserve">
+    <value>Course Code</value>
+  </data>
+  <data name="lblCourseDetails" xml:space="preserve">
+    <value>Course Details</value>
+  </data>
+  <data name="lblCourseList" xml:space="preserve">
+    <value>Course List</value>
+  </data>
+  <data name="lblCourseManagement" xml:space="preserve">
+    <value>Course Management</value>
+  </data>
+  <data name="lblCourseName" xml:space="preserve">
+    <value>Course Name</value>
+  </data>
+  <data name="lblCoursesCost" xml:space="preserve">
+    <value>Course Cost</value>
+  </data>
+  <data name="lblCourseType" xml:space="preserve">
+    <value>Course Type</value>
+  </data>
+  <data name="lblCreate" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="lblCreateDate" xml:space="preserve">
+    <value>Created Date</value>
+  </data>
+  <data name="lblCurrentPosition" xml:space="preserve">
+    <value>Current Position</value>
+  </data>
+  <data name="lblCustomer" xml:space="preserve">
+    <value>Customer</value>
+  </data>
+  <data name="lblDate" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="lblDateOfBirth" xml:space="preserve">
+    <value>Date Of Birth</value>
+  </data>
+  <data name="lblDateOfJoin" xml:space="preserve">
+    <value>Date Of Join</value>
+  </data>
+  <data name="lblDepartment" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="lblDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="lblDetails" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="lblDownloadTemplate" xml:space="preserve">
+    <value>Download Template</value>
+  </data>
+  <data name="lblDuration" xml:space="preserve">
+    <value>Duration</value>
+  </data>
+  <data name="lblEdit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="lblEducation" xml:space="preserve">
+    <value>Education</value>
+  </data>
+  <data name="lblEmployeeName" xml:space="preserve">
+    <value>Employee Name</value>
+  </data>
+  <data name="lblEndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="lblEXPORT" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="lblExprieDate" xml:space="preserve">
+    <value>Expire Date</value>
+  </data>
+  <data name="lblEXTENTTRAINEE" xml:space="preserve">
+    <value>Extent Trainee</value>
+  </data>
+  <data name="lblFile" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="lblFileImport" xml:space="preserve">
+    <value>File Import</value>
+  </data>
+  <data name="lblFilterCourse" xml:space="preserve">
+    <value>Filter Course</value>
+  </data>
+  <data name="lblFirstCheck" xml:space="preserve">
+    <value>First Check</value>
+  </data>
+  <data name="lblFIRSTRESULT" xml:space="preserve">
+    <value>FIRST RESULT</value>
+  </data>
+  <data name="lblFrom" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="lblFromDate" xml:space="preserve">
+    <value>From Date</value>
+  </data>
+  <data name="lblFromTime" xml:space="preserve">
+    <value>From Time</value>
+  </data>
+  <data name="lblFromTo" xml:space="preserve">
+    <value>From-To</value>
+  </data>
+  <data name="lblFullName" xml:space="preserve">
+    <value>Full Name</value>
+  </data>
+  <data name="lblFuturePosition" xml:space="preserve">
+    <value>Future Position</value>
+  </data>
+  <data name="lblGender" xml:space="preserve">
+    <value>Gender</value>
+  </data>
+  <data name="lblGENERAL" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="lblGrade" xml:space="preserve">
+    <value>Grade</value>
+  </data>
+  <data name="lblGroupCourse" xml:space="preserve">
+    <value>Group Course</value>
+  </data>
+  <data name="lblHome" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="lblImport" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="lblImportList" xml:space="preserve">
+    <value>Import list</value>
+  </data>
+  <data name="lblInProcess" xml:space="preserve">
+    <value>In process</value>
+  </data>
+  <data name="lblInputCertificate" xml:space="preserve">
+    <value>Input Certificate</value>
+  </data>
+  <data name="lblInputCost" xml:space="preserve">
+    <value>Input Cost</value>
+  </data>
+  <data name="lblInputNote" xml:space="preserve">
+    <value>Input Note</value>
+  </data>
+  <data name="lblInputResult" xml:space="preserve">
+    <value>Input Result</value>
+  </data>
+  <data name="lblInstructor" xml:space="preserve">
+    <value>Instructor</value>
+  </data>
+  <data name="lblInstructorDetails" xml:space="preserve">
+    <value>Instructor Details</value>
+  </data>
+  <data name="lblInstructorList" xml:space="preserve">
+    <value>Instructor List</value>
+  </data>
+  <data name="lblInstructorManagement" xml:space="preserve">
+    <value>Instructor Management</value>
+  </data>
+  <data name="lblInstructorName" xml:space="preserve">
+    <value>Instructor Name</value>
+  </data>
+  <data name="lblISINSTRUCTOR" xml:space="preserve">
+    <value>Is Instructor</value>
+  </data>
+  <data name="lblJobTitle" xml:space="preserve">
+    <value>Job Title</value>
+  </data>
+  <data name="lblJobTitle_Occupation" xml:space="preserve">
+    <value>Job Title</value>
+  </data>
+  <data name="lblJobtitleStandard" xml:space="preserve">
+    <value>Job Title</value>
+  </data>
+  <data name="lblKindOfSuccessor" xml:space="preserve">
+    <value>Kind Of Successor</value>
+  </data>
+  <data name="lblLearningTime" xml:space="preserve">
+    <value>Learning time</value>
+  </data>
+  <data name="lblList" xml:space="preserve">
+    <value>List</value>
+  </data>
+  <data name="lblListOfSubjectNeedCoaching" xml:space="preserve">
+    <value>List Of Course Need Coaching</value>
+  </data>
+  <data name="lblListSubjectScores" xml:space="preserve">
+    <value>List Course Scores</value>
+  </data>
+  <data name="lblManual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="lblMaxTranineeMembers" xml:space="preserve">
+    <value>Maximum Number Of Participants</value>
+  </data>
+  <data name="lblMethod" xml:space="preserve">
+    <value>Method</value>
+  </data>
+  <data name="lblName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="lblNationality" xml:space="preserve">
+    <value>Nationality</value>
+  </data>
+  <data name="lblNo" xml:space="preserve">
+    <value>No.</value>
+  </data>
+  <data name="lblNote" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="lblNoteList" xml:space="preserve">
+    <value>Note list</value>
+  </data>
+  <data name="lblOptions" xml:space="preserve">
+    <value>Option</value>
+  </data>
+  <data name="lblOrganization" xml:space="preserve">
+    <value>Organization</value>
+  </data>
+  <data name="lblParticipate" xml:space="preserve">
+    <value>Participate</value>
+  </data>
+  <data name="lblPassportNo" xml:space="preserve">
+    <value>Passport No</value>
+  </data>
+  <data name="lblPassScore" xml:space="preserve">
+    <value>Pass Score</value>
+  </data>
+  <data name="lblPending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="lblPhone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="lblPlaceOfBirth" xml:space="preserve">
+    <value>Place Of Birth</value>
+  </data>
+  <data name="lblPoint" xml:space="preserve">
+    <value>Point</value>
+  </data>
+  <data name="lblPotentialSuccessors" xml:space="preserve">
+    <value>Potential Successors</value>
+  </data>
+  <data name="lblProcessing" xml:space="preserve">
+    <value>Processing</value>
+  </data>
+  <data name="lblReCheck" xml:space="preserve">
+    <value>Re Check</value>
+  </data>
+  <data name="lblRecurrent" xml:space="preserve">
+    <value>Recurrent</value>
+  </data>
+  <data name="lblRefreshCycle" xml:space="preserve">
+    <value>Refresh Cycle</value>
+  </data>
+  <data name="lblRegisable" xml:space="preserve">
+    <value>Registrable</value>
+  </data>
+  <data name="lblReject" xml:space="preserve">
+    <value>Reject</value>
+  </data>
+  <data name="lblRelevantTrainingDepartment" xml:space="preserve">
+    <value>Relevant Training Department</value>
+  </data>
+  <data name="lblRemark" xml:space="preserve">
+    <value>Remark</value>
+  </data>
+  <data name="lblResulList" xml:space="preserve">
+    <value>Result list</value>
+  </data>
+  <data name="lblRESULT" xml:space="preserve">
+    <value>Result</value>
+  </data>
+  <data name="lblRoom" xml:space="preserve">
+    <value>Room</value>
+  </data>
+  <data name="lblSave" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="lblSCHEDULE" xml:space="preserve">
+    <value>Schedule</value>
+  </data>
+  <data name="lblSearch" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="lblSelectAnOption" xml:space="preserve">
+    <value>Select an option</value>
+  </data>
+  <data name="lblStartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="lblStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="lblSUBCOURSENAME" xml:space="preserve">
+    <value>Sub Course Name</value>
+  </data>
+  <data name="lblSubject" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="lblSubjectCode" xml:space="preserve">
+    <value>Subject Code</value>
+  </data>
+  <data name="lblSubjectList" xml:space="preserve">
+    <value>Subject List</value>
+  </data>
+  <data name="lblSubjectManagement" xml:space="preserve">
+    <value>Subject Management</value>
+  </data>
+  <data name="lblSubjectName" xml:space="preserve">
+    <value>Subject Name</value>
+  </data>
+  <data name="lblSubjectType" xml:space="preserve">
+    <value>Subject Type</value>
+  </data>
+  <data name="lblSuccessorsTrainingPlan" xml:space="preserve">
+    <value>Successors Training Plan</value>
+  </data>
+  <data name="lblSurvey" xml:space="preserve">
+    <value>Survey</value>
+  </data>
+  <data name="lblTime" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="lblTo" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="lblToDate" xml:space="preserve">
+    <value>To Date</value>
+  </data>
+  <data name="lblToTime" xml:space="preserve">
+    <value>To Time</value>
+  </data>
+  <data name="lblTRAINEE" xml:space="preserve">
+    <value>Trainee</value>
+  </data>
+  <data name="lblTraineeList" xml:space="preserve">
+    <value>Trainee List</value>
+  </data>
+  <data name="lblTraineeManagement" xml:space="preserve">
+    <value>Trainee Management</value>
+  </data>
+  <data name="lblTraineeParticipateSubject" xml:space="preserve">
+    <value>Trainee Participate Subject</value>
+  </data>
+  <data name="lblTrainingAllowance" xml:space="preserve">
+    <value>Training Allowance</value>
+  </data>
+  <data name="lblTRAININGCENTER" xml:space="preserve">
+    <value>Training Center</value>
+  </data>
+  <data name="lblTRAININGCOMPETENCY" xml:space="preserve">
+    <value>Training Competency</value>
+  </data>
+  <data name="lblTrainingCourses" xml:space="preserve">
+    <value>Training Course</value>
+  </data>
+  <data name="lblType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="lblVenue" xml:space="preserve">
+    <value>Venue</value>
+  </data>
+  <data name="lblYes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="lblBy" xml:space="preserve">
+    <value>By</value>
+  </data>
+  <data name="lblCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="lblEmployee" xml:space="preserve">
+    <value>Employee</value>
+  </data>
+  <data name="lblFinal" xml:space="preserve">
+    <value>Final</value>
+  </data>
+  <data name="lblHighLeader" xml:space="preserve">
+    <value>High Leader</value>
+  </data>
+  <data name="lblHighPotential" xml:space="preserve">
+    <value>High Potential</value>
+  </data>
+  <data name="lblInformationPotentialSuccessor" xml:space="preserve">
+    <value>Information Potential Successor</value>
+  </data>
+  <data name="lblJob" xml:space="preserve">
+    <value>Job</value>
+  </data>
+  <data name="lblNeedCoaching" xml:space="preserve">
+    <value>Need Coaching</value>
+  </data>
+  <data name="lblNoAssign" xml:space="preserve">
+    <value>No Assign</value>
+  </data>
+  <data name="lblPosition" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="lblSuccessionPositions" xml:space="preserve">
+    <value>Succession Positions</value>
+  </data>
+  <data name="lblAreYouSure" xml:space="preserve">
+    <value>Are you sure</value>
+  </data>
+  <data name="lblAttendanceSheet" xml:space="preserve">
+    <value>Attendance Sheet</value>
+  </data>
+  <data name="lblATTENDENTSHEET" xml:space="preserve">
+    <value>ATTENDENT SHEET</value>
+  </data>
+  <data name="lblClose" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="lblCostList" xml:space="preserve">
+    <value>Cost List</value>
+  </data>
+  <data name="lblCostReport" xml:space="preserve">
+    <value>Cost Report</value>
+  </data>
+  <data name="lblCOURSERESULT" xml:space="preserve">
+    <value>Course Result</value>
+  </data>
+  <data name="lblDays" xml:space="preserve">
+    <value>Days</value>
+  </data>
+  <data name="lblEmployeeRecord" xml:space="preserve">
+    <value>Employee Record</value>
+  </data>
+  <data name="lblFinalCourseResult" xml:space="preserve">
+    <value>Final Course Result</value>
+  </data>
+  <data name="lblFinalCourseResultList" xml:space="preserve">
+    <value>Final Course Result List</value>
+  </data>
+  <data name="lblHours" xml:space="preserve">
+    <value>Hours</value>
+  </data>
+  <data name="lblInstructorSubjectList" xml:space="preserve">
+    <value>Instructor Subject List</value>
+  </data>
+  <data name="lblInstructorSubjectReport" xml:space="preserve">
+    <value>Instructor Subject Report</value>
+  </data>
+  <data name="lblModify" xml:space="preserve">
+    <value>Modify</value>
+  </data>
+  <data name="lblNbrOfCertiIssued" xml:space="preserve">
+    <value>Nbr of certi. issued</value>
+  </data>
+  <data name="lblNumberOfCertificatesIssued" xml:space="preserve">
+    <value>Number of certificates issued</value>
+  </data>
+  <data name="lblNumberOfParticipants" xml:space="preserve">
+    <value>Maximum number of participants</value>
+  </data>
+  <data name="lblPaticipants" xml:space="preserve">
+    <value>Paticipants</value>
+  </data>
+  <data name="lblPrint" xml:space="preserve">
+    <value>Print</value>
+  </data>
+  <data name="lblRecords" xml:space="preserve">
+    <value>Records</value>
+  </data>
+  <data name="lblReport" xml:space="preserve">
+    <value>Report</value>
+  </data>
+  <data name="lblReportResult" xml:space="preserve">
+    <value>Report Result</value>
+  </data>
+  <data name="lblSelectEmployee" xml:space="preserve">
+    <value>Select Employee</value>
+  </data>
+  <data name="lblSubjectResult" xml:space="preserve">
+    <value>Subject Result</value>
+  </data>
+  <data name="lblSubjectResultList" xml:space="preserve">
+    <value>Subject Result List</value>
+  </data>
+  <data name="lblTeachers" xml:space="preserve">
+    <value>Instructor</value>
+  </data>
+  <data name="lblTOTAL" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="lblTrainingActivityReport" xml:space="preserve">
+    <value>Training Activity Report</value>
+  </data>
+  <data name="lblTrainingActivityReportList" xml:space="preserve">
+    <value>Training Activity Report list</value>
+  </data>
+  <data name="lblTrainingDate" xml:space="preserve">
+    <value>Training date</value>
+  </data>
+  <data name="lblTrainingPlan" xml:space="preserve">
+    <value>Training Plan</value>
+  </data>
+  <data name="lblTRAININGPLANFOR" xml:space="preserve">
+    <value>TRAINING PLAN FOR</value>
+  </data>
+  <data name="lblTypeLearning" xml:space="preserve">
+    <value>Type learning</value>
+  </data>
+  <data name="lblViewReport" xml:space="preserve">
+    <value>View Report</value>
+  </data>
+  <data name="lblDistinction" xml:space="preserve">
+    <value>Distinction</value>
+  </data>
+  <data name="lblInstructorCode" xml:space="preserve">
+    <value>Instructor Code</value>
+  </data>
+  <data name="lblPass" xml:space="preserve">
+    <value>Pass</value>
+  </data>
+  <data name="lblEmailAddress" xml:space="preserve">
+    <value>Email address</value>
+  </data>
+  <data name="lblForgotYourPassword" xml:space="preserve">
+    <value>Forgot Your Password</value>
+  </data>
+  <data name="lblLogin" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="lblLoginToYourAccount" xml:space="preserve">
+    <value>Login to your account</value>
+  </data>
+  <data name="lblLostYourPassword" xml:space="preserve">
+    <value>Lost your password</value>
+  </data>
+  <data name="lblNewPass" xml:space="preserve">
+    <value>New Password</value>
+  </data>
+  <data name="lblNewPassComfirm" xml:space="preserve">
+    <value>New Pass comfirm</value>
+  </data>
+  <data name="lblOldPass" xml:space="preserve">
+    <value>Old Password</value>
+  </data>
+  <data name="lblPassword" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="lblSubmit" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="lblUserName" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="lblContractList" xml:space="preserve">
+    <value>Contract List</value>
+  </data>
+  <data name="lblContractManagement" xml:space="preserve">
+    <value>Contract Management</value>
+  </data>
+  <data name="lblContractor" xml:space="preserve">
+    <value>Contractor</value>
+  </data>
+  <data name="lblCreatedDate" xml:space="preserve">
+    <value>Created Date</value>
+  </data>
+  <data name="lblCurrency" xml:space="preserve">
+    <value>Currency</value>
+  </data>
+  <data name="lblExpireDate" xml:space="preserve">
+    <value>Expire Date</value>
+  </data>
+  <data name="lblLastUpdatedDate" xml:space="preserve">
+    <value>Last Updated Date</value>
+  </data>
+  <data name="lblPeriodDay" xml:space="preserve">
+    <value>Period (Day)</value>
+  </data>
+  <data name="lblPrice" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="lblSignDate" xml:space="preserve">
+    <value>Sign Date</value>
+  </data>
+  <data name="lblCreateDepartment" xml:space="preserve">
+    <value>Create Department</value>
+  </data>
+  <data name="lblImportDepartment" xml:space="preserve">
+    <value>Import Department</value>
+  </data>
+  <data name="lblMaster" xml:space="preserve">
+    <value>Master</value>
+  </data>
+  <data name="lblMasterData" xml:space="preserve">
+    <value>Master Data</value>
+  </data>
+  <data name="lblArea" xml:space="preserve">
+    <value>Area</value>
+  </data>
+  <data name="lblAssignedSubject" xml:space="preserve">
+    <value>Assigned Courses</value>
+  </data>
+  <data name="lblAvailableSubject" xml:space="preserve">
+    <value>Available Courses</value>
+  </data>
+  <data name="lblCapacity" xml:space="preserve">
+    <value>Capacity</value>
+  </data>
+  <data name="lblCreatedAt" xml:space="preserve">
+    <value>Created At</value>
+  </data>
+  <data name="lblCreatedBy" xml:space="preserve">
+    <value>Created By</value>
+  </data>
+  <data name="lblCreatedDay" xml:space="preserve">
+    <value>Created Day</value>
+  </data>
+  <data name="lblCreatedUser" xml:space="preserve">
+    <value>Created User</value>
+  </data>
+  <data name="lblDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="lblEquipment" xml:space="preserve">
+    <value>Equipment</value>
+  </data>
+  <data name="lblFullOption" xml:space="preserve">
+    <value>Full option</value>
+  </data>
+  <data name="lblFunction" xml:space="preserve">
+    <value>Function</value>
+  </data>
+  <data name="lblGroupUser" xml:space="preserve">
+    <value>Group User</value>
+  </data>
+  <data name="lblJobTitleName" xml:space="preserve">
+    <value>Job Title Name</value>
+  </data>
+  <data name="lblLocation" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="lblModifiedAt" xml:space="preserve">
+    <value>Modified At</value>
+  </data>
+  <data name="lblNone" xml:space="preserve">
+    <value>none</value>
+  </data>
+  <data name="lblNoSeats" xml:space="preserve">
+    <value>No Seats</value>
+  </data>
+  <data name="lblParentId" xml:space="preserve">
+    <value>Parent Department</value>
+  </data>
+  <data name="lblPermission" xml:space="preserve">
+    <value>Permission</value>
+  </data>
+  <data name="lblRoles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="lblSerialNumberTax" xml:space="preserve">
+    <value>Serial Number Tax</value>
+  </data>
+  <data name="lblSortName" xml:space="preserve">
+    <value>Sort Name</value>
+  </data>
+  <data name="lblTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="lblView" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="lblYouAreSureToDeleteUser" xml:space="preserve">
+    <value>Are you sure to delete user ?</value>
+  </data>
+  <data name="lblChangePassword" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="lblChangeProfile" xml:space="preserve">
+    <value>Change Profile</value>
+  </data>
+  <data name="lblCheckPass" xml:space="preserve">
+    <value>Password must contain at least 8 characters, including uppercase, lowercase letters, special characters and numbers</value>
+  </data>
+  <data name="lblFirstName" xml:space="preserve">
+    <value>First name</value>
+  </data>
+  <data name="lblImportJobtitle" xml:space="preserve">
+    <value>Import Jobtitle</value>
+  </data>
+  <data name="lblLastName" xml:space="preserve">
+    <value>Last name</value>
+  </data>
+  <data name="lblLastOnlineAt" xml:space="preserve">
+    <value>Last online At</value>
+  </data>
+  <data name="lblMarkAllAsRead" xml:space="preserve">
+    <value>Mark All as Read</value>
+  </data>
+  <data name="lblMonth" xml:space="preserve">
+    <value>Month</value>
+  </data>
+  <data name="lblProfile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="lblRole" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="lblRoleList" xml:space="preserve">
+    <value>Role List</value>
+  </data>
+  <data name="lblRoleName" xml:space="preserve">
+    <value>Role Name</value>
+  </data>
+  <data name="lblSendMessage" xml:space="preserve">
+    <value>Send Message</value>
+  </data>
+  <data name="lblSubjectScore" xml:space="preserve">
+    <value>Subject Score</value>
+  </data>
+  <data name="lblSystemManagement" xml:space="preserve">
+    <value>System Management</value>
+  </data>
+  <data name="lblUser" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="lblUserList" xml:space="preserve">
+    <value>User List</value>
+  </data>
+  <data name="lblLogout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="ASSIGN_BY" xml:space="preserve">
+    <value>Assgin By</value>
+  </data>
+  <data name="SELECT_GROUPCOURSE" xml:space="preserve">
+    <value>-- Select Group Course --</value>
+  </data>
+  <data name="COST_GROUPCOST" xml:space="preserve">
+    <value>Group Cost</value>
+  </data>
+  <data name="REPORT_COST_GROUPCOST" xml:space="preserve">
+    <value>Group Cost</value>
+  </data>
+  <data name="APPROVE_ASSIGN_DETAIL" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="lblEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="TRAINEE_BIRTHDAY" xml:space="preserve">
+    <value>Day Of Birth</value>
+  </data>
+  <data name="TRAINEE_EID" xml:space="preserve">
+    <value>EID</value>
+  </data>
+  <data name="TRAINEE_FULLNAME" xml:space="preserve">
+    <value>Full Name</value>
+  </data>
+  <data name="TRAINEE_GENDER" xml:space="preserve">
+    <value>Gender</value>
+  </data>
+  <data name="TRAINEE_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="TRAINEE_PASSPORT" xml:space="preserve">
+    <value>Passport</value>
+  </data>
+  <data name="TRAINEE_COMPANY" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="TRAINEE_DEPARTMENT" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="TRAINEE_EMAIL" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="TRAINEE_JOB" xml:space="preserve">
+    <value>Job Title</value>
+  </data>
+  <data name="TRAINEE_JOINDATE" xml:space="preserve">
+    <value>Date Of Join</value>
+  </data>
+  <data name="TRAINEE_NATION" xml:space="preserve">
+    <value>Nationality</value>
+  </data>
+  <data name="TRAINEE_PHONE" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="TRAINEE_PLACEOFBIRTH" xml:space="preserve">
+    <value>Place of Birth</value>
+  </data>
+  <data name="TRAINEE_TYPE" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="MCOURSE_ASSIGNEDSUBJECT" xml:space="preserve">
+    <value>Assigned Course</value>
+  </data>
+  <data name="MCOURSE_CODE" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="MCOURSE_DESCRIPTION" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="MCOURSE_NAME" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="MCOURSE_SUBJECT_TYPE" xml:space="preserve">
+    <value>Course Type</value>
+  </data>
+  <data name="lblBondAgreement" xml:space="preserve">
+    <value>Bond Agreement</value>
+  </data>
+  <data name="lblCommitment" xml:space="preserve">
+    <value>Commitment</value>
+  </data>
+  <data name="lblCompensationCost" xml:space="preserve">
+    <value>Refund Of Expenses</value>
+  </data>
+  <data name="lblCostManagement" xml:space="preserve">
+    <value>Cost Management</value>
+  </data>
+  <data name="lblNonWorking" xml:space="preserve">
+    <value>Employee Status</value>
+  </data>
+  <data name="lblNonWorkingDay" xml:space="preserve">
+    <value>Resignation Date</value>
+  </data>
+  <data name="lblReTrainingCost" xml:space="preserve">
+    <value>Re-Training Fee</value>
+  </data>
+  <data name="lblTotalCost" xml:space="preserve">
+    <value>Total Cost</value>
+  </data>
+  <data name="lblAllowance" xml:space="preserve">
+    <value>Allowance</value>
+  </data>
+  <data name="lblChart" xml:space="preserve">
+    <value>Chart</value>
+  </data>
+  <data name="lblContent" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="lblDaysAgo" xml:space="preserve">
+    <value>Days ago</value>
+  </data>
+  <data name="lblDeparmentMaster" xml:space="preserve">
+    <value>Deparment Master</value>
+  </data>
+  <data name="lblGridview" xml:space="preserve">
+    <value>Gridview</value>
+  </data>
+  <data name="lblListTrainee" xml:space="preserve">
+    <value>List Trainee</value>
+  </data>
+  <data name="lblMessenger" xml:space="preserve">
+    <value>Messenger</value>
+  </data>
+  <data name="lblMonthsAgo" xml:space="preserve">
+    <value>Months ago</value>
+  </data>
+  <data name="lblRecurrentTrainingList" xml:space="preserve">
+    <value>Recurrent Training list</value>
+  </data>
+  <data name="lblRecurrentTrainingReport" xml:space="preserve">
+    <value>Recurrent Training Report</value>
+  </data>
+  <data name="lblSearchByJobtitle" xml:space="preserve">
+    <value>Search by Jobtitle</value>
+  </data>
+  <data name="lblSearchinglimitation" xml:space="preserve">
+    <value>Searching Limitation (months)</value>
+  </data>
+  <data name="lblSearchingPoint" xml:space="preserve">
+    <value>Searching point</value>
+  </data>
+  <data name="lblSelectedItems" xml:space="preserve">
+    <value>Select Items</value>
+  </data>
+  <data name="lblValidity" xml:space="preserve">
+    <value>Validity</value>
+  </data>
+  <data name="lblYearsAgo" xml:space="preserve">
+    <value>Years ago</value>
+  </data>
+  <data name="lblChartDepartment" xml:space="preserve">
+    <value>Chart Department</value>
+  </data>
+  <data name="lblChartGroupCost" xml:space="preserve">
+    <value>Chart Group Cost</value>
+  </data>
+  <data name="lblFilter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="lblMonths" xml:space="preserve">
+    <value>Months</value>
+  </data>
+  <data name="lblYears" xml:space="preserve">
+    <value>Years</value>
+  </data>
+  <data name="DELETE_TRAINEE" xml:space="preserve">
+    <value>Trainee</value>
+  </data>
+  <data name="lblHeader" xml:space="preserve">
+    <value>Header</value>
+  </data>
+  <data name="lblError" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="lblErrorNote" xml:space="preserve">
+    <value>Error_Note</value>
+  </data>
+  <data name="lblCompanyCode" xml:space="preserve">
+    <value>Company Code</value>
+  </data>
+  <data name="lblContractCode" xml:space="preserve">
+    <value>Contract Code</value>
+  </data>
+  <data name="lblContractorCode" xml:space="preserve">
+    <value>Contractor Code</value>
+  </data>
+  <data name="lblNationalyCode" xml:space="preserve">
+    <value>Nationaly Code</value>
+  </data>
+  <data name="lblRoomCode" xml:space="preserve">
+    <value>Room Code</value>
+  </data>
+  <data name="lblHasCommitment" xml:space="preserve">
+    <value>Has Committed</value>
+  </data>
+  <data name="lblRemainDaysOfRefund" xml:space="preserve">
+    <value>Remain Days Of Refund</value>
+  </data>
+  <data name="lblAttemptsAllowed" xml:space="preserve">
+    <value>Attempts Allowed</value>
+  </data>
+  <data name="lblAverageGrade" xml:space="preserve">
+    <value>Average Grade</value>
+  </data>
+  <data name="lblCostPerPerson" xml:space="preserve">
+    <value>Cost Per Person</value>
+  </data>
+  <data name="lblFirstAttempt" xml:space="preserve">
+    <value>First Attempt</value>
+  </data>
+  <data name="lblGradingMethod" xml:space="preserve">
+    <value>Grading Method</value>
+  </data>
+  <data name="lblHighestGrade" xml:space="preserve">
+    <value>Highest Grade</value>
+  </data>
+  <data name="lblLastAttempt" xml:space="preserve">
+    <value>Last Attempt</value>
+  </data>
+  <data name="lblJobLevel" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="lblEffectiveDate" xml:space="preserve">
+    <value>Effective Date</value>
+  </data>
+  <data name="lblCommitmentPeriod" xml:space="preserve">
+    <value>Period (Month)</value>
+  </data>
+  <data name="lblLanguage" xml:space="preserve">
+    <value>vi</value>
+  </data>
+  <data name="lblRequestApprove" xml:space="preserve">
+    <value>Request Approve</value>
+  </data>
+  <data name="lblApproveFinalCourseResult" xml:space="preserve">
+    <value>Approve Final Course Result</value>
+  </data>
+  <data name="lblRejectReason" xml:space="preserve">
+    <value>Reject reason</value>
+  </data>
+  <data name="lblRemarkComment" xml:space="preserve">
+    <value>Remark Comment</value>
+  </data>
+  <data name="lblWARNING" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="lblApprovalStatus" xml:space="preserve">
+    <value>Approval Status</value>
+  </data>
+  <data name="lblListGroupTrainee" xml:space="preserve">
+    <value>List Group Trainee</value>
+  </data>
+  <data name="lblMentor" xml:space="preserve">
+    <value>Mentor</value>
+  </data>
+  <data name="lblAbsent" xml:space="preserve">
+    <value>Absent</value>
+  </data>
+  <data name="lblPresent" xml:space="preserve">
+    <value>Present</value>
+  </data>
+  <data name="lblLate" xml:space="preserve">
+    <value>Late</value>
+  </data>
+  <data name="lblPERCENTAGEOFTOTAL" xml:space="preserve">
+    <value>% of Total</value>
+  </data>
+  <data name="lblMinTranineeMembers" xml:space="preserve">
+    <value>Min Traninee Members</value>
+  </data>
+  <data name="lblHANNAH" xml:space="preserve">
+    <value>Hannah</value>
+  </data>
+  <data name="lblForgotPassword" xml:space="preserve">
+    <value>Forgot Password</value>
+  </data>
+  <data name="lblCHECKFAIL" xml:space="preserve">
+    <value>Check Fail</value>
+  </data>
+  <data name="lblStt" xml:space="preserve">
+    <value>No.</value>
+  </data>
+  <data name="lblCodeCertificate" xml:space="preserve">
+    <value>Code Certificate</value>
+  </data>
+  <data name="ALERT_APPROVE" xml:space="preserve">
+    <value>Approve</value>
+  </data>
+  <data name="ALERT_REJECT" xml:space="preserve">
+    <value>Reject</value>
+  </data>
+  <data name="lblApproved" xml:space="preserve">
+    <value>Approved</value>
+  </data>
+  <data name="lblBlocked" xml:space="preserve">
+    <value>Blocked</value>
+  </data>
+  <data name="lblUnBlocked" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="lbl_FORMAT_DATE" xml:space="preserve">
+    <value>dd/MM/yyyy</value>
+  </data>
+  <data name="lbl_TAB_LMS_ASSIGN" xml:space="preserve">
+    <value>LMS Assign</value>
+  </data>
+  <data name="lbl_SENDREQUEST" xml:space="preserve">
+    <value>Send Request</value>
+  </data>
+  <data name="lbl_SENT" xml:space="preserve">
+    <value>Sent</value>
+  </data>
+  <data name="lblCANCELAPPROVE" xml:space="preserve">
+    <value>Cancel Approve</value>
+  </data>
+  <data name="lblGroupTrainee" xml:space="preserve">
+    <value>Trainee Group</value>
+  </data>
+  <data name="ACTIVE" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="INACTIVE" xml:space="preserve">
+    <value>InActive</value>
+  </data>
+  <data name="lblSendMail" xml:space="preserve">
+    <value>Send Email</value>
+  </data>
+  <data name="lblCancelRequest" xml:space="preserve">
+    <value>Cancel Request</value>
+  </data>
+  <data name="lblRequest_Date" xml:space="preserve">
+    <value>Requested Date</value>
+  </data>
+  <data name="lblDeActive" xml:space="preserve">
+    <value>Deactive</value>
+  </data>
+  <data name="lblExternal" xml:space="preserve">
+    <value>External</value>
+  </data>
+  <data name="lblInternal" xml:space="preserve">
+    <value>Internal</value>
+  </data>
+  <data name="lblFemale" xml:space="preserve">
+    <value>Female</value>
+  </data>
+  <data name="lblMale" xml:space="preserve">
+    <value>Male</value>
+  </data>
+  <data name="lblOthers" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="lblResignationDate" xml:space="preserve">
+    <value>Resignation Date</value>
+  </data>
+  <data name="EMPLOYEE_JOINED_PARTY_DATE" xml:space="preserve">
+    <value>Joined Party Date</value>
+  </data>
+  <data name="lblContactList" xml:space="preserve">
+    <value>Contacts List</value>
+  </data>
+  <data name="lblContactManagement" xml:space="preserve">
+    <value>Contact Management</value>
+  </data>
+  <data name="lblContactDetails" xml:space="preserve">
+    <value>Contact Details</value>
+  </data>
+  <data name="lblSend" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="lblSubjectSendMail" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="lblContactInformation" xml:space="preserve">
+    <value>Contact Information</value>
+  </data>
+  <data name="lblReply" xml:space="preserve">
+    <value>Reply</value>
+  </data>
+  <data name="KEYWORDS_MAIL" xml:space="preserve">
+    <value>KEYWORDS ARE ALLOWED TO USE</value>
+  </data>
+  <data name="lblScheduleManagement" xml:space="preserve">
+    <value>Schedule Management</value>
+  </data>
+  <data name="lblBackGroundColor" xml:space="preserve">
+    <value>Background Color</value>
+  </data>
+  <data name="lblCategory" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="lblIcon" xml:space="preserve">
+    <value>Icon</value>
+  </data>
+  <data name="lblImage" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="lblMeetingManagement" xml:space="preserve">
+    <value>Meeting Management</value>
+  </data>
+  <data name="lblMeetingRoom" xml:space="preserve">
+    <value>Meeting Room</value>
+  </data>
+  <data name="lblPostBy" xml:space="preserve">
+    <value>Post By</value>
+  </data>
+  <data name="lblPostNews" xml:space="preserve">
+    <value>News</value>
+  </data>
+  <data name="lblPostNewsCategory" xml:space="preserve">
+    <value>PostNews Category</value>
+  </data>
+  <data name="lblPostNewsList" xml:space="preserve">
+    <value>List PostNews</value>
+  </data>
+  <data name="lblPostNotification" xml:space="preserve">
+    <value>Notification</value>
+  </data>
+  <data name="lblPostWelcome" xml:space="preserve">
+    <value>Welcome</value>
+  </data>
+  <data name="lblTypePostNews" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="lblExpectedCost" xml:space="preserve">
+    <value>Expected Cost</value>
+  </data>
+  <data name="lblTarget" xml:space="preserve">
+    <value>Target</value>
+  </data>
+  <data name="lblAwaitSync" xml:space="preserve">
+    <value>Await Sync</value>
+  </data>
+  <data name="lblSynchronized" xml:space="preserve">
+    <value>Synchronized</value>
+  </data>
+  <data name="lblActiveEnroll" xml:space="preserve">
+    <value>Active Enroll</value>
+  </data>
+  <data name="lblProgramCode" xml:space="preserve">
+    <value>Course Code</value>
+  </data>
+  <data name="lblStatusEnroll" xml:space="preserve">
+    <value>Status Enroll</value>
+  </data>
+  <data name="lblTraineePortal" xml:space="preserve">
+    <value>Trainee Portal</value>
+  </data>
+  <data name="HELP_EMPLOYEE_COURSE" xml:space="preserve">
+    <value>List of courses that instructors can teach</value>
+  </data>
+  <data name="HELP_EMPLOYEE_EID" xml:space="preserve">
+    <value>User code to distinguish it from many people in the system</value>
+  </data>
+  <data name="HELP_EMPLOYEE_EMAIL" xml:space="preserve">
+    <value>Email is most commonly used by users</value>
+  </data>
+  <data name="HELP_EMPLOYEE_FULLNAME" xml:space="preserve">
+    <value>Fullname of user</value>
+  </data>
+  <data name="HELP_EMPLOYEE_TARGET" xml:space="preserve">
+    <value>Classify target is mentor or hannah</value>
+  </data>
+  <data name="HELP_EMPLOYEE_TYPE" xml:space="preserve">
+    <value>Classify type is internal or external</value>
+  </data>
+  <data name="HELP_EMPLOYEE_DEPARTMENT" xml:space="preserve">
+    <value>The department / faculty existing in the system is derived from the system data</value>
+  </data>
+  <data name="HELP_EMPLOYEE_JOBTITLE" xml:space="preserve">
+    <value>The title existing in the system is derived from the system data</value>
+  </data>
+  <data name="HELP_SUBJECT_AVERAGECALCULATE" xml:space="preserve">
+    <value>The average scoring method for the course is applicable or not applicable</value>
+  </data>
+  <data name="HELP_SUBJECT_CODE" xml:space="preserve">
+    <value>Course codes are used to differentiate courses, avoid overlapping and under certain rules</value>
+  </data>
+  <data name="HELP_SUBJECT_DURATION" xml:space="preserve">
+    <value>Course duration are calculated with hours</value>
+  </data>
+  <data name="HELP_SUBJECT_GROUPCOURSE" xml:space="preserve">
+    <value>Group courses are derived from system data</value>
+  </data>
+  <data name="HELP_SUBJECT_LISTINSTRUCTOR" xml:space="preserve">
+    <value>List of instructors available in the system</value>
+  </data>
+  <data name="HELP_SUBJECT_PASSSCORE" xml:space="preserve">
+    <value>Classify points and rank for each level</value>
+  </data>
+  <data name="HELP_SUBJECT_RECURRENT" xml:space="preserve">
+    <value>The retraining period of the course and the training course, if not the retraining course, may be set to 0 by default.</value>
+  </data>
+  <data name="HELP_COST_GROUPCOST" xml:space="preserve">
+    <value>The cost of training is derived from the system data</value>
+  </data>
+  <data name="HELP_COURSE_COMMITMENT" xml:space="preserve">
+    <value>Commitments made if not completed will be refunded</value>
+  </data>
+  <data name="HELP_COURSE_COURSETYPE" xml:space="preserve">
+    <value>Type of course available in the training system</value>
+  </data>
+  <data name="HELP_COURSE_DEPARTMENT" xml:space="preserve">
+    <value>The department / faculty existing in the system is derived from the system data</value>
+  </data>
+  <data name="HELP_COURSE_GROUPSUBJECT" xml:space="preserve">
+    <value>Group courses are taken from system data</value>
+  </data>
+  <data name="HELP_COURSE_HANNAH" xml:space="preserve">
+    <value>Those who perform the task of administering, managing and serving the teaching and learning at educational establishments</value>
+  </data>
+  <data name="HELP_COURSE_INPUT_COST" xml:space="preserve">
+    <value />
+  </data>
+  <data name="HELP_COURSE_INPUT_EXPECTED_COST" xml:space="preserve">
+    <value />
+  </data>
+  <data name="HELP_COURSE_MAXTRAINEE" xml:space="preserve">
+    <value>The maximum number of trainees in a class according to the need to distribute the trainees in the class accordingly</value>
+  </data>
+  <data name="HELP_COURSE_MENTOR" xml:space="preserve">
+    <value>Counseling and support to trainees to maximize the ability to study, practice and scientific research</value>
+  </data>
+  <data name="HELP_COURSE_MINTRAINEE" xml:space="preserve">
+    <value>The minimum number of trainees in a class according to the need to distribute the trainees in the class accordingly</value>
+  </data>
+  <data name="HELP_COURSE_PER_PERSON" xml:space="preserve">
+    <value>Personal expenses for instructor who are teaching assigned courses</value>
+  </data>
+  <data name="HELP_COURSE_REGISABLE" xml:space="preserve">
+    <value>The course will be a course for students to register themselves or to open a regular course</value>
+  </data>
+  <data name="HELP_JOBTITLE_ASSIGNED" xml:space="preserve">
+    <value>The list of assigned courses is taken from the list of selected courses from the courses available on the system</value>
+  </data>
+  <data name="HELP_JOBTITLE_AVAILABLE" xml:space="preserve">
+    <value>List of courses available on the system for placement in designated positions</value>
+  </data>
+  <data name="HELP_JOBTITLE_LEVEL" xml:space="preserve">
+    <value>High or low rank depending on assigned position</value>
+  </data>
+  <data name="HELP_JOBTITLE_OCCUPATION" xml:space="preserve">
+    <value>Occupation standard will be stored in the system and assigned to the user when creating</value>
+  </data>
+  <data name="HELP_JOBTITLE_POSITION" xml:space="preserve">
+    <value>Positions by rank with different names</value>
+  </data>
+  <data name="HELP_SUBJECT_SCORE" xml:space="preserve">
+    <value>Classify points and rank for each level</value>
+  </data>
+  <data name="HELP_USER_GROUP_USER" xml:space="preserve">
+    <value>Group users are derived from system data</value>
+  </data>
+  <data name="HELP_USER_INSTRUCTOR" xml:space="preserve">
+    <value>List of instructors available in the system is from the teacher manager</value>
+  </data>
+  <data name="HELP_USER_ROLE" xml:space="preserve">
+    <value>List of permissions available in the system comes from roles management</value>
+  </data>
+  <data name="lblEXPORT_POINT" xml:space="preserve">
+    <value>Export Points</value>
+  </data>
+  <data name="lblAdvanced" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  <data name="lblAttendance" xml:space="preserve">
+    <value>Attendance</value>
+  </data>
+  <data name="lblCLEANLOG" xml:space="preserve">
+    <value>Clean Log</value>
+  </data>
+  <data name="lblGroupTraineeCreate" xml:space="preserve">
+    <value>Group Trainee Create</value>
+  </data>
+  <data name="lblGroupTraineeEdit" xml:space="preserve">
+    <value>Group Trainee Edit</value>
+  </data>
+  <data name="lblPostNewsManagement" xml:space="preserve">
+    <value>PostNews Management</value>
+  </data>
+  <data name="lblSystemControl" xml:space="preserve">
+    <value>System Control</value>
+  </data>
+  <data name="lblJobName" xml:space="preserve">
+    <value>Jobtitle Name</value>
+  </data>
+  <data name="COURSE_PUBlIC" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="lblMaxGrade" xml:space="preserve">
+    <value>Max Grade</value>
+  </data>
+  <data name="lblIngredient" xml:space="preserve">
+    <value>Ingredient</value>
+  </data>
+  <data name="lblExpiryDate" xml:space="preserve">
+    <value>Expiry Date</value>
+  </data>
+  <data name="lblRegistryDate" xml:space="preserve">
+    <value>Registry Date</value>
+  </data>
+  <data name="lblHOME_CHART" xml:space="preserve">
+    <value>Training Course Chart</value>
+  </data>
+  <data name="lblReminderTitle" xml:space="preserve">
+    <value>Reminder Title</value>
+  </data>
+  <data name="lblisExaminer" xml:space="preserve">
+    <value>Is Examiner</value>
+  </data>
+  <data name="lblMonitor" xml:space="preserve">
+    <value>Monitor</value>
+  </data>
+  <data name="lblExaminer" xml:space="preserve">
+    <value>Examiner</value>
+  </data>
+  <data name="lblExpiredInstructors" xml:space="preserve">
+    <value>Expired Instructors</value>
+  </data>
+  <data name="lblDaysTotal" xml:space="preserve">
+    <value>Days Total</value>
+  </data>
+  <data name="lblExpiredInstructorsList" xml:space="preserve">
+    <value>Expired Instructors List</value>
+  </data>
+  <data name="lblLastCourse" xml:space="preserve">
+    <value>Last Course</value>
+  </data>
+  <data name="lblLastDay" xml:space="preserve">
+    <value>Last Day</value>
+  </data>
+  <data name="lblLastSubject" xml:space="preserve">
+    <value>Last Subject</value>
+  </data>
+  <data name="lblRESULTS" xml:space="preserve">
+    <value>Results</value>
+  </data>
+  <data name="lblDept" xml:space="preserve">
+    <value>Dept</value>
+  </data>
+  <data name="lblFail" xml:space="preserve">
+    <value>Fail</value>
+  </data>
+  <data name="lblNoPayment" xml:space="preserve">
+    <value>No Payment</value>
+  </data>
+  <data name="lblPaid" xml:space="preserve">
+    <value>Paid</value>
+  </data>
+  <data name="lblProcessStepsCourse" xml:space="preserve">
+    <value>Process Steps Course</value>
+  </data>
+  <data name="lblCompanyName" xml:space="preserve">
+    <value>Company Name</value>
+  </data>
+  <data name="lblAuto" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="lblCertificateManagement" xml:space="preserve">
+    <value>Certificate Management</value>
+  </data>
+  <data name="lblInstructors" xml:space="preserve">
+    <value>Instructors</value>
+  </data>
+  <data name="lblNationalityName" xml:space="preserve">
+    <value>Nationality Name</value>
+  </data>
+  <data name="lblRoomName" xml:space="preserve">
+    <value>Room Name</value>
+  </data>
+  <data name="lblMarkType" xml:space="preserve">
+    <value>Mark Type</value>
+  </data>
+  <data name="lblAddress" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="lblEmailTo" xml:space="preserve">
+    <value>Email To</value>
+  </data>
+  <data name="lblRoomType" xml:space="preserve">
+    <value>Room Type</value>
+  </data>
+  <data name="lblSubjectMail" xml:space="preserve">
+    <value>Subject Mail</value>
+  </data>
+  <data name="lblTaxCode" xml:space="preserve">
+    <value>Tax Code</value>
+  </data>
+  <data name="lblContentTemplate" xml:space="preserve">
+    <value>Content - Template</value>
+  </data>
+  <data name="lblDone" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="lblListInstructors" xml:space="preserve">
+    <value>List Instructors</value>
+  </data>
+  <data name="lblMailExchange" xml:space="preserve">
+    <value>Mail Exchange</value>
+  </data>
+  <data name="lblMailTemplate" xml:space="preserve">
+    <value>Mail Template</value>
+  </data>
+  <data name="lblWaiting" xml:space="preserve">
+    <value>Waiting</value>
+  </data>
+  <data name="lblCertificateCode" xml:space="preserve">
+    <value>Certificate Code</value>
+  </data>
+  <data name="lblCertificateName" xml:space="preserve">
+    <value>Certificate Name</value>
+  </data>
+  <data name="lblTimeRemind" xml:space="preserve">
+    <value>Remind before (day)</value>
+  </data>
+  <data name="lblRoleID" xml:space="preserve">
+    <value>Role ID</value>
+  </data>
+  <data name="lblSubjects" xml:space="preserve">
+    <value>Subjects</value>
+  </data>
+  <data name="lblExaminers" xml:space="preserve">
+    <value>Examiners</value>
+  </data>
+  <data name="lblRemarks" xml:space="preserve">
+    <value>Remarks</value>
+  </data>
+  <data name="SELECT_COURSE_NAME" xml:space="preserve">
+    <value>Select Course Name</value>
+  </data>
+  <data name="lblDateOfIssue" xml:space="preserve">
+    <value>Date Of Issue</value>
+  </data>
+  <data name="lblRequestBy" xml:space="preserve">
+    <value>Request By</value>
+  </data>
+  <data name="lblDateApproval" xml:space="preserve">
+    <value>Date Approval</value>
+  </data>
+  <data name="lblPayment" xml:space="preserve">
+    <value>Payment</value>
+  </data>
+  <data name="lblTotalDuration" xml:space="preserve">
+    <value>Total Duration</value>
+  </data>
+  <data name="lblDateFrom" xml:space="preserve">
+    <value>Date From</value>
+  </data>
+  <data name="lblDateTo" xml:space="preserve">
+    <value>Date To</value>
+  </data>
+  <data name="lblStaffID" xml:space="preserve">
+    <value>Staff ID</value>
+  </data>
+  <data name="lblParticipants" xml:space="preserve">
+    <value>Participants</value>
+  </data>
+</root>

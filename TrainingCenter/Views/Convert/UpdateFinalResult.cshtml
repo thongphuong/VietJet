@@ -1,0 +1,80 @@
+﻿@using TMS.Core.App_GlobalResources
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout_LMS.cshtml";
+}
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li class="active">@Resource.lblDetails</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="panel " style="margin-top: 10px;" id="frmFilter">
+    <div class="panel-heading">
+    </div>
+    <div class="panel-body">
+        <div class="form-login">
+            <div class="text-left" style="margin-bottom:-5px;">
+                <div class="icon-object border-slate-300 text-slate-300"><i class="icon-reading"></i></div>
+                <h2 class="content-group form-title" id="title-login">Update Final Result</h2>
+                <label style="color:aquamarine">@ViewBag.Message</label>
+            </div>
+            <select class="form-control selectpicker createform" id="CourseList" data-placeholder="-- @Resource.lblCourseList --">
+                <option></option>
+                @if (ViewBag.ListCourse != null)
+                {
+                    foreach (var item in ViewBag.ListCourse)
+                    {
+                        <option value="@item.Key">@item.Value</option>
+                    }
+                }
+
+            </select>
+            <hr />
+            <div class="row">
+                <div class="col-md-1">
+                    <b>@Resource.lblPass</b>
+                </div>
+                <div class="col-md-1">
+                    <input type="number" class="form-control frmFilter" id="txt_coursepass" name="txt_coursepass" value="80" />
+                </div>
+                <div class="col-md-1">
+                    <b>@Resource.lblDistinction</b>
+                </div>
+                <div class="col-md-1">
+                    <input type="number" class="form-control frmFilter" id="txt_coursedistinction" name="txt_coursedistinction" value="90" />
+                </div>
+            </div>
+            <br />
+            <div class="form-group" style="text-align:right;" id="div-submit">
+                <button type="button" id="btnUpdate" class="btn btn-primary ">Cập nhật<i class="icon-circle-right2 position-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+@section Scripts{
+    <script type="text/javascript">
+        $('#btnUpdate').click(function () {
+            var id = $("#CourseList").val();
+            var pass = $("#txt_coursepass").val();
+            var distinction = $("#txt_coursedistinction").val();
+            Update(id, pass, distinction);
+        });
+        function Update(id,pass,distinction) {
+            window.location.href = "/Convert/UpdateResult?courseid=" + id + "&pass=" + pass + "&distinction=" + distinction;
+        }
+    </script>
+
+}
+

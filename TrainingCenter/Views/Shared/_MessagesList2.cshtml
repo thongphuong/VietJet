@@ -1,0 +1,91 @@
+﻿@using TMS.Core.Utils
+@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Notifications.NotificationModel
+<style type="text/css">
+    .navbar-top-links .dropdown-menu li a {
+        padding: 25px 15px;
+        min-height: 0;
+    }
+
+    .active2 {
+        background: #F8F8F8;
+    }
+</style>
+<input type="hidden" value="@Model.Count" id="hd_count_mess2" />
+@foreach (var item in Model.NotificationDetail)
+{
+    string time = DateUtil.DateToString(item.datesend, "dd/MM/yyyy hh:mm");
+    if (item.datesend != null &&
+        (DateTime.Now.Day == item.datesend.Value.Day &&
+        DateTime.Now.Month == item.datesend.Value.Month &&
+        DateTime.Now.Year == item.datesend.Value.Year))
+    {
+        TimeSpan span = (DateTime.Now - item.datesend.Value);
+        if (span.Hours == 0 && span.Minutes == 0)
+        {
+            time = "Now";
+        }
+        else {if (span.Hours == 0 && span.Minutes > 0)
+            {
+                time = string.Format("{0} minutes", span.Minutes);
+            }
+            else if (span.Hours > 0)
+            {
+                time = string.Format("{0}h{1}m", span.Hours, span.Minutes);
+            }
+        }
+    }
+   
+    <input hidden value="@item.id" id="iditem" />
+    <a href="@(!item.Notification.URL.IsEmpty() ? item.Notification.URL : "javascript:void(0)" )" class="list-group-item  @(item.status == (int)UtilConstants.NotificationStatus.Show ? "active2" : "active")" onclick="viewnotification(@item.id)" style="padding-bottom: 25px; ">
+        @*@{
+            HttpCookie cookie = HttpContext.Current.Request.Cookies["language"];
+           if (cookie.Value == "en")
+           {
+                <i class="zmdi zmdi-comment-more"></i> <b>@Html.DisplayFor(modelItem => item.Notification.Message)</b> <br />
+                <i>@Html.DisplayFor(modelItem => item.Notification.MessageContent) </i>
+           }
+           else if (cookie.Value == "vi")
+           {
+                <i class="zmdi zmdi-comment-more"></i> <b>@Html.DisplayFor(modelItem => item.Notification.MessageVN)</b> <br />
+                <i>@Html.DisplayFor(modelItem => item.Notification.MessageContentVN) </i>
+           }
+         }*@
+        
+        <i class="zmdi zmdi-comment-more"></i> <b>@Html.DisplayFor(modelItem => item.Notification.Message)</b> <br />
+        <i>@Html.DisplayFor(modelItem => item.Notification.MessageContent)</i><br />
+        <span class="text-muted small text-left">
+           
+            <b><em>@((item.USER.FIRSTNAME != null ? item.USER.FIRSTNAME.ToUpper() : " " )+ " " + (item.USER.LASTNAME != null ? item.USER.LASTNAME.ToUpper() : ""))</em></b>
+                <br />
+            
+            <b><em>@time</em></b>
+        </span>
+    </a>
+    @*<a onclick="callHidden(@item.id)">
+        <i class="fa fa-eye-slash text-right" aria-hidden="true"></i>
+    </a>*@
+}
+
+<script type="text/javascript">
+    function Reload()
+    {
+        location.reload();
+    }
+    function callHidden(id) {
+        notify.confirm('@Messege.HIDDEN_NOTIFICATION', 'Warning', TITLE_STATUS_WARNING, hideSubmit, id);
+    }
+    function hideSubmit(id) {
+        $.ajax({
+            type: 'POST',
+            url: "/Home/Hidden",
+            datatype: 'json',
+            data: { id: id },
+            success: function (response) {
+                if (response.result)
+                    location.reload();
+            }
+        });
+    }
+</script>
+

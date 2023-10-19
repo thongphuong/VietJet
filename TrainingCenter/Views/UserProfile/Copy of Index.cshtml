@@ -1,0 +1,257 @@
+﻿@model IEnumerable<TrainingCenter.Models.UserProfile>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.ActiveMenu = "System";
+    ViewBag.ActiveSubMenu = "UserProfile";
+}
+
+@section pageTitle {
+    <h1><i class="fa fa-user"></i>
+        User Profile
+                        <small>Management</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+        <li class="active"><i class="fa fa-user" style="margin-right:5px"></i>User Profile management</li>
+    </ol>
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-danger">
+            <div class="box-header">
+
+                <h3 class="box-title">Profile List</h3>
+                <div class="box-tools pull-right" data-toggle="tooltip">
+                    
+                    <div class="btn-group" data-toggle="btn-toggle" id="functionMenu">
+                        @*<button type="button" class="btn btn-default btn-sm"><i class="fa fa-plus"></i></button>*@
+
+                        
+                        <button class="btn btn-primary" id="btCreateProfile">
+                            <i class="fa fa-plus"></i>
+                            Create New Profile
+                        </button>
+                        <button class="btn btn-primary" id="btImportUser">
+                            <i class="fa fa-download"></i>
+                            Import User
+                        </button>
+                        <button class="btn btn-success" id="btRefreshPage">
+                            <i class="fa fa-refresh"></i>
+                            Refresh Data
+                        </button>
+                        
+                    </div>
+                    @Html.DropDownList("DepartmentList",(SelectList)ViewBag.Current_Department_Id, "- - - All Department - - -", new { @class = "form-control", id="DepartmentList", style="display:inline-block; width:auto; padding: 5px 12px;" })
+                </div>
+            </div>
+            <div class="box-body table-responsive">
+                <table id="defaultTable" class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:20px;text-align:center">#
+                            </th>
+                            <th>ID
+                            </th>                          
+                            <th>Username
+                            </th>
+                            <th>First name
+                            </th>
+                            <th>Last name
+                            </th>
+                            <th>Mobile Phone
+                            </th>
+                            <th>Department
+                            </th>
+                            <th>Group
+                            </th>
+                            @* <th></th>*@
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr data-id="@item.UserId">
+                                <td style="text-align:center">                                   
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.str_File_No)
+                                </td>                                
+                                <td class="colUsername">
+                                    @Html.DisplayFor(modelItem => item.UserName)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.str_Firstname)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.str_Lastname)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.str_Mobile_Phone)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Department.str_Name)
+                                </td>
+                                <td>
+                                    @(item.int_Group_Roles_Id!=null?item.Group_Roles.str_Group_Name:"")
+                                </td>
+                                @* <td>
+
+                                    <div class="btn-group">
+                                        <button type="button"  class="btn btn-default editBut" data-id="@item.UserId"><i class="fa fa-pencil"></i></button>
+                                        <button type="button"  class="btn btn-default detailBut" data-id="@item.UserId"><i class="fa fa-bars"></i></button>
+                                        <button type="button"  class="btn btn-default deleteBut" data-id="@item.UserId"><i class="fa fa-times"></i></button>
+
+                                         @if (item.bit_Teacher)
+                                    {
+                                             <button type="button"  class="btn btn-default subjectBut" data-id="@item.UserId"><i class="fa fa-user-md"></i></button>
+                                        
+                                    }
+                                    </div>
+                                    @Html.ActionLink("Edit", "Edit", new { id=item.UserId }) |
+                                        @Html.ActionLink("Details", "Details", new { id=item.UserId }) |
+                                        @Html.ActionLink("Delete", "Delete", new { id=item.UserId })
+                                </td>*@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+</div>
+<div class="modal fade" id="confirmdelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //$('.editBut').click(function () {
+    //    window.location.href("/UserProfile/Edit/" + $(this).data("id"));
+    //});
+    //$('.detailBut').click(function () {
+    //    window.location.href("/UserProfile/Detail/" + $(this).data("id"));
+    //});
+    //$('.deleteBut').click(function () {
+    //    window.location.href("/UserProfile/Delete/" + $(this).data("id"));
+    //});
+
+    $("#btCreateProfile").click(function () {
+        window.location.href="/UserProfile/Create";
+    });
+
+    $("#btImportUser").click(function () {
+        window.location.href = "/UserProfile/ImportUser";
+    });
+    
+    $("#btRefreshPage").click(function () {
+        location.reload();
+    });
+
+    $(document).ready(function () {
+        var table = $('#defaultTable').DataTable({
+            "bLengthChange": true,
+            "fnDrawCallback": function (oSettings) {
+                /* Need to redo the counters if filtered or sorted */
+                if (oSettings.bSorted || oSettings.bFiltered) {
+                    for (var i = 0, iLen = oSettings.aiDisplay.length ; i < iLen ; i++) {
+                        $('td:eq(0)', oSettings.aoData[oSettings.aiDisplay[i]].nTr).html(i + 1);
+                    }
+                }
+            },
+            "aoColumnDefs": [
+                { "bSortable": false, "aTargets": [0] }
+            ],
+            "aaSorting": [[1, 'asc']]
+        });
+        $('#defaultTable tbody').on('click', 'tr', function () {
+            if (!$(this).hasClass('selected')) {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+                $('#functionMenu').find('#btDeleteProfile').remove();
+                $('#functionMenu').find('#btEditProfile').remove();
+                $('#functionMenu').find('#btDetailProfile').remove();
+                if (typeof $('tr.selected').data("id") != "undefined") {
+                    $('#functionMenu').prepend("<button class='btn btn-danger' id='btDeleteProfile'><i class='fa fa-times'></i> Delete</button>"
+                        + "<button class='btn btn-warning' id='btEditProfile'><i class='fa fa fa-pencil'></i> Edit</button>"
+                        + "<button class='btn btn-info' id='btDetailProfile'><i class='fa fa fa-bars'></i> Detail</button>");
+                }
+            }
+        });
+
+        $(document).on("click", '#btEditProfile', function () {
+            window.location.href="/UserProfile/Edit/" + $('#defaultTable .selected').data("id");
+        });
+
+        $(document).on("click", '#btDeleteProfile', function () {
+            //window.location.href("/UserProfile/Delete/" + $('#defaultTable .selected').data("id"));            
+            setPopUpInform('Confirm Delete',
+                '<p>You are about to delete user profile, this procedure is irreversible.</p>'
+                + '<p>Do you want to proceed?</p><p>Username: <strong>' + $('tr.selected').find('.colUsername').text() + '</strong></p>',
+                'Cancel,Delete');
+            $('#confirmdelete').modal('show');
+
+        });
+
+        $(document).on("click", '#btDetailProfile', function () {
+            window.location.href="/UserProfile/Details/" + $('#defaultTable .selected').data("id");
+        });
+
+        $('#DepartmentList').change(function () {
+            window.location.href = "/UserProfile/Index/" + $('#DepartmentList').val();
+        });
+        
+
+        $('#confirm-delete').on('show.bs.modal', function (e) {
+
+        })
+
+        $(document).on('click', '#deletePop', function () {
+            var selectedRow = $('tr.selected');
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "/UserProfile/DeleteUser",
+                dataType: "json",
+                data: { Id: selectedRow.data('id') },
+                success: function (result) {
+                    if (result.code == "Success") {
+                        table.rows(selectedRow).remove().draw();
+                        $('#functionMenu').find('#btDeleteProfile').remove();
+                        $('#functionMenu').find('#btEditProfile').remove();
+                        $('#functionMenu').find('#btDetailProfile').remove();
+                    }
+                    else {
+                        setPopUpInform('Delete Fail',
+                                       '<p>' + result.message + '</p>',
+                                       'Close');
+                        setTimeout(function () { $('#confirmdelete').modal('show'); }, 200)
+                        //$('#ShowPopUp').click();
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', '#closePop', function () {
+            $('#confirmdelete').modal('hide');
+        });
+
+    });
+
+</script>
+
+

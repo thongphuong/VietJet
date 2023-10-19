@@ -1,0 +1,90 @@
+﻿@using TMS.Core.App_GlobalResources
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<form action="/Menu/ImportFunctions" method="POST" enctype="multipart/form-data">
+    <a href="/Menu/GetImportExcel" target="_blank">Download</a>
+    <input type="file" name="postedFile"/>
+    <input type="submit"/>
+</form>
+
+<div class="panel-body">
+    <table id="data-table" class="table table-striped table-bordered">
+        <thead >
+            <tr role="row">
+                <th>@Resource.lblStt</th>
+                <th>Name</th>
+                <th>IsActive</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+    </table>
+</div>
+
+<div class="table-responsive hidden">
+    <table id="data-table-child" class="table table-striped table-hover table-bordered">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Url</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function() {
+            var sTable;
+            var customRow = [
+            { "targets": 0 }
+            ];
+            sTable = initDataTable("#data-table", "/Menu/AjaxHandlerListGroupFunctions", customRow);
+      
+
+        sTable.on('click', 'tr td button.expand', function() {
+            var id = $(this).data('id');
+            var tr = $(this).closest('tr');
+            var row = sTable.row(tr);
+
+            if (row.child.isShown()) {
+                tr.removeClass('details');
+                row.child.html('');
+
+            } else {
+                tr.addClass('details');
+
+                row.child(showChildren(id)).show();
+
+            }
+        });
+    });
+        function showChildren(id) {
+            var $child = $("#data-table-child").clone();
+            $child.dataTable({
+                "responsive:": true,
+                 "pageLength": 900000,
+                "searching": false,
+                "columnDefs": [
+                    {
+                        "targets": 0,
+                        "data": null,
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    }
+                ],
+                "aaSorting": [],
+                "bServerSide": true,
+                "sAjaxSource": "/Menu/AjaxHandlerChildMenu/" + id,
+                "bProcessing": true
+            });
+            return $child;
+        }
+    </script>
+}

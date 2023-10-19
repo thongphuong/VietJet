@@ -1,0 +1,97 @@
+﻿@using DAL.Entities
+@model Course
+@{
+    ViewBag.Title = "CourseResult";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.ActiveSubMenu = "Report";
+}
+
+
+
+
+<div class="nav-tabs-custom" id="detailTabs">
+    <!-- Tabs within a box -->
+    <ul class="nav nav-tabs pull-right ui-sortable-handle">
+        <li class="pull-left header"><i class="fa fa-tags"></i>Reports - Training Plan</li>
+    </ul>
+    <div class="tab-content padding">
+        <div class="chart tab-pane active" id="FlowBoard" style="position: relative; padding: 15px; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+            <div class="row">
+
+                @using (Html.BeginForm("CourseInformation", "Report", FormMethod.Post, new { @id = "MainForm", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="col-md-12" style="border-right: solid 1px #e5e5e5">
+                        <div class="row">
+                            <div class="col-md-3">
+
+                                <span>Filter Start Date</span>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" name="fSearchDate" id="fSearchDate" placeholder="Search Start Date" onchange="ChangeDate()" value="@ViewBag.SearchDateRange">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <p>
+                                    <span>Course Code</span>
+                                    <input type="text" name="CourseCode" value="@ViewBag.CourseCode" class="form-control"/>
+                                </p>
+                            </div>
+                              <div class="col-md-4">
+                                <p>
+                                    <span>Course Name</span>
+                                    <input type="text" name="CourseName" value="@ViewBag.CourseName" class="form-control"/>
+                                </p>
+                            </div>
+                            <div class="col-md-2">
+                                <p>
+                                    <span style="width: 5px; display: block">&nbsp;</span>
+                                    <button class="btn btn-block btn-info" name="SubmitButton" value="View Report">View Report</button>
+                                </p>
+                            </div>
+                        </div>                       
+                    </div>
+                }
+            </div>
+
+
+
+            @if (ViewBag.SearchDateRange!=null)
+            {               
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-xs-12">
+                        <div class="box box-danger">
+                            <div class="box-header" style="border-bottom: solid 1px #e5e5e5">
+                                <h3 class="box-title">Report Result</h3>
+                                <div class="box-tools pull-right" data-toggle="tooltip">
+                                    <div class="btn-group" data-toggle="btn-toggle" id="functionMenu" style="padding-top: 5px;">
+                                        <a href="/Template/Report/ExportCourseInformation?ReportType=PDF"><i class="fa fa-file-text"></i>Export PDF</a>
+                                        <a href="/Template/Report/ExportCourseInformation?ReportType=Excel" style="margin-left: 10px"><i class="fa fa-table"></i>Export Excel</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-12" style="text-align: center">
+                                        <img  src="@Url.Action("ViewCourseInformation", "Report", new { fSearchDate = ViewBag.SearchDateRange, CourseCode=ViewBag.CourseCode, CourseName=ViewBag.CourseName })"   style="margin:auto"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+
+    $('#fSearchDate').daterangepicker({
+        format: 'DD MMM YYYY'
+    });
+
+
+</script>

@@ -1,0 +1,182 @@
+﻿.authorization-edit-wrapper-lsBox {
+    width: 100%;
+    float: left;
+    border: 1px solid #cccccc;
+    padding: 10px;
+    height: 390px;
+}
+
+.authorization-edit-btnNav {
+    float: left;
+    margin: 110px 20px 0 20px;
+}
+
+    .authorization-edit-btnNav input[type="button"] {
+        width: 45px;
+        margin-bottom: 10px;
+    }
+
+.float-left {
+    float: left;
+}
+
+.authorization-edit-lstBox1 {
+    border: none;
+}
+
+.authorization-edit-lsbox-title {
+    width: 45%;
+    float: left;
+}
+
+.disabledbutton {
+    pointer-events: none;
+    -ms-opacity: 0.4;
+    opacity: 0.4;
+}
+
+.border-solid {
+    border: 1px solid #ccc;
+}
+
+
+.cusor-pointer {
+    cursor: pointer;
+}
+
+.margin-top-30 {
+    margin-top: 30px;
+}
+.margin-top-10 {
+    margin-top: 10px;
+}
+.margin-left-20 {
+    margin-left: 20px;
+}
+.margin-left-10 {
+    margin-left: 10px;
+}
+.relative {
+    position: relative;
+}
+
+.size-15 {
+    font-size: 15px;
+}
+
+.size-16 {
+    font-size: 16px;
+}
+
+.size-17 {
+    font-size: 17px;
+}
+
+.size-18 {
+    font-size: 18px;
+}
+
+.size-19 {
+    font-size: 19px;
+}
+
+.size-20 {
+    font-size: 20px;
+}
+
+
+
+
+
+
+#accordian {
+    /*Some cool shadow and glow effect*/
+}
+
+    #accordian > ul {
+        margin-left: -40px;
+    }
+
+    #accordian ul li:hover {
+        background: #ecdc01;
+    }
+    /*heading styles*/
+    #accordian ul li {
+        font-size: 17px;
+        line-height: 50px;
+        font-weight: bold;
+        cursor: pointer;
+        /*fallback for browsers not supporting gradients*/
+        background: rgba(0, 0, 0, 0);
+        border-bottom: 1px solid #fff;
+    }
+     #accordian ul ul li:first-child {
+        border-top: 1px solid #fff;
+    }
+
+    #accordian li a {
+        padding: 0 0 0 5px;
+        color: black;
+        height: 100%;
+        display: block;
+    }
+
+        #accordian li a span {
+            padding: 0 0 0 4px;
+            font-size: 13px;
+            margin-right: 0px;
+            height: 100%;
+            display: inline-block;
+        }
+    /*list items*/
+    #accordian li {
+        list-style-type: none;
+    }
+    /*links*/
+    #accordian ul ul li {
+        padding: 0;
+        color: white;
+        text-decoration: none;
+        font-size: 11px;
+        color: white !important;
+        line-height: 50px;
+        display: block;
+        /*transition for smooth hover animation*/
+        -webkit-transition: all 0.15s;
+        -moz-transition: all 0.15s;
+        -ms-transition: all 0.15s;
+        -o-transition: all 0.15s;
+        transition: all 0.15s;
+        background: #ecdc01;
+    }
+
+    #accordian .sub {
+        padding: 0 20px;
+    }
+
+    /*hover effect on links*/
+    #accordian ul ul li:hover {
+        background: #e51f20;
+        border-left: 5px solid white;
+    }
+
+    #accordian ul ul li a:hover {
+        color: white;
+    }
+    /*Lets hide the non active LIs by default*/
+    #accordian ul ul {
+        display: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    #accordian li.active {
+        background: #ecdc01;
+    }
+
+        #accordian li.active ul {
+            display: block;
+        }
+
+
+

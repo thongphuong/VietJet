@@ -1,0 +1,298 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Employee.EmployeeGroupModify
+@{
+    ViewBag.Title = "ModifyGroup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fas fa-users"></i> @Resource.lblTraineeManagement - @(Model.Id.HasValue ? Resource.lblGroupTraineeEdit : Resource.lblGroupTraineeCreate ) </h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblTraineeManagement</li>
+                <li class="active">@Resource.lblGroupTrainee @(Model.Id.HasValue ? Resource.lblEdit : Resource.lblCreate )
+            </ol>
+        </div>
+    </div>
+}
+
+<style>
+    input[type='checkbox'] {
+        position: relative !important;
+    }
+    .list-height-over {
+        overflow: scroll;
+        max-height: 400px;
+    }
+</style>
+<div class="panel list-panel">
+    <div class="panel-heading list-panel-heading">
+        <h1 class="panel-title list-panel-title"><i class="fas fa-pencil-alt font-small-byhoa" aria-hidden="true"></i> @(Model.Id.HasValue ? Resource.lblEdit : Resource.lblCreate )</h1>
+    </div>
+    <div class="panel-body center-block">
+        @using (Html.BeginForm("ModifyGroup", "Employee", FormMethod.Post, new { id = "createform" }))
+        {
+            <div class="tab-pane fade  active in" id="home">
+                <div class="row">
+                    @Html.HiddenFor(m => m.Id)
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>@Resource.lblCode <font color="red">(*)</font></label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="hidden" value="-1" id="editor-index" />
+                                @Html.TextBoxFor(m => m.Code, new { @class = "form-control", id = "Code", placeholder = Resource.lblCode, @Required = "Required" })
+                                @Html.ValidationMessageFor(m => m.Code, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>@Resource.lblName <font color="red">(*)</font></label>
+                            </div>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.Name, new { @class = "form-control", id = "Name", placeholder = Resource.lblName, @Required = "Required" })
+                                @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>
+                                    <label>@Resource.lblTRAINEE</label>
+                                </label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="col-md-9">
+                                    <input type="text" id="FilterCodeOrName" name="FilterCodeOrName" placeholder="Code or Name" class="form-control" style="margin-left:-15px;" />
+                                </div>
+                                <div class="col-md-3">
+                                    <a id="btFilter" class="btn btn-primary center-block legitRipple" onclick="checkTrainee()">@Resource.lblFilter</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>@Resource.lblDescription</label>
+                            </div>
+                            <div class="col-md-8">
+                                @Html.TextAreaFor(model => model.Description, new { id = "txt_NOTE", @class = "form-control", @rows = "1" })
+                                @Html.ValidationMessageFor(m => m.Description, null, new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+
+                            </div>
+                            <div class="col-md-8">
+                                <div class="panel panel-default">
+                                    <div id="panel-body">
+                                        <div id="TraineeIds" class="authorization-edit-lstBox2 list-height-300" style="border: none">
+                                            <div id="subjectlist"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 list-height-300">
+                        <div class="form-group " id="listSubject"></div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="action-form text-right">
+                @if (User.IsInRole("/Employee/ModifyGroup"))
+                {
+                    @*<button type="submit" class="btn btn-primary" id="save"><i class="fa fa-floppy-o" aria-hidden="true"></i> @Resource.lblSave</button>*@
+                    <a class="btn btn-primary" id="saveA" onclick="submit()"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                }
+                <a onclick="goBack()" class="btn btn-default legitRipple"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        var history_temp = [];
+        $(document).ready(function () {
+            checkTrainee();
+        });
+        function submit() {
+            spinner.open();
+            var form = $("#createform").serialize();
+            var $forms = $('#createform');
+            //if ($forms.valid()) {
+            $.ajax({
+                type: 'POST',
+                url: "/Employee/ModifyGroup",
+                datatype: 'json',
+                data: form,
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, 'SUCCESS', TITLE_STATUS_SUCCESS);
+                        window.location.href = '/Employee/Group';
+                    }
+                    else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    spinner.close();
+                }
+            });
+        }
+        function checkTrainee() {
+            var form = $("#createform").serialize();
+            $.ajax({
+                type: 'POST',
+                @{if(Model.Id  != null)
+                    {
+                        @:url: "/Employee/AjaxHandlerListSelectTrainee/" + @Model.Id +"",
+                     }
+                else
+                {
+                @:url: "/Employee/AjaxHandlerListSelectTrainee",
+                }
+                }              
+                cache: false,
+                datatype: 'json',
+                data: form,
+                success: function (data) {
+                    $("#subjectlist").html('');
+                    $("#subjectlist").append(data);
+                    
+                }, complete: function () {
+                    document.getElementById("checkAll").onclick = function () {
+                        var checklist_select = [];
+                        $(".intructorId").each(function (i, v) {
+                            checklist_select.push($(v).val());
+                        });
+                        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                        for (var checkbox of checkboxes) {
+                            checkbox.checked = this.checked;
+                        }
+                        //$(".TraineeIds").prop('checked', $(this).prop("checked"));
+                        $(".TraineeIds").each(function (i,c) {
+                            if ($(this).prop("checked") == false) {
+                                    $(c).trigger('change');
+                            }
+                            else if ($(this).prop("checked") == true) {
+                                if (!checklist_select.includes($(c).val())) {
+                                        $(c).trigger('change');
+                                }
+                            }
+                        });
+                    };
+                    var checklist_select = [];
+                    $(".intructorId").each(function (i, v) {
+                        checklist_select.push($(v).val());
+                    });
+                    $("input[name='TraineeIds']").each(function (i,v) {
+                        if (history_temp.includes($(this).val())) {
+                            $(this).prop("checked", true);
+                        }
+                      if ($(this).prop("checked") == true) {
+                            if (!checklist_select.includes($(this).val())) {
+                                    $(this).trigger('change');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        function display_data() {
+            $.ajax({
+                type: 'GET',
+                cache: false,
+                datatype: 'json',
+              
+
+
+            });
+        }
+        $('#FilterCodeOrName').bind("enterKey", function (e) {
+            checkTrainee();
+        });
+        $('#FilterCodeOrName').keyup(function (e) {
+            if (e.keyCode == 13) {
+                $(this).trigger("enterKey");
+            } 
+        });
+        $(document).on('change', 'input[name="TraineeIds"]', function () {
+            var $this = $(this);
+            var value = $(this).val();
+            if ($(this).prop("checked") == true) {
+                history_temp.push(value);
+            } else {
+                var index = history_temp.indexOf(value);
+                if (index > -1) {
+                     history_temp.splice(index, 1);
+                }
+            }
+            optionclick($this, value);
+        });
+        function optionclick(ddlInstructor, instructorId) {
+        var $tr = ddlInstructor.closest('div');
+
+        //var rowIndex = $tr.data('index');     
+         var nameins = ddlInstructor.data("name");
+         var idins = ddlInstructor.val();
+        //var $instructorList = $tr.find('.lstList');
+        var $subjectList = $('#listSubject');
+
+        var rowId = $subjectList.data('index') == undefined ? 0 : $subjectList.data('index');
+        if (ddlInstructor.is(":checked")) {
+            ddlInstructor.addClass('active');
+            //ddlInstructor.data('none', false);
+
+
+            var htmlInstructor = '<div class="row insdura_' + idins + ' subjectInstructor"><input class="intructorId" type="hidden" name="intructorId" id="intructorId" value="'+idins+'"/>';
+            htmlInstructor += '<div class="form-group col-md-6"><label>@Resource.lblTRAINEE</label>' +
+                '<input class="" id="editor-insdra-instructorId" type="hidden" name="TraineeIds[' + rowId + '].TraineeId" value="' + instructorId + '"/> <input type="text" id="editor-insdra-instructorName" class="form-control input-sm" readonly="readonly"  value="' + nameins + '"/></div>';
+            htmlInstructor += '</div>';
+
+            $subjectList.append(htmlInstructor);
+            rowId++;
+            $subjectList.data('index', rowId);
+            if (rowId == 0) {
+                    valueselect = loacalallowance;
+            }
+        } else {
+            ddlInstructor.removeClass('active');
+            //ddlInstructor.data('none', true);
+            //ddlInstructor.removeAttr('selected');
+            $('.insdura_' + idins).remove();
+            if (rowId > 0) {
+                    rowId--;
+            }
+            $subjectList.data('index', rowId);
+        }
+
+        var countarray = 0;
+        var $root = $('.subjectInstructor');
+        $.each($root, function(i, o) {
+            var $this = $(this);
+            $this.find('#editor-insdra-instructorId').attr("name", "TraineeIds[" + countarray + "].TraineeId");
+            countarray++;
+        });
+    }
+    </script>
+}

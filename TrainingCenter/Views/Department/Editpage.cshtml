@@ -1,0 +1,186 @@
+﻿@using DAL.Entities
+@using DAL.Repositories
+@using DAL.UnitOfWork
+@model Department
+@{
+    UnitOfWork _uow = new UnitOfWork();
+    IRepository<Department> _repoDepartment = _uow.Repository<Department>();
+    IRepository<Trainee> _repoTrainee = _uow.Repository<Trainee>();
+    int id = ViewBag.id;
+    var mModel = Model;
+
+    IEnumerable<Department> deps = _repoDepartment.Get(a => !a.bit_Deleted, x => x.OrderBy(a => a.Department_Id));
+    IEnumerable<Trainee> trainee_ = _repoTrainee.Get(a => !a.bit_Deleted && a.int_Role == (int)Constants.ROLE.Instructor, x => x.OrderBy(a => a.str_Fullname));
+}
+@functions{
+    public string loaddepartment(int? parentid, int level, int? department_id)
+    {
+        UnitOfWork _uow = new UnitOfWork();
+        IRepository<Department> _repoDepartment = _uow.Repository<Department>();
+        string result = string.Empty;
+        bool parent = false;
+        var data = _repoDepartment.Get(a => !a.bit_Deleted);
+        if (parentid == null)
+        {
+            data = data.Where(a => !a.bit_Deleted && a.int_Parent_Id == null);
+            parent = true;
+        }
+        else
+        {
+            data = data.Where(a => !a.bit_Deleted && a.int_Parent_Id == parentid);
+        }
+
+        if (data.Count() == 0)
+            return result;
+        else
+        {
+            foreach (var item in data)
+            {
+                string selected = "";
+                if (item.Department_Id == department_id)
+                {
+                    selected = "selected";
+                }
+                string khoangtrang = "";
+                for (int i = 0; i < level; i++)
+                {
+                    khoangtrang += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                }
+
+                result += "<option value='" + item.Department_Id + "' style='font-size:" + (18 - (level + 2)) + "px;' " + selected + " >" + khoangtrang + "+ " + item.str_Name;
+                result += "</option>";
+                result += loaddepartment(item.Department_Id, level + 1, department_id);
+            }
+        }
+        return result;
+    }
+}
+<div class="panel panel-danger list-panel" id="list-panel">
+    <div class="panel-heading list-panel-heading">
+        <h1 class="panel-title list-panel-title"> Edit </h1>
+    </div>
+    <div class="panel-body center-block">
+        @using (Html.BeginForm("Modify", "Department", FormMethod.Post, new { id = "createform" }))
+        {
+            <input type="hidden" id="hd_id" name="id" value="@id" />
+
+            <div class="form-group col-lg-12">
+              
+                @{
+                    if (mModel.is_training == true)
+                    {
+                        <input type="checkbox" id="is_training" name="is_training" checked />
+                    }
+                    else
+                    {
+                        <input type="checkbox" id="is_training" name="is_training" />
+                    }
+                }
+                <label>Relevant Training Department </label>
+            </div>
+            <div id="divtraining">
+                <div class="form-group col-lg-12">
+                    <label>Head name</label>
+                    <select class="form-control" name="int_headname" id="int_headname">
+                        @foreach (var item in trainee_)
+                        {
+                            if (item.Trainee_Id == mModel.headname)
+                            {
+                                <option value="@item.Trainee_Id" selected>@item.str_Fullname</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Trainee_Id">@item.str_Fullname</option>
+                            }
+
+                        }
+
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group col-lg-12">
+                <label>@Resources.Resource.DEPARTMENT_PARENT</label>
+                <select class="form-control" name="int_parentID" id="int_parentID" data-placeholder="-- Parent Department --">
+                    <option></option>
+                    @Html.Raw(loaddepartment(null, 1, mModel.int_Parent_Id))
+                </select>
+            </div>
+
+            <div class="form-group col-lg-12">
+                <label>Code <font color="red">(*)</font></label>
+                <input type="text" name="str_Code" value="@mModel.str_Code" data-parsley-required-message="Required Fields" required class="form-control">
+            </div>
+            <div class="form-group col-lg-12">
+                <label>Department Name <font color="red">(*)</font></label>
+                <input type="text" name="str_Name" value="@mModel.str_Name" class="form-control">
+            </div>
+            <div class="form-group col-lg-12">
+                <label>Description </label>
+                <textarea rows="7" class="form-control" value="@mModel.decsription" name="str_Description"></textarea>
+            </div>
+
+                <div class="divider"></div>
+                <div class="divider"></div>
+                <div class="form-group col-lg-12">
+                    <div id="messageout">
+                    </div>
+                </div>
+                <div class="pull-right pad10R">
+                    @{
+                        if (CMSUtils.Is_Edit("/Department/Index")) // neu co
+                        {
+                            <a class="btn btn-md btn-danger min-width-100" onclick="submit()">Update</a>
+                            <a href="javascript:void(0)" onclick="active(0,'create')" class="btn btn-md btn-danger min-width-100">Cancel</a>
+                        }
+                    }
+                    
+                </div>
+                    }
+    </div>
+</div>
+<script src="~/Content/Js/select2/js/select2.full.min.js"></script>
+<script>
+    $(document).ready(function () {
+        //$(".js-example-basic-single").select2(); $("p:not(.intro)")
+        $('select:not([name="DepTable_length"])').select2({
+            width: '100%',
+            allowClear: true
+        }).addClass('form-control searchText1');
+        checksubject();
+        @{
+            if (mModel.is_training == true)
+            {
+               @:$('#divtraining').show();
+            }
+            else
+            {
+                @:$('#divtraining').hide();
+            }
+        }
+        $('#is_training').change(function () {
+            if ($(this).is(":checked")) {
+                $('#divtraining').show();
+            } else {
+                $('#divtraining').hide();
+            }
+            checksubject();
+        });
+       
+
+    });
+    function checksubject() {
+        var form = $("#createform").serialize();
+        var $forms = $('#createform');
+        $.ajax({
+            type: 'POST',
+            url: "/Department/checkselectsubject",
+            datatype: 'json',
+            data: form,
+            success: function (data) {
+                $("#subjectlist").html('');
+                $("#subjectlist").append(data);
+            }
+        });
+    }
+</script>

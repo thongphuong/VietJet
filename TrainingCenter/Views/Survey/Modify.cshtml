@@ -1,0 +1,185 @@
+﻿@using TMS.Core.Utils
+@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Survey.SurveyModels
+@{
+    ViewBag.Title = "Modify";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fab fa-keycdn"></i>  Survey Management - @(Model.Id == 0? "Create" : "Edit")</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li>Survey Management</li>
+                <li class="active">@(Model.Id == 0 ? "Create" : "Edit")</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title"><i class="fas fa-pencil-alt font-small-byhoa" aria-hidden="true"></i> @(Model.Id == 0 ? "Create" : "Edit")</h1>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("Modify", "Survey", FormMethod.Post, new { @class = "form-horizontal bordered-row", id = "createform" }))
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.HiddenFor(model => model.Id)
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>@Resource.lblCode <span class="text-danger">(*)</span></label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" id="Code" name="Code" @(Model.Id == null ? "" : "readonly" ) value="@Model.Code" data-parsley-required-message="Required Fields" required class="form-control">
+                                @Html.ValidationMessageFor(m => m.Code, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>@Resource.lblName <span class="text-danger">(*)</span> </label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" id="Name" name="Name" value="@Model.Name" data-parsley-required-message="Required Fields" required class="form-control">
+                                @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>@Resource.lblStartDate<span class="text-danger">(*)</span></label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right frmFilter" name="StartDate" id="StartDate" placeholder="@Resource.lblStartDate" value="@Model.StartDate">
+                                </div>
+
+                                @Html.ValidationMessageFor(m => m.StartDate, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>@Resource.lblEndDate<span class="text-danger">(*)</span></label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right frmFilter" name="EndDate" id="EndDate" placeholder="@Resource.lblEndDate" value="@Model.EndDate">
+                                </div>
+                                @Html.ValidationMessageFor(m => m.EndDate, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label> @Resource.lblDescription</label>
+                            </div>
+                            <div class="col-md-10">
+                                <textarea class="form-control" cols="20" name="Description" id="Description" rows="2">@Model.Description</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label> Visible</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select class="form-control" id="IsActive" name="IsActive">
+                                    <option value="true">Show</option>
+                                    <option value="false">Hiden</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        }
+                <div class="row">
+                    <div class="action-form text-right">
+                        @{
+                        if (User.IsInRole("/Contract/Modify"))
+                        {
+                            <a href="javascript:void(0)" class="btn btn-primary  legitRipple" id="submit" onclick=" submit() "><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                            <a onclick=" goBack() " class="btn  btn-default legitRipple"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+                    }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+            $(document).ready(function() {
+                $('.date').datetimepicker({
+                    format: "HH:mm"
+                });
+                formatDatetimepicker('#StartDate', '@Resource.lblLanguage');
+
+                formatDatetimepicker('#EndDate', '@Resource.lblLanguage');
+            });
+
+            function submit() {
+                spinner.open();
+                $('#submit').hide();
+                var form = document.getElementById('createform');
+                var formData = new FormData(form);
+
+                $.ajax({
+                    type: 'POST',
+                    url: "/Survey/Modify",
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    //datatype: 'json',
+                    success: function (data) {
+                        if (!data.result) {
+                            notify.alert(data.message, "WARNING", TITLE_STATUS_DANGER);
+                        } else {
+                            notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                            window.location.href = "/Survey/Index/";
+                        }
+                    },
+                    complete: function () {
+                        spinner.close();
+                        $('#submit').show();
+                    }
+                });
+            }
+    </script>
+}

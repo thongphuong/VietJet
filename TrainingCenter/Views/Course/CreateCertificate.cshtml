@@ -1,0 +1,654 @@
+﻿@using DAL.Entities
+@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.ReportModels.FinalCourseResultModel
+@{
+    ViewBag.Title = "CreateCertificate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="cer_style">
+    <style type="text/css">
+        .widget {
+            display: inline-block;
+            font-size: 14px !important;
+            line-height: 20px !important;
+            margin: 5px;
+            vertical-align: top;
+            color: #333;
+            border-radius: 5px;
+            margin: 10px;
+            border-radius: 5px;
+            -webkit-border-radius: 5px;
+            display: inline-block;
+            page-break-after: always;
+        }
+
+            .widget .header p {
+                padding: 10px;
+                border-bottom: 1px solid lightgrey;
+                max-width: 360px;
+            }
+
+            .widget .header .title {
+                font-weight: bold;
+                vertical-align: middle;
+                min-height: 36px;
+                padding: 5px 10px 5px 10px;
+            }
+
+            .widget .header:hover {
+                background-color: #f4f4f4;
+            }
+
+            .widget .header .title.selected {
+                border-color: cornflowerblue;
+                background-color: #EEF;
+            }
+
+            .widget .content {
+                padding: 5px;
+                overflow-y: auto;
+                max-height: 400px;
+            }
+
+        .gradient-blue {
+            background: #b8e1fc; /* Old browsers */
+            /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+            background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2I4ZTFmYyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwJSIgc3RvcC1jb2xvcj0iI2E5ZDJmMyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjI1JSIgc3RvcC1jb2xvcj0iIzkwYmFlNCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjM3JSIgc3RvcC1jb2xvcj0iIzkwYmNlYSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0iIzkwYmZmMCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjUxJSIgc3RvcC1jb2xvcj0iIzZiYThlNSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjgzJSIgc3RvcC1jb2xvcj0iI2EyZGFmNSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNiZGYzZmQiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+            background: -moz-linear-gradient(top, #b8e1fc 0%, #a9d2f3 10%, #90bae4 25%, #90bcea 37%, #90bff0 50%, #6ba8e5 51%, #a2daf5 83%, #bdf3fd 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #b8e1fc), color-stop(10%, #a9d2f3), color-stop(25%, #90bae4), color-stop(37%, #90bcea), color-stop(50%, #90bff0), color-stop(51%, #6ba8e5), color-stop(83%, #a2daf5), color-stop(100%, #bdf3fd)); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top, #b8e1fc 0%, #a9d2f3 10%, #90bae4 25%, #90bcea 37%, #90bff0 50%, #6ba8e5 51%, #a2daf5 83%, #bdf3fd 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top, #b8e1fc 0%, #a9d2f3 10%, #90bae4 25%, #90bcea 37%, #90bff0 50%, #6ba8e5 51%, #a2daf5 83%, #bdf3fd 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top, #b8e1fc 0%, #a9d2f3 10%, #90bae4 25%, #90bcea 37%, #90bff0 50%, #6ba8e5 51%, #a2daf5 83%, #bdf3fd 100%); /* IE10+ */
+            background: linear-gradient(to bottom, #b8e1fc 0%, #a9d2f3 10%, #90bae4 25%, #90bcea 37%, #90bff0 50%, #6ba8e5 51%, #a2daf5 83%, #bdf3fd 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b8e1fc', endColorstr='#bdf3fd', GradientType=0); /* IE6-8 */
+        }
+    </style>
+</div>
+
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-graduation-cap"></i>  @Resource.lblCourseManagement - @Resource.lblInputCertificate</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblCourseManagement</li>
+                <li class="active">@Resource.lblInputCertificate</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div id="frmFilter">
+        @using (Html.BeginForm("AjaxHandleLisInputCetificate", "Course", FormMethod.Post, new { id = "createform" }))
+        {
+            <div class="col-md-12" style="margin-top: 10px;" id="divFilterProgram">
+                <div class="panel  list-panel" id="list-panel">
+                    <div class="panel-heading list-panel-heading">
+                        <h1 class="panel-title list-panel-title">
+                            @Resource.lblFilter
+                            <p class="btn-group pull-right">
+                                <a href="/Course/InputCerNo/" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-list-ul" aria-hidden="true"></i> List Certificate</a>
+                            </p>
+                        </h1>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row col-md-12">
+                            <div class="row" style="margin-top: 10px;">
+                                <div class="col-md-2">
+                                    <label>@Resource.lblCourseCode</label>
+                                </div>
+                                <div class="col-md-2">
+                                    @Html.TextBox("coursecode", null, new
+                                    {
+                                        @class = "form-control"
+                                    })
+                                </div>
+
+                                <div class="col-md-1">
+                                    <label>@Resource.lblTime</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" class="form-control pull-right" name="fSearchDate_from" id="fSearchDate_from" placeholder="@Resource.lblStartDate">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" class="form-control pull-right" name="fSearchDate_to" id="fSearchDate_to" placeholder="@Resource.lblEndDate">
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <button type="button" id="btFiltercourse" onclick="filterFinal()" class="btn btn-primary">@Resource.lblFilter</button>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row" style="margin-top: 10px;">
+                                <div class="col-md-2">
+                                    <b>@Resource.lblCourseName</b>
+                                </div>
+                                <div class="col-md-10">
+                                    <select class="form-control selectpicker frmFilter" id="CourseList" name="CourseList" data-placeholder="-- @Resource.lblCourseList  @*(@Resource.lblCode - @Resource.lblName)*@ --" onchange="OnChangeCourseList(this.value)">
+                                        <option></option>
+                                        @if (Model.Courses != null)
+                                        {
+                                            foreach (var item in Model.Courses)
+                                            {
+                                                <option value="@item.Key">@item.Value</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 10px;" id="filterSubject">
+                                <div class="col-md-2">
+                                    <b>@Resource.lblSubject</b>
+                                </div>
+                                <div class="col-md-10">
+                                    <select class="form-control frmFilter" id="ddl_subject" name="ddl_subject" data-placeholder="--@Resource.lblSubjectList--"></select>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 10px;">
+                                <div class="col-md-11">
+                                </div>
+                                <div class="col-md-1">
+                                    <button type="submit" class="btn btn-primary pull-right" id="btFilter">
+                                        <i class="fa fa-search"></i> @Resource.lblSearch
+                                    </button>
+                                    <button type="button" class="btn btn-primary pull-right" id="btFilter2">
+                                        <i class="fa fa-search"></i> @Resource.lblSearch
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*<div class="col-md-12" style="margin-top: 10px;" id="divFilterCourse">
+                    <div class="panel  list-panel" id="list-panel">
+                        <div class="panel-heading list-panel-heading">
+                            <h1 class="panel-title list-panel-title">@Resource.lblFilter</h1>
+                        </div>
+                        <div class="panel-body">
+
+                            <div class="row col-md-12">
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-2">
+                                        <label>@Resource.lblCourseCode</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        @Html.TextBox("coursecode", null, new
+                                       {
+                                           @class = "form-control"
+                                       })
+                                    </div>
+
+                                    <div class="col-md-1">
+                                        <label>@Resource.lblTime</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <input type="text" class="form-control pull-right" name="fSearchDate_from" id="fSearchDate_from" placeholder="@Resource.lblStartDate">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <input type="text" class="form-control pull-right" name="fSearchDate_to" id="fSearchDate_to" placeholder="@Resource.lblEndDate">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button type="button" id="btFiltercourse" onclick="Filtercourse()" class="btn btn-primary">@Resource.lblFilter</button>
+                                    </div>
+                                </div>
+
+
+                                <hr>
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-2">
+                                        <b>@Resource.lblCourseName</b>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <select class="form-control selectpicker frmFilter" id="CourseList" name="CourseList" data-placeholder="-- @Resource.lblCourseList --" onchange="OnChangeCourseList(this.value)">
+                                            <option></option>
+
+                                            @if (Model.Courses != null)
+                                            {
+                                                foreach (var item in Model.Courses)
+                                                {
+                                                    <option value="@item.Key">@item.Value</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-2">
+                                        <b>@Resource.lblSubject</b>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <select class="form-control frmFilter" id="ddl_subject" name="ddl_subject"  data-placeholder="--@Resource.lblSubjectList--">                                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-11">
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button type="button" class="btn btn-primary pull-right" id="btFilter2">
+                                            <i class="fa fa-search"></i> @Resource.lblSearch
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+            <form id="form_test"></form> @*--------vi diệu---------*@
+            <div class="col-md-12" style="margin-top: 10px;">
+                <div class="panel list-panel" id="list-panel">
+                    <div class="panel-body">
+                        <ul class="nav nav-tabs" style="margin-bottom: 10px;">
+                            <li class="tabProgram active">
+                                <a href="#PROGRAM" data-toggle="tab" aria-expanded="False" id="tabProgram">@Resource.lblCourse</a>
+                            </li>
+                            <li class="tabCourse">
+                                <a href="#COURSE" data-toggle="tab" aria-expanded="False" id="tabCourse">@Resource.lblSubject</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade active in" id="PROGRAM">
+                                <form name="FinalCourseResult_form" id="FinalCourseResult_form">
+                                    <div class="table-responsive">
+                                        <table id="FinalCourseResult" class="table table-striped table-bordered" style="width: 100%">
+                                            <thead>
+                                                <tr role="row">
+                                                    <th style="width: 5%">No.</th>
+                                                    <th style="width: 10%">@Messege.EID</th>
+                                                    <th style="width: 10%">@Resource.lblName</th>
+                                                    <th style="width: 10%">@Resource.lblJobTitle</th>
+                                                    <th style="width: 10%">@Resource.lblDepartment</th>
+                                                    <th style="width: 5%">@Resource.lblPoint</th>
+                                                    <th style="width: 5%">@Resource.lblGrade</th>
+                                                    <th style="width: 15%">@Resource.lblCodeCertificate</th>
+
+                                                    <th style="width: 10%">@Resource.lblCertificate</th>
+                                                    <th style="width: 10%">@Resource.lblStatus</th>
+                                                    @*<th style="width: 10%">@Resource.lblActions</th>*@
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                            <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                        </table>
+                                    </div>
+
+                                </form>
+                                <div class="row">
+                                    <div class="action-form text-right">
+                                        @if (User.IsInRole("/Course/InputCerNo"))
+                                        {
+                                            @:<a href="javascript:void(0)" class="btn btn-primary" id="courseSubmit" onclick=" submitcourse() " style="display: none; width: 80px"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="COURSE">
+                                @*<div class="col-md-12 ">
+                                        <a href="/Course/SetCertificate" class="btn btn-success btn-xs dropdown-toggle legitRipple pull-right "><i class="fa fa-plus" aria-hidden="true"></i> @Resource.lblCreate</a>
+                                        <br />
+                                    </div>
+                                    <div class="col-md-12">
+                                        <hr />
+                                        <div class="col-md-6">
+                                            <div class="col-md-6 text-right">
+                                                <b>Decision N<small style="margin-top: -3px; position: absolute;">o</small></b>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control" name="ATOGroup" id="ATOGroup" value="" />
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-3">
+                                            <select class="form-control frmFilter" name="CertificateGroupId" id="CertificateGroup" data-placeholder="-- Group Certificate --">
+                                                <option></option>
+                                                @if (Model.GroupCertificates.Any())
+                                                {
+                                                    foreach (var item in Model.GroupCertificates)
+                                                    {
+                                                        <option value="@item.Key">@item.Value</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>*@
+                                <form id="TraineeOfProgram_form">
+                                    <div class="table-responsive">
+                                        <table id="TraineeOfProgram" class="table table-striped table-bordered" style="width: 100%">
+                                            <thead>
+                                                <tr role="row">
+                                                    <th style="width: 5%">@Resource.lblNo</th>
+                                                    <th style="width: 10%">@Resource.TRAINEE_EID</th>
+                                                    <th style="width: 15%">@Resource.lblName</th>
+                                                    <th style="width: 15%">@Resource.lblDepartment</th>
+                                                    <th style="width: 20%">@Resource.lblLearningTime</th>
+                                                    <th style="width: 3%">@Resource.lblFirstCheck</th>
+                                                    <th style="width: 3%">@Resource.lblReCheck</th>
+                                                    @*<th style="width: 25%">@Resource.lblRemark</th>*@
+                                                    <th style="width: 25%">@Resource.lblCodeCertificate</th>
+
+                                                    <th style="width: 8%">@Resource.lblCertificate</th>
+                                                    <th style="width: 10%">@Resource.lblStatus</th>
+                                                    @*<th style="width: 5%">@Resource.lblActions</th>*@
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                            <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                        </table>
+                                    </div>
+                                </form>
+                                <div class="row">
+                                    <div class="action-form text-right">
+                                        @if (User.IsInRole("/Course/InputCerNo"))
+                                        {
+                                            @:<a href="javascript:void(0)" class="btn btn-primary" id="submitCourseCertifiCate" onclick="submitCourseCertifiCate()" style="display: none; width: 80px"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div id="cer_script">
+    <script src="~/Content/Js/html2canvas/canvas2image.js"></script>
+    <script src="~/Content/Js/html2canvas/html2canvas.js"></script>
+    @*<script src='~/Content/assets/js/jquery-2.2.4.js'></script>*@
+    <script type="text/javascript">
+        function Download(id) {
+            html2canvas($("#a" + id), {
+                onrendered: function (canvas) {
+                    Canvas2Image.saveAsPNG(canvas);
+                }
+            });
+        }
+    </script>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        function Blank_Review(id) {
+              var bd = $("#c" + id).html();
+            var cer_style = $("#cer_style").html();
+            var cer_script = $("#cer_script").html();
+            var wOpen = window.open($(this).attr("href"), '_blank');
+            wOpen.document.write("<a href='javascript:void(0)' onclick='Download(" + id + ")' title='Download'>[Download]<a>" + cer_style + bd + "" + cer_script);
+        }
+        var $dataTable;
+        var tbTrainee;
+
+        $(document).ready(function () {
+            $("#createform").submit(function (e) {
+                $dataTable.draw();
+                $('#courseSubmit').show();
+                e.preventDefault();
+                $('#CertificateForAll').val('-1');
+                $('#CertificateForAll').trigger('change');
+                //tbTrainee.draw();
+
+            });
+            $("#tabProgram").click();
+            var customRow = [
+                {
+                    "targets": 0, 
+                     "className": "text-center"
+                },
+                {
+                    "targets": 5,
+                    "className": "text-center"
+
+                },
+                {
+                    "targets": 6,
+                    "className": "text-center"
+
+                },
+                {
+                    "targets": 7,
+                    "className": "text-center"
+
+                },
+                {
+                    "targets": 9,
+                    "className": "text-center"
+
+                }
+            ];
+            var customRow2 = [
+               {
+                   "targets": 0,
+                   "className": "text-center"
+               }
+            ];
+            //TraineeOfProgram AjaxHandlerSubjectCertificate
+            $dataTable = initDataTableMaxPageLength("#FinalCourseResult", "/Course/AjaxHandleLisInputCetificate", customRow);
+            tbTrainee = initDataTableMaxPageLength("#TraineeOfProgram", "/Course/AjaxHandlerSubjectCertificate", customRow2);
+
+            formatDatetimepicker('#fSearchDate_from', '@Resource.lblLanguage');
+            formatDatetimepicker('#fSearchDate_to', '@Resource.lblLanguage');
+            formatDatetimepicker('#CreateDate', '@Resource.lblLanguage');
+
+
+        });
+        $("#btFilter2").on("click",function () {
+            tbTrainee.draw();
+        });
+        function filterFinal() {
+            var form = $("#createform").serialize();
+            //if ($forms.valid()) {
+            $.ajax({
+                type: 'POST',
+                url: "/Course/FilterFinal_new",
+                datatype: 'json',
+                data: form,
+                success: function (result) {
+
+                    $('#CourseList').empty();
+                    $('#CourseList').prop('selectedIndex', 0);
+                    $('#CourseList').append(result.value_option);
+                    $('#CourseList').select2();
+                },
+                complete: function () {
+                }
+            });
+            // }
+        }
+
+        function Filtercourse() {
+            var form = $("#createform").find("#divFilterCourse").serialize();
+            //if ($forms.valid()) {
+            $.ajax({
+                type: 'POST',
+                url: "/Course/filtercourse",
+                datatype: 'json',
+                data: form,
+                success: function (result) {
+
+                    $('#CourseList').empty();
+                    $('#CourseList').prop('selectedIndex', 0);
+                    $('#CourseList').append(result.value_option);
+                    $('#CourseList').select2();
+                    $('#CourseList').trigger("change");
+                },
+                complete: function () {
+                }
+            });
+            // }
+        }
+        $('#CertificateForAll').change(function () {
+            var value = $("#CertificateForAll").val();
+            if (value == -1) {
+                $('.Certificate').show();
+
+            } else {
+                $('.Certificate').hide();
+                $('.Certificate').val(-1);
+
+            }
+
+        });
+        document.getElementById("btFilter").onclick = function () {
+            var id = $("#CourseList").val();
+            $.ajax({
+                type: 'POST',
+                url: "/Course/GetATO",
+                datatype: 'json',
+                data: { id: id },
+                success: function (data) {
+                    $("#ATO").val(data.ATO);
+                    $("#courseId").val(data.courseId);
+                    $dataTable.draw();
+                    $('#courseSubmit').show();
+                }
+            });
+        }
+        function submitCourseCertifiCate() {
+            spinner.open();
+            var form = $("#TraineeOfProgram_form").serialize() + "&courseid=" + $("#CourseList").val() + "&subjectid=" + $("#ddl_subject").val();
+            $.ajax({
+                type: 'POST',
+                url: "/Course/SaveCertificate",
+                datatype: 'json',
+                data: form,
+                success: function (data) {
+                    if (data.result) {
+                        tbTrainee.draw();
+                        notify.alert(data.message, 'success', TITLE_STATUS_SUCCESS);
+
+                    } else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                },
+                complete: function () {
+                    $("#submitCourseCertifiCate").css("display","none");
+                    tbTrainee.draw();
+                    spinner.close();
+                }
+            });
+        }
+        function submitcourse() {
+            spinner.open();
+            var form = $("#FinalCourseResult_form").serialize() +"&courseid=" + $("#CourseList").val();
+            $.ajax({
+                type: 'POST',
+                url: "/Course/SaveCertifiCateForGroup",
+                datatype: 'json',
+                data: form,
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, 'success', TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                },
+                complete: function () {
+                    $("#courseSubmit").css("display","none");
+                    $dataTable.draw();
+                    spinner.close();
+                }
+            });
+        }
+        $("#btFilter2").click(function (e) {
+            //LoadDataTable();
+        });
+        $("#tabProgram").click(function (e) {
+            //$('#divFilterProgram').show();
+            $('#filterSubject').hide();
+            $('#btFilter2').hide();
+             $('#btFilter').show();
+            //LoadDataTable();
+        });
+        $("#tabCourse").click(function (e) {
+            $('#filterSubject').show();
+            $('#btFilter2').show();
+             $('#btFilter').hide();
+            //$('#divFilterProgram').hide();
+            LoadDataTable();
+        });
+        function LoadDataTable() {
+            $('#submitCourseCertifiCate').show();
+            if ($("li.tabProgram").hasClass("active")) {
+                $dataTable.draw();
+            }
+            else if ($("li.tabCourse").hasClass("active")) {
+                tbTrainee.draw();
+
+            }
+        }
+        function OnChangeCourseList(val) {
+            var vals = $("#CourseList").select("val");
+                if (val!="") {
+                    $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: "/Course/ChangeCourseReturnSubjectResult",
+                    dataType: "json",
+                    data: { courseId: val },
+                    success: function (result) {
+                        $('#ddl_subject').empty();
+                        $('#ddl_subject').append("<option></option>");
+                        $('#ddl_subject').prop('selectedIndex', 0);
+                        if (result.value_null == "0") {
+                            $('#ddl_subject').append(result.value_option);
+                            //$('#ddl_subject').selectpicker('refresh');
+                        }
+                        else {
+                            $('#ddl_subject').append("<option></option>");
+                        }
+                    }
+                });
+                }
+            else {
+                $('#ddl_subject').empty();
+                $('#ddl_subject').prop('selectedIndex', 0);
+            }
+        };
+        $.fn.pressEnter = function (fn) {
+            return this.each(function () {
+                $(this).bind('enterPress', fn);
+                $(this).keyup(function (e) {
+                    if (e.keyCode == 13) {
+                        $(this).trigger("enterPress");
+                    }
+                });
+            });
+        };
+        $("#Eid").pressEnter(function () {
+            $('#btFilter2').trigger('click');
+        });
+        $("#Fullname").pressEnter(function () {
+            $('#btFilter2').trigger('click');
+        });
+        $("#Email").pressEnter(function () {
+            $('#btFilter2').trigger('click');
+        });
+        $(".line_6").addClass("active");
+    </script>
+}
+

@@ -1,0 +1,320 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using TrainingCenter.Utilities;
+using System.Globalization;
+using TMS.Core.App_GlobalResources;
+using System.Text;
+using DAL.Entities;
+using TMS.Core.Services.Approves;
+using TMS.Core.Services.Department;
+using TMS.Core.Services.Employee;
+using TMS.Core.Utils;
+using TMS.Core.ViewModels.Common;
+
+namespace TrainingCenter.Controllers
+{
+    using System.Threading.Tasks;
+    using TMS.Core.Services;
+    using TMS.Core.Services.Configs;
+    using TMS.Core.Services.CourseDetails;
+    using TMS.Core.Services.CourseMember;
+    using TMS.Core.Services.Courses;
+    using TMS.Core.Services.Notifications;
+    using TMS.Core.Services.Users;
+    using TMS.Core.ViewModels;
+    using TMS.Core.ViewModels.Departments;
+
+    public class DepartmentController : BaseAdminController
+    {
+        #region Variables
+        #endregion
+        //
+        // GET: /Department/
+        public DepartmentController(IConfigService configService, IUserContext userContext, INotificationService notificationService, ICourseMemberService courseMemberService, IEmployeeService employeeService, ICourseDetailService courseDetailService, IDepartmentService departmentService, ICourseService courseService, IApproveService approveService) : base(configService, userContext, notificationService, courseMemberService, employeeService, courseDetailService, departmentService, courseService, approveService)
+        {
+        }
+
+        public ActionResult Index()
+        {
+            var isMasterUser = GetUser().IsMaster;
+            ViewBag.Namesite = GetByKey("Namesite");
+            return View(isMasterUser);
+        }
+        public ActionResult AjaxHandler(jQueryDataTableParamModel param)
+        {
+            try
+            {
+                var strCode = string.IsNullOrEmpty(Request.QueryString["strCode"]) ? string.Empty : Request.QueryString["strCode"].ToLower().Trim();
+                var strName = string.IsNullOrEmpty(Request.QueryString["strName"]) ? string.Empty : Request.QueryString["strName"].ToLower().Trim();
+                var url = string.IsNullOrEmpty(Request.QueryString["url"]) ? string.Empty : Request.QueryString["url"].ToLower().Trim();
+
+
+                var data = DepartmentService.Get(a =>
+                    (string.IsNullOrEmpty(strCode) || a.Code.Contains(strCode)) &&
+                    (string.IsNullOrEmpty(strName) || a.Name.Contains(strName)));
+
+
+                IEnumerable<Department> filtered = data;
+
+                var sortColumnIndex = Convert.ToInt32(Request["iSortCol_0"]);
+                Func<Department, object> orderingFunction = (c => sortColumnIndex == 1 ? c.Code
+                                                          : sortColumnIndex == 2 ? c.Name
+                                                          : sortColumnIndex == 3 ? (object)c.Description
+                                                          : c.Id);
+
+
+                var sortDirection = Request["sSortDir_0"]; // asc or desc
+                filtered = (sortDirection == "asc") ? filtered.OrderBy(orderingFunction)
+                                    : filtered.OrderByDescending(orderingFunction);
+                //var cscost = filtered.ToArray();
+                var displayed = filtered.Skip(param.iDisplayStart).Take(param.iDisplayLength);
+                var verticalBar = GetByKey("VerticalBar");
+                var result = from c in displayed.ToArray()
+                             select new object[] {
+                                 string.Empty,
+                         c.Code,
+                         "<a href='javascript:void(0)' onclick='active("+c.Id+",\"view\")'>"+c.Name+"</a>",
+                         c.Description,
+                       ((Is_View(url)) ? "<a href='javascript:void(0)' onclick='active("+c.Id+",\"view\")'><i class='fa fa-search' aria-hidden='true' style=' font-size: 16px; '></i></a>" : "") +
+                        ((Is_Edit(url)) ? verticalBar +"<a href='javascript:void(0)' onclick='active("+c.Id+",\"edit\")'><i class='fa fa-pencil-square-o' aria-hidden='true' style=' font-size: 16px; '></i></a>" : "")+
+                        ((Is_Delete(url)) ? verticalBar +"<a href='javascript:void(0)' onclick='calldelete(" + c.Id  + ")'><i class='fa fa-trash-o' aria-hidden='true' style=' font-size: 16px; '></i></a>" : "")
+                        };
+                return Json(new
+                {
+                    sEcho = param.sEcho,
+                    iTotalRecords = filtered.Count(),
+                    iTotalDisplayRecords = filtered.Count(),
+                    aaData = result
+                },
+           JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                LogEvent(UtilConstants.LogType.EVENT_TYPE_ERROR, UtilConstants.LogEvent.Error, "Department/AjaxHandler", ex.Message);
+
+
+                return Json(new
+                {
+                    sEcho = param.sEcho,
+                    iTotalRecords = 0,
+                    iTotalDisplayRecords = 0,
+                },
+                    JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult Details(int id = 0)
+        {
+            Department department = DepartmentService.GetById(id);
+            var departments = DepartmentService.Get().OrderByDescending(p => p.Id);
+            ViewBag.ParentDepartmentList = new SelectList(departments.Where(x => x.Id == department.ParentId).ToList(), "Department_Id", "str_Name");
+            if (department == null)
+            {
+                return HttpNotFound();
+            }
+            return View(department);
+        }
+
+        public ActionResult Modify(int? id)
+        {
+            var user = GetUser();
+            if (user == null) return null;
+            // var code = "";
+
+            var model = new DepartmentModifyViewModel();
+            var departments = user.IsMaster ? DepartmentService.Get() : DepartmentService.Get(a => a.UserPermissions.Any(x => x.Id == a.Id));
+            if (id.HasValue)
+            {
+                var entity = DepartmentService.GetById(id);
+                if (entity == null)
+                {
+                    model.Notify = "Department is not found";
+                }
+                else
+                {
+                    departments = departments.Where(a => !a.Ancestor.StartsWith(entity.Ancestor));
+                    model.ParentId = entity.ParentId;
+                    model.Name = entity.Name;
+                    model.Id = entity.Id;
+                    model.Description = entity.Description;
+                    model.Code = entity.Code;
+                    model.is_training = entity.is_training;
+                    model.HeadName = entity.headname;
+                }
+            }
+            var permissions = departments.OrderBy(a => a.Ancestor).ToDictionary(a => a.Id, a => a.Name);
+            model.Departments = permissions;
+            model.DictionaryInstructor = EmployeeService.GetInstructors(true)?.OrderBy(a => a.LastName).ToDictionary(a => a.Id, a => string.Format("{0} - {1}", a.str_Staff_Id, ReturnDisplayLanguage(a.FirstName, a.LastName)));
+            return PartialView("Modify", model);
+        }
+        [HttpPost]
+        public async Task<ActionResult> Modify(DepartmentModifyViewModel model, FormCollection form)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(new AjaxResponseViewModel()
+                {
+                    message = MessageInvalidData(ModelState),
+                    result = false
+                });
+            }
+
+            try
+            {
+                model.is_training = form["is_trainingg"] == "on" ? true : false;
+                DepartmentService.Modify(model);
+                if (model.is_training == true)
+                {
+                    if (model.HeadName.HasValue)
+                    {
+                        var employee = EmployeeService.GetById(model.HeadName);
+                        if (employee != null)
+                        {
+                            Dictionary<string, object> dic = new Dictionary<string, object>();
+                            dic.Add("LmsStatus", 1);
+
+                            if (CMSUtils.UpdateDataSQLNoLog("Id", employee.Id + "", "Trainee", dic.Keys.ToArray(), CMSUtils.SetDBNullobject(dic.Values.ToArray())) > 0)
+                            {
+
+                            }
+                        }
+                    }
+
+                }
+                await Task.Run(() =>
+                {
+                    #region [--------CALL LMS (CRON DEpartment)----------]
+                    var callLms = CallServices(UtilConstants.CRON_DEPARTMENT);
+
+                    if (!callLms)
+                    {
+                        //return Json(new AjaxResponseViewModel()
+                        //{
+                        //    message = string.Format(Messege.SUCCESSFULLY_BUT_ERROR_LMS, (model.Id.HasValue ? Resource.lblModify : Resource.lblCreate), model.Name),
+                        //    result = false
+                        //});
+                    }
+                    //var callLMS = CallServices(UtilConstants.CRON_USER);
+                    #endregion
+                });
+                return Json(new { result = true, message = "Update success" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                LogEvent(UtilConstants.LogType.EVENT_TYPE_ERROR, UtilConstants.LogEvent.Error, "Department/Modify", ex.Message);
+                return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public ActionResult checkselectsubject(string id, FormCollection form)
+        {
+            string is_training = string.IsNullOrEmpty(form["is_training"]) ? null : form["is_training"].Trim();
+            int id_hd = string.IsNullOrEmpty(form["id"]) ? -1 : Int32.Parse(form["id"].Trim());
+
+            var datadepartment = DepartmentService.Get();
+            var datatraining = datadepartment.Select(a => a.Id);
+            if (is_training == null)
+            {
+                datadepartment = DepartmentService.Get(a => !datatraining.Contains(a.Id));
+            }
+            StringBuilder HTML = new StringBuilder();
+            HTML.Append("<select class='form-control' name='int_parentID' id='int_parentID' data-placeholder='-- Parent Department --'><option></option>");
+            foreach (var item in datadepartment)
+            {
+                if (item.Id == id_hd)
+                {
+                    HTML.AppendFormat("<option value='{0}' selected>{1}</option>", item.Id, item.Name);
+                }
+                else
+                {
+                    HTML.AppendFormat("<option value='{0}'>{1}</option>", item.Id, item.Name);
+                }
+            }
+            HTML.Append("</select>");
+            return Json(HTML.ToString());
+        }
+        public ActionResult DepartmentListView()
+        {
+            var user = GetUser();
+            var departmentList = GetDepartmentModel(user.IsMaster);
+            var model = new DepartmentViewModel()
+            {
+                DepartmentViewModels = departmentList,
+                IsMaster = user.IsMaster
+            };
+            return PartialView("_Partials/_DepartmentListView", model);
+        }
+
+        public async Task<ActionResult> UpdateStatus(int id)
+        {
+            try
+            {
+                var result = DepartmentService.Active(id);
+                await Task.Run(() =>
+                {
+                    #region [--------CALL LMS (CRON USER)----------]
+                    var callLms = CallServices(UtilConstants.CRON_DEPARTMENT);
+                    if (!callLms)
+                    {
+                        //return Json(new AjaxResponseViewModel()
+                        //{
+                        //    message = string.Format(Messege.SUCCESSFULLY_BUT_ERROR_LMS, Resource.lblModify, string.Empty),
+                        //    result = false
+                        //});
+                    }
+                    #endregion
+                });
+                return Json(new AjaxResponseViewModel { result = true, data = result, message = (result ? "Active" : "Inactive") + " success" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new AjaxResponseViewModel { result = false, message = ex.Message });
+            }
+        }
+        [HttpPost]
+        public async Task<ActionResult> Delete(int id)
+        {
+            try
+            {
+                DepartmentService.Delete(id);
+                await Task.Run(() =>
+                {
+                    #region [--------CALL LMS (CRON DEpartment)----------]
+                    var callLms = CallServices(UtilConstants.CRON_DEPARTMENT);
+                    if (!callLms)
+                    {
+                        //return Json(new AjaxResponseViewModel()
+                        //{
+                        //    message = string.Format(Messege.SUCCESSFULLY_BUT_ERROR_LMS, Resource.lblDelete, string.Empty),
+                        //    result = false
+                        //});
+                    }
+                    #endregion
+                });
+                return Json(new { result = true, message = "Delete success" },JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                LogEvent(UtilConstants.LogType.EVENT_TYPE_ERROR, UtilConstants.LogEvent.Error, "Department/Delete", ex.Message);
+                return Json(new { result = false, message = ex.Message },JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult Create(int? id)
+        {
+            var user = GetUser();
+            if (user == null) return null;
+            // var code = "";
+            var departments = user.IsMaster ? DepartmentService.Get().OrderBy(a => a.Ancestor) : DepartmentService.Get(a => a.UserPermissions.Any(x => x.DepartmentId == a.Id)).OrderBy(a => a.Ancestor);
+            var permissions = departments.ToDictionary(a => a.Id, a => a.Name);
+            var model = new DepartmentModifyViewModel()
+            {
+                Departments = permissions,
+                ParentId = id
+            };
+
+            return PartialView("_Partials/_DepartmentModify", model);
+        }
+    }
+}

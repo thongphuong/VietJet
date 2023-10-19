@@ -1,0 +1,135 @@
+﻿@model List<TrainingCenter.Models.Class_Member>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.ActiveMenu = "Training";
+    ViewBag.ActiveSubMenu = "Class";
+}
+
+@section pageTitle {
+    <h1><i class="fa fa-user"></i>
+        Class
+                        <small>Management</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+        <li><a href="/Class"><i class="fa fa-puzzle-piece"></i>Class management</a></li>
+        <li><a href="/Class/Details/@ViewBag.ClassID"><i class="fa fa-puzzle-piece"></i>Detail</a></li>
+        <li class="active">Input Result</li>
+    </ol>
+}
+
+<div class="row">
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm("InputResult", "Class", FormMethod.Post, new { @id = "defaultForm", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            if (ViewBag.Message != null)
+            {
+            <div class="callout callout-danger">
+                @ViewBag.Message
+            </div>
+            }
+            <input type="hidden" name="classId" value="@((int)ViewBag.ClassID)" />
+            <div class="box box-danger">
+                <div class="box-header">
+
+                    <h3 class="box-title">Class's Members</h3>
+
+                </div>
+                <div class="box-body table-responsive">
+                    <table id="defaultTable" class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>#
+                                </th>
+                                <th>Staff Id
+                                </th>
+                                <th>Fullname
+                                </th>
+                                <th>Score
+                                </th>
+                                <th>Result
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Count(); i++)
+                            {
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        @Html.HiddenFor(m => Model[i].Class_Member_id)
+                                        @Html.HiddenFor(m => Model[i].Class_Id)
+                                        @Html.HiddenFor(m => Model[i].UserId)
+                                        @Html.HiddenFor(m => Model[i].int_Result)
+                                        @Model[i].UserProfile.str_File_No
+                                    </td>
+                                    <td class="colClassName">
+                                        @Model[i].UserProfile.str_Firstname @Model[i].UserProfile.str_Lastname
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => Model[i].int_Last_Mark, new { @class = "form-control" })
+                                    </td>
+                                    <td>@(Model[i].int_Result == 1 ? "Pass" : (Model[i].int_Result == -1 ? "Fail" : ""))</td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-danger">Save Result</button>
+                    <button type="button" class="btn btn-default" id="btCancel" data-id="@ViewBag.ClassId">Cancel</button>
+                </div>
+            </div>
+        }
+        <!-- /.box -->
+    </div>
+</div>
+<div class="modal fade" id="dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var table = $('#defaultTable').DataTable({
+        "bLengthChange": false,
+        "fnDrawCallback": function (oSettings) {
+            /* Need to redo the counters if filtered or sorted */
+            if (oSettings.bSorted || oSettings.bFiltered) {
+                for (var i = 0, iLen = oSettings.aiDisplay.length ; i < iLen ; i++) {
+                    $('td:eq(0)', oSettings.aoData[oSettings.aiDisplay[i]].nTr).html(i + 1);
+                }
+            }
+        },
+        "aoColumnDefs": [
+            { "bSortable": false, "aTargets": [0] }
+        ],
+        "aaSorting": [[1, 'asc']]
+    });
+
+    $(document).on('click', '#btCancel', function () {
+        window.location.href = "/Class/Details/" + $(this).data('id');
+    });
+
+</script>
+
+
+
+

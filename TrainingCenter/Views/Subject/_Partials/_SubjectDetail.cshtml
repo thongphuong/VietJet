@@ -1,0 +1,27 @@
+﻿@using System.Web.Script.Serialization
+@using Newtonsoft.Json
+@using TMS.Core.ViewModels.Subjects
+@model SubjectModifyViewModel
+@{
+    var index = 0;
+}
+<div class="panel panel-primary">
+    <div class="panel-body table-responsive">
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" onclick="subject.showDetail()">Add</button>
+        </div>
+        <table class="table table-hover table-striped table-bordered width-100" id="subject-details">
+            <thead>
+            <tr>
+                <td>Code </td>
+                <td>Name </td>
+                <td>Instructors </td>
+                <td>Recurrent </td>
+                <td>Is Average Caculate</td>
+                <td>Score</td>
+                <td></td>
+            </tr>
+            </thead>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,406 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@using Utilities
+@model TMS.Core.ViewModels.Employee.EmployeeModelIndex
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-header"><i class="fas fa-user-graduate"></i>  Examiner/Monitor Management -  @Resource.lblList</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>Examiner/Monitor Management</li>
+                <li class="active">@Resource.lblList</li>
+            </ol>
+        </div>
+    </div>
+}
+<div class="panel " style="margin-top: 10px;">
+
+    <div class="panel-body">
+        <div class="tab-content">
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-12">
+                    <div class="panel  list-panel" id="list-panel">
+                        <div class="panel-heading list-panel-heading">
+                            <h1 class="panel-title list-panel-title">
+                                <i class="fas fa-user-graduate" font-small-byhoa"></i> @Resource.lblList
+                            </h1>
+                        </div>
+                        <div class="panel-body">
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a href="#Examiner" data-toggle="tab" aria-expanded="false">@Resource.lblExaminer</a>
+                                </li>
+
+                                <li class="">
+                                    <a href="#Monitor" data-toggle="tab" aria-expanded="false">@Resource.lblMonitor</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style="margin-top:10px">
+                                <div class="tab-pane fade  active in" id="Examiner">
+                                    <div id="panel-search" class="collapse panel">
+                                        @using (Html.BeginForm("AjaxHandlerExaminer", "AcademicStaff", FormMethod.Post, new { id = "frmFilter" }))
+                                        {
+                                            <div class="panel-body">
+                                                <div class="row col-md-12">
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <label>@Messege.EIDGV</label>
+                                                            <input type="text" name="fStaffId" id="fStaffId" class="form-control frmFilter" placeholder="@Messege.EIDGV" />
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label>@Resource.lblFullName</label>
+                                                            <input type="text" name="fName" id="fName" class="form-control frmFilter" placeholder="@Resource.lblFullName" />
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label>@Resource.lblGender</label>
+                                                            @Html.DropDownList("Genders", Model.Genders, "", new { @class = "form-control combobox frmFilter", data_placeholder = "--" + @Resource.lblGender + "--" })
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label>@Resource.lblEmail</label>
+                                                            <input type="text" name="fEmail" id="fEmail" class="form-control frmFilter" placeholder="@Resource.lblEmail" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" style="margin-top: 10px;">
+                                                        <div class="col-md-3">
+                                                            <label>@Resource.lblPhone</label>
+                                                            <input type="text" name="fPhone" id="fPhone" class="form-control frmFilter" placeholder="@Resource.lblPhone" />
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label>@Resource.lblDepartment</label>
+                                                            <select class="form-control frmFilter" name="DepartmentList" id="DepartmentList" data-placeholder="-- @Resource.lblDepartment --">
+                                                                <option></option>
+                                                                @Html.Raw(Model.Departments)
+                                                            </select>
+
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label>@Resource.lblJobTitle_Occupation</label>
+                                                            @Html.DropDownList("JobTitleList", Model.JobTitles, "", new { @class = "form-control combobox frmFilter", data_placeholder = "--" + @Resource.lblJobTitle_Occupation + "--" })
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label>@Messege.TYPE</label>
+                                                            @Html.DropDownList("Type", Model.Type, "", new
+                                                            {
+                                                                @id = "ddl_TYPE",
+                                                                @class = "form-control frmFilter",@*@onchange = "onchangetype()",*@@data_placeholder = "--" + Messege.TYPE + "--"
+})
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" style="margin-top: 10px">
+                                                        <div class="col-md-1 pull-right">
+                                                            <label>&nbsp;</label>
+                                                            <button type="submit" class="btn btn-primary pull-right" id="btFilter">
+                                                                <i class="fa fa-search"></i> @Resource.lblSearch
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        <br />
+                                    </div>
+                                    <p class="pull-right" data-toggle="collapse" data-target="#panel-search" style="cursor:pointer;" id="call-panel-search"><i class="fa fa-search"></i> @Messege.Search</p>
+
+                                    <table id="Trainee" class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr role="row">
+                                                <th style="width: 5%;">@Resource.lblStt</th>
+                                                <th>@Resource.TRAINEE_EID</th>
+                                                <th>@Resource.lblFullName</th>
+                                                <th>@Resource.lblJobTitle_Occupation</th>
+                                                <th>@Resource.lblDepartment</th>
+                                                <th>@Resource.lblType</th>
+                                                <th>@Resource.lblStatus</th>
+                                                <th style="width: 10%;">@Resource.lblOptions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="Monitor">
+                                    <div id="panel-search1" class="collapse panel">
+                                        @using (Html.BeginForm("AjaxHandlerMonitor", "AcademicStaff", FormMethod.Post, new { id = "frmFilter1" }))
+                                        {
+                                            <div class="panel-body">
+                                                <div class="row col-md-12">
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <label>@Messege.EIDGV</label>
+                                                            <input type="text" name="fStaffId1" id="fStaffId1" class="form-control frmFilter" placeholder="@Messege.EIDGV" />
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label>@Resource.lblFullName</label>
+                                                            <input type="text" name="fName1" id="fName1" class="form-control frmFilter" placeholder="@Resource.lblFullName" />
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label>@Resource.lblGender</label>
+                                                            @Html.DropDownList("Genders1", Model.Genders, "", new { @class = "form-control combobox frmFilter", data_placeholder = "--" + @Resource.lblGender + "--" })
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label>@Resource.lblEmail</label>
+                                                            <input type="text" name="fEmail1" id="fEmail1" class="form-control frmFilter" placeholder="@Resource.lblEmail" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" style="margin-top: 10px;">
+                                                        <div class="col-md-3">
+                                                            <label>@Resource.lblPhone</label>
+                                                            <input type="text" name="fPhone1" id="fPhone1" class="form-control frmFilter" placeholder="@Resource.lblPhone" />
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label>@Resource.lblDepartment</label>
+                                                            <select class="form-control frmFilter" name="DepartmentList1" id="DepartmentList1" data-placeholder="-- @Resource.lblDepartment --">
+                                                                <option></option>
+                                                                @Html.Raw(Model.Departments)
+                                                            </select>
+
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label>@Resource.lblJobTitle_Occupation</label>
+                                                            @Html.DropDownList("JobTitleList1", Model.JobTitles, "", new { @class = "form-control combobox frmFilter", data_placeholder = "--" + @Resource.lblJobTitle_Occupation + "--" })
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label>@Messege.TYPE</label>
+                                                            @Html.DropDownList("Type1", Model.Type, "", new
+                                                            {
+                                                                @id = "ddl_TYPE1",
+                                                                @class = "form-control frmFilter",@*@onchange = "onchangetype()",*@@data_placeholder = "--" + Messege.TYPE + "--"
+})
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" style="margin-top: 10px">
+                                                        <div class="col-md-1 pull-right">
+                                                            <label>&nbsp;</label>
+                                                            <button type="submit" class="btn btn-primary pull-right" id="btFilter1">
+                                                                <i class="fa fa-search"></i> @Resource.lblSearch
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        <br />
+                                    </div>
+                                    <p class="pull-right" data-toggle="collapse" data-target="#panel-search1" style="cursor:pointer;" id="call-panel-search"><i class="fa fa-search"></i> @Messege.Search</p>
+                                    <table id="Trainee1" class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr role="row">
+                                                <th style="width: 5%;">@Resource.lblStt</th>
+                                                <th>@Resource.TRAINEE_EID</th>
+                                                <th>@Resource.lblFullName</th>
+                                                <th>@Resource.lblJobTitle_Occupation</th>
+                                                <th>@Resource.lblDepartment</th>
+                                                <th>@Resource.lblType</th>
+                                                <th>@Resource.lblStatus</th>
+                                                <th style="width: 10%;">@Resource.lblOptions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--TRAINING COMPETENCY-->
+        </div>
+
+        <div class="row" id="btndiv">
+            <div class="action-form text-right">
+
+                <a onclick="goBack()" class="btn btn-default"><i class="fas fa-sign-out-alt"></i>&nbsp;@Resource.BACK</a>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal fade" id="myModalSave" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <div class="panel-heading panel-title list-panel-title">
+                        <h5 class="modal-title" id="modal-header"> @Resource.lblEdit</h5>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="Id" name="Id" />
+                    <div id="FormMessage"></div>
+                    <div class="col-md-12" style="margin-bottom:20px;">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label><b>Name : </b></label>
+                                <label id="valueName"></label>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label><b>Code :</b></label>
+                                <label id="valueCode"></label>
+
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:10px;">
+                            <div class="col-md-2">
+                                <label><b>Allowance</b></label>
+                            </div>
+                            <div class="col-md-10">
+                                <input class="form-control" type="number" id="valueAllownce" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="Modal_Footer" style="margin-top:10px;">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        var sTable;
+         var sTable1;
+        $(document).ready(function () {
+            var customRow = [
+                {
+                    "targets": 6,
+                    "className": "text-center",
+                },
+                {
+                    "targets": 7,
+                    "className": "text-center",
+                }
+            ];
+
+            sTable = initDataTable('#Trainee', '/AcademicStaff/AjaxHandlerExaminer', customRow);
+            sTable1 = initDataTable('#Trainee1', '/AcademicStaff/AjaxHandlerMonitor', customRow);
+            $('#frmFilter').submit(function (e) {
+                e.preventDefault();
+                sTable.draw();
+            });
+            $('#frmFilter1').submit(function (e) {
+                e.preventDefault();
+                sTable1.draw();
+            });
+            //$('#myModalSave').on('hidden.bs.modal', function () {
+            //    sTable1.fnDraw();
+            //});
+
+            $('#btnExport').click(function () {
+                exportExcel();
+            });
+        });
+        function exportExcel() {
+
+            var params = {
+                fStaffId: $('#fStaffId').val(),
+                fName: $('#fName').val(),
+                fGender: $('#Genders').val(),
+                fEmail: $('#fEmail').val(),
+                fPhone: $('#fPhone').val(),
+                ComOrDepId: $('#DepartmentList').val(),
+                fJobTitle: $('#JobTitleList').val(),
+                ddl_TYPE: $('#Type').val(),
+                Mentor: $('#Mentor').val(),
+                control: $('#control').val(),
+            };
+            var str = jQuery.param(params);
+            window.location.href = "/Employee/ExportEXCEL?" + str;
+        }
+
+        function Set_Participate_Employee(isParticipate, id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/Employee/SubmitSetParticipateEmployee",
+                datatype: 'json',
+                data: { isParticipate: isParticipate, id: id },
+                success: function (data) {
+                    if (data.result) {
+                        sTable.draw();
+                        notify.alert(data.message, 'SUCCESS', TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, 'ERROR', TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    spinner.close();
+                }
+            });
+        }
+        function calldelete(id) {
+            notify.confirm('@Messege.DELETE_INSTRUCTOR', 'Confirm', TITLE_STATUS_WARNING, deletesubmit, id);
+        }
+        function deletesubmit(id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/Instructor/delete",
+                datatype: 'json',
+                data: { id: id },
+                success: function (data) {
+                    if (data.result) {
+                        sTable.draw();
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                    }
+                    else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                        sTable.draw();
+                    }
+
+                }, complete: function () {
+                    spinner.close();
+                }
+            });
+        }
+        function ModifyAllowance(id) {
+            $("#myModalSave").modal("show");
+          
+            $.ajax({
+                type: 'POST',
+                url: "/AcademicStaff/ReloadAjax",
+                datatype: 'json',
+                data: { id: id },
+                success: function (data) {
+                    if (data.result) {
+                        $("#Id").val(id);
+                        $("#valueName").text(data.name);
+                        $("#valueCode").text(data.code);
+                        $("#valueAllownce").val(data.cost);
+                    }
+                }
+            });
+            $("#Modal_Footer").empty();
+            $("#Modal_Footer").append(" <a href='javascript:void(0)' onclick='submitModify()' class='btn btn-primary'>@Resource.lblSave</a><button type='button' class='btn btn-primary' data-dismiss='modal'>Close</button>");
+        }
+        function submitModify() {
+            spinner.open();
+            var id = $("#Id").val();
+            var allowance = $("#valueAllownce").val();
+            $.ajax({
+                type: 'POST',
+                url: "/AcademicStaff/SaveAllowance",
+                datatype: 'json',
+                data: { id: id, allowance: allowance },
+                success: function (data) {
+                    if (data.result) {
+                        $("#myModalSave").modal("hide");
+                        notify.alert(data.message, 'SUCCESS', TITLE_STATUS_SUCCESS);
+                    }
+                    else {
+                        notify.alert(data.message, 'ERROR', TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    spinner.close();
+                }
+            });
+        } 
+    </script>
+}

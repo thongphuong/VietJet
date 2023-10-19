@@ -1,0 +1,215 @@
+﻿@using TMS.Core.App_GlobalResources
+
+@{
+    ViewBag.Title = "Group";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                <i class="fas fa-users"></i> @Resource.lblTraineeManagement - @Resource.lblGroupTrainee
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblTraineeManagement</li>
+                <li class="active"> @Resource.lblGroupTrainee</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title">
+                    <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> @Resource.lblList
+                    <p class="btn-group pull-right">
+
+                        @if (User.IsInRole("/Employee/Group")) // neu co
+                        {
+                            <a href="/Employee/ModifyGroup" class="btn btn-success btn-xs dropdown-toggle legitRippley"><i class="fa fa-plus" aria-hidden="true"></i> @Resource.lblADDNEW</a>
+                        }
+
+                    </p>
+                </h1>
+            </div>
+            <div class="panel-body">
+                <div class=" table-responsive" style="margin-top: 10px;">
+                    <div id="panel-search" class="collapse panel">
+                        @using (Html.BeginForm("AjaxHandlerGroupEmployee", "Employee", FormMethod.Post, new { id = "frmFilter" }))
+                        {
+
+                            <div class="panel-body">
+                                <div class="row ">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <input type="text" name="NameS" id="NameS" class="form-control frmFilter" placeholder="@Resource.lblName" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <input type="text" name="CodeS" id="CodeS" class="form-control frmFilter" placeholder="@Resource.lblCode" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary pull-right" id="btFilter">
+                                                <i class="fa fa-search"></i> @Resource.lblSearch
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        }
+                        <br />
+                    </div>
+                    <p class="pull-right" data-toggle="collapse" data-target="#panel-search" style="cursor:pointer;"  id="call-panel-search"><i class="fa fa-search"></i> @Messege.Search</p>
+                    <table id="GroupTrainee" class="table table-striped table-bordered">
+                        <thead>
+                            <tr role="row">
+                                <th style="width: 5%;">@Resource.lblStt</th>
+                                <th>@Resource.lblCode</th>
+                                <th>@Resource.lblName</th>
+                                <th>@Resource.lblStatus</th>
+                                <th>@Resource.lblOptions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="hidden">
+    <table id="sTableTrainee" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr role="row">
+                <th>@Resource.lblStt</th>
+                <th>@Messege.EID</th>
+                <th>@Resource.lblName</th>
+                <th>@Resource.lblPhone</th>
+                <th>@Resource.lblJob</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+    </table>
+</div>
+@section Scripts{
+
+    <script src="~/Scripts/js/app.js"></script>
+    <script type="text/javascript">
+        var sTable;
+        $(document).ready(function () {
+            //datatable serverside
+            var customRow = [{ "targets": 0 }, {
+                "targets": 3,
+                "className": "text-center",
+            }, { "targets": 0 }, {
+                    "targets": 4,
+                    "className": "text-center",
+                }];
+            sTable = initDataTable('#GroupTrainee', '/Employee/AjaxHandlerGroupEmployee', customRow);
+            $('#frmFilter').submit(function (e) {
+                e.preventDefault();
+                sTable.draw();
+            });
+
+
+
+            var detailRows = [];
+            $('#GroupTrainee tbody').on('click', 'tr td span.expand', function () {
+                var id = $(this).data('value');
+                var tr = $(this).closest('tr');
+                var row = sTable.row(tr);
+                var idx = $.inArray(tr.attr('id'), detailRows);
+
+                if (row.child.isShown()) {
+                    tr.removeClass('details');
+                    row.child.hide();
+
+                    // Remove from the 'open' array
+                    detailRows.splice(idx, 1);
+                }
+                else {
+                    tr.addClass('details');
+
+                    row.child(format(id)).show();
+
+                    // Add to the 'open' array
+                    if (idx === -1) {
+                        detailRows.push(tr.attr('id'));
+                    }
+                }
+            });
+            sTable.on('draw', function () {
+                $.each(detailRows, function (i, id) {
+                    $('#' + id + ' td.details-control').trigger('click');
+                });
+            });
+
+
+        });
+
+        function format(id) {
+            var customRowsubject = [{ "targets": 0 }];
+            var table = $("#sTableTrainee").clone();
+            initDataTableMaxPageLength(table, "/Employee/AjaxHandlerGroupTraneeSub/" + id, customRowsubject);
+            return table;
+        }
+        function SetParticipateGroupTrainee(isStatus, id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/Employee/SetParticipateGroupEmployee",
+                datatype: 'json',
+                data: { isStatus: isStatus, id: id },
+                success: function (data) {
+                    if (data.result) {
+                        sTable.draw();
+                        notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+
+                    } else {
+                        notify.alert(data.message, "ERROR", TITLE_STATUS_DANGER);
+                    }
+
+                },complete : function() {
+                    spinner.close();
+                }
+            });
+        }
+        function calldelete(Id) {
+            notify.confirm('@Messege.DELETE_GROUPUSER', 'Confirm', TITLE_STATUS_WARNING, deletesubmit, Id);
+        }
+        function deletesubmit(id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/Employee/DeleteGroup",
+                datatype: 'json',
+                data: { Id: id },
+                success: function (data) {
+                    if (data.result) {
+                        sTable.draw();
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    spinner.close();
+
+                }
+            });
+        }
+
+        $(".line_38").addClass("active");
+    </script>
+}

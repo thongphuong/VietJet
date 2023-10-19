@@ -1,0 +1,185 @@
+﻿@using TMS.Core.App_GlobalResources;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewBag.Title = "Group User";
+}
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-cogs"></i>  @Resource.lblSystemManagement - @Resource.lblGroupUser @Resource.lblList </h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblSystemManagement</li>
+                <li class="active">@Resource.lblGroupUser @Resource.lblList</li>
+            </ol>
+        </div>
+    </div>
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title">
+                    <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> @Resource.lblList
+
+
+                    <p class="btn-group pull-right">
+
+                        @if (User.IsInRole("/GroupUser/CreateGroupUser")) // neu co
+                    {
+                        <a href="javascript:void(0)" data-url="/GroupUser/CreateGroupUser" class="btn btn-success btn-xs dropdown-toggle legitRippley" id="add-item"><i class="fa fa-plus" aria-hidden="true"></i> @Resource.lblADDNEW</a>
+                }
+
+                    </p>
+                </h1>
+            </div>
+            <div class="panel-body">
+                <div class=" table-responsive" style="margin-top: 10px;">
+                    <div id="panel-search" class="collapse panel">
+                        @using (Html.BeginForm("AjaxHandler", "GroupUser", FormMethod.Post, new { id = "frmFilter" }))
+                    {
+                        <div class="panel-body">
+                            <div class="col-md-12 ">
+                                <div class="col-md-5">
+                                    <label class="col-md-2">@Resource.lblName</label>
+                                    <div class="col-md-10">
+                                        <input type="text" name="name" id="name" class="form-control frmFilter" placeholder="@Resource.lblName" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="col-md-2">@Resource.lblTitle</label>
+                                    <div class="col-md-10">
+                                        <input type="text" name="title" id="title" class="form-control frmFilter" placeholder="@Resource.lblTitle" />
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <button type="submit" class="btn btn-primary pull-right" id="btFilter">
+                                        <i class="fa fa-search"></i> @Resource.lblSearch
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                }
+                        <br />
+                    </div>
+                    <p class="pull-right" data-toggle="collapse" data-target="#panel-search" style="cursor:pointer;"  id="call-panel-search"><i class="fa fa-search"></i> @Messege.Search</p>
+
+                    <table id="groupusers" class="table table-striped table-bordered">
+                        <thead>
+                            <tr role="row">
+                                <th style="width: 5%;">@Resource.lblStt</th>
+                                <th>@Resource.lblName</th>
+                                <th>@Resource.lblTitle</th>
+                                <th>@Resource.lblStatus</th>
+                                <th>@Resource.lblOptions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            @*<div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>*@
+            <div class="modal-body">
+                <label>@Resource.lblYouAreSureToDeleteUser?</label>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="messageout2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="Modal_Footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/js/app.js"></script>
+    <script type="text/javascript">
+        var sTable;
+        $(document).ready(function () {
+            //datatable serverside
+            var customRow = [{ "targets": 0 }, {
+                "targets": 3,
+                "className": "text-center",
+            }, {
+                    "targets": 4,
+                    "className": "text-center",
+                }];
+            sTable = initDataTable('#groupusers', '/GroupUser/AjaxHandler', customRow);
+            $('#frmFilter').submit(function (e) {
+                e.preventDefault();
+                sTable.draw();
+            });
+            $('#add-item').click(function () {
+                openModalEditor(this, groupuser.newItem);
+            });
+        });
+        function Set_Participate_GroupUser(isParticipate, id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/GroupUser/SubmitSetParticipateGroupUser",
+                datatype: 'json',
+                data: { isParticipate: isParticipate, id: id },
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+
+                    } else {
+                        notify.alert(data.message, "ERROR", TITLE_STATUS_DANGER);
+                    }
+
+                },complete : function() {
+                    sTable.draw();
+                    spinner.close();
+                }
+            });
+        }
+        function calldelete(Id) {
+            notify.confirm('@Messege.DELETE_GROUPUSER', 'Confirm', TITLE_STATUS_WARNING, deletesubmit, Id);
+        }
+        function deletesubmit(id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/GroupUser/Delete",
+                datatype: 'json',
+                data: { Id: id },
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    sTable.draw();
+                    spinner.close();
+
+                }
+            });
+        }
+
+        $(".line_38").addClass("active");
+    </script>
+}

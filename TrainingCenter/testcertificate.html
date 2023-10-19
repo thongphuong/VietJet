@@ -1,0 +1,356 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="Content/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="Content/assets/css/metisMenu.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="Content/assets/css/material-design-iconic-font.min.css">
+    <link href="/Content/css/jQueryUI/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="Content/assets/css/animate.min.css">
+    <link rel="stylesheet" href="Content/assets/css/ripple.min.css">
+    <link rel="stylesheet" href="Content/assets/css/hover.css">
+    <link rel="stylesheet" href="Content/assets/css/sweetalert.min.css">
+    <link rel="stylesheet" href="Content/assets/css/gallery/lightgallery.min.css">
+    <link rel="stylesheet" href="Content/assets/css/gallery/justifiedGallery.min.css">
+    <link rel="stylesheet" href="Content/assets/css/jquery-jvectormap.css">
+    <link rel="stylesheet" href="Content/assets/css/calendar/fullcalendar.min.css">
+    <link rel="stylesheet" href="Content/assets/css/calendar/fullcalendar.print.css" media="print">
+    <link href="Content/assets/css/font-awesome.css" rel="stylesheet" />
+    <link href="Content/assets/css/deluxe-admin.css" rel="stylesheet">
+    <link href="Content/Js/jstree/css/jquery.tree.css" rel="stylesheet" />
+    <link href="Content/Js/jstree/css/Customize.css" rel="stylesheet" />
+    <link href="Content/assets/css/datatables.min.css" rel="stylesheet" />
+    <link href="Content/assets/css/tinhvan.css" rel="stylesheet" />
+    <link href="Content/Js/jstree/themes/default/style.min.css" rel="stylesheet" />
+    <link href="Content/assets/css/calendar/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="Content/Js/bootrap-select/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="Content/Js/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="Content/css/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" />
+    <link href="Content/app.css" rel="stylesheet" />
+    <link href="Content/assets/css/iconloading.css" rel="stylesheet" />
+    <link href="Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <link href="Content/css/VietJetFont.css" rel="stylesheet" />
+
+
+
+
+    <style>
+        .table > tbody > tr:hover {
+            background-color: #ecf0f1;
+        }
+
+        .page-header {
+            font-size: 25px;
+        }
+
+        .side-nav-white {
+            box-shadow: 0 1px 1px 0 rgba(0,0,0,0.5), 0 1px 1px 0 rgba(0,0,0,0.1);
+        }
+
+        textarea.form-control {
+            height: auto;
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+
+        #footer {
+            margin-top: -55px;
+        }
+
+        .fa-toggle-on, .fa-toggle-off {
+            font-size: 20px;
+        }
+
+        .fa-toggle-on {
+            color: green;
+        }
+
+        table tr th {
+            text-align: center;
+        }
+    </style>
+    <script>
+        function isNumber(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+    </script>
+
+
+
+    <style>
+        #drag-me::before {
+            content: "#" attr(id);
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+<body>
+    <div>
+        <input type="hidden" id="field_id" />
+    </div>
+    <div class="panel-body">
+        <div class="row col-md-12" style="margin-top: 10px;">
+            <div class="col-md-2">
+                <b>Background</b>
+            </div>
+            <div class="col-md-10">
+                <input class="form-control" type="file"  name="ImgFile" id="uploadEditorImage" />
+            </div>
+        </div>
+        <div class="row col-md-12" style="margin-top: 10px;">
+            <div class="col-md-2">
+                <b>width-height (px)</b>
+            </div>
+            <div class="col-md-10">
+                <input class="form-control" type="number" id="txt_width"  onkeyup="reload()"/>
+                <input class="form-control" type="number" id="txt_height" onkeyup="reload()"/>
+            </div>
+        </div>
+        <div class="row col-md-12" style="margin-top: 10px;">
+            <div style="border:dotted;width:100vh;height:800px;background: no-repeat;" id="cer_content">
+                <p class="draggable" id="draggable_1" style="display: inline-block; transform: translate(147px, 107px);" onclick="edit(this)"> test eidt</p>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Edit
+                </div>
+                <div class="modal-body">
+                    
+
+                    <div class="row col-md-12" style="margin-top: 10px;">
+                        <div class="col-md-1">
+                            <label><b>font-size</b></label>
+                            <input class="form-control" type="text" id="review_font_size" onkeyup="reload_review()" />
+                        </div>
+                        <div class="col-md-1">
+                            <label><b>color</b></label>
+                            <input class="form-control" type="text" id="review_color" onkeyup="reload_review()" />
+                        </div>
+                        <div class="col-md-2">
+                            <label><b>font-family</b></label>
+                            <input class="form-control" type="text" id="review_font_family" onkeyup="reload_review()" />
+                        </div>
+                        <div class="col-md-2">
+                            <label><b>font-weight</b></label>
+                            <input class="form-control" type="text" id="review_font_weight" onkeyup="reload_review()" />
+                        </div>
+                        <div class="col-md-2">
+                            <label><b>font-style</b></label>
+                            <select class="form-control" id="review_font_style" onchange="reload_review()">
+                                <option value="normal">normal</option>
+                                <option value="italic">italic</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label><b>text-align</b></label>
+                            <select class="form-control" id="review_text_align" onchange="reload_review()">
+                                <option value="left">left</option>
+                                <option value="center">center</option>
+                                <option value="right">right</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label><b>width-height (px or %)</b></label>
+                            <input class="form-control" type="text" id="review_width" onkeyup="reload_review()" />
+                            <input class="form-control" type="text" id="review_height" onkeyup="reload_review()" />
+                            <input type="hidden" id="review_x" />
+                            <input type="hidden" id="review_y" />
+                        </div>
+                        
+                        <div class="col-md-12">
+                           <input class="btn btn-primary pull-right" type="submit" id="review_save" value="Save review" onclick="save_review()" />
+                        </div>
+                    </div>
+                    <div class="row col-md-12" id="review" style="width:100%;border:solid;"></div>
+                </div>
+                <div class="modal-footer" id="Modal_Footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="Content/assets/js/jquery-2.2.4.js"></script>
+    <script src="Scripts/js/bootstrap.min.js"></script>
+    <script src="Content/assets/js/metisMenu.min.js"></script>
+    <script src="Content/assets/js/scripts/init.js"></script>
+    <script src="Content/assets/js/jquery.counterup.min.js"></script>
+    <script src="Content/assets/js/ripple.min.js"></script>
+    <script src="Content/assets/js/jquery.slimscroll.min.js"></script>
+    <script src="Content/assets/js/sweetalert.min.js"></script>
+    <script src="Content/Js/jquery-ui/jquery-ui.min.js"></script>
+    <script src="Content/Js/jstree/js/jquery.tree.js"></script>
+    <script src="Content/Js/select2/js/select2.full.min.js"></script>
+    <script src="/Scripts/moment.min.js"></script>
+    <script src="Scripts/moment-with-locales.min.js"></script>
+    <script src="/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="Content/assets/js/datatables.min.js"></script>
+    <script src="Content/assets/js/dataTables.responsive.js"></script>
+    <script src="Content/assets/js/dataTables.buttons.min.js"></script>
+    <script src="Scripts/js/common.js"></script>
+    <script src="Scripts/ScriptSys/ScriptTool/ToolFunction.js"></script>
+    <script src="Scripts/ScriptSys/ScriptTool/ToolTMS.js"></script>
+    <script src="Scripts/ScriptSys/ScriptTMS/Shared/_layout.js"></script>
+    <script src="Content/interact.js"></script>
+    <script>
+    
+
+        // target elements with the "draggable" class
+        interact('.draggable')
+            .draggable({
+                // enable inertial throwing
+                inertia: true,
+                // keep the element within the area of it's parent
+                restrict: {
+                    restriction: "parent",
+                    endOnly: true,
+                    elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+                },
+                // enable autoScroll
+                autoScroll: true,
+
+                // call this function on every dragmove event
+                onmove: dragMoveListener,
+                // call this function on every dragend event
+                onend: function (event) {
+
+                }
+            });
+        function dragMoveListener(event) {
+            var target = event.target,
+                // keep the dragged position in the data-x/data-y attributes
+                x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+                y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+            // translate the element
+            target.style.webkitTransform =
+                target.style.transform =
+                'translate(' + x + 'px, ' + y + 'px)';
+
+            // update the posiion attributes
+            target.setAttribute('data-x', x);
+            target.setAttribute('data-y', y);
+        }
+        // this is used later in the resizing and gesture demos
+        window.dragMoveListener = dragMoveListener;
+        $("#uploadEditorImage").change(function () {
+            readURL(this);
+        });
+        function readURL(input) {
+
+            var fsize = 1024 * 1024 * 2;
+
+            if (input.files[0].size < fsize) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#cer_content').css('background-image', 'url(' + e.target.result + ')');
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            else {
+
+                notify.alert("Allowed file size exceeded. (Max. 2 MB)", 'Warning', TITLE_STATUS_DANGER);
+
+            }
+        }
+        function reload() {
+            var txt_width = $('#txt_width').val();
+            var txt_height = $('#txt_height').val();
+            $('#cer_content').css('width', txt_width);
+            $('#cer_content').css('height', txt_height);
+        }
+        function reload_review() {
+            //review_font_family
+            var review_font_family = $('#review_font_family').val();
+            $('#P_review').css('font-family', review_font_family);
+            //review_font_size
+            var review_font_size = $('#review_font_size').val();
+            $('#P_review').css('font-size', review_font_size);
+            //review_width review_height
+            var review_width = $('#review_width').val();
+            $('#P_review').css('width', review_width);
+            var review_height = $('#review_height').val();
+            $('#P_review').css('height', review_height);
+            
+            //review_color
+            var review_color = $('#review_color').val();
+            $('#P_review').css('color', review_color);
+            //review_font_weight
+            var review_font_weight = $('#review_font_weight').val();
+            $('#P_review').css('font-weight', review_font_weight);
+            //review_font_style
+            var review_font_style = $('#review_font_style').val();
+            $('#P_review').css('font-style', review_font_style);
+            //review_text_align
+            var review_text_align = $('#review_text_align').val();
+            $('#P_review').css('text-align', review_text_align);
+        }
+        function save_review()
+        {
+            var field_id = $('#field_id').val();
+            $("#" + field_id).attr('style', $('#P_review').attr("style"));
+            //review_x review_y
+            var review_x = $('#review_x').val();
+            var review_y = $('#review_y').val();
+            $("#" + field_id).css('transform', 'translate(' + review_x + 'px,' + review_y + 'px)');
+            $("#myModal").modal("hide");
+        }
+        function edit(event) {
+            var contentPanelId = $(event).attr("id");
+            var content = $(event).text();
+
+            $('#field_id').val();
+            $('#field_id').val(contentPanelId);
+
+            var review_font_family = $(event).css("font-family");
+            console.log(review_font_family);
+            $('#review_font_family').val(review_font_family);
+            var review_font_size = $(event).css("font-size");
+            $('#review_font_size').val(review_font_size);
+            var review_width = $(event).css("width");
+            $('#review_width').val(review_width);
+            var review_height = $(event).css("height");
+            $('#review_height').val(review_height);
+
+            var review_x = $(event).css("transform").split(/[()]/)[1];
+            $('#review_x').val(review_x.split(new char[] { ','})[4]);
+            var review_y = $(event).css("transform").split(/[()]/)[1];
+            $('#review_y').val(review_y.split(new char[] { ','})[5]);
+            var review_color = $(event).css("color");
+            $('#review_color').val(review_color);
+            var review_font_weight = $(event).css("font-weight");
+            console.log(review_font_weight);
+            $("#review_font_weight").val(review_font_weight);
+            var review_font_style = $(event).css("font-style");
+            $("#review_font_style").val(review_font_style);
+            var review_text_align = $(event).css("text-align");
+            $("#review_text_align").val(review_text_align);
+
+           
+
+            $('#review').empty();
+            $('#review').append('<p id="P_review" style="display: inline-block;">' + content + '</p>');
+            $('#myModal').modal('show');
+            reload_review();
+           
+        }
+    </script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+﻿@using TMS.Core.Utils
+@using TMS.Core.App_GlobalResources
+@using Utilities
+@*@using AppUtils = Utilities.AppUtils;*@
+@{
+    //var menu = ViewBag.MenuConfig;
+    var fullname = ViewBag.CurrentUser;
+    string avatar = ViewBag.Avatar;
+    var pathimage = ViewBag.pathimage;
+}
+
+<aside>
+    <div class="navbar-default sidebar">
+        <div class="sidebar-nav navbar-collapse">
+            <div class="nav side-nav-white" id="side-menu">
+                <ul class="list-unstyled">
+                    <li class="profile">
+                        <a href="javascript:void(0);" aria-expanded="false" style="background: url(../../Content/img/Timeday/@pathimage) left top no-repeat;width: 100%;background-size: 100% 128px;">
+                            <div class="avatar">
+                                @*<img src="@((string.IsNullOrEmpty(avatar) || avatar.StartsWith("NoAvata")) ? "/Content/img/NoAvata.png" : string.Format("{0}{1}", UtilConstants.PathImage, avatar))" class="img-responsive" id="blah"/>*@
+                                <img src="@((string.IsNullOrEmpty(avatar) || avatar.StartsWith("NoAvata")) ? UtilConstants.PathImage+"NoAvata.png" :
+                                AppUtils.getAppSetting("AWSLinkS3") + AppUtils.getAppSetting("PathImage").Substring(1) +avatar)" class="img-responsive" id="blah" />
+                            </div>
+                            <div class="info">
+                                @fullname<i class="zmdi zmdi-caret-down"></i>
+                            </div>
+                        </a>
+                        <ul class="nav2 nav-level collapse" aria-expanded="false" style="height: 0px;">
+                            <li class="active-second">
+                                <a href="@Url.Action("ChangeProfile", "User")" class="legitRipple"><i class="zmdi zmdi-account"></i> @Resource.lblChangeProfile</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("ChangePass", "User")" class="legitRipple"><i class="zmdi zmdi-settings"></i> @Resource.lblChangePassword</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Logout", "Authenticate")" class="legitRipple"><i class="zmdi zmdi-sign-in"></i> @Resource.lblLogout</a>
+                                @*<a href="javascript:void(0)" class="legitRipple" onclick="sslssso.logout()"><i class="zmdi zmdi-sign-in"></i> @Resource.lblLogout</a>*@
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="list-unstyled sidebar-left">
+                    <li class="home">
+                        <a href="/"><i class="zmdi zmdi-view-dashboard"></i> @Resource.HOME</a>
+                    </li>
+
+                    @{Html.RenderAction("GenerateMenu", "Authenticate"); }
+                    @*@Html.Raw(menu)*@
+                </ul>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<style>
+    .byhoa {
+        margin-left: 1em;
+    }
+
+    .font-byhoa {
+        font-size: 23px;
+    }
+
+    .font-small-byhoa {
+        font-size: 19px;
+    }
+</style>
+<script type="text/javascript">
+    //$('.byhoa').removeClass("fa-w-14");
+</script>
+
+
+
+
+
+
+

@@ -1,0 +1,235 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@using Utilities;
+@model TMS.Core.ViewModels.Employee.EmployeeModelPrint
+@{
+    ViewBag.Title = "PrintProfile";
+}
+<style>
+    #reportpage table > thead > tr > th,
+    #reportpage .table > thead > tr > th,
+    #reportpage table > tbody > tr > th,
+    #reportpage .table > tbody > tr > th,
+    #reportpage table > tfoot > tr > th,
+    #reportpage .table > tfoot > tr > th,
+    #reportpage table > thead > tr > td,
+    #reportpage .table > thead > tr > td,
+    #reportpage table > tbody > tr > td,
+    #reportpage .table > tbody > tr > td,
+    #reportpage table > tfoot > tr > td,
+    #reportpage .table > tfoot > tr > td {
+        border: 1px solid #000;
+        color: black;
+    }
+
+    .text-left {
+        text-align: left;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-right {
+        text-align: right;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-center {
+        text-align: center;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .header-title {
+        color: black;
+        font-weight: bold;
+    }
+
+    .td_course {
+        padding-left: 10px;
+        background: #ccc;
+    }
+
+    .footer_date {
+        color: black;
+        padding-top: 20px;
+        font-style: italic;
+    }
+
+    h4 {
+        color: black;
+    }
+</style>
+
+<link href="~/Content/assets/css/vietjet-print.css" rel="stylesheet" media="print" />
+
+<div class="col-sm-12">
+    <div class="col-sm-3 text-left">
+        @if (string.IsNullOrEmpty(Model.Avatar) || Model.Avatar.StartsWith("NoAvata"))
+        {
+            <img src="@(UtilConstants.PathImage+"NoAvata.png")" class="img-responsive center-block" style="width: 213px;height:320px" />
+        }
+        else
+        {
+            <img src="@(AppUtils.getAppSetting("AWSLinkS3") + AppUtils.getAppSetting("PathImage").Substring(1) +Model.Avatar))" class="img-responsive center-block" />
+        }
+    </div>
+    <div class="col-sm-9 text-right" style="border: 1px solid #ccc;">
+        <div class="col-sm-12 text-left">
+            <div class="col-sm-12 text-left">
+                <b>FULL NAME:</b>
+                @(Model.FullName)
+            </div>
+        </div>
+        <div class="col-sm-12 text-left">
+            <div class="col-sm-6 text-left">
+                <b>EID:</b>
+                @(Model.Eid)
+            </div>
+            <div class="col-sm-3 text-left">
+                <b>ID:</b>
+                @(Model.PersonalId)
+            </div>
+            <div class="col-sm-3 text-left">
+                <b>PASSPORT NO:</b>
+                @(Model.Passport ?? "")
+            </div>
+        </div>
+        <div class="col-sm-12 text-left">
+            <div class="col-sm-6 text-left">
+                <b>DATE OF BIRTH:</b>
+                @(Model.DateOfBirth)
+            </div>
+            <div class="col-sm-6 text-left">
+                <b>GENDER:</b>
+                @(Model.Gender)
+            </div>
+        </div>
+        <div class="col-sm-12 text-left">
+            <div class="col-sm-6 text-left">
+                <b>PLACE OF BIRTH:</b>
+                @(Model.PlaceOfBirth)
+            </div>
+            <div class="col-sm-6 text-left">
+                <b>EMAIL:</b>
+                @(Model.Email)
+            </div>
+        </div>
+        <div class="col-sm-12 text-left">
+            <div class="col-sm-6 text-left">
+                <b>NATIONALITY:</b>
+                @(Model.Nation)
+            </div>
+            <div class="col-sm-6 text-left">
+                <b>PHONE:</b>
+                @(Model.Phone)
+            </div>
+        </div>
+        <div class="col-sm-12 text-left">
+            <div class="col-sm-6 text-left">
+                <b>DATE OF JOIN:</b>
+                @(Model.DateOfJoin)
+            </div>
+            <div class="col-sm-6 text-left">
+                <b>JOB TITLE:</b>
+                @(Model.JobTitle)
+            </div>
+        </div>
+        <div class="col-sm-12 text-left">
+            <div class="col-sm-6 text-left">
+                <b>TYPE:</b>
+                @(Model.Type)
+            </div>
+            <div class="col-sm-6 text-left">
+                <b>DEPARTMENT:</b>
+                @(Model.Department)
+            </div>
+        </div>
+        <div class="col-sm-12 text-left">
+            <div class="col-sm-6 text-left">
+                <b>COMPANY:</b>
+                @(Model.Company)
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-sm-12" style="margin-top: 10px;">
+    <div class="panel  list-panel" id="list-panel">
+        <div class="panel-heading list-panel-heading">
+            <h1 class="panel-title list-panel-title" style="text-transform: uppercase;">@Resource.lblEducation</h1>
+        </div>
+        <div class="panel-body">
+            <table id="Table_Education" class="table dt-responsive no-wrap table-striped " cellspacing="0" width="100%">
+                <thead class="cf m-gray">
+                    <tr role="row">
+                        <th class="text-center">No</th>
+                        <th>Time</th>
+                        <th>Course</th>
+                        <th>Organization</th>
+                        <th>Note</th>
+                    </tr>
+                    @{
+                        var counts = 0;
+                        foreach (var item in Model.Educations)
+                        {
+                            counts++;
+                            <tr>
+                                <td>@counts</td>
+                                <td>@item.Time</td>
+                                <td>@item.Course</td>
+                                <td>@item.Organization</td>
+                                <td>@item.Note</td>
+                            </tr>
+                        }
+                    }
+                </thead>
+                <tbody></tbody>
+                <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@if(Model.TrainingCourseCustom.Any())
+{
+    <div class="col-sm-12" style="margin-top: 10px;">
+        <div class="panel  list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title">TRAINING COURSES</h1>
+            </div>
+            <div class="panel-body">
+                <table id="Table_Trainee_Courses" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <tr role="row">
+                        <th class="text-center">No</th>
+                        <th>Course Code</th>
+                        <th>Time</th>
+                        <th>Subject</th>
+                        <th>First Check</th>
+                        <th>Re Check</th>
+                        <th>Remark</th>
+                        <th>Grade</th>
+                        <th>Refresh Cycle</th>
+                        <th>Expire Date</th>
+                    </tr>
+                    @{
+                        var counts2 = 0;
+                        foreach (var item in Model.TrainingCourseCustom)
+                        {
+                            counts2++;
+                            <tr>
+                                <td>@counts2</td>
+                                <td>@item.courseDetails.Course.Code</td>
+                                <td>@item.dtm_from_to</td>
+                                <td>@item.subjectName</td>
+                                <td>@item.firstCheck </td>
+                                <td>@item.reCheck    </td>
+                                <td>@item.remark     </td>
+                                <td>@item.grade      </td>
+                                <td>@item.recurrent  </td>
+                                <td>@(item.ex_Date.HasValue ? item.ex_Date.Value.ToString("dd/MM/yyyy") : "")</td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+}
+

@@ -1,0 +1,257 @@
+﻿@using TMS.Core.App_GlobalResources;
+@model TMS.Core.ViewModels.Instructor.InstructorModel
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.ActiveMenu = "Program";
+    ViewBag.ActiveSubMenu = "Instructor";
+}
+
+@section breadcrumb{
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header"><i class="fa fa-user-md"></i>@Resource.lblInstructorManagement - @Resource.lblInstructorList</h1>
+        <ol class="breadcrumb">
+            <li><a href="/">@Resource.lblHome</a></li>
+            <li>@Resource.lblInstructorManagement</li>
+            <li class="active">@Resource.lblInstructorList</li>
+        </ol>
+    </div>
+</div>
+}
+@using (Html.BeginForm("AjaxHandler", "Instructor", FormMethod.Post, new {id = "frmFilter"}))
+{
+<div class="col-md-12">
+    <div class="panel list-panel" id="list-panel">
+        <div class="panel-heading list-panel-heading">
+            <h1 class="panel-title list-panel-title">@Resource.lblFilter</h1>
+        </div>
+        <div class="panel-body">
+            <div class="row col-md-12">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>@Messege.EIDGV</label>
+                        <input type="text" name="fStaffId" id="fStaffId" class="form-control frmFilter" placeholder="@Messege.EIDGV" />
+                    </div>
+                    <div class="col-md-3">
+                        <label>@Resource.lblFullName</label>
+                        <input type="text" name="fName" id="fName" class="form-control frmFilter" placeholder="@Resource.lblFullName" />
+                    </div>
+                    <div class="col-md-3">
+                        <label>@Resource.lblGender</label>
+                        @Html.DropDownList("Genders", Model.Genders, "", new {@class = "form-control combobox frmFilter", data_placeholder = "--" + @Resource.lblGender + "--" })
+                    </div>
+                    <div class="col-md-3">
+                        <label>@Resource.lblEmail</label>
+                        <input type="text" name="fEmail" id="fEmail" class="form-control frmFilter" placeholder="@Resource.lblEmail" />
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-3">
+                        <label>@Resource.lblPhone</label>
+                        <input type="text" name="fPhone" id="fPhone" class="form-control frmFilter" placeholder="@Resource.lblPhone" />
+                    </div>
+                    <div class="col-md-3">
+                        <label>@Resource.lblDepartment</label>
+                        <select class="form-control frmFilter" name="DepartmentList" id="DepartmentList" data-placeholder="-- @Resource.lblDepartment --">
+                            <option></option>
+                            @Html.Raw(Model.DepartmentList)
+                        </select>
+
+                    </div>
+                    <div class="col-md-3">
+                        <label>@Resource.lblJobTitle_Occupation</label>
+                        @Html.DropDownList("JobTitleList", Model.JobTitles, "", new {@class = "form-control combobox frmFilter", data_placeholder = "--" + @Resource.lblJobTitle_Occupation + "--" })
+                    </div>
+                    <div class="col-md-3">
+                        <label>@Messege.TYPE</label>
+                        @Html.DropDownList("Type", Model.Type, "", new {@id = "ddl_TYPE", @class = "form-control frmFilter", @onchange = "onchangetype()", @data_placeholder = "--" + Messege.TYPE + "--" })
+                    </div>
+                    
+                </div>
+                <div class="row" style="margin-top: 10px">
+                    <div class="col-md-3">
+                        <label>@Messege.TYPE</label>
+                        @Html.DropDownList("Mentor", Model.Mentor, "", new {  @class = "form-control frmFilter",  @data_placeholder = "--" + Resource.lblMentor + "--" })
+                    </div>
+                    <div class="col-md-1 pull-right">
+                        <button type="submit" class="btn btn-primary pull-right" id="btFilter">
+                            <i class="fa fa-search"></i> @Resource.lblSearch
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+
+
+<div class="col-md-12">
+    <div class="panel list-panel" id="list-panel">
+        <div class="panel-heading list-panel-heading">
+            <h1 class="panel-title list-panel-title">
+                <i class="fa fa-list" aria-hidden="true"></i> @Resource.lblInstructorList
+      
+                <p class="btn-group pull-right">
+                    <a id="btnExport" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-download" aria-hidden="true"></i> @Resource.lblEXPORT</a>
+                    @if (User.IsInRole(Url.Action("Create", "Instructor")))
+                    {
+                    <a href="/Instructor/Create" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-plus" aria-hidden="true"></i> @Resource.lblCreate</a>
+                    }
+                </p>
+            </h1>
+        </div>
+        <div class="panel-body table-responsive">
+            <table id="Trainee" class="table table-striped table-bordered">
+                <thead >
+                    <tr role="row">
+                        <th style="width:5%;">@Resource.lblStt</th>
+                        <th>@Messege.EIDGV</th>
+                        <th>@Resource.lblFullName</th>
+                        <th>@Resource.lblGender</th>
+                        <th>Email</th>
+                        <th>@Resource.lblPhone</th>
+                        <th>@Resource.lblJobTitle_Occupation</th>
+                        <th>@Resource.lblDepartment</th>
+                        <th>@Messege.TYPE</th>
+                        <th>@Resource.lblStatus</th>
+                        <th style="width:10%;">@Resource.lblOptions</th>
+                </thead>
+                <tbody></tbody>
+                <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            @*<div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>*@
+            <div class="modal-body">
+                <label>@Messege.DELETE_INSTRUCTOR</label>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div id="messageout2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="Modal_Footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+<script type="text/javascript">
+    var sTable;
+    $(document).ready(function () {
+        var customRow = [
+            {
+                "targets": 9,
+                "className": "text-center",
+            }
+        ];
+        sTable = initDataTable('#Trainee', '/Instructor/AjaxHandler', customRow);
+        $('#frmFilter').submit(function (e) {
+            e.preventDefault();
+            sTable.draw();
+        });
+        $('#myModal').on('hidden.bs.modal', function () {
+            sTable.fnDraw();
+        });
+
+        $('#btnExport').click(function () {
+            window.location.href = '/Instructor/ExportEXCEL';
+        });
+
+    });
+
+
+    function Set_Participate_Instructor(isParticipate, id) {
+        spinner.open();
+        $.ajax({
+            type: 'POST',
+            url: "/Instructor/SubmitSetParticipateInstructor",
+            datatype: 'json',
+            data: { isParticipate: isParticipate, id: id },
+            success: function (data) {
+                if (data.result) {
+                    sTable.draw();
+                    notify.alert(data.message, 'SUCCESS', TITLE_STATUS_SUCCESS);
+                } else {
+                    notify.alert(data.message, 'ERROR', TITLE_STATUS_DANGER);
+                }
+                
+               
+            }, complete: function () {
+
+                spinner.close();
+            }
+        });
+    }
+
+
+    function calldelete(id) {
+        notify.confirm('@Messege.DELETE_INSTRUCTOR', 'Confirm', TITLE_STATUS_WARNING, deletesubmit, id);
+    }
+    function deletesubmit(id) {
+        spinner.open();
+        $.ajax({
+            type: 'POST',
+            url: "/Instructor/delete",
+            datatype: 'json',
+            data: { id: id },
+            success: function (data) {
+                if (data.result) {
+                    sTable.draw();
+                    notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                }
+                else {
+                    notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                }
+
+            }, complete: function () {
+                spinner.close();
+            }
+        });
+    }
+
+
+
+    function callrandom(name, id) {
+        var message = "@Messege.WARNING_SEND_NEW_PASS".replace("{0}", name);
+        notify.confirm(message, "Confirm", TITLE_STATUS_SUCCESS, passwordRandomSubmit, id);
+
+    }
+
+    function passwordRandomSubmit(id) {
+        spinner.open();
+        $.ajax({
+            type: 'POST',
+            url: "/Trainee/RandomResetPassword",
+            datatype: 'json',
+            data: { id: id },
+            success: function (data) {
+                if (data.result) {
+                    notify.alert(data.message, 'SUCCESS', TITLE_STATUS_SUCCESS);
+                }
+                else {
+                    notify.alert(data.message, 'ERROR', TITLE_STATUS_DANGER);
+                }
+
+            }, complete: function () {
+                spinner.close();
+            }
+        });
+    }
+
+</script>
+}

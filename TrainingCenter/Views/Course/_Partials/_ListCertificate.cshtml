@@ -1,0 +1,75 @@
+﻿@using ClosedXML.Excel
+@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Courses.GroupCertificateModel
+
+@{
+    var listSubject = new List<int>();
+}
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-md-12">
+            <div class="col-md-6 control-label">
+                @Html.HiddenFor(m => m.Id ,new {@class = "form-control"})
+
+                <label>@Resource.lblCourse</label>
+                @Html.TextBoxFor(m => m.Name, new {@class = "form-control"})
+                <div id="divListCer" style="margin-top: 10px;">
+                    <label>@Resource.lblCertificate</label>
+                    <select class="form-control" name="CertificateId" id="CertificateId" placeholder="@Resource.lblCertificate" onchange="filterLoadImg(this.value)">
+                        <option value="" disabled selected>Select your option</option>
+                        @if (Model.Certificates.Any())
+                        {
+                            foreach (var m in Model.Certificates)
+                            {
+                                    <option value="@m.Key" @(Model.CertificateId.HasValue ? "selected" : "" ) > @m.Value</option>
+                            }
+                        }
+                    </select>
+
+                    <label>@Resource.lblSubjectList</label>
+                    <select class="form-control input-sm default list-height-300" multiple="multiple" id="SubjectId">
+                        @if (Model.Subjects.Any())
+                        {
+                            
+                            foreach (var m in Model.Subjects)
+                            {
+                                if (Model.IdSubjects != null && Model.IdSubjects.Contains(m.Key))
+                                {
+                                    <option value="@m.Key" class="active"  selected > @m.Value</option>
+                                    {
+                                        listSubject.Add(m.Key);
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="@m.Key"> @m.Value</option>
+                                }
+
+                            }
+                        }
+                    </select>
+                    @if (listSubject.Any())
+                    {
+                        foreach (var id in listSubject)
+                        {
+                            <input type="hidden" name="ArrSubjectId" value="@id" id="input_@(id)" />
+                        }
+                    }
+                    <input type="hidden" name="ArrSubjectId" value="-1" />
+                </div>
+                <div class="action-form text-right">
+                    <a href="javascript:void(0);" class="btn btn-primary legitRipple" id="submit" onclick="addGroup()"><i class="fa fa-floppy-o" aria-hidden="true"></i> @Resource.lblSave</a>
+                    <a onclick=" goBack() " class="btn  btn-default legitRipple"><i class="fa fa-sign-out" aria-hidden="true"></i> @Resource.lblBack</a>
+                </div>
+            </div>
+            <div class="col-md-6 control-label">
+                <div id="divLoadimg" >
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-12">
+           
+        </div>
+    </div>
+        
+    

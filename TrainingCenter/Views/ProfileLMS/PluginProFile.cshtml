@@ -1,0 +1,609 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@using Utilities
+@model TMS.Core.ViewModels.Employee.EmployeeModelDetails
+@{
+    ViewBag.Title = "PluginProFile";
+    Layout = "~/Views/Shared/_Layout_LMS.cshtml";
+    var control = Model.Control == (int)UtilConstants.ROLE.Trainee;
+}
+
+
+<style type="text/css">
+    .highlight {
+        color: red;
+    }
+
+        .highlight input {
+            color: red;
+        }
+
+    header, footer {
+        display: none;
+    }
+
+    .row {
+        margin-right: 0px;
+        margin-left: 0px;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="panel " style="margin-top: 10px;" id="frmFilter">
+    <div class="panel-heading">
+        <h1 class="panel-title list-panel-title">
+            <i class="fas @(control ? "fa-user-graduate" : "fa-user-tie") font-small-byhoa"></i> @Resource.lblInstructorDetails
+            @*<p class="btn-group pull-right">
+                    <a id="btnPrint" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-print" aria-hidden="true"></i> @Resource.lblPrint</a>
+
+                </p>*@
+        </h1>
+    </div>
+    <div class="panel-body">
+        <div class="tab-content">
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-3">
+                    <div class="profile-sidebar box-shadow">
+                        <img src="@(((string.IsNullOrEmpty(Model.Avatar) || Model.Avatar.StartsWith("NoAvata")) ? UtilConstants.PathImage+"NoAvata.png" :
+                                 AppUtils.getAppSetting("AWSLinkS3") + AppUtils.getAppSetting("PathImage").Substring(1) +Model.Avatar))" class="img-responsive center-block" />
+                        <input type="hidden" value="@Model.Id" class="frmFilter" name="Id" id="Id" />
+                        <input type="hidden" class="form-control frmFilter" name="control" id="control" value="@(control ? (int)UtilConstants.ROLE.Trainee  : (int) UtilConstants.ROLE.Instructor)" />
+                        <div class="profile-username text-center">
+                            <p>@(Model.FullName)</p>
+                        </div>
+                        <div class="profile-job text-center">
+                            <p>@(Model.Jobtitle)</p>
+                        </div>
+                        @if (Model.CheckHannahMentor)
+                        {
+                            <div class="profile-job text-center">
+                                <p>@(Model.HannahMentor)</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="panel box-shadow">
+                        <div class="panel-body center-block">
+                            <div class="row">
+                                <div class="form-group col-md-9">
+                                    <label>@Resource.lblFullName</label><br />
+                                    <label class="form-control">@Model.FullName</label>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>@Resource.TRAINEE_EID</label><br />
+                                    <label class="form-control">@Model.Eid</label>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>ID</label><br />
+                                    <label class="form-control">@Model.PersonId</label>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>@Resource.lblPassportNo</label><br />
+                                    <label class="form-control">@Model.Passport</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>@Resource.lblEmail</label><br />
+                                    <label class="form-control">@Model.Email</label>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>@Resource.lblType</label><br />
+                                    <label class="form-control">@Model.Type</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>@Resource.lblDepartment</label><br />
+                                    <label class="form-control">@Model.Department</label>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>@Resource.lblGender</label><br />
+                                    <label class="form-control">@Model.Gender</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>@Resource.lblJobTitle</label><br />
+                                    <label id="JobTitle" class="form-control">@Model.Jobtitle</label>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>@Resource.lblNationality</label><br />
+                                    <label class="form-control">@Model.Nation</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>@Resource.lblCompany</label><br />
+                                    <label class="form-control">@Model.Company</label>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>@Resource.lblPhone</label><br />
+                                    <label class="form-control">@Model.Phone</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>@Resource.lblDateOfJoin</label><br />
+                                    <label class="form-control">@Model.DateOfJoin</label>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>@Resource.lblResignationDate</label><br />
+                                    <label class="form-control">@Model.ResignationDate</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-----------Jobtitle---------------->
+            @*<div class="row" style="margin-top: 10px;">
+                <div class="col-md-12">
+                    <div class="panel  list-panel" id="list-panel">
+                        <div class="panel-heading list-panel-heading">
+                            <h1 class="panel-title list-panel-title">@Resource.lblJobtitleStandard</h1>
+                        </div>
+                        <div class="panel-body">
+                            @{ Html.RenderAction("PartialListJobStandard", "ProfileLMS");}
+                        </div>
+
+                    </div>
+                </div>
+            </div>*@
+
+            <!-----------CONTRACT---------------->
+            @if (!control)
+            {
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div class="panel  list-panel" id="list-panel">
+                            <div class="panel-heading list-panel-heading">
+                                <h1 class="panel-title list-panel-title">@Resource.lblContract</h1>
+                            </div>
+                            <div class="panel-body">
+                                <table id="TableContract" class="table table-striped table-bordered">
+                                    <thead class="cf">
+                                        <tr role="row">
+                                            <th class="text-center">@Resource.lblStt</th>
+                                            <th class="text-left">@Resource.lblContractNo</th>
+                                            <th>@Resource.lblExprieDate</th>
+                                            <th>@Resource.lblDescription</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!------EDUCATION------>
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-12">
+                    <div class="panel  list-panel" id="list-panel">
+                        <div class="panel-heading list-panel-heading">
+                            <h1 class="panel-title list-panel-title">@Resource.lblEducation</h1>
+                        </div>
+                        <div class="panel-body">
+                            <table id="TableEducation" class="table table-striped table-bordered">
+                                <thead class="cf">
+                                    <tr role="row">
+                                        <th class="text-center">@Resource.lblStt</th>
+                                        <th>@Resource.lblTime</th>
+                                        <th>@Resource.lblCourse</th>
+                                        <th>@Resource.lblOrganization</th>
+                                        <th>@Resource.lblNote</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!----------TRAINING COURSES--------->
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-12">
+                    <div class="panel  list-panel" id="list-panel">
+                        <div class="panel-heading list-panel-heading">
+                            <h1 class="panel-title list-panel-title">
+                                List Program
+                                @*<p class="btn-group pull-right">
+                                        <a id="btnPrint1" href="/Employee/Trainee_Point/?id=@Model.Id" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-print" aria-hidden="true"></i> &nbsp;@Resource.lblEXPORT_POINT</a>
+
+                                    </p>*@
+                            </h1>
+                        </div>
+                        <div class="panel-body">
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a href="#TRAININGCOURSES" data-toggle="tab" aria-expanded="false">@Resource.lblTrainingCourses</a>
+                                </li>
+
+                                <li class="">
+                                    <a href="#EXTENTTRAININGCOURSES" data-toggle="tab" aria-expanded="false">Training Courses</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style="margin-top:10px">
+                                <div class="tab-pane fade  active in" id="TRAININGCOURSES">
+                                    <table id="TableTrainingCourses" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                        <thead class="cf">
+                                            <tr role="row">
+                                                <th></th>
+                                                <th class="text-center">@Resource.lblStt</th>
+                                                <th>@Resource.lblCourseCode</th>
+                                                <th>@Resource.lblCourseName</th>
+                                                <th>@Resource.lblTime</th>
+                                                <th>@Resource.lblCertificate</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="EXTENTTRAININGCOURSES">
+                                    <table id="TableTrainingSubject" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                        <thead class="cf">
+                                            <tr role="row">
+                                                @*
+                                                <th class="text-center">@Resource.lblStt</th>*@
+                                                <th>@Resource.lblSubject</th>
+                                                <th>@Resource.lblTime</th>
+                                                <th>First Check</th>
+                                                <th>Re Check</th>
+                                                <th>@Resource.lblRemark</th>
+                                                <th>@Resource.lblGrade</th>
+                                                <th>@Resource.lblRefreshCycle</th>
+                                                <th>@Resource.lblExprieDate</th>
+                                                <th>@Resource.lblCertificate</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--TRAINING COMPETENCY-->
+            @if (!control)
+            {
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div class="panel  list-panel" id="list-panel">
+                            <div class="panel-heading list-panel-heading">
+                                <h1 class="panel-title list-panel-title">@Resource.lblTRAININGCOMPETENCY</h1>
+                            </div>
+                            <div class="panel-body">
+                                <table id="TableTrainingCompetency" class="table table-striped table-bordered dt-responsive" style="width: 100%">
+                                    <thead>
+                                        <tr role="row">
+                                            <th>@Resource.lblStt</th>
+                                            <th>@Resource.lblCode</th>
+                                            <th>@Resource.lblSubjectName</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!--Conducted SUBJECTS-->
+            @if (!control)
+            {
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div class="panel  list-panel" id="list-panel">
+                            <div class="panel-heading list-panel-heading">
+                                <h1 class="panel-title list-panel-title">@Resource.lblCONDUCTEDCOURSES</h1>
+                            </div>
+                            <div class="panel-body">
+                                <table id="TableConductedCourses" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                    <thead class="cf">
+                                        <tr role="row">
+                                            <th class="text-center">@Resource.lblStt</th>
+                                            <th>@Resource.lblCode</th>
+                                            <th>@Resource.lblSubjectName</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+
+        </div>
+
+        @*<div class="row" id="btndiv">
+                <div class="action-form text-right">
+
+                    <a onclick="goBack()" class="btn btn-default"><i class="fas fa-sign-out-alt"></i>&nbsp;@Resource.BACK</a>
+                </div>
+            </div>*@
+
+    </div>
+
+</div>
+
+<div class="hidden table-responsive">
+    <table id="TableTraineeSubjectsOfCourse" class="table table-striped table-bordered" style="width: 100%">
+        <thead>
+            <tr role="row">
+                <th class="text-center">@Resource.lblStt</th>
+                <th>@Resource.lblSubject</th>
+                <th>@Resource.lblTime</th>
+                <th>@Resource.lblTypeLearning</th>
+                <th>@Resource.lblPoint</th>
+                <th>@Resource.lblGrade</th>
+                <th>@Resource.lblRemark</th>
+                <th>@Resource.lblRefreshCycle</th>
+                <th>@Resource.lblExprieDate</th>
+                <th>@Resource.lblStatus</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+    </table>
+</div>
+
+<div class="hidden">
+    <table id="TableConductedCoursesOfSubject" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr role="row">
+                <th class="text-center">@Resource.lblStt</th>
+                <th>@Resource.lblCode</th>
+                <th>@Resource.lblCourse</th>
+                <th>@Resource.lblFrom</th>
+                <th>@Resource.lblTo</th>
+                <th>@Resource.lblRoom</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+    </table>
+</div>
+<div class="col-md-12" style="margin-top: 10px;display:none;">
+    <div class="panel panel-default list-panel" id="list-panel">
+        <div class="panel-body">
+            <div id="reportpage" style="padding-top: 20px; padding-bottom: 20px; padding-left: 30px; padding-right: 15px;">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        var tbContract;
+        var tbEdu;
+        var tbTrainingCourse;
+        var tbTrainingSubject;
+        var tbTrainingCompetency;
+        var tbConductedCourses;
+        var tbTraineeSubjectsOfCourse;
+        var customRowContract = [
+            {
+                "targets": 0,
+                "className": "text-center"
+            }
+        ];
+        var customRowEdu = [
+            {
+                "targets": 0,
+                "className": "text-center"
+            }
+        ];
+       var customRowTrainingCourse = [
+            {
+                "targets": 1,
+                "className": "text-center"
+            },
+            {
+                "targets": 3,
+                "className": "text-left"
+            }
+        ];
+        var customRowTrainningCompetency = [
+            {
+                "targets": 0,
+                "className": "text-center"
+            }
+        ];
+        var customRowConductedCourses = [
+            {
+                "targets": 0,
+                "className": "text-center"
+            }
+        ];
+        var customRowSubjectsOfCourse = [
+            {
+                "targets": 0,
+                "className": "text-center"
+            }
+        ];
+        var customRowTrainingSubject = [
+            {
+                "targets": 0,
+                "className": "text-center"
+            }
+        ];
+        $(document).ready(function () {
+            CheckJobTitle();
+            tbContract = initDataTable("#TableContract", "/ProfileLMS/AjaxHandlerContract", customRowContract);
+            tbEdu = initDataTable("#TableEducation", "/ProfileLMS/AjaxHandlerEducation", customRowEdu);
+            tbTrainingCourse = initDataTable_huy("#TableTrainingCourses", "/ProfileLMS/AjaxHandlerTrainingCourses", customRowTrainingCourse);
+            tbTrainingSubject = $("#TableTrainingSubject").dataTable({
+                "ordering": false,
+                "responsive:": true,
+                "searching": false,
+                "aaSorting": [],
+                "bServerSide": true,
+                "sAjaxSource": "/ProfileLMS/AjaxHandlerSubjectsOfCourse2",
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                    aoData.push({ "name": "Id", "value": $("#Id").val() });
+                },
+                rowsGroup: [
+                    0
+                ],
+            });
+            var detailRowsTrainingCourse = [];
+            $('#TableTrainingCourses tbody').on('click', 'tr td span.expand', function () {
+                var id = $(this).data('value');
+                var tr = $(this).closest('tr');
+                var row = tbTrainingCourse.row(tr);
+                var idx = $.inArray(tr.attr('id'), detailRowsTrainingCourse);
+
+                if (row.child.isShown()) {
+                    tr.removeClass('details');
+                    row.child.hide();
+                    // Remove from the 'open' array
+                    detailRowsTrainingCourse.splice(idx, 1);
+                } else {
+                    tr.addClass('details');
+                    row.child(format(id)).show();
+                    // Add to the 'open' array
+                    if (idx === -1) {
+                        detailRowsTrainingCourse.push(tr.attr('id'));
+                    }
+                }
+            });
+            tbTrainingCourse.on('draw', function () {
+                $.each(detailRowsTrainingCourse, function (i, id) {
+                    $('#' + id + ' td.details-control').trigger('click');
+                });
+            });
+
+
+
+            tbTrainingCompetency = initDataTable("#TableTrainingCompetency", "/ProfileLMS/AjaxHandlerTrainingCompetecy", customRowTrainningCompetency);
+            tbConductedCourses = initDataTable("#TableConductedCourses", "/ProfileLMS/AjaxHandlerConductedSubjects", customRowConductedCourses);
+            var detailRowsConductedCourses = [];
+            $('#TableConductedCourses tbody').on('click', 'tr td span.expand', function () {
+                var id = $(this).data('value');
+                var tr = $(this).closest('tr');
+                var row = tbConductedCourses.row(tr);
+                var idx = $.inArray(tr.attr('id'), detailRowsConductedCourses);
+
+                if (row.child.isShown()) {
+                    tr.removeClass('details');
+                    row.child.hide();
+                    // Remove from the 'open' array
+                    detailRowsTrainingCourse.splice(idx, 1);
+                } else {
+                    tr.addClass('details');
+                    row.child(formatTableConductedCourseOfSubject(id)).show();
+                    // Add to the 'open' array
+                    if (idx === -1) {
+                        detailRowsTrainingCourse.push(tr.attr('id'));
+                    }
+                }
+            });
+            tbConductedCourses.on('draw', function () {
+                $.each(detailRowsConductedCourses, function (i, id) {
+                    $('#' + id + ' td.details-control').trigger('click');
+                });
+            });
+        });
+
+
+        function format(id) {
+            var table = $("#TableTraineeSubjectsOfCourse").clone();
+            var customRow = [{ "targets": 0 }, {
+                "targets": 3,
+                "className": "text-center"
+            },
+            {
+                "targets": 4,
+                "className": "text-center"
+            }
+            ];
+            initDataTableMaxPageLength(table, "/ProfileLMS/AjaxHandlerSubjectsOfCourse/" + id, customRow);
+            return table;
+        }
+        function formatTableConductedCourseOfSubject(id) {
+
+            var table = $("#TableConductedCoursesOfSubject").clone();
+            var customRow = [{ "targets": 0 }, {
+                "targets": 3,
+                "className": "text-center"
+            },
+            {
+                "targets": 4,
+                "className": "text-center"
+            }
+            ];
+            initDataTableMaxPageLength(table, "/ProfileLMS/AjaxHandlerConductedCourseOfSubject/" + id, customRow);
+            return table;
+        }
+        function active() {
+            var id = $("#Id").val();
+            var type = $("#control").val();
+            $.ajax({
+                type: "GET",
+                url: "/ProfileLMS/PluginEmployeeProfilePrint/",
+                datatype: "json",
+                data: {
+                    id: id,
+                    type: type
+                },
+                success: function (data) {
+                    $('#reportpage').html(data);
+						var delayInMilliseconds = 1000; //1 second
+						setTimeout(function() {
+							printElement(document.getElementById("reportpage"));
+							window.print();
+						}, delayInMilliseconds);
+                }
+            });
+        }
+        $('#btnPrint').on('click', function () {
+            active();
+            //$("#Trainee").DataTable().draw();
+        });
+        function printElement(elem) {
+            var domClone = elem.cloneNode(true);
+            var $printSection = document.getElementById("printSection");
+
+            if (!$printSection) {
+                var $printSection = document.createElement("div");
+                $printSection.id = "printSection";
+                document.body.appendChild($printSection);
+            }
+
+            $printSection.innerHTML = "";
+
+            $printSection.appendChild(domClone);
+        }
+
+        function CheckJobTitle() {
+            var check = $("#CheckSubject").val()
+            if (check == "true") {
+                $("#JobTitle").css({ "background-color": "aquamarine", "color": "#fff" });
+            }
+        }
+    </script>
+}s

@@ -1,0 +1,37 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+
+
+<div class='col-md-12 notice notice-info course-detail-0'>
+    <div class='hidden-xs col-md-3 col-xs-12'><b>Code: </b> @Model.Code</div><div class='hidden-xs col-md-9  col-xs-12'><b>From-To: </b>@(DateUtil.DateToString(Model.StartDate, "dd/MM/yyyy")) - @(DateUtil.DateToString(Model.EndDate, "dd/MM/yyyy"))</div>
+    <div class='visible-xs col-md-3 col-xs-12' style='font-size: 11px;'><b>Code: </b> @Model.Code</div><div class='visible-xs col-md-9  col-xs-12' style='font-size: 11px;margin-bottom: 5px;'><b>From-To: </b>@(DateUtil.DateToString(Model.StartDate, "dd/MM/yyyy")) - @(DateUtil.DateToString(Model.EndDate, "dd/MM/yyyy"))</div>
+    <div class='hidden-xs col-md-12'><h4><b>@Model.Name</b></h4></div>
+    <div class='visible-xs  col-md-12' style='margin-bottom: 15px;'><h5><b>@Model.Name</b></h5></div>
+
+    <div class='row bs-wizard' style='border-bottom:0;'>
+       @{ 
+           var dataTypeApprovalType = UtilConstants.ApproveTypeDictionary();
+           foreach (var item in dataTypeApprovalType)
+           {
+               #region[check process]
+
+               var key = item.Key;
+               var requestInfo = "";
+               var status = "disabled";//disabled  active complete
+               var icon = "";
+               var display = "none";
+               var iconEdit = "";
+               var labelStatus = "";
+               var log = "";
+               //var data = Model.TMS_APPROVES.FirstOrDefault(a => a.int_Type == key);
+
+               
+               #endregion
+           }
+       }
+
+    </div>
+
+
+
+</div>

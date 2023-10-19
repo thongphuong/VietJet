@@ -1,0 +1,285 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@model TMS.Core.ViewModels.EmployeeModels.EmployeeViewModel
+@{
+    ViewBag.Title = "PrintProfileInstructor";
+
+    int count = 0;
+    int count1 = 0;
+}
+<style>
+    #reportpage table > thead > tr > th,
+    #reportpage .table > thead > tr > th,
+    #reportpage table > tbody > tr > th,
+    #reportpage .table > tbody > tr > th,
+    #reportpage table > tfoot > tr > th,
+    #reportpage .table > tfoot > tr > th,
+    #reportpage table > thead > tr > td,
+    #reportpage .table > thead > tr > td,
+    #reportpage table > tbody > tr > td,
+    #reportpage .table > tbody > tr > td,
+    #reportpage table > tfoot > tr > td,
+    #reportpage .table > tfoot > tr > td {
+        border: 1px solid #000;
+        color: black;
+    }
+
+    .text-left {
+        text-align: left;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-right {
+        text-align: right;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-center {
+        text-align: center;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .header-title {
+        color: black;
+        font-weight: bold;
+    }
+
+    .td_course {
+        padding-left: 10px;
+        background: #ccc;
+    }
+
+    .footer_date {
+        color: black;
+        padding-top: 20px;
+        font-style: italic;
+    }
+
+    h4 {
+        color: black;
+    }
+    .images {
+    width: 25%;
+    }
+    .content {
+    width: 75%;
+    }
+    .col-lg-6 {
+    width: 50%;
+    }
+    .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11 {
+    float: left;
+    }
+    .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+    float: right;
+    }
+</style>
+
+<link href="~/Content/assets/css/vietjet-print.css" rel="stylesheet" media="print" />
+<div class="col-md-12 text-center">
+    <table width="100%" border="1">
+        <tr>
+            <td width="20%">
+                <div class="col-sm-12 text-center ">
+                    <img src="~/Content/img/logo.png" style="width: 80%;margin-top: 12px;" />
+                </div>
+            </td>
+            <td colspan="1">
+                <div class="col-sm-12 text-center">
+                    <h2 class="header-title">Trainee Profile</h2>
+                </div>
+            </td>
+            <td width="20%">
+                <div class="col-sm-12 text-right pull-right">
+                    FORM: VJC-VTC-F-010 <br />
+                    ISS 01/REV 02<br />
+                    1/1/2017
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="panel " style="margin-top: 10px;">
+    <div class="panel-body">
+
+        <div class="tab-content">
+
+            <div class="row" style="margin-top:10px;">
+
+                <div class="col-md-4 images">
+                    <div class="profile-sidebar box-shadow">
+                        @if (string.IsNullOrEmpty(Model.Employees.avatar) || Model.Employees.avatar.StartsWith("NoAvata"))
+                        {
+                            <img src="@(UtilConstants.PathImage + "NoAvata.png")" class="img-responsive center-block" @*style="width:200px; height:200px;"*@ />
+                        }
+                        else
+                        {
+                            <img src="@(UtilConstants.PathImage + Model.Employees.avatar)" class="img-responsive center-block" @*style="width:200px; height:200px;"*@ />
+                        }
+                        <div class="profile-username text-center">
+                            <p>@(Model.Employees.FirstName != null ? (Model.Employees.FirstName.Trim() + " " + Model.Employees.LastName.Trim()) : "")</p>
+                        </div>
+                        <div class="profile-job text-center">
+                            <p>@(Model.Employees.JobTitle != null && Model.Employees.JobTitle.Name != null ? Model.Employees.JobTitle.Name : "")</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8 content">
+                    <div class="panel box-shadow">
+                        <div class="panel-body center-block">
+                            <div class="form-group col-lg-6">
+                                <label>ID : @(Model.Employees.PersonalId != null ? Model.Employees.PersonalId : "________")</label><br />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Messege.EID : @(Model.Employees.str_Staff_Id != null ? Model.Employees.str_Staff_Id : "________")</label><br />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblDateOfBirth : @(Model.Employees.dtm_Birthdate != null ? DateUtil.DateToString(Model.Employees.dtm_Birthdate.Value, "dd/MM/yyyy") : "________")</label><br />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblPassportNo : @(Model.Employees.Passport != null ? Model.Employees.Passport : "________")</label><br />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblGender : @(Model.Employees.Gender.HasValue && UtilConstants.GenderDictionary().ContainsKey(Model.Employees.Gender.Value) ? UtilConstants.GenderDictionary()[Model.Employees.Gender.Value] : "________")</label><br />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblPlaceOfBirth : @(Model.Employees.str_Place_Of_Birth != null ? Model.Employees.str_Place_Of_Birth : "________" )</label><br />
+                               
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblEmail : @(Model.Employees.str_Email != null ? Model.Employees.str_Email : "________")</label><br />
+                               
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblNationality : @(Model.Employees.Nation != null ? Model.Employees.Nation : "________")</label><br />
+                               
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblPhone : @(Model.Employees.str_Cell_Phone != null ? Model.Employees.str_Cell_Phone : "________")</label><br />
+                               
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblDateOfJoin : @(Model.Employees.dtm_Join_Date != null ? DateUtil.DateToString(Model.Employees.dtm_Join_Date, "dd/MM/yyyy") : "________")</label><br />
+                              
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblJobTitle : @(Model.Employees.JobTitle != null && Model.Employees.JobTitle.Name != null ? Model.Employees.JobTitle.Name : "________")</label><br />                              
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblDepartment : @(Model.Employees.Department.Name ?? "________-")</label><br />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                @if (Model.Employees.bit_Internal)
+                                {
+                                    <label>@Messege.TYPE : Internal</label><br />
+                                }
+                                else
+                                {
+                                    <label>@Resource.lblType : External</label><br />
+                                }
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblCompany : @(Model.Employees.Company_Id.HasValue ? Model.Employees.Company.str_Name : "_______")</label><br />                               
+                            </div>                            
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblNonWorkingDay : @(Model.Employees.non_working_day != null ? DateUtil.DateToString(Model.Employees.non_working_day, "dd/MM/yyyy") : "_______")</label><br />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!------EDUCATION------>
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-12">
+                    <div class="panel  list-panel" id="list-panel">
+                        <div class="panel-heading list-panel-heading">
+                            <h1 class="panel-title list-panel-title">@Resource.lblEducation</h1>
+                        </div>
+                        <div class="panel-body">
+                            <table id="Table_Education"  class="table table-striped table-bordered">
+                                <thead class="cf m-gray">
+                                    <tr role="row">
+                                        <th class="text-center">@Resource.lblStt</th>
+                                        <th class="text-center">@Resource.lblTime</th>
+                                        <th class="text-center">@Resource.lblCourse</th>
+                                        <th class="text-center">@Resource.lblOrganization</th>
+                                        <th class="text-center">@Resource.lblNote</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        if (Model.Training_Education != null)
+                                        {
+                                            foreach (var item in Model.Training_Education)
+                                            {
+                                                count++;
+                                                <tr>
+                                                    <td class="text-left">@(count)</td>
+                                                    <td class="text-center">@((item.dtm_time_from.HasValue ? item.dtm_time_from.Value.ToString("dd/MM/yyyy") : "") + "-" + (item.dtm_time_to.HasValue ? item.dtm_time_to.Value.ToString("dd/MM/yyyy") : ""))</td>
+                                                    <td class="text-left">@(item.str_Subject)</td>
+                                                    <td class="text-left">@(item.str_organization)</td>
+                                                    <td class="text-left">@(item.str_note)</td>
+                                                </tr>
+                                            }
+
+                                        }
+                                    }
+                                </tbody>
+                                <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!----------TRAINING COURSES--------->
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-12">
+                    <div class="panel  list-panel" id="list-panel">
+                        <div class="panel-heading list-panel-heading">
+                            <h1 class="panel-title list-panel-title">@Resource.lblTrainingCourses</h1>
+                        </div>
+                        <div class="panel-body">
+                            <table id="Table_Trainee_Courses" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                <thead class="cf m-gray">
+                                    <tr role="row">
+                                        <th class="text-center">No</th>
+                                        <th class="text-center">@Resource.lblCourseCode</th>
+                                        <th class="text-center">@Resource.lblCourseName</th>
+                                        <th class="text-center">@Resource.lblTime</th>
+                                        <th class="text-center">@Resource.lblCertificate</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{  
+                                        if (Model.Training_Course != null)
+                                        {
+                                            foreach (var item in Model.Training_Course)
+                                            {
+                                                count1++;
+                                                <tr>
+                                                    <td class="text-left">@(count1)</td>
+                                                    <td class="text-left">@(item.Code)</td>
+                                                    <td class="text-left">@(item.Name)</td>
+                                                    <td class="text-center">@(item.StartDate.ToString("dd/MM/yyyy") + "-" + item.EndDate.ToString("dd/MM/yyyy"))</td>
+                                                    <td class="text-left">@(item.Course_Result_Final.FirstOrDefault(a => a.traineeid == Model.Employees.Id).SRNO)</td>
+                                                </tr>
+                                            }
+
+                                        }
+                                    }
+                                </tbody>
+                                <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

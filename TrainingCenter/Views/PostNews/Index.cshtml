@@ -1,0 +1,206 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.PostNews.PostNewsModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="far fa-newspaper"></i> @Resource.lblPostNewsManagement</h1>
+            <ol class="breadcrumb">
+                <li><a href="/Home">@Resource.lblHome</a></li>
+                <li>@Resource.lblPostNewsManagement</li>
+                <li class="active">@Resource.lblPostNewsList</li>
+            </ol>
+        </div>
+    </div>
+}
+
+
+<div class="col-md-12">
+    <div class="panel list-panel" id="list-panel">
+        <div class="panel-heading list-panel-heading">
+            <h1 class="panel-title list-panel-title">
+                <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> @Resource.lblPostNewsList
+
+                <p class="btn-group pull-right">
+
+                    <a href="@Url.Action("Modify")" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-plus" aria-hidden="true"></i> @Resource.lblADDNEW</a>
+                </p>
+            </h1>
+        </div>
+        <div class="panel-body">
+            <div class=" table-responsive" style="margin-top: 10px;">
+                <div id="panel-search" class="collapse panel">
+                    <form action="@Url.Action("AjaxHandler", "PostNews")" method="POST" id="frmFilter">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>@Resource.lblTitle</label>
+                                        <input type="text" name="Title" id="Title" class="form-control frmFilter" placeholder="@Resource.lblTitle" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>@Resource.lblContent</label>
+                                        <input type="text" name="Content" id="Content" class="form-control frmFilter" placeholder="@Resource.lblContent" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>@Resource.lblTypePostNews</label>
+                                        <select class="form-control frmFilter" name="Type" id="Type" data-placeholder="-- @Resource.lblTypePostNews --">
+                                            <option></option>
+                                            <option value="1">@Resource.lblPostNews</option>
+                                            <option value="0">@Resource.lblPostNotification</option>
+                                            <option value="2">@Resource.lblPostWelcome</option>
+                                            @*@if (Model.Categories != null)
+                                                {
+                                                    foreach (var item in Model.Categories)
+                                                    {
+                                                        <option value="@item.Key">@item.Value</option>
+                                                    }
+                                                }*@
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-4">
+                                        <label>@Resource.lblStartDate</label>
+                                        <input type="text" name="StartDate" id="StartDate" class="form-control frmFilter" placeholder="@Resource.lblStartDate" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>@Resource.lblEndDate</label>
+                                        <input type="text" name="EndDate" id="EndDate" class="form-control frmFilter" placeholder="@Resource.lblEndDate" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>@Resource.lblGroupTrainee</label>
+                                        <select class="form-control frmFilter" name="GroupTraineeID" id="GroupTraineeID" data-placeholder="--  @Resource.lblGroupTrainee --">
+                                            <option></option>
+                                            @if (Model.GroupTrainee != null)
+                                            {
+                                                foreach (var item in Model.GroupTrainee)
+                                                {
+                                                    <option value="@item.Key">@item.Value</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-12">
+                                        <div>
+                                            <label>&nbsp;</label>
+                                        </div>
+                                        <div class="col-md-1 pull-right row">
+                                            <button type="submit" class="btn btn-primary pull-right" id="btFilter">
+                                                <i class="fa fa-search"></i> @Resource.lblSearch
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <br />
+                </div>
+                <p class="pull-right" data-toggle="collapse" data-target="#panel-search" style="cursor:pointer;"  id="call-panel-search"><i class="fa fa-search"></i> @Messege.Search</p>
+
+                <table id="PostNew" class="table table-striped table-bordered" style="width: 100%">
+                    <thead>
+                        <tr role="row">
+                            <th style="width: 5%;">@Resource.lblNo</th>
+                            <th>@Resource.lblTitle</th>
+                            <th>@Resource.lblType</th>
+                            <th>@Resource.lblStartDate</th>
+                            <th>@Resource.lblEndDate</th>
+                            <th>@Resource.lblPostBy</th>
+                            <th>@Resource.lblStatus</th>
+                            <th>@Resource.lblOptions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        var table;
+        $(document).ready(function () {
+            $('#frmFilter').submit(function (e) {
+                table.draw();
+                e.preventDefault();
+            });
+            formatDatetimepicker('#StartDate', '@Resource.lblLanguage');
+            formatDatetimepicker('#EndDate', '@Resource.lblLanguage');
+            var customRow = [
+                    {
+                        "targets": 6,
+                        "className": "text-center"
+                    }, {
+                        "targets": 7,
+                        "className": "text-center"
+                    }
+            ];
+            table = initDataTable("#PostNew", "/PostNews/AjaxHandler", customRow);
+        });
+
+
+
+        function Set_Participate_PostNew(isParticipate, id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/PostNews/SubmitSetParticipatePostNew",
+                datatype: 'json',
+                data: { isParticipate: isParticipate, id: id },
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, "ERROR", TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    table.draw();
+                    spinner.close();
+                }
+            });
+        }
+        function callDelete(id) {
+            notify.confirm('@Messege.DELETE_POSTNEWS', "warning", 2, actionDelete, id);
+        }
+        function actionDelete(id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/PostNews/Delete",
+                datatype: 'json',
+                data: { id: id },
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    table.draw();
+                    spinner.close();
+
+                }
+            });
+        }
+    </script>
+}
+
+
+
+

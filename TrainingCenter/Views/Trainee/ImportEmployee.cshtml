@@ -1,0 +1,184 @@
+﻿@model List<TMS.Core.ViewModels.ViewModel.ImportTraineeViewModel>
+@{
+    ViewBag.Title = "Import Employee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="nav-tabs-custom" id="detailTabs">
+    <!-- Tabs within a box -->
+    <ul class="nav nav-tabs pull-right ui-sortable-handle">
+        <li class="pull-left header"><i class="fa fa-group"></i>Trainee Management - Import Employee</li>
+    </ul>
+    <div class="tab-content padding">
+        <div class="chart tab-pane active" id="employeeList" style="position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+            <form action="/Trainee/UploadEmloyeeList" method="post" enctype="multipart/form-data">
+
+                <table>
+                    <tr>
+                        <td colspan="2">
+
+                            <div class="form-group">
+                                <label for="contactFile">
+                                    Upload File (xlsx):
+                                </label>
+                                <input type="file" name="staffFile" id="contactFile" style="width: auto; border: 0; font-weight: bold" class="form-control" />
+
+                                <img id="Loading1" src="~/Content/Images/loading.GIF" alt="" style="position: relative; top: 6px; display: none" />
+                            </div>
+                            @if (!string.IsNullOrEmpty(ViewBag.OperationMessage))
+                            {
+                                <br />
+                                <span class="message-error"><i>@ViewBag.OperationMessage</i></span>
+                            }
+
+                        </td>
+                    </tr>
+                </table>
+            </form>
+
+
+            @using (Html.BeginForm("ImportEmployee", "Trainee", FormMethod.Post))
+            {
+                if (Model != null && Model.Count > 0)
+                {
+                <div class="widget widget-table">
+                    <div class="widget-header">
+                        <h3><i class="fa fa-table"></i> Danh sách nhân viên Import</h3>
+
+                    </div>
+                    <div class="widget-content">
+                        <table id="EmployeeList" class="table table-sorting table-striped table-hover datatable dataTable table-bordered no-footer" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th>Staff ID
+                                    </th>
+                                    <th>Fullname
+                                    </th>
+                                    <th>Email
+                                    </th>
+                                    <th>Department
+                                    </th>
+                                    <th>Job Title
+                                    </th>
+                                    <th>Station
+                                    </th>
+                                    <th>Cellphone
+                                    </th>
+                                    <th>Birthdate
+                                    </th>
+                                    <th>Place of Birth
+                                    </th>
+                                    <th>Status
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.Count(); i++)
+                                {
+                                    <tr>
+                                        <td style="text-align: left">
+                                            @Html.DisplayFor(m => m[i].str_Staff_Id)
+                                        </td>
+                                        <td style="text-align: left">
+                                            @Html.DisplayFor(m => m[i].str_Fullname)
+                                        </td>
+                                        <td style="text-align: left">
+                                            @Html.DisplayFor(m => m[i].str_Email)
+                                        </td>
+                                        <td style="text-align: left">
+                                            @Html.DisplayFor(m => m[i].Department)
+                                        </td>
+                                        <td style="text-align: left">
+                                            @Html.DisplayFor(m => m[i].Job_Title)
+                                        </td>
+                                        <td style="text-align: left">
+                                            @Html.DisplayFor(m => m[i].str_Station)
+                                        </td>
+                                        <td style="text-align: left">
+                                            @Html.DisplayFor(m => m[i].str_Cell_Phone)
+                                        </td>
+                                        <td style="text-align: left">
+                                            @(Model[i].dtm_Birthdate == null ? "" : Model[i].dtm_Birthdate.Value.ToString("dd MMM yyyy"))
+                                        </td>
+                                        <td style="text-align: left">
+                                            @Html.DisplayFor(m => m[i].str_BirthPlace)
+                                        </td>
+                                        @if (String.IsNullOrEmpty(Model[i].status))
+                                        {
+                                            <td style="text-align: left">Valid</td>
+                                        }
+                                        else
+                                        {
+                                            <td style="text-align: left; color: red;">
+                                                @Html.DisplayFor(m => m[i].status)
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        @for (int i = 0; i < Model.Count(); i++)
+                        {
+                            
+                            @Html.HiddenFor(m => m[i].str_Staff_Id)
+                          
+                            @Html.HiddenFor(m => m[i].str_Fullname)
+                         
+                            @Html.HiddenFor(m => m[i].str_Email)
+                             
+                            @Html.HiddenFor(m => m[i].Department)
+                         
+                            @Html.HiddenFor(m => m[i].Job_Title)
+
+                       
+                            @Html.HiddenFor(m => m[i].str_Station)
+                           
+                            @Html.HiddenFor(m => m[i].str_Cell_Phone)
+                             
+                            @Html.HiddenFor(m => m[i].dtm_Birthdate)
+                            
+                            @Html.HiddenFor(m => m[i].str_BirthPlace)
+
+                            @Html.HiddenFor(m => m[i].status)
+                           
+                        }
+                        <hr />
+                        <div class="row">
+
+                            @* <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.StaffType_Id, (SelectList)ViewBag.StaffTypeList, "- - - Chọn loại nhân viên - - -", new { @class = "form-control" })
+                    </div>*@
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary form-control">Import</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>     
+
+                }
+            }
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<script>
+
+    $("#EmployeeList").dataTable({
+        sDom: "<'row'<'col-sm-6'l><'col-sm-6'f>r>t<'row'<'col-sm-6'i><'col-sm-6'p>>"
+    });
+    $('input[type="file"]').change(function () {
+        // Ẩn
+        $('.message-error').hide();
+
+        // Hiện loading
+        $('#Loading1').show();
+
+        // Submit upfile
+        this.form.submit();
+    });
+</script>

@@ -1,0 +1,71 @@
+﻿@model TrainingCenter.Models.Group_Roles
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Group_Roles</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.str_Group_Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.str_Group_Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.bit_UserProfile)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.bit_UserProfile)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.bit_Department)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.bit_Department)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.bit_Subject)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.bit_Subject)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.bit_Program)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.bit_Program)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.bit_Room)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.bit_Room)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.bit_Course)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.bit_Course)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.bit_Class)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.bit_Class)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

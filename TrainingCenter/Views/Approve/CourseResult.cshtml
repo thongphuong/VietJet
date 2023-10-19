@@ -1,0 +1,361 @@
+﻿@using DAL.Entities
+@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@model TMS_APPROVES
+@{
+    ViewBag.Title = "Course";
+    int id = -1;
+    if (ViewContext.RouteData.Values["id"].ToString() != "")
+    {
+        id = Int32.Parse(ViewContext.RouteData.Values["id"].ToString());
+    }
+}
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-graduation-cap"></i> @Resource.lblApproveFinalCourseResult</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Messege.llblApprove</li>
+                <li class="active">@Resource.lblApproveFinalCourseResult</li>
+            </ol>
+        </div>
+    </div>
+}
+<style>
+    @@media (min-width: 240px) and (max-width: 600px) and (orientation: portrait) {
+        .bs-wizard {
+            display: flex;
+            flex-direction: column;
+        }
+
+            .bs-wizard > .bs-wizard-step {
+                flex: 1 1 !important;
+            }
+
+                .bs-wizard > .bs-wizard-step .bs-wizard-stepnum {
+                    text-align: left;
+                }
+
+                .bs-wizard > .bs-wizard-step:first-child > .progress {
+                    left: 0% !important;
+                    width: calc(100% - 40px) !important;
+                }
+
+                .bs-wizard > .bs-wizard-step:last-child > .progress {
+                    width: calc(100% - 40px) !important;
+                }
+
+                .bs-wizard > .bs-wizard-step > .progress {
+                    left: 0%;
+                    width: calc(100% - 40px);
+                    margin-left: 40px;
+                }
+
+                .bs-wizard > .bs-wizard-step > .bs-wizard-dot {
+                    left: 0% !important;
+                    top: 43px !important;
+                    margin-left: 0px !important;
+                }
+
+            .bs-wizard p {
+                right: 0% !important;
+                top: 22% !important;
+                left: auto !important;
+            }
+    }
+</style>
+<div class="panel list-panel card card-block"  id="frmFilter">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="" style="margin-top: 10px;">
+                    <div class="col-lg-12">
+                        <ul class="list-inline text-center">
+                            <li>
+                                <h5><i class="zmdi zmdi-circle" style="color: #8B9999;"></i> @Resource.lblPending</h5>
+                            </li>
+                            <li>
+                                <h5><i class="zmdi zmdi-circle" style="color: blueviolet;"></i> @Resource.lblCancelRequest</h5>
+                            </li>
+                            <li>
+                                <h5><i class="zmdi zmdi-circle" style="color: #ff9800;"></i> @Resource.lblEdit</h5>
+                            </li>
+                            <li>
+                                <h5><i class="zmdi zmdi-circle" style="color: #e51c23;"></i> @Resource.lblReject</h5>
+                            </li>
+                            <li>
+                                <h5><i class="zmdi zmdi-circle" style="color: #2196f3;"></i> @Resource.lblProcessing</h5>
+                            </li>
+                            <li>
+                                <h5><i class="zmdi zmdi-circle" style="color: #4caf50;"></i> @Resource.lblApproval</h5>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-12" style="margin-top: 10px;">
+                        @*@{Html.RenderAction("ProccessBar", "Approve", new {Model.Course});}*@
+
+                        <div id="Div_ProccessBar"></div>
+
+                    </div>
+                    <div class="row col-md-12">
+                        <div class="" style="margin-top: 10px;">
+                            <div class="form-group col-md-2 col-xs-6">
+                                <b>@Resource.lblCourseName:</b>
+                            </div>
+                            <div class="form-group col-md-10 col-xs-8">
+                                @Model.Course.Name &nbsp;
+                            </div>
+                            <div class="form-group col-md-2 col-xs-6">
+                                <b>@Resource.lblCode:</b>
+                            </div>
+                            <div class="form-group col-md-4 col-xs-8">
+                                @Model.Course.Code &nbsp;
+                            </div>
+                            <div class="form-group col-md-2 col-xs-6">
+                                <b>@Resource.lblDate:</b>
+                            </div>
+                            <div class="form-group col-md-4 col-xs-8">
+                                @(Model.Course.StartDate.Value.ToString("dd/MM/yyyy")) - @(Model.Course.EndDate.Value.ToString("dd/MM/yyyy")) &nbsp;
+                            </div>
+                            <div class="form-group col-md-2 col-xs-6">
+                                <b>@Resource.lblVenue:</b>
+                            </div>
+                            <div class="form-group col-md-4 col-xs-8">
+                                @Model.Course.Venue &nbsp;
+                            </div>
+                            <div class="form-group col-md-2 col-xs-6">
+                                <b>@Resource.lblMaxTranineeMembers:</b>
+                            </div>
+                            <div class="form-group col-md-4 col-xs-8">
+                                @Model.Course.NumberOfTrainee &nbsp;
+                            </div>
+                            <div class="form-group col-md-2 col-xs-8">
+                                <b>@Resource.lblNote:</b>
+                            </div>
+                            <div class="form-group col-md-12 col-xs-12" style="word-break: break-word;">
+                                @Html.Raw(string.IsNullOrEmpty(Model.Course.Note) ? "" : Model.Course.Note.Replace("\n", "\r\n").Replace(System.Environment.NewLine, " <br/> ")) &nbsp;
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="panel" id="list-panel">
+                    <div class="panel-heading list-panel-heading">
+                        <h1 class="panel-title list-panel-title">@Resource.lblFinalCourseResult</h1>
+                    </div>
+                    <div class="panel-body  table-responsive">
+                        <table id="FinalCourseResult" class="table table-striped table-bordered" style="width: 100%">
+                            <thead>
+                                <tr role="row">
+                                    <th style="width: 5%">@Resource.lblStt</th>
+                                    <th style="width: 15%">@Resource.lblCode</th>
+                                    <th style="width: 15%">@Resource.lblName</th>
+                                    <th style="width: 15%">@Resource.lblJobTitle</th>
+                                    <th style="width: 15%">@Resource.lblDepartment</th>
+                                    <th style="width: 10%">@Resource.lblPoint</th>
+                                    <th style="width: 10%">@Resource.lblGrade</th>
+                                    <th style="width: 15%">@Resource.lblRemark</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+
+                @using (Html.BeginForm("CourseResult", "Approve", FormMethod.Post, new {id = "createform"}))
+                {
+
+
+                    if (Model != null)
+                    {
+                        <input type="hidden" name="CourseList" id="CourseList" class="frmFilter" value="@Model.Course.Id"/>
+                        if (Model.int_id_status == (int) UtilConstants.EStatus.Pending)
+                        {
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+
+                                            <input type="hidden" value="@Model.id" name="id"/>
+                                            <input type="radio" checked="checked" value="@((int) UtilConstants.EStatus.Approve)" id="btApprove" name="radioroption"/> <label for="btApprove">@Messege.llblApprove </label>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <input type="radio" value="@((int) UtilConstants.EStatus.Reject)" id="btReject" name="radioroption"/> <label for="btReject">@Resource.lblReject </label>
+                                        </div>
+                                        <div id="idsentmail" class="col-sm-12 " style="display: none">
+                                            <label class="control-label"> <input id="responsable" name="checkResp" value="true" type="checkbox"/>&nbsp;Send Email </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div id="idRejectReason" class="form-group hidden">
+                                            <label class="col-sm-2 control-label">@Resource.lblRejectReason</label>
+                                            <div class="col-sm-10">
+                                                <textarea id="str_RejectReason" name="str_RejectReason" rows="3" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+
+                    }
+
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row ">
+        <div class="action-form text-right">
+            @if (Model.int_id_status == (int)UtilConstants.EStatus.Pending)
+            {
+                <a href="javascript:void(0);" class="btn btn-danger legitRipple" id="submit" onclick=" Submit() "><i class="fa fa-paper-plane" aria-hidden="true"></i> @Resource.lblSubmit</a>
+            }
+            <a onclick=" goBack_new() " class="btn  btn-default legitRipple"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+@section Scripts{
+    <script type="text/javascript">
+        function Submit() {
+            spinner.open();
+            var id = $("#CourseList").val()
+            var form = $("#createform").serialize();
+            var $forms = $('#createform');
+            $.ajax({
+                type: 'POST',
+                url: "/Approve/CourseResult",
+                datatype: 'json',
+                data: form,
+                success: function (data) {
+                    if (data.result) {                        
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                        location.reload();
+                    } else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    spinner.close();
+                }
+            });
+        }
+
+
+        $(document).ready(function () {
+
+          $.ajax({
+                      url: '/Approve/ProccessBar2',
+                  dataType: 'html',
+                           data: { approvalId: @id  },
+                      success: function(data) {
+                         $('#Div_ProccessBar').html(data);
+                      }
+                });
+
+
+
+
+            var $dataTable;
+            $("#frmFilter").submit(function (e) {
+                $dataTable.draw();
+                e.preventDefault();
+            });
+            var customRow = [
+               {
+                    "targets": 0,
+                    "className": "text-center",
+                   "data": null,
+                   render: function (data, type, row, meta) {
+                       return meta.row + meta.settings._iDisplayStart + 1;
+                   }
+               },
+                    {
+                        "targets": [],
+                        "visible": false
+                    }
+            ];
+            $dataTable = initDataTable("#FinalCourseResult", "/Course/AjaxHandleListResultFinalApproval", customRow);
+
+            @*$('input:radio[name="radioroption"]').change(function () {
+                if (this.value === '@((int)UtilConstants.EStatus.Reject)') {
+                    $("#idRejectReason").removeClass("hidden");
+                } else {
+                    $("#idRejectReason").addClass("hidden");
+                }
+            });*@
+            @*$('input:radio[name="radioroption"]').change(function () {
+                if (this.value === '@((int)UtilConstants.EStatus.Reject)') {
+                    $("#idRejectReason").removeClass("hidden");
+                   
+                } else {
+                    $("#idRejectReason").addClass("hidden");
+                  
+                }
+            });*@
+            // active menu
+            //line_#id of parent node
+            $(".line_350").addClass("active");
+
+            $('input:radio[name="radioroption"]').change(function () {
+                if (this.value === '@((int)UtilConstants.EStatus.Reject)') {
+                    $("#idRejectReason").removeClass("hidden");
+
+                } else {
+                    $("#idRejectReason").addClass("hidden");
+                    $("#str_RejectReason").val("");
+                }
+            });
+        });
+        function format(id) {
+            var table = $("#subject").clone();
+            var sSTable = table.DataTable({
+                "responsive:": true,
+                "pageLength": 900000,
+                "searching": false,
+                "columnDefs": [{
+                    "targets": 0,
+                    "className": "text-center",
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    },"sortable":false
+                }],
+                "aaSorting": [],
+                "bServerSide": true,
+                "sAjaxSource": "/Report/AjaxHandlResultHasInsert",
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                    aoData.push(//{ "name": "CourseList", "value": $('#CourseList').val() },
+                    { "name": "ddl_subject", "value": id }
+                    //{ "name": "ToDate", "value": $('#endDate').val() },
+                    //{ "name": "FromDate", "value": $('#startDate').val() }
+                    );
+                }
+            });
+
+            return table;
+        }
+
+        function goBack_new()
+        {
+            window.location.href = "/Approve/Index?coursetype=@HttpContext.Current.Request["coursetype"]&statuslist=@HttpContext.Current.Request["statuslist"]&code=@HttpContext.Current.Request["code"]&fName=@HttpContext.Current.Request["fName"]";
+        }
+    </script>
+}

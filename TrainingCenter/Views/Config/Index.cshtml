@@ -1,0 +1,114 @@
+﻿@using DAL.Entities
+@model IEnumerable<CONFIG>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-cogs"></i>  System Management - Config</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li>System Management</li>
+                <li class="active">Config</li>
+            </ol>
+        </div>
+    </div>
+}
+
+
+<div class="panel">
+
+    <div class="panel-heading">
+        <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> Config List
+    </div>
+
+
+    <div class="panel-body">
+        <div class="tab-content">
+            <div class="tab-pane fade  active in" id="home">
+
+
+                <form class="form-horizontal" action="@Url.Action("Modify", "Config")" method="post" id="FormSubmit">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-12">
+                                @foreach (var item in Model)
+                                {
+                                    if (item.KEY == "Reminder_Before_Template")
+                                    {
+                                        <div class="form-group">
+                                            <input hidden name="TemplateId" value="@item.ID" />
+                                            <label class="col-xs-3 text-bold">@item.NAME :</label>
+                                            <div class="col-xs-9">
+                                                @Html.DropDownList("ddlTemplateMail", ViewBag.VbTemplateMailList as SelectList, "--- Select ---")
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    // Loai truong hop template mail
+                                    {
+                                        <div class="form-group">
+                                            <input hidden name="Id" value="@item.ID" />
+                                            <label class="col-xs-3 text-bold">@item.NAME :</label>
+                                            <div class="col-xs-9">
+                                                <textarea rows="2" maxlength="3000" class="form-control" cols="3" name="Value">@item.VALUE</textarea>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div class="pull-right pad10R">
+                            @{
+                                if (User.IsInRole("/Config/Index")) // neu co
+                                {
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                }
+                            }
+                            <input type="button" class="btn btn-primary" id="btnBack" onclick="location.href='@Url.Action("Index", "Home")' ; " value="Back" />
+
+                        </div>
+                    </div>
+
+                </form>
+
+
+            </div>
+            <div class="tab-pane fade" id="profile">
+                <div class="row col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+
+                        </div>
+                        <div class="col-md-6">
+
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-2">
+                            <input type="text" name="fStaffId2" id="fStaffId2" class="form-control searchText2" placeholder="Staff ID" />
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" name="fName2" id="fName2" class="form-control searchText2" placeholder="Name" />
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" name="fEmail2" id="fEmail2" class="form-control searchText2" placeholder="Email" />
+                        </div>
+                        <div class="col-md-2">
+
+                            <button type="submit" id="btFilter2" class="btn btn-primary form-control">Search</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

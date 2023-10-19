@@ -1,0 +1,203 @@
+﻿@using TMS.Core.Utils
+@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Courses.DetailCourseCostModel
+
+
+
+@{
+    ViewBag.Title = "Detail Course Cost";
+
+}
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-graduation-cap"></i>  @Resource.lblCourseManagement - @Resource.lblCoursesCost</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblCourseManagement</li>
+                <li class="active">@Resource.lblCoursesCost</li>
+            </ol>
+        </div>
+    </div>
+}
+
+
+<div class="panel list-panel">
+    <div class="panel-heading list-panel-heading">
+        <h1 class="panel-title list-panel-title">@Resource.lblCourse</h1>
+    </div>
+    <div class="panel-body table-responsive">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="" style="margin-top: 10px;">
+                    @*<div class="col-lg-12">
+                            <ul class="list-inline text-center">
+                                <li>
+                                    <h5><i class="zmdi zmdi-circle" style="color: #8B9999;"></i> @Resource.lblPending</h5>
+                                </li>
+                                <li>
+                                    <h5><i class="zmdi zmdi-circle" style="color: blueviolet;"></i> @Resource.lblCancelRequest</h5>
+                                </li>
+                                <li>
+                                    <h5><i class="zmdi zmdi-circle" style="color: #ff9800;"></i> @Resource.lblEdit</h5>
+                                </li>
+                                <li>
+                                    <h5><i class="zmdi zmdi-circle" style="color: #e51c23;"></i> @Resource.lblReject</h5>
+                                </li>
+                                <li>
+                                    <h5><i class="zmdi zmdi-circle" style="color: #2196f3;"></i> @Resource.lblProcessing</h5>
+                                </li>
+                                <li>
+                                    <h5><i class="zmdi zmdi-circle" style="color: #4caf50;"></i> @Resource.lblApproval</h5>
+                                </li>
+                            </ul>
+                        </div>*@
+
+                    <div class="row col-md-12">
+                        <div class="" style="margin-top: 10px;">
+                            <div class="form-group col-md-2 col-xs-4">
+                                <b>@Resource.lblCourseName:</b>
+                            </div>
+                            <div class="form-group col-md-4 col-xs-8">
+                                @Model.Name &nbsp;
+
+                            </div>
+                            @*<div class="form-group col-md-2 col-xs-4">
+                                <b>@Messege.lblCourseType:</b>
+                            </div>
+                            <div class="form-group col-md-4 col-xs-8">
+
+                                &nbsp;
+
+                            </div>*@
+                            <div class="form-group col-md-2 col-xs-4">
+                                <b>@Resource.lblCode:</b>
+                            </div>
+                            <div class="form-group col-md-4 col-xs-8">
+                                @Model.Code &nbsp;
+                            </div>
+                            <div class="form-group col-md-2 col-xs-4">
+                                <b>@Resource.lblDate:</b>
+                            </div>
+                            <div class="form-group col-md-4 col-xs-8">
+                                @(Model.Date) &nbsp;
+                            </div>
+                            <div class="form-group col-md-2 col-xs-4">
+                                <b>@Resource.lblVenue:</b>
+                            </div>
+                            <div class="form-group col-md-4 col-xs-8">
+                                @Model.Venue &nbsp;
+                            </div>
+                            @*<div class="form-group col-md-2 col-xs-5">
+                                <b>@Resource.lblMaxTranineeMembers:</b>
+                            </div>
+                            <div class="form-group col-md-4 col-xs-7">
+                                &nbsp;
+                            </div>*@
+                            <div class="form-group col-md-2 col-xs-4">
+                                <b>@Messege.lblNote:</b>
+                            </div>
+                            <div class="form-group col-md-4 col-xs-8">
+                                @Model.Note &nbsp;
+                            </div>
+                            <div class="form-group col-md-2 col-xs-4">
+                                <b>@Resource.lblCost:</b>
+                            </div>
+                            <div class="form-group col-md-4 col-xs-8">
+                                @Model.Cost &nbsp;
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                </div>
+            </div>
+            
+
+            <div class="col-md-12">
+                <div class="panel" id="list-panel">
+                    <div class="panel-heading list-panel-heading">
+                        <h1 class="panel-title list-panel-title">@Resource.lblTraineeList</h1>
+                    </div>
+                    <div class="panel-body table-responsive">
+                        <table id="Trainee" class="table table-bordered table-striped" cellspacing="0" width="100%">
+                            <thead class="cf">
+                            <tr role="row">
+                                <th>@Resource.lblStt</th>
+                                <th>@Messege.EID</th>
+                                <th>@Resource.TRAINEE_FULLNAME</th>
+                                <th>@Resource.lblDepartment</th>
+                                <th>@Resource.lblCost</th>
+                            </tr>
+                            </thead>
+
+                            <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="panel" id="list-panel">
+                    <div class="panel-heading list-panel-heading">
+                        <h1 class="panel-title list-panel-title">@Resource.lblSubjectList</h1>
+                    </div>
+                    <div class="panel-body table-responsive">
+                        <table id="Subject" class="table table-bordered table-striped" cellspacing="0" width="100%">
+                            <thead class="cf">
+                            <tr role="row">
+                                <th>@Resource.lblStt</th>
+                                <th>@Resource.lblSubjectCode</th>
+                                <th>@Resource.lblName</th>
+                                <th>@Resource.lblAverageCalculate</th>
+                                <th>@Resource.lblPassScore</th>
+                                <th>@Resource.lblRecurrent</th>
+                                <th>@Resource.lblDuration</th>
+                                <th>@Messege.lblStart</th>
+                                <th>@Messege.lblEnd</th>
+                                <th>@Resource.lblMethod</th>
+                                <th>@Resource.lblRoom</th>
+                                <th>@Resource.lblInstructor</th>
+                                <th>@Resource.lblMentor</th>
+                                <th>@Resource.lblHANNAH</th>
+                            </tr>
+                            </thead>
+
+                            <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="action-form text-right">
+            <a onclick=" goBack() " class="btn  btn-default legitRipple"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        var tableSubject;
+        var tableTrainee;
+        $(document).ready(function() {
+            var customRow = [
+
+            ];
+            tableSubject = initDataTable("#Subject", "/Course/AjaxHandlerCourseCost/"+ @ViewContext.RouteData.Values["id"], customRow);
+            var customRowTrainee = [
+
+            ];
+            tableTrainee = initDataTable("#Trainee", "/Course/AjaxHandlerTraineeCost/"+ @ViewContext.RouteData.Values["id"], customRowTrainee);
+        });
+    </script>
+}
+
+
+
+
+
+

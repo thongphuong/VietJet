@@ -1,0 +1,81 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@using TMS.Core.ViewModels.UserModels
+@model TMS.Core.ViewModels.Courses.CourseModifyModel
+
+<script type="text/template" id="course-detail-blended">
+    <div class="form-group col-md-12 blendedfor" data-index="{index}" id="div_Remove_Blended_{index}">
+        <div class="col-md-12 row">
+            <div class="col-md-2">
+                <label>@Resource.lblName</label>
+                <input type="text" id="detail-blended-learningtype" name="Blended[{index}].LearningType" data-index="{index}" data-toggle="tooltip" title="Learning Type" class="form-control input-sm default required learningtype_{index}" placeholder="@Resource.lblName" required />
+                @*<select class="form-control input-sm default required learningtype_{index}" data-index="{index}" data-toggle="tooltip" title="Learning Type" id="detail-blended-learningtype" name="Blended[{index}].LearningType" required>
+                        <option value="" disabled selected>Select your @Resource.lblTypeLearning</option>
+                        @if (Model.DictionaryLearningTypeBlended.Any() || Model.DictionaryLearningTypeBlended != null)
+                        {
+                            foreach (var type in Model.DictionaryLearningTypeBlended)
+                            {
+                                <option value="@type.Key">@type.Value</option>
+                            }
+                        }
+                    </select>*@
+            </div>
+            @*<div class="col-md-2" id="div_markType_{index}">
+                    <label>@Resource.lblMarkType</label>
+                    <select class="form-control input-sm default marktype_{index}" data-index="{index}" data-toggle="tooltip" title="Mark Type" id="detail-blended-marktype" name="Blended[{index}].MarkType">
+                        <option value="0">@Resource.lblManual</option>
+                        <option value="1">@Resource.lblAuto</option>
+                    </select>
+                </div>*@
+            <div class="col-md-2">
+                <label>@Resource.lblFromDate</label>
+                <input type="hidden" id="detail-blended-id" name="Blended[{index}].Id" />
+                <input type="text" id="detail-blended-datefrom-{index}" name="Blended[{index}].DateFrom" data-index="{index}" data-toggle="tooltip" title="@Resource.lblFromDate" class="form-control input-sm   date_validate date_from start_date_{index} check_dp_datefrom" placeholder="@Resource.lblStartDate" required />
+            </div>
+            <div class="col-md-2">
+                <label>@Resource.lblToDate</label>
+                <input type="text" id="detail-blended-dateto-{index}" name="Blended[{index}].DateTo" data-index="{index}" data-toggle="tooltip" title="@Resource.lblToDate" class="form-control input-sm   date_validate date_to end_date_{index} check_dp_dateto" placeholder="@Resource.lblEndDate" required />
+            </div>
+            <div class="col-md-3">
+                <label>@Resource.lblRoom</label>
+                <select class="form-control input-sm default reselect room_{index}" data-index="{index}" data-toggle="tooltip" title="Class Room" id="detail-blended-roomid" name="Blended[{index}].Room">
+                    <option value="" disabled selected>Select your @Resource.lblRoom</option>
+                    @if (Model.DictionaryRooms.Any() || Model.DictionaryRooms != null)
+                    {
+                        foreach (var room in Model.DictionaryRooms)
+                        {
+                            <option value="@room.Key">@room.Value</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-2" id="div_examiner_{index}">
+                <label>@Resource.lblExaminer</label>
+                <select class="form-control input-sm default examiner_{index}" data-index="{index}" data-toggle="tooltip" title="Examiner" id="detail-blended-examiner" name="Blended[{index}].Examiner" data-placement="-- @Resource.lblExaminer --">
+                    <option value="-1">-- @Resource.lblExaminer --</option>
+
+                    @if (Model.DictionaryHannah.Any() || Model.DictionaryHannah != null)
+                    {
+                        foreach (var item in Model.DictionaryHannah)
+                        {
+                            <option value="@item.Key">@item.Value</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Duration (Hours)</label>
+                <input class="form-control BlendedDuration" value="0" name="Blended[{index}].BlendedDuration" id="detail-blended-BlendedDuration" />
+            </div>
+            <div class="col-md-2">
+                <label>Cost</label>
+                <input class="form-control BlendedAllowance" value="0" name="Blended[{index}].BlendedAllowance" id="detail-blended-BlendedAllowance" />
+            </div>
+        </div>
+        <div class="col-md-3" style="margin-top:10px;">
+            <a href="javasciprt:void(0)" data-toggle="tooltip" data-index='" + childIndex + "' onclick='removeModalBlended(this)' title="Remove" class="legitRipple" style="color:#df3333;">
+                <i class="fa fa-trash"></i>&nbsp;Remove
+            </a>
+        </div>
+    </div>
+</script>

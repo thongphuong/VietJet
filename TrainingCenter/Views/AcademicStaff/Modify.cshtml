@@ -1,0 +1,386 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@using Utilities
+@model TMS.Core.ViewModels.Employee.EmployeeModelModify
+
+@{
+    ViewBag.Title = "Modify";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var control = Model.Control == (int)UtilConstants.ROLE.Trainee;
+    var eduIndex = 0;
+    var contractIndex = 0;
+    var i = 0;
+}
+<style>
+    .list-height-over {
+        overflow-y: scroll;
+        max-height: 400px;
+    }
+
+    ul {
+        list-style-type: circle !important;
+    }
+</style>
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fas fa-user-graduate"></i>  Examiner/Monitor Management -  @Resource.lblEdit</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>Examiner/Monitor Management</li>
+                <li class="active">@Resource.lblEdit</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="panel list-panel" id="list-panel">
+    <div class="panel-heading list-panel-heading">
+        <h1 class="panel-title list-panel-title"><i class="fas fa-pencil-alt font-small-byhoa" aria-hidden="true"></i> @Resource.lblEdit </h1>
+    </div>
+    <div class="panel-body center-block">
+        @using (Html.BeginForm("Modify", "AcademicStaff", FormMethod.Post, new { id = "createform", enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(model => model.Id)
+            <input type="hidden" id="RelevantDepartmentId" name="RelevantDepartmentId" value="@Model.RelevantDepartmentId" />
+            <div class="row" style="margin-top: 10px">
+                <div class="col-md-12">
+                    <div class="panel box-shadow">
+                        <div class="panel-body center-block">
+                            <div class="table-responsive">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label>@Resource.lblName: </label>
+                                                <label>@Model.FullName</label>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>@Resource.lblCode: </label>
+                                                <label>@Model.Eid</label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Subjects)
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-10">
+                                                <input type="text" id="FilterCodeOrName" name="FilterCodeOrName" placeholder="@Resource.lblCode / @Resource.lblName" class="form-control" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <a id="btFilter" class="btn btn-primary center-block legitRipple" onclick="FilterSubject()">@Resource.lblFilter</a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                    </div>
+                                </div>
+
+                                <div class="row" id="group-subjects">
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <div class="panel panel-default">
+                                                <div id="panel-body">
+                                                    <div id="subjectlist" class="list-height-over" onscroll="scrollList(this)">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 list-height-over">
+                                        <div class="form-group " id="listSubject"></div>
+                                        <div class="form-group " id="listSubject_edit">
+                                            @*list-height-300*@
+                                            @if (Model != null && Model.InstructorSubjects != null)
+                                            {
+                                                for (var j = 0; j < Model.InstructorSubjects.Count(); j++)
+                                                {
+
+                                                    var subjectInstructor = Model.InstructorSubjects.ElementAt(j);
+
+                                                    <div class="row insdura_@(subjectInstructor.SubjectId) subjectInstructor" id="subjectInstructor">
+                                                        -
+                                                        <div class="form-group col-md-6">
+                                                            <label>@Resource.lblSubject</label>
+                                                            <input class="" type="hidden" name="InstructorSubjects[@j].InstructorId" id="editor-insdra-instructorId" value="@subjectInstructor.InstructorId" />
+                                                            <input class="" type="hidden" name="InstructorSubjects[@j].SubjectId" id="editor-insdra-subjectId" value="@subjectInstructor.SubjectId" />
+                                                            <input class="instructorValue" type="hidden" id="editor-insdra-id" name="InstructorSubjects[@j].Id" value="@subjectInstructor.Id" />
+                                                            <input type="text" id="editor-insdra-instructorName" class="form-control input-sm name" readonly="readonly" value="@(string.Format("{0} - {1}", subjectInstructor.Code, subjectInstructor.Name))" />
+                                                        </div>
+                                                        <div class="form-group  col-md-6">
+                                                            <label>@Resource.lblTrainingAllowance</label>
+                                                            <input type="number" class="form-control input-sm" id="editor-insdra-allowance" name="InstructorSubjects[@j].Allowance" value="@subjectInstructor.Allowance">
+
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+        <div class="row" id="btndiv">
+            <div class="action-form text-right">
+                @if (User.IsInRole("/Employee/Modify"))
+                {
+                    <label for="submitSave" class="btn btn-primary"><i class="fas fa-save"></i>&nbsp;@Resource.lblSave</label>
+                    <input type="button" id="submitSave" class="btn btn-primary hidden" value="@Resource.lblSave" onclick="create()" />
+                }
+                <a onclick="goBack()" class="btn btn-default"><i class="fas fa-sign-out-alt"></i>&nbsp;@Resource.BACK</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/Scripts/DataTables/dataTables.buttons.min.js"></script>
+    <script src="~/Scripts/DataTables/buttons.html5.min.js"></script>
+    <script src="~/Scripts/js/common.js"></script>
+    <link href="~/Content/css/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Content/trainingtime/buttons.html5.min.js" type="text/javascript"></script>
+    <script src="~/Content/trainingtime/jquery.blockUI.js" type="text/javascript"></script>
+    <script src="~/Content/trainingtime/jszip.min.js" type="text/javascript"></script>
+    <script src="~/Content/trainingtime/xlsx.core.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+          var pageSize = 14;
+        var pageIndex = 0;
+            var processing;
+        $(document).ready(function() {
+            checkTrainee();
+        });
+
+        $(".line_180").addClass("active");
+
+        $(document).ready(function() {
+
+            $('#checkAll').change(function() {
+                var $this = $(this);
+                var isChecked = $this.prop('checked');
+                $this.closest('li').find('input[name="Abilities"]').prop('checked', isChecked);
+            });
+
+
+        });
+
+
+        $(document).on('change', 'input[name="InstructorAbility"]', function() {
+            var $this = $(this);
+            var value = $(this).val();
+            var allowance = $(this).data('allowance');
+
+            optionclick($this, value, allowance);
+        });
+
+        var index = @i;
+         var valueselect = 0;
+        var data__ = "";
+
+         $("#editor-insdra-allowance").each(function (i,v) {
+            valueselect = $(v).val();
+        });
+
+        function optionclick(ddlInstructor, instructorId, allowance) {
+
+            //debugger;
+            var $tr = ddlInstructor.closest('div');
+
+            //var rowIndex = $tr.data('index');
+            var idins = ddlInstructor.val();
+           var nameins = ddlInstructor.data("name");
+            //var $instructorList = $tr.find('.lstList');
+            var $subjectList = $('#listSubject_edit');
+
+            var rowId = $subjectList.data('index') == undefined ? 0 : $subjectList.data('index');
+            if (ddlInstructor.is(":checked")) {
+
+                ddlInstructor.addClass('active');
+                //ddlInstructor.data('none', false);
+                var loacalallowance = 0;
+                if ($tr.find('.instructorValue').length == 0) {
+                    loacalallowance = allowance;
+                }
+
+                var htmlInstructor = '<div class="row insdura_' + idins + ' subjectInstructor">';
+                htmlInstructor += '<div class="form-group col-md-6"><label>@Resource.lblSubject</label>' +
+                    '<input class="instructorValue" id="editor-insdra-subjectId" type="hidden" name="InstructorSubjects[' + rowId + '].SubjectId" value="' + idins + '"/> <input class="" id="editor-insdra-instructorId" type="hidden" name="InstructorSubjects[' + rowId + '].InstructorId" value="' + instructorId + '"/> <input type="text" id="editor-insdra-instructorName" class="form-control input-sm" readonly="readonly"  value="' + nameins + '"/></div>';
+                htmlInstructor += '<div class="form-group col-md-6"><label>@Resource.lblTrainingAllowance</label>  <input type="number" data-index="' + rowId + '" class="form-control input-sm" id="editor-insdra-allowance" name="InstructorSubjects[' + rowId + '].Allowance" value="' + valueselect + '"></div>';
+                htmlInstructor += '</div>';
+
+                $subjectList.append(htmlInstructor);
+                rowId++;
+                $subjectList.data('index', rowId);
+                if (rowId == 0) {
+                     valueselect = loacalallowance;
+                }
+            } else {
+
+                ddlInstructor.removeClass('active');
+                //ddlInstructor.data('none', true);
+                //ddlInstructor.removeAttr('selected');
+                $('.insdura_' + idins).remove();
+                if (rowId > 0) {
+                       rowId--;
+                }
+                $subjectList.data('index', rowId);
+            }
+
+            var countarray = 0;
+            var $root = $('.subjectInstructor');
+            $.each($root, function(i, o) {
+                var $this = $(this);
+                $this.find('#editor-insdra-id').attr("name", "InstructorSubjects[" + countarray + "].Id");
+                $this.find('#editor-insdra-instructorId').attr("name", "InstructorSubjects[" + countarray + "].InstructorId");
+                $this.find('#editor-insdra-subjectId').attr("name", "InstructorSubjects[" + countarray + "].SubjectId");
+                $this.find('#editor-insdra-allowance').attr("name", "InstructorSubjects[" + countarray + "].Allowance");
+                countarray++;
+            });
+
+        }
+
+        function checkTrainee() {
+            var form = getDataSubject();
+            $.ajax({
+                type: 'POST',
+                @{if(Model.Id  != null)
+                    {
+                        @:url: "/AcademicStaff/AjaxHandlerListSelectSubject/" + @Model.Id +"",
+                     }
+                else
+                {
+                @:url: "/AcademicStaff/AjaxHandlerListSelectSubject",
+                }
+                }
+
+                datatype: 'json',
+                data:  { pageIndex: pageIndex, pageSize: pageSize, form : form},
+                success: function (data) {
+                    if (data != null) {
+                        processing = false;
+                        if (data__.length == 0) {
+                                $("#subjectlist").append(data);
+                            data__ = data.replace('</ul></li></ul>', '');
+                        }
+                        else {
+
+                            data__ = data__.concat(data);
+                                $("#subjectlist").html('');
+                            $("#subjectlist").append(data__);
+                                data__ = data__.replace('</ul></li></ul>', '');
+                        }
+                        $("#checkAll").on("change", function () {
+                            if ($(this).prop('checked')) {
+                                    $(".InstructorAbility").each(function () {
+                                    $(this).prop('checked', true).trigger('change');
+                                });
+                            } else {
+                                    $(".InstructorAbility").each(function () {
+                                    $(this).prop('checked', false).trigger('change');
+                                });
+                            }
+                        });
+
+                    }
+                    else
+                    {
+                        pageIndex--;
+                    }
+                }
+
+            });
+        }
+        function create() {
+            $('label[for="submitSave"]').hide();
+            spinner.open();
+            var form = document.getElementById('createform');
+            var formData = new FormData(form);
+
+            $.ajax({
+                type: 'POST',
+                url: "/AcademicStaff/Modify",
+                contentType: false,
+                processData: false,
+                data: formData,
+                //datatype: 'json',
+                success: function(data) {
+                    if (!data.result) {
+                        notify.alert(data.message, "WARNING", TITLE_STATUS_DANGER);
+
+                    } else {
+                        notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                        //window.location.href = "/Employee/Index/" + @(Model.Control);
+                    }
+                },
+                error: function(jdHRX, textStatus, thrownMessage) {
+                    $("#messageout").html("Server error!!!");
+                },
+                complete: function() {
+                    $('label[for="submitSave"]').show();
+                    spinner.close();
+                }
+            });
+        }
+
+        function FilterSubject() {
+            pageIndex = 0;
+            data__ = "";
+            $("#subjectlist").html('');
+            checkTrainee();
+
+        }
+        function getDataSubject() {
+            var $root = $('#createform');
+            var rs = {
+                FilterCodeOrName: $root.find('#FilterCodeOrName').val(),
+                int_khoidaotao: $root.find('#RelevantDepartmentId').val(),
+                Subjects: [],
+            }
+            var $subject = $root.find('div.subjectInstructor');
+            $.each($subject, function(i, o) {
+                var $this = $(this);
+                var id = $this.find('#editor-insdra-subjectId').val();
+                rs.Subjects.push(id);
+            });
+            return rs;
+        }
+
+        $('#FilterCodeOrName').bind("enterKey", function(e) {
+            FilterSubject();
+        });
+        $('#FilterCodeOrName').keyup(function(e) {
+            if (e.keyCode == 13) {
+                $(this).trigger("enterKey");
+            }
+        });
+
+        $(document).on('change', '#editor-insdra-allowance', function () {
+            if ($(this).data("index") == 0) {
+                valueselect = parseInt($(this).val());
+            }
+        });
+        function scrollList(e) {
+            if (processing)
+                return false;
+            if ((e.scrollTop + e.clientHeight) >= $(e)[0].scrollHeight && !processing) {
+                processing = true;
+                pageIndex++;
+                checkTrainee();
+            }
+        }
+
+    </script>
+}

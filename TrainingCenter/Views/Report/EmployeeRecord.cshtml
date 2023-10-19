@@ -1,0 +1,145 @@
+﻿@using DAL.Entities
+@model Trainee
+@{
+    ViewBag.Title = "CourseResult";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.ActiveSubMenu = "Report";
+}
+
+
+
+
+<div class="nav-tabs-custom" id="detailTabs">
+    <!-- Tabs within a box -->
+    <ul class="nav nav-tabs pull-right ui-sortable-handle">
+        <li class="pull-left header"><i class="fa fa-tags"></i>Reports - Employee Record</li>
+    </ul>
+    <div class="tab-content padding">
+        <div class="chart tab-pane active" id="FlowBoard" style="position: relative; padding: 15px; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        @using (Html.BeginForm("EmployeeRecord", "Report", FormMethod.Post, new { @id = "MainForm", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <span>Staff Id</span>
+                                    <input type="text" name="fStaffId" id="fStaffId" class="form-control" placeholder="Staff Id" />
+                                </div>
+                                <div class="col-md-3">
+                                    <span>Fullname</span>
+                                    <input type="text" name="fName" id="fName" class="form-control" placeholder="Fullname" />
+                                </div>
+                                <div class="col-md-3">
+                                    <span>Email</span>
+                                    <input type="text" name="fEmail" id="fEmail" class="form-control" placeholder="Email" />
+                                </div>
+                                <div class="col-md-4">
+                                    <span>Department</span>
+                                    @Html.DropDownListFor(m => m.Department_Id, (SelectList)ViewBag.DepartmentList, "- - - Select - - -", new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top:5px;">
+                                <div class="col-md-10">
+                                    <p>
+                                        <span>Select Employee</span>
+                                        @Html.DropDownListFor(m => m.Id, (SelectList)ViewBag.EmployeeList, "- - - Select - - -", new { @class = "form-control" })
+                                    </p>
+                                </div>
+                                <div class="col-md-2">
+                                    <p>
+                                        <span style="width: 5px; display: block">&nbsp;</span>
+                                        <button class="btn btn-block btn-info" name="SubmitButton" value="View Report">View Report</button>
+                                    </p>
+                                </div>
+                            </div>
+
+
+                        }
+                    </div>
+
+                </div>
+            </div>
+
+            @if (Model != null)
+            {
+                <div class="row" style="margin-top: 20px; text-align: center;">
+                    <div>
+                        <div class="box box-danger">
+                            <div class="box-header" style="border-bottom: solid 1px #e5e5e5">
+                                <h3 class="box-title">Report Result</h3>
+                                <div class="box-tools pull-right" data-toggle="tooltip">
+                                    <div class="btn-group" data-toggle="btn-toggle" id="functionMenu" style="padding-top: 5px;">
+                                        <a href="/Template/Report/ExportEmployeeRecord?ReportType=PDF"><i class="fa fa-file-text"></i>Export PDF</a>
+                                        <a href="/Template/Report/ExportEmployeeRecord?ReportType=Excel" style="margin-left: 10px"><i class="fa fa-table"></i>Export Excel</a>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-12" style="text-align: center">
+                                        <img src="@Url.Action("ViewEmployeeRecord", "Report", new { Trainee_Id = Model.Id })" style="margin:auto" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#fStaffId').change(function () {
+        filterEmployeeList();
+    });
+
+    $('#fName').change(function () {
+        filterEmployeeList();
+    });
+    $('#fEmail').change(function () {
+        filterEmployeeList();
+    });
+    $('#Department_Id').change(function () {
+        filterEmployeeList();
+    });
+
+
+    function filterEmployeeList() {
+        $("#Trainee_Id").text('');
+        $("#Trainee_Id").append('<option value>- - - Select - - -</option>');
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "/Template/Report/GetEmployeeList",
+            dataType: "json",
+            data: {
+                StaffId: $("#fStaffId").val(),
+                Name: $('#fName').val(),
+                Email: $('#fEmail').val(),
+                DepartmentId: $('#Department_Id').val()
+            },
+            success: function (data) {
+                if (data.code == "Success") {
+                    $.each(data.SubjectList, function (i, item) {
+                        $("#Trainee_Id").append('<option value="' + item.TraineeId + '">' + item.Text + '</option>');
+                    });
+                }
+            }
+        });
+
+
+    }
+
+    $("#MainForm").on('submit', function (e) {
+        if ($('#Trainee_Id').val() == '')
+        {
+            e.preventDefault();
+            alert('Please select an employee');
+        }  
+    });
+</script>

@@ -1,0 +1,144 @@
+﻿
+
+table {
+    /*border: 2px solid #2196F3 !important;*/
+    width: 100% !important;
+    border-collapse: collapse;
+}
+
+    table td, table th {
+        border: 1px solid #AAAAAA;
+        padding: 3px 2px;
+    }
+
+    table tbody td {
+        font-size: 14px;
+    }
+
+    table tr:nth-child(even) {
+        background: #e2dff7;
+    }
+
+    table thead {
+        background: #2196F3;
+    }
+
+        table thead th {
+            font-size: 15px;
+            font-weight: bold;
+            color: #FFFFFF;
+            text-align: center !important;
+            vertical-align: middle !important;
+            border-left: 2px solid #2196F3;
+        }
+
+            table thead th:first-child {
+                border-left: none;
+            }
+
+    table tfoot {
+        font-size: 13px;
+        font-weight: bold;
+        color: #FFFFFF;
+        background: #2196F3;
+    }
+
+        table tfoot td {
+            font-size: 13px;
+        }
+
+        table tfoot .links {
+            text-align: right;
+        }
+
+            table tfoot .links a {
+                display: inline-block;
+                background: #FFFFFF;
+                color: #A40808;
+                padding: 2px 8px;
+                border-radius: 5px;
+            }
+
+
+
+
+
+.bg-red-vietjet {
+    background: #0882A5;
+}
+
+.panel-heading {
+    color: #ffffff;
+    background-color: #0882A5;
+    border-color: #ecf0f1;
+}
+
+.list-panel-title {
+    color: #ffffff;
+    font-size: 17px;
+}
+
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    z-index: 2;
+    color: #fff;
+    cursor: default;
+    background-color: #0882A5;
+    border-color: #0882A5;
+}
+
+.login-form {
+    background: url('/Content/assets/img/home/DSJ_3732.jpg') no-repeat;
+    background-size: cover;
+    position: relative;
+    height: 100vh;
+    min-height: 500px;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #0882A5;
+    border-color: #0882A5;
+}
+
+    .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
+        color: #fff;
+        background-color: #399bb7;
+        border-color: #399bb7;
+    }
+
+ul.nav.nav-tabs li.active > a {
+    font-family: "Open Sans","Helvetica Neue",Arial,sans-serif;
+    background-color: #0882A5;
+    color: white;
+}
+
+.font-vietjet-black {
+    font-family: 'Encode Sans Semi Condensed', sans-serif;
+}
+
+
+.nav-tabs > li > a, .nav-pills > li > a {
+    font-family: "Open Sans","Helvetica Neue",Arial,sans-serif;
+}
+
+.panel-primary {
+    border-color: #0882A5;
+}
+
+    .panel-primary > .panel-heading {
+        color: #fff;
+        background-color: #0882A5;
+        border-color: #0882A5;
+    }
+
+#footer {
+    margin-top: -55px;
+}
+
+.fa-toggle-on, .fa-toggle-off {
+    font-size: 20px;
+}
+
+.fa-toggle-on {
+    color: green;
+}

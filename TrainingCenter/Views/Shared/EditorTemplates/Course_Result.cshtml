@@ -1,0 +1,78 @@
+﻿@using DAL.Entities
+@model Course_Result
+@{
+    var IsApprove = (Boolean)ViewBag.IsApprove;
+}
+
+<tr>
+    <td></td>
+    <td>@Model.Trainee.str_Fullname
+        @Html.HiddenFor(m => m.Trainee.str_Fullname)
+        @Html.HiddenFor(m => m.Course_Result_Id)
+
+
+    </td>
+    @if (Model.Course_Detail.Subject.bit_ScoreOrResult)
+    {
+        <td>
+            @if (IsApprove)
+            {
+                @Html.TextBoxFor(m => m.First_Check_Score, new { @class = "form-control", disabled = "disabled" })
+            }
+            else
+            {
+                @Html.TextBoxFor(m => m.First_Check_Score, new { @class = "form-control" })
+            }
+        </td> 
+        <td>
+            @Html.HiddenFor(m => m.First_Check_Result)
+            @if (Model.First_Check_Result == "P" || IsApprove)
+            {
+                @Html.TextBoxFor(m => m.Re_Check_Score, new { @class = "form-control", disabled = "disabled" })
+            }
+            else
+            {
+                @Html.TextBoxFor(m => m.Re_Check_Score, new { @class = "form-control" })
+            }
+        </td>
+    }
+    else
+    {
+        <td>
+            @if (IsApprove)
+            {
+                @Html.TextBoxFor(m => m.First_Check_Result, new { @class = "form-control", disabled = "disabled" })
+            }
+            else
+            {
+                @Html.TextBoxFor(m => m.First_Check_Result, new { @class = "form-control" })
+            }
+        </td>
+
+        <td>
+            @if (Model.First_Check_Result == "P" || IsApprove)
+            {
+                @Html.TextBoxFor(m => m.Re_Check_Result, new { @class = "form-control", disabled = "disabled" })
+            }
+            else
+            {
+                @Html.TextBoxFor(m => m.Re_Check_Result, new { @class = "form-control" })
+            }
+        </td>
+    }
+
+    <td>
+        @if (IsApprove)
+        {
+            @Html.TextBoxFor(m => m.Remark, new { @class = "form-control", disabled = "disabled" })
+        }
+        else
+        {
+            @Html.TextBoxFor(m => m.Remark, new { @class = "form-control" })
+        }
+    </td>
+    <td>
+        @*<span class="badge bg-red">55%</span>*@
+
+    </td>
+</tr>

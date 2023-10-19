@@ -1,0 +1,623 @@
+﻿@using DAL.Entities
+@using DAL.Repositories
+@using DAL.UnitOfWork
+@using TMS.Core.App_GlobalResources
+@model IEnumerable<DAL.Entities.Course>
+
+    @{
+        ViewBag.Title = "Index";
+        ViewBag.ActiveMenu = "Training";
+        ViewBag.ActiveSubMenu = "Course";
+        var Type = ViewBag.CourseTypeList;
+        var fstatus = ViewBag.Status;
+    }
+
+    @section breadcrumb{
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header"><i class="fa fa-graduation-cap"></i> @Resource.lblCourseManagement - @Resource.lblCourseList</h1>
+                <ol class="breadcrumb">
+                    <li><a href="/">@Resource.lblHome</a></li>
+                    <li>@Resource.lblCourseManagement</li>
+                    <li class="active">@Resource.lblCourseList</li>
+                </ol>
+            </div>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel list-panel" id="list-panel">
+                <div class="panel-heading list-panel-heading">
+                    <h1 class="panel-title list-panel-title">
+                        <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i>  @Resource.lblCourseList
+                        <p class="btn-group pull-right">
+                            @*<a id="btnExport" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-download" aria-hidden="true"></i> @Resource.lblEXPORT</a>*@
+                            @if (User.IsInRole("/Course/Create"))
+                            {
+                                <a href="/Course/Create" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-plus" aria-hidden="true"></i> @Resource.lblADDNEW</a>
+                            }
+                            @*@if (User.IsInRole("/Course/AssignTrainee"))
+                                {
+                                <a href="/Course/AssignTrainee/" class="btn btn-primary">ASSIGN TRAINEE</a>
+                                }
+                                @if (User.IsInRole("/Course/Cost"))
+                                {
+                                <a href="/Course/Cost/" class="btn btn-primary">INPUT COST</a>
+                                }
+                                @if (User.IsInRole("/Course/Note"))
+                                {
+                                <a href="/Course/Note/" class="btn btn-primary">INPUT NOTE</a>
+                                }*@
+                        </p>
+                    </h1>
+                </div>
+                <div class="panel-body">
+                    <div id="panel-search1" class=" panel">
+                        <form action="/Course/AjaxHandler" id="frmFilter">
+                            <input type="text" style="display:none" name="fCourseType" id="fCourseType" class="form-control frmFilter" value="" />
+                            <input type="text" style="display:none" name="fstatus" id="fstatus" class="form-control frmFilter" value="" />
+                            <div class="panel-body">
+                                <div class="row col-md-12">
+                                    <div class="row" style="margin-top: 10px;">
+                                        <div class="col-md-12">
+                                            <div class="col-md-4">
+                                                <label class="col-md-4">@Resource.lblCode</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" name="fCode" id="fCode" class="form-control frmFilter" placeholder="@Resource.lblCourseCode" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="col-md-4">@Resource.lblCourseName</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" name="fName" id="fName" class="form-control frmFilter" placeholder="@Resource.lblCourseName" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="col-md-4">@Resource.lblCourseType</label>
+                                                <div class="col-md-8">
+                                                    <select data-placeholder="-- Course Type --" id="CourseType" name="CourseType" class="form-control" data-width="100%">
+                                                        <option></option>
+                                                        @foreach (var item in Type)
+                                                        {
+                                                            <option value="@item.Value">@item.Text</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top: 10px;">
+                                        <div class="col-md-12">
+                                            <div class="col-md-4">
+                                                <label class="col-md-4">@Resource.lblStartDate</label>
+                                                <div class="col-md-8">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <i class="fa fa-calendar"></i>
+                                                        </div>
+                                                        <input type="text" class="form-control pull-right frmFilter date-picker" name="fSearchDate_from" id="fSearchDate_from" placeholder="@Resource.lblStartDate">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="col-md-4">@Resource.lblEndDate</label>
+                                                <div class="col-md-8">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <i class="fa fa-calendar"></i>
+                                                        </div>
+                                                        <input type="text" class="form-control pull-right frmFilter date-picker" name="fSearchDate_to" id="fSearchDate_to" placeholder="@Resource.lblEndDate">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="col-md-4">@Resource.lblStatus</label>
+                                                <div class="col-md-8">
+                                                    @*<input type="text" name="fstatus" id="fstatus" class="form-control frmFilter" placeholder="@Resource.lblStatus" />*@
+                                                    <select data-placeholder="-- @Resource.lblStatus --" id="status" name="status" class="form-control" data-width="100%">
+                                                        <option></option>
+                                                        @foreach (var item in fstatus)
+                                                        {
+                                                            <option value="@item.Value">@item.Text</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row col-md-12" style="margin-top: 10px;">
+                                    <a href="Create/" class="btn btn-danger legitRipple">ADD NEW</a>
+                                    <a href="AssignTrainee/" class="btn btn-danger legitRipple">ASSIGN TRAINEE</a>
+                                    <a href="Cost/" class="btn btn-danger legitRipple">INPUT COST</a>
+                                    <a href="Note/" class="btn btn-danger legitRipple">INPUT NOTE</a>
+                                    <button type="submit" class="btn btn-primary pull-right" id="btFilter" style="width: 100px;">
+                                        <i class="fas fa-search"></i> @Resource.lblSearch
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <ul class="list-inline text-center">
+                            <li>
+                                <h5><i class="zmdi zmdi-circle" style="color: #8B9999;"></i> @Resource.lblPending</h5>
+                            </li>
+                            <li>
+                                <h5><i class="zmdi zmdi-circle" style="color: blueviolet;"></i> @Resource.lblCancelRequest</h5>
+                            </li>
+                            <li>
+                                <h5><i class="zmdi zmdi-circle" style="color: #ff9800;"></i> @Resource.lblEdit</h5>
+                            </li>
+                            <li>
+                                <h5><i class="zmdi zmdi-circle" style="color: #e51c23;"></i> @Resource.lblReject</h5>
+                            </li>
+                            <li>
+                                <h5><i class="zmdi zmdi-circle" style="color: #2196f3;"></i> @Resource.lblProcessing</h5>
+                            </li>
+                            <li>
+                                <h5><i class="zmdi zmdi-circle" style="color: #4caf50;"></i> @Resource.lblApproval</h5>
+                            </li>
+                        </ul>
+                    </div>
+                    @*<p class="pull-right" data-toggle="collapse" data-target="#panel-search" style="cursor:pointer;" id="call-panel-search"><i class="fa fa-search"></i> @Messege.Search</p>*@
+                    <div class="table-responsive">
+                        <table id="Trainee" class="table table-striped table-bordered">
+                            <thead>
+                                <tr role="row">
+                                    <th>@Resource.lblStt</th>
+                                    <th>@Resource.lblCode</th>
+                                    <th>@Resource.lblCourseName</th>
+                                    @*<th>@Resource.lblTime</th>*@
+                                    <th>@Resource.lblApproval</th>
+                                    <th>@Resource.lblActive</th>
+                                    <th>@*@Resource.lblOptions*@</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="sitetemp" class="hidden">
+
+        </div>
+        <div class="hidden table-responsive">
+            <table id="subject" class="table table-striped table-bordered">
+                <thead>
+                    <tr role="row">
+                        <th style="width:5%;">@Resource.lblStt</th>
+                        <th class="dt-left" style="width:8%;">@Resource.lblCode</th>
+                        <th>@Resource.lblSubjectName</th>
+                        <th>@Resource.lblSubjectType</th>
+                        <th>@Resource.lblAverageCalculate</th>
+                        <th style="width:7%;">@Resource.lblMethod</th>
+                        <th>@Resource.lblPassScore</th>
+                        <th style="width:10%;">@Resource.lblRecurrent</th>
+                        <th>@Resource.lblDuration</th>
+                        <th style="width:10%;">@Resource.lblStatus</th>
+                        <th>@Resource.lblRemark</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+            </table>
+        </div>
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    @*<div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Modal Header</h4>
+                        </div>*@
+                    <div class="modal-body">
+                        <label>@Messege.DELETE_SUBJECT</label>
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-md-12">
+                                <div id="messageout2">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" id="Modal_Footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="myModalSave" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <div class="panel-heading panel-title list-panel-title">
+                            <h5 class="modal-title" id="modal-header"> @Resource.lblRemark</h5>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div id="messageoutRemark">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+
+    <style>
+        select {
+            color: #000 !important;
+        }
+
+        .bootstrap-timepicker-widget table td input {
+            min-width: 55px;
+            margin: 0;
+            text-align: center;
+        }
+
+        #tableProgram td {
+            border: 0;
+        }
+
+        .mysymbol {
+            font-size: 16px;
+            color: green;
+        }
+    </style>
+
+    @section Scripts{
+        <script type="text/javascript">
+var sTable;
+            $(document).ready(function () {
+
+                $("#CourseType").on('change', function () {
+                    $("#fCourseType").val($("#CourseType").val());
+
+                });
+              $("#status").on('change', function () {
+                    $("#fstatus").val($("#status").val());
+
+                });
+$("#frmFilter").submit(function (e) {
+    sTable.draw();
+    e.preventDefault();
+});
+var customRow = [
+    //{ "targets": 4, "sortable": false },
+    { "targets": 5, "sortable": false }
+    ,
+    {
+        "targets":5,
+        "className": "text-center",
+    }
+];
+sTable = initDataTable("#Trainee", "/Course/AjaxHandler", customRow);
+//datatable serverside
+
+var detailRows = [];
+$('#Trainee tbody').on('click', 'tr td span.expand', function () {
+
+    var id = $(this).data('value');
+    var tr = $(this).closest('tr');
+    var row = sTable.row(tr);
+    var idx = $.inArray(tr.attr('id'), detailRows);
+    if (row.child.isShown()) {
+        tr.removeClass('details');
+        row.child.hide();
+
+        // Remove from the 'open' array
+        detailRows.splice(idx, 1);
+    } else {
+        tr.addClass('details');
+
+        row.child(format(id)).show();
+
+        // Add to the 'open' array
+        if (idx === -1) {
+            detailRows.push(tr.attr('id'));
+        }
+    }
+});
+sTable.on('draw', function () {
+    $.each(detailRows, function (i, id) {
+        $('#' + id + ' td.details-control').trigger('click');
+    });
+});
+
+
+$('#myModal').on('hidden.bs.modal', function () {
+    sTable.draw();
+});
+
+formatDatetimepicker('#fSearchDate_from', '@Resource.lblLanguage');
+formatDatetimepicker('#fSearchDate_to', '@Resource.lblLanguage');
+$('#btnExport').click(function () {
+    var params = {
+        fCode: $('#fCode').val(),
+        fName: $('#fName').val(),
+        fSearchDate_from: $('#fSearchDate_from').val(),
+        fSearchDate_to: $('#fSearchDate_to').val(),
+    };
+    var str = jQuery.param(params);
+    window.location.href = '/Course/ExportEXCEL?' + str;
+});
+});
+
+
+function format(id) {
+    var table = $("#subject").clone();
+    var ssTable;
+    var customRow = [{ "targets": 0 },
+    {
+        "targets": 3,
+        "className": "text-left",
+    },
+    {
+        "targets": 4,
+        "className": "text-left",
+    },
+    {
+        "targets": 5,
+        "className": "text-left",
+    },
+    {
+        "targets": 6,
+        "className": "text-left",
+    },
+    {
+        "targets": 7,
+        "className": "text-left",
+    },
+    {
+        "targets": 8,
+        "className": "text-left",
+    },
+    {
+        "targets": 9,
+        "className": "text-center",
+    }];
+    ssTable = initDataTableMaxPageLength(table, "/Course/AjaxHandlerSubject/" + id, customRow);
+    return table;
+}
+
+function onShow(id, table) {
+var sSTable = table.DataTable({
+    "responsive:": true,
+         "pageLength": 900000,
+    "searching": false,
+    "columnDefs": [
+        {
+            "targets": 0,
+            "data": null,
+            render: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
+            }
+        }
+    ],
+    "aaSorting": [],
+    "bServerSide": true,
+    "sAjaxSource": "/Course/AjaxHandlerSubject/" + id,
+    "bProcessing": true
+});
+return sSTable;
+}
+
+function calldelete(id) {
+notify.confirm("@Messege.DELETE_SUBJECT", "Confirm", TITLE_STATUS_DANGER, deletesubmit, id);
+
+}
+
+function deletesubmit(id) {
+spinner.open();
+$.ajax({
+    type: 'POST',
+    url: "/Course/delete",
+    datatype: 'json',
+    data: { id: id },
+    success: function (data) {
+        if (data.result) {
+            notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+            sTable.draw();
+        }
+        else {
+            notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+        }
+
+    }, complete: function () {
+        spinner.close();
+    }
+});
+}
+function duplicate_course(id) {
+    spinner.open();
+    $.ajax({
+        url: '/Course/Create/' + id,
+        dataType: 'html',
+        success: function (response) {
+            var data = response;
+            var res = data.split("<nochange>");
+            $("#sitetemp").html('').append(res[1]);
+            var $root = $('#createform');
+            var rs = {
+                //Id: $root.find('#Id').val(),
+                GroupSubjectId: $root.find('#GroupSubjectId').val(),
+                DepartmentIds: $root.find('#DepartmentIds').val(),
+                BeginDate: $root.find('#txt_STARTDATE').val(),
+                Customer: $root.find('#ddl_TYPE').val(),
+                Venue: $root.find('#txt_VENUE').val(),
+                MaxTranineeMembers: $root.find('#txt_NOTRAINEE').val(),
+                MinTranineeMembers: $root.find('#txt_MinTRAINEE').val(),
+                Name: $root.find('#lastnamecourse').val() + " - Copy",
+                Code: $root.find('#txt_COURSECODE').val(),
+                EndDate: $root.find('#txt_ENDDATE').val(),
+                CourseType: $root.find('#ddl_TYPECOURSE').val(),
+                PartnerId: $root.find('#ddl_PARTNER').val(),
+                Survey: $root.find('#ddl_SURVEY').val(),
+                Note: $root.find('#txt_NOTE').val(),
+                CourseDetailModels: []
+            }
+            var $details = $root.find('div.course-detail-content');
+            $.each($details, function (i, o) {
+                var $this = $(this);
+                var id = $this.find('#course-detail-Id').val();
+                var detail = {
+                    Id: id == undefined ? null : id,
+                    SubjectId: $this.find('#course-detail-subject').val(),
+                    LearningType: $this.find('#course-detail-type-learning').val(),
+                    Registable: $this.find('#course-detail-regisable').val(),
+                    DateFrom: $this.find('#course-detail-from-date').val(),
+                    DateTo: $this.find('#course-detail-to-date').val(),
+                    TimeFrom: $this.find('#course-detail-from-time').val(),
+                    TimeTo: $this.find('#course-detail-to-time').val(),
+                    Room: $this.find('#course-detail-room').val(),
+                    attempts: $this.find('#course-detail-attempts').val(),
+                    grademethod: $this.find('#course-detail-grademethod').val(),
+                    allowance: $this.find('#course-detail-allowance').val(),
+
+                    Commitment: $this.find('#course-detail-commitment').val(),
+
+                    Mentor: $this.find('#course-detail-Mentor').val(), //Mentor
+
+                    Hannah: $this.find('#course-detail-Hannah').val(), //Hannah
+
+                    CommitmentExpiredate: $this.find('#course-detail-CommitmentExpiredate').val(),
+
+                    SubjectInstructors: [],
+                    Blended: [],
+                }
+                var $insuctors = $this.next().find('.intrustorList').find('.subjectInstructor');
+                $.each($insuctors, function (index, obj) {
+
+                    var $obj = $(obj);
+                    var _id = $obj.find('#editor-insdra-id').val();
+                    detail.SubjectInstructors.push({
+                        Id: _id == undefined ? null : _id,
+                        InstructorId: $obj.find('#editor-insdra-instructorId').val(),
+                        SubjectId: $obj.find('#editor-insdra-subjectId').val(),
+                        Name: $obj.find('#editor-insdra-instructorName').val(),
+                        Duration: $obj.find('#editor-insdra-duration').val(),
+                    });
+                });
+                var $blended = $this.find('.detail-blended son .hidden_input');
+                $.each($blended, function (index, obj) {
+                    var $obj = $(obj);
+                    var _id = $obj.find('#detail-blended-id').val();
+                    detail.Blended.push({
+                        Id: _id == undefined ? null : _id,
+                        DateFrom: $obj.find('#detail-blended-datefrom').val(),
+                        DateTo: $obj.find('#detail-blended-dateto').val(),
+                        RoomId: $obj.find('#detail-blended-roomid').val(),
+                        LearningTypeId: $obj.find('#detail-blended-learningtypeid').val()
+                    });
+                });
+                rs.CourseDetailModels.push(detail);
+            });
+            var note = "";
+            rs.SubmitType = 1;
+            $.ajax({
+                type: 'POST',
+                url: "/Course/Create",
+                datatype: 'json',
+                data: { model: rs, note: note },
+                success: function (data) {
+                    if (data.result) {
+                        // notify.alert(data.message, 'SUCCESS', TITLE_STATUS_SUCCESS);
+                        sTable.draw();
+                    } else {
+                        //  notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                },
+                complete: function () {
+                        spinner.close();
+                }
+            });
+        }
+    });
+
+
+}
+
+
+function getStringFromTime(time) {
+    if (time === null || typeof time === 'undefined') {
+        return '';
+    } else if (typeof time != 'string') {
+        var hours = time.Hours;
+        var minutes = time.Minutes;
+
+        if (minutes < 10)
+            minutes = "0" + minutes;
+        if (hours < 10)
+            hours = "0" + hours;
+
+        return hours + ":" + minutes;
+    } else {
+        return time;
+    }
+}
+
+function getStringFromJsonDate(jsonDate) {
+    if (jsonDate === null || typeof jsonDate === 'undefined') {
+        return '';
+}
+if (jsonDate != '') {
+    var dateString = jsonDate.substr(6);
+    var currentTime = new Date(parseInt(dateString));
+    var month = currentTime.getMonth() + 1;
+    var day = currentTime.getDate();
+    var year = currentTime.getFullYear();
+    var date = day + "/" + month + "/" + year;
+    return date;
+} else {
+    return '';
+}
+}
+function Set_Participate_Course(isParticipate, id) {
+    spinner.open();
+    $.ajax({
+        type: 'POST',
+        url: "/Course/SubmitSetParticipateCourse",
+        datatype: 'json',
+        data: { isParticipate: isParticipate, id: id },
+        success: function (data) {
+            if (data.result) {
+                sTable.draw();
+                notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+            } else {
+                notify.alert(data.message, "DANGER", TITLE_STATUS_WARNING);
+            }
+
+        }, complete: function () {
+            spinner.close();
+        }
+
+    });
+}
+    function viewremark(selector) {
+        spinner.open();
+        $.ajax({
+        type: 'POST',
+        url: "/Course/ShowRemark",
+        datatype: 'json',
+        data: { id: selector },
+            success: function (data) {
+            spinner.close();
+                $("#myModalSave").modal("show");
+                $("#messageoutRemark").html($.parseHTML(data));
+
+        }
+    });
+    }
+
+$(".line_6").addClass("active");
+        </script>
+    }

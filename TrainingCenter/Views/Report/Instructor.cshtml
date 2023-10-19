@@ -1,0 +1,250 @@
+﻿@using TMS.Core.App_GlobalResources
+@{
+    ViewBag.Title = "Instructor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fas fa-chart-pie"></i> @Resource.lblInstructorSubjectReport</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblReport</li>
+                <li class="active">@Resource.lblInstructorSubjectReport</li>
+            </ol>
+        </div>
+    </div>
+}
+
+@using (Html.BeginForm("ExportInstructor", "Report", FormMethod.Post, new { id = "createform" }))
+{
+    <div class="row">
+        <div class="col-md-12" style="margin-top: 10px;">
+            <div class="panel  list-panel" id="list-panel">
+                <div class="panel-heading list-panel-heading">
+                    <h1 class="panel-title list-panel-title">
+                        <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> @Resource.lblInstructorSubjectList
+                        <p class="btn-group pull-right" style="display:none">
+                            <a id="btnPrint" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-print" aria-hidden="true"></i> @Resource.lblPrint</a>
+                        </p>
+                        <p class="btn-group pull-right">
+                            <a href="javascript:void(0)" class="btn btn-success btn-xs dropdown-toggle legitRipple" id="btnExport" onclick="document.getElementById('createform').submit();"><i class="fa fa-download" aria-hidden="true"></i> @Resource.lblEXPORT</a>
+                        </p>
+                    </h1>
+                </div>
+                <div class="panel-body table-responsive">
+                    <div id="panel-search" class="collapse1 panel">
+                        <div class="panel-body">
+                            <div class="row col-md-12">
+                                <div class="row" style="margin-top:10px;">
+                                    <div class="col-md-2">
+                                        <label>@Resource.lblInstructorCode</label>
+                                        <input class="form-control" id="traineeCode" name="traineeCode" placeholder="@Resource.lblCode" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>@Resource.lblInstructorName</label>
+                                        <input class="form-control" id="traineeName" name="traineeName" placeholder="@Resource.lblName" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>@Resource.lblSubjectCode</label>
+                                        <input class="form-control" id="subjectCode" name="subjectCode" placeholder="@Resource.lblCode" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>@Resource.lblSubjectName</label>
+                                        <input class="form-control" id="subjectName" name="subjectName" placeholder="@Resource.lblName" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>@Resource.DEPARTMENT_NAME</label>
+                                        <select name="department" id="department" class="form-control selectpicker frmFilter" data-placeholder="-- @Resource.DEPARTMENT_NAME  --">
+                                            <option></option>
+                                            @foreach (var item in ViewBag.ltsDepartment)
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>@Resource.lblJobTitle</label>
+                                        <select name="jobtitle" id="jobtitle" class="form-control selectpicker frmFilter" data-placeholder="-- @Resource.lblJobTitle  --">
+                                            <option></option>
+                                            @foreach (var item in ViewBag.ltsJobtitle)
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="row" style="margin-top:10px;">      
+                                    <div class="col-md-12 pull-right">
+                                        <button type="submit" class="btn btn-primary pull-right" id="btFilter">
+                                            <i class="fa fa-search"></i> @Resource.lblSearch
+                                        </button>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                    @*<p class="pull-right" data-toggle="collapse" data-target="#panel-search" style="cursor:pointer;" id="call-panel-search"><i class="fa fa-search"></i> @Messege.Search</p>*@
+                    <table id="Trainee" class="table table-striped table-bordered" style="width: 100%">
+                        <thead>
+                            <tr role="row">
+                                <th>@Resource.lblStt</th>
+                                <th>@Messege.EIDGV</th>
+                                <th>@Resource.lblName</th>
+                                <th>@Resource.lblJobTitle_Occupation</th>
+                                <th>@Resource.lblDepartment</th>
+                                <th>@Resource.lblCode</th>
+                                <th>@Resource.lblSubject</th>
+                        </thead>
+                        <tbody></tbody>
+                        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12" style="margin-top: 10px;display:none;">
+        <div class="panel panel-default list-panel" id="list-panel">
+            <div class="panel-body">
+                <div id="reportpage" style="padding-top: 20px; padding-bottom: 20px; padding-left: 30px; padding-right: 15px;">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div id="messageout">
+            <img src="~/Content/assets/img/report/logoreport.png" style="display:none;" />
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <!-- timepicker -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //datatable serverside
+            var sTable = $("#Trainee").DataTable({
+                "responsive:": true,
+                "searching": false,
+                "columnDefs": [
+                    {
+                        "targets": 0,
+                        "className": "text-center",
+                        "data": null,
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    }],
+                "aaSorting": [],
+                "bServerSide": true,
+                "sAjaxSource": "/Report/AjaxHandlerInstructor",
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                    aoData.push(
+                        { "name": "subjectName", "value": $('#subjectName').val() },
+                        { "name": "traineeCode", "value": $('#traineeCode').val() },
+                        { "name": "subjectCode", "value": $('#subjectCode').val() },
+                        { "name": "department", "value": $('#department').val() },
+                        { "name": "jobtitle", "value": $('#jobtitle').val() },
+                        { "name": "traineeName", "value": $('#traineeName').val() }
+                    )
+                },
+            });
+            $('#btFilter').click(function (e) {
+                //active();
+                e.preventDefault();
+                sTable.draw();
+                //$("#reportpage").load(location.href + " #reportpage");
+
+            });
+        });
+        function active() {
+            $.ajax({
+                type: "GET",
+                url: "/Report/InstructorPrint/",
+                datatype: "json",
+                data: {
+                    traineeName: $('#traineeName').val(),
+                    traineeCode: $('#traineeCode').val(),
+                    subjectName: $('#subjectName').val(),
+                    subjectCode: $('#subjectCode').val()
+                },
+                success: function (data) {
+                   $('#reportpage').html(data);
+						var delayInMilliseconds = 1000; //1 second
+						setTimeout(function() {
+							printElement(document.getElementById("reportpage"));
+							window.print();
+						}, delayInMilliseconds);
+                }
+            });
+        }
+        function format(id) {
+            var table = $("#subject").clone();
+            var sSTable = table.DataTable({
+                "responsive:": false,
+                "pageLength": 900000,
+                "searching": false,
+                "columnDefs": [{
+                    "targets": 0,
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                }],
+                "aaSorting": [],
+                "bServerSide": true,
+                "sAjaxSource": "/Report/AjaxHandlerTrainingSubject/" + id,
+                "bProcessing": true
+            });
+            return table;
+        }
+        function OnChangeCourseList(val) {
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "/Report/ChangeCourseReturnSubject",
+                dataType: "json",
+                data: { id_course: val },
+                success: function (result) {
+                    $('#ddl_subject').empty();
+                    $('#ddl_subject').prop('selectedIndex', 0);
+                    if (result.value_null == "0") {
+                        $('#ddl_subject').append(result.value_option);
+                    }
+                    else {
+                        $('#ddl_subject').append("<option value='-1'>-- Subject --</option>");
+                    }
+                }
+            });
+        }
+        $('#btnPrint').on('click', function () {
+            active();
+            //$("#Trainee").DataTable().draw();
+        });
+        $('#btnExport').click(function (e) {
+            $('#createform').submit();
+        });
+        function printElement(elem) {
+            var domClone = elem.cloneNode(true);
+            var $printSection = document.getElementById("printSection");
+
+            if (!$printSection) {
+                var $printSection = document.createElement("div");
+                $printSection.id = "printSection";
+                document.body.appendChild($printSection);
+            }
+
+            $printSection.innerHTML = "";
+
+            $printSection.appendChild(domClone);
+        }
+    </script>
+}

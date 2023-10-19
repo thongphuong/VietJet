@@ -1,0 +1,748 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Web.Mvc;
+using TrainingCenter.Utilities;
+using DAL.Entities;
+using TMS.Core.Services.Configs;
+using TMS.Core.Services.Contracts;
+using TMS.Core.Services.CourseDetails;
+using TMS.Core.Services.CourseMember;
+using TMS.Core.Services.Employee;
+using TMS.Core.Services.Notifications;
+using TMS.Core.Services.Users;
+using TMS.Core.App_GlobalResources;
+using TMS.Core.Services.Approves;
+using TMS.Core.Utils;
+
+namespace TrainingCenter.Controllers
+{
+    using OfficeOpenXml;
+    using OfficeOpenXml.Style;
+    using Resources;
+    using System.Configuration;
+    using System.Data.Entity.SqlServer;
+    using System.Globalization;
+    using System.IO;
+    using System.Text.RegularExpressions;
+    using TMS.Core.Services;
+    using TMS.Core.Services.Courses;
+    using TMS.Core.Services.Department;
+    using TMS.Core.ViewModels;
+    using TMS.Core.ViewModels.Common;
+    using TMS.Core.ViewModels.Contracts;
+
+    public class ContractController : BaseAdminController
+    {
+        #region MyRegion
+
+        private readonly IContractService _repoContract;
+
+
+
+        #endregion
+
+        public ContractController(IConfigService configService, IUserContext userContext, INotificationService notificationService, ICourseMemberService courseMemberService, IEmployeeService employeeService, ICourseDetailService courseDetailService, IDepartmentService departmentService, ICourseService courseService, IContractService repoContract, IApproveService approveService) : base(configService, userContext, notificationService, courseMemberService, employeeService, courseDetailService, departmentService, courseService, approveService)
+        {
+            _repoContract = repoContract;
+        }
+
+        #region Export EXCEL
+        public FileResult ExportEXCEL(FormCollection form)
+        {
+            var filecontent = ExportEXCEL();
+            if (filecontent != null)
+            {
+                return File(filecontent, ExportUtils.ExcelContentType, "Contract_List.xlsx");
+            }
+            return null;
+        }
+        private byte[] ExportEXCEL()
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("vi-VN");
+            IFormatProvider culture = new System.Globalization.CultureInfo("vi-VN", true);
+            string templateFilePath = Server.MapPath(@"" + GetByKey("PrivateTemplate") + "/Template/ExcelFile/Contract_List.xlsx");
+            FileInfo template = new FileInfo(templateFilePath);
+            //var courseDetail = _repoCourseServiceDetail.GetById(ddlSubject);
+
+            int Contractor2 = string.IsNullOrEmpty(Request.QueryString["Contractor2"]) ? -1 : Convert.ToInt32(Request.QueryString["Contractor2"].Trim());
+            int Status2 = string.IsNullOrEmpty(Request.QueryString["Status2"]) ? -1 : Convert.ToInt32(Request.QueryString["Status2"]);
+            int Type2 = string.IsNullOrEmpty(Request.QueryString["Type2"]) ? -1 : Convert.ToInt32(Request.QueryString["Type2"]);
+            string str_Code2 = string.IsNullOrEmpty(Request.QueryString["str_Code2"]) ? "" : Request.QueryString["str_Code2"].Trim();
+            string str_Contractno2 = string.IsNullOrEmpty(Request.QueryString["str_Contractno2"]) ? "" : Request.QueryString["str_Contractno2"].Trim();
+            string url = string.IsNullOrEmpty(Request.QueryString["url"]) ? string.Empty : Request.QueryString["url"].ToLower().Trim();
+
+            var data = _repoContract.Get(a =>
+            (Contractor2 == -1 || a.int_Id_contractor == Contractor2) &&
+            (Status2 == -1 || a.int_Id_status == Status2) &&
+            (Type2 == -1 || a.int_Id_type == Type2) &&
+            (string.IsNullOrEmpty(str_Code2) || a.str_Code.Contains(str_Code2)) &&
+            (string.IsNullOrEmpty(str_Contractno2) || a.str_Contractno.Contains(str_Contractno2))
+             ).OrderByDescending(a => a.id);
+
+            ExcelPackage excelPackage;
+            MemoryStream ms = new MemoryStream();
+            byte[] bytes = null;
+            if (data != null)
+            {
+                using (excelPackage = new ExcelPackage(template, false))
+                {
+                    ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.First();
+                    int startRow = 9;
+                    //var Row = 0;
+                    int count = 0;
+                    foreach (var item in data)
+                    {
+                        int col = 2;
+                        count++;
+                        ExcelRange cellNo = worksheet.Cells[startRow + 1, col];
+                        cellNo.Value = count;
+                        cellNo.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        cellNo.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                        cellNo.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+
+                        ExcelRange cellCode = worksheet.Cells[startRow + 1, ++col];
+                        cellCode.Value = item?.str_Code;
+                        cellCode.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        cellCode.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                        cellCode.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+
+                        ExcelRange cellContrctNo = worksheet.Cells[startRow + 1, ++col];
+                        cellContrctNo.Value = item?.str_Contractno;
+                        cellContrctNo.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        cellContrctNo.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                        cellContrctNo.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+                        ExcelRange cellCONTRACTOR = worksheet.Cells[startRow + 1, ++col];
+                        cellCONTRACTOR.Value = item?.CAT_CONTRACTOR?.str_Fullname ?? "";
+                        cellCONTRACTOR.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                        cellCONTRACTOR.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        cellCONTRACTOR.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+                        ExcelRange cellPrice = worksheet.Cells[startRow + 1, ++col];
+                        cellPrice.Value = item.mon_Price.HasValue ? item?.mon_Price.Value.ToString("N", culture) + (item.Currency.HasValue? " "+ UtilConstants.CurrencyDictionary()[item.Currency.Value].ToString() : "") : "0";
+                        cellPrice.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                        cellPrice.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        cellPrice.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+                        ExcelRange cellExpiryDate = worksheet.Cells[startRow + 1, ++col];
+                        cellExpiryDate.Value = item?.dtm_Expiredate != null ? DateUtil.DateToString(item?.dtm_Expiredate, "dd/MM/yyyy") : "";
+                        cellExpiryDate.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                        cellExpiryDate.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        cellExpiryDate.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+                        ExcelRange cellPhone = worksheet.Cells[startRow + 1, ++col];
+                        cellPhone.Value = item?.CAT_CONTRACTS_STATUS?.name;
+                        cellPhone.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                        cellPhone.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        cellPhone.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+                        ExcelRange cellActive = worksheet.Cells[startRow + 1, ++col];
+                        cellActive.Value = item?.bit_Is_active == true ? "Active" : "DeActive";
+                        cellActive.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                        cellActive.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                        cellActive.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+                        startRow++;
+
+                    }
+                    bytes = excelPackage.GetAsByteArray();
+                }
+
+            }
+            return bytes;
+
+        }
+
+        #endregion
+
+        public ActionResult Index(int id = 0)
+        {
+            var model = new ContractModels
+            {
+
+                Contractor = _repoContract.GetContractList(),
+                Type = _repoContract.GetContractType(),
+                Status = _repoContract.GetContractStatus(),
+            };
+            return View(model);
+        }
+
+
+        public ActionResult Modify(int id = 0, string type = "")
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("vi-VN");
+            IFormatProvider culture = new System.Globalization.CultureInfo("vi-VN", true);
+            var model = new ContractModels();
+
+            if (id != 0)
+            {
+                var entity = _repoContract.GetById(id);
+                model.Id = entity.id;
+                model.ContractorID = entity.int_Id_contractor;
+                model.Code = entity.str_Code;
+                model.ContractNO = entity.str_Contractno;
+                model.Description = entity.str_Description;
+                model.SignDate = entity.dtm_Signdate;
+                model.Expiredate = entity.dtm_Expiredate;
+                model.Note = entity.str_Note;
+                model.Price = entity.mon_Price;
+                model.Currency = entity.Currency;
+                model.StatusID = entity.int_Id_status;
+                model.TypeID = entity.int_Id_type;
+                model.CreatedDate = entity.dtm_Created_date;
+                model.UpdateDate = entity.dtm_Last_updated_date;
+            }
+            ViewBag.id = id;
+            ViewBag.mModel = model;
+            model.ContractorList = _repoContract.GetContractor().OrderBy(a => a.str_Fullname).ToDictionary(a => a.id, a => a.str_Fullname);
+            model.TypeList = _repoContract.GetTypeContract().ToDictionary(a => a.id, a => a.name);
+            model.StatusList = _repoContract.GetStatus().ToDictionary(a => a.id, a => a.name);
+            model.StatusList[-1] = "";
+            model.StatusList.OrderBy(a => a.Key);
+            string pageshow = "";
+            if (type == "view")
+            {
+                pageshow = "Detailpage";
+            }
+            else if (type == "edit")
+            {
+                pageshow = "Editpage";
+            }
+            else if (type == "create")
+            {
+                pageshow = "Createpage";
+            }
+
+            return PartialView(pageshow, model);
+        }
+        public ActionResult Editpage(int id = 0)
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("vi-VN");
+            IFormatProvider culture = new System.Globalization.CultureInfo("vi-VN", true);
+            var model = new ContractModels();
+
+
+            if (id != 0)
+            {
+                var entity = _repoContract.GetById(id);
+                model.Id = entity.id;
+                model.ContractorID = entity.int_Id_contractor;
+                model.Code = entity.str_Code;
+                model.ContractNO = entity.str_Contractno;
+                model.Description = entity.str_Description;
+                model.SignDate = entity.dtm_Signdate;
+                model.Expiredate = entity.dtm_Expiredate;
+                model.Note = entity.str_Note;
+                model.Price = entity.mon_Price;
+                model.Currency = entity.Currency;
+                model.StatusID = entity.int_Id_status;
+                model.TypeID = entity.int_Id_type;
+                model.StatusList = new Dictionary<int, string>();
+            }
+            model.ContractorList = _repoContract.GetContractor().OrderBy(a => a.str_Fullname).ToDictionary(a => a.id, a => a.str_Fullname);
+            model.TypeList = _repoContract.GetTypeContract().ToDictionary(a => a.id, a => a.name);          
+            model.Curencylist = UtilConstants.CurrencyDictionary();
+            model.StatusList.Add(-1, "");
+            var list_status = _repoContract.GetStatus().Where(a => a.isactive == 1);
+            foreach (var item in list_status)
+            {
+                model.StatusList.Add(item.id, item.name);
+            }
+            return View(model);
+        }
+        public ActionResult Detailpage(int id = 0)
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("vi-VN");
+            IFormatProvider culture = new System.Globalization.CultureInfo("vi-VN", true);
+            var model = new ContractModels();
+            if (id != 0)
+            {
+                var entity = _repoContract.GetById(id);
+                model.Id = entity.id;
+                model.ContractorID = entity.int_Id_contractor;
+                model.Code = entity.str_Code;
+                model.ContractNO = entity.str_Contractno;
+                model.Description = entity.str_Description;
+                model.SignDate = entity.dtm_Signdate;
+                model.Expiredate = entity.dtm_Expiredate;
+                model.Note = entity.str_Note;
+                model.Price = entity.mon_Price;
+                model.Currency = entity.Currency;
+                model.StatusID = entity.int_Id_status;
+                model.TypeID = entity.int_Id_type;
+                model.CreatedDate = entity.dtm_Created_date;
+                model.UpdateDate = entity.dtm_Last_updated_date;
+                if(entity.int_Created_by != null)
+                {
+                    var usercreate = UserContext.GetById((int)entity.int_Created_by);
+                    model.CreatedBy = ReturnDisplayLanguage(usercreate.FIRSTNAME, usercreate.LASTNAME);
+                }
+                if(entity.int_Last_updated_by != null)
+                {
+                    var userupdate = UserContext.GetById((int)entity.int_Last_updated_by);
+                    model.UpdateBy = ReturnDisplayLanguage(userupdate.FIRSTNAME, userupdate.LASTNAME);
+                }
+
+            }
+            model.ContractorList = _repoContract.GetContractor().ToDictionary(a => a.id, a => a.str_Fullname);
+            model.TypeList = _repoContract.GetTypeContract().ToDictionary(a => a.id, a => a.name);
+            model.StatusList = _repoContract.GetStatus().ToDictionary(a => a.id, a => a.name);
+            model.Curencylist = UtilConstants.CurrencyDictionary();
+            return View(model);
+        }
+        public ActionResult Createpage(int id = 0)
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("vi-VN");
+            IFormatProvider culture = new System.Globalization.CultureInfo("vi-VN", true);
+            var model = new ContractModels()
+            {
+                ContractorList = _repoContract.GetContractor().ToDictionary(a => a.id, a => a.str_Fullname),
+                TypeList = _repoContract.GetTypeContract().ToDictionary(a => a.id, a => a.name),
+                StatusList = new Dictionary<int,string>(),
+                Curencylist = UtilConstants.CurrencyDictionary(),
+            };
+            model.StatusList.Add(-1, "");
+            var list_status = _repoContract.GetStatus().Where(a => a.isactive == 1);
+            foreach (var item in list_status)
+            {
+                model.StatusList.Add(item.id, item.name);
+            }
+            return View(model);
+        }
+        // fill data to datatable by ajax 
+
+        public class sessionfilter
+        {
+            public string param { get; set; }
+            public string location { get; set; }
+        }
+
+
+        public ActionResult AjaxHandler(jQueryDataTableParamModel param)
+        {
+            try
+            {
+                System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("vi-VN");
+                int Contractor2 = string.IsNullOrEmpty(Request.QueryString["Contractor2"]) ? -1 : Convert.ToInt32(Request.QueryString["Contractor2"].Trim());
+                int Status2 = string.IsNullOrEmpty(Request.QueryString["Status2"]) ? -1 : Convert.ToInt32(Request.QueryString["Status2"]);
+                int Type2 = string.IsNullOrEmpty(Request.QueryString["Type2"]) ? -1 : Convert.ToInt32(Request.QueryString["Type2"]);
+                string str_Code2 = string.IsNullOrEmpty(Request.QueryString["str_Code2"]) ? "" : Request.QueryString["str_Code2"].Trim();
+                string str_Contractno2 = string.IsNullOrEmpty(Request.QueryString["str_Contractno2"]) ? "" : Request.QueryString["str_Contractno2"].Trim();
+                string url = string.IsNullOrEmpty(Request.QueryString["url"]) ? string.Empty : Request.QueryString["url"].ToLower().Trim();
+
+                var data = _repoContract.Get(a =>
+                (Contractor2 == -1 || a.int_Id_contractor == Contractor2) &&
+                (Type2 == -1 || a.int_Id_type == Type2) &&
+                (string.IsNullOrEmpty(str_Code2) || a.str_Code.Contains(str_Code2)) &&
+                (string.IsNullOrEmpty(str_Contractno2) || a.str_Contractno.Contains(str_Contractno2))
+                 );
+                var limit = DateTime.Now.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+                switch (Status2)
+                {
+                    case 1:
+                        data = data.Where(a => ((!a.dtm_Expiredate.HasValue && a.dtm_Signdate.HasValue) || (SqlFunctions.DateDiff("day", a.dtm_Expiredate, limit) <= 0 && (a.dtm_Signdate.HasValue || !a.dtm_Signdate.HasValue))) && a.int_Id_status != 4 && a.int_Id_status != 2).OrderByDescending(a => a.id);
+                        break;
+                    case 2:
+                        data = data.Where(a => (!a.dtm_Signdate.HasValue || a.dtm_Signdate > limit) && !a.dtm_Expiredate.HasValue && (!a.int_Id_status.HasValue || a.int_Id_status == Status2)).OrderByDescending(a => a.id);
+                        break;
+                    case 3:
+                        data = data.Where(a => a.dtm_Expiredate.HasValue && SqlFunctions.DateDiff("day", a.dtm_Expiredate, limit) > 0 && (a.dtm_Signdate.HasValue || !a.dtm_Signdate.HasValue) && a.int_Id_status != 4 && a.int_Id_status != 2).OrderByDescending(a => a.id);
+                        break;
+                    case 4:
+                        data = data.Where(a => !a.dtm_Expiredate.HasValue && a.int_Id_status == Status2).OrderByDescending(a => a.id);
+                        break;
+                    default:
+                        data = data.OrderByDescending(a => a.id);
+                        break;
+                }
+                IEnumerable<TMS_CONTRACTS> filtered = data;
+
+                var sortColumnIndex = Convert.ToInt32(Request["iSortCol_0"]);
+                Func<TMS_CONTRACTS, string> orderingFunction = (c => sortColumnIndex == 1 ? c.str_Code
+                                                          : sortColumnIndex == 2 ? c?.str_Contractno
+                                                          : sortColumnIndex == 3 ? c?.str_Description
+                                                          : sortColumnIndex == 4 ? c?.CAT_CONTRACTOR?.str_Fullname
+                                                          : sortColumnIndex == 5 ? c?.dtm_Expiredate?.ToString()
+                                                          : sortColumnIndex == 6 ? c?.CAT_CONTRACTS_STATUS?.name
+                                                          : c.id.ToString());
+
+
+                var sortDirection = Request["sSortDir_0"]; // asc or desc
+                if (sortDirection != null)
+                {
+                    filtered = (sortDirection == "asc") ? filtered.OrderBy(orderingFunction)
+                                  : filtered.OrderByDescending(orderingFunction);
+                }
+                
+
+                var displayed = filtered.Skip(param.iDisplayStart).Take(param.iDisplayLength);
+                var verticalBar = GetByKey("VerticalBar");
+                var result = from c in displayed.ToArray()
+                             let dtmExpiredate = c?.dtm_Expiredate
+                             //where dtmExpiredate != null
+                             select new object[] {
+                                            string.Empty,
+                                            c.str_Code,
+                                            c.str_Contractno,
+                                            c.str_Description,
+                                            c?.CAT_CONTRACTOR?.str_Fullname,
+                                            (dtmExpiredate != null ? DateUtil.DateToString(dtmExpiredate,"dd/MM/yyyy") : ""),
+                                            returncolunmStatus(c.dtm_Signdate,dtmExpiredate,c?.int_Id_status),
+                                            (dtmExpiredate.HasValue ? returncolunm((dtmExpiredate.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59) - DateTime.Now).TotalDays.ToString("####")):""),
+                                             c.bit_Is_active == false ? "&nbsp;<i class='fa fa-toggle-off' onclick='Set_Participate_Contract(0,"+c.id+")' aria-hidden='true' title='Inactive' style='cursor: pointer;'></i>" : "&nbsp;<i class='fa fa-toggle-on'  onclick='Set_Participate_Contract(1,"+c.id+")' aria-hidden='true' title='Active' style='cursor: pointer;'></i>",
+
+                                            ((Is_View(url)) ?  "<a  title='View'  href='"+@Url.Action("Detailpage",new{id = c.id})+"')' data-toggle='tooltip'><i class='fa fa-search btnIcon_blue font-byhoa' aria-hidden='true' ></i></a>" : "" ) + 
+                                             ((Is_Edit(url)) ? verticalBar +"<a   title='Edit'  href='"+@Url.Action("Editpage",new{id = c.id})+"' data-toggle='tooltip'><i class='fas fa-edit btnIcon_green font-byhoa' aria-hidden='true' ></i></a>" : "") +
+                                            ((Is_Delete(url)) ? verticalBar +"<a title='Delete' href='javascript:void(0)' onclick='calldelete(" + c.id  + ")' data-toggle='tooltip'><i class='fas fa-trash btnIcon_red font-byhoa' aria-hidden='true' ></i></a>" : "")
+                                        };
+
+                ViewData["search"] = result;
+
+                return Json(new
+                {
+                    sEcho = param.sEcho,
+                    iTotalRecords = filtered.Count(),
+                    iTotalDisplayRecords = filtered.Count(),
+                    aaData = result,
+
+                },
+           JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                LogEvent(UtilConstants.LogType.EVENT_TYPE_ERROR, UtilConstants.LogEvent.Error, "Contract/AjaxHandler", ex.Message);
+                return Json(new
+                {
+                    sEcho = param.sEcho,
+                    iTotalRecords = 0,
+                    iTotalDisplayRecords = 0,
+                },
+                    JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        private string returncolunm(string input)
+        {
+            string html = input;
+            if (!string.IsNullOrEmpty(input))
+            {
+                var period = int.Parse(input);
+                if (period < 0)
+                {
+                    html = "<p style='color:red;'>" + input + "</p>";
+                }
+            }
+
+            return html;
+        }
+
+        private string returncolunmStatus(DateTime? signdate,DateTime? expiredate, int? status)
+        {
+            System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("vi-VN");
+            CultureInfo customCulture = (CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+            customCulture.NumberFormat.NumberDecimalSeparator = ".";
+            System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+            var separator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            var html = "";           
+            var input = expiredate.HasValue ? expiredate.Value.AddHours(23).AddMinutes(59).AddSeconds(59).Subtract(DateTime.Now).TotalDays.ToString("f1") : "";
+            if(status.HasValue && status != 1 && status != 3)
+            {
+                if (status == 2)
+                {
+                    html = "Pending";
+                }
+                if (status == 4)
+                {
+                    html = "Canceled";
+                }
+            }
+            else
+            {
+                if (signdate.HasValue)
+                {
+                    if(signdate.Value > DateTime.Now.Date.AddHours(23).AddMinutes(59).AddSeconds(59))
+                    {
+                        html = "Pending";
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(input))
+                        {
+                            var input_ = Regex.Replace(input, "[.,]", separator);
+                            var period = double.Parse(input_);
+                            if (period < 0)
+                            {
+                                html = "Closed";
+                            }
+                            else if (period >= 0)
+                            {
+                                html = "In Progress";
+                            }
+                        }
+                        else
+                        {
+                            html = "In Progress";
+                            if (status == 4)
+                            {
+                                html = "Canceled";
+                            }
+                        }
+                    }
+                    
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(input))
+                    {
+                        var input_ = Regex.Replace(input, "[.,]", separator);
+                        var period = double.Parse(input_);
+                        if (period < 0)
+                        {
+                            html = "Closed";
+                        }
+                        else if (period >= 0)
+                        {
+                            html = "In Progress";
+                        }
+                    }
+                    else
+                    {
+                        html = "Pending";
+                        if (status == 2)
+                        {
+                            html = "Pending";
+                        }
+                        if (status == 4)
+                        {
+                            html = "Canceled";
+                        }
+                    }
+                }
+            }
+           
+
+
+
+            return html;
+        }
+        #region User-Modify
+
+
+        [HttpPost]
+        public ActionResult Modify(ContractModels model, FormCollection form)
+        {
+            model.Code = String.IsNullOrEmpty(form["str_Code"].Trim()) ? "" : form["str_Code"].Trim();
+            model.ContractNO = String.IsNullOrEmpty(form["str_Contractno"].Trim()) ? "" : form["str_Contractno"].Trim();
+            var signdate = form["dtm_Signdate"];
+            var exp_date = form["dtm_Expiredate"];
+            if (model.Code == "" && model.ContractNO == "" && signdate == "" && exp_date == "")
+            {
+                return Json(new AjaxResponseViewModel()
+                {
+                    message = Messege.UNSUCCESS,
+                    result = false
+                }, JsonRequestBehavior.AllowGet);
+            }
+            if (model.ContractNO == "")
+            {
+                return Json(new AjaxResponseViewModel()
+                {
+                    message = Messege.VALIDATION_CONTRACTNO,
+                    result = false
+                }, JsonRequestBehavior.AllowGet);
+            }
+            if (model.Code == "")
+            {
+                return Json(new AjaxResponseViewModel()
+                {
+                    message = Messege.VALIDATION_CONTRACTCODE,
+                    result = false
+                }, JsonRequestBehavior.AllowGet);
+            }
+            //if (exp_date == "")
+            //{
+            //    return Json(new AjaxResponseViewModel()
+            //    {
+            //        message = Messege.VALIDATION_CONTRACT_EXPRIEDATE,
+            //        result = false
+            //    }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (signdate == "")
+            //{
+            //    return Json(new AjaxResponseViewModel()
+            //    {
+            //        message = Messege.VALIDATION_CONTRACT_SIGNDATE,
+            //        result = false
+            //    }, JsonRequestBehavior.AllowGet);
+            //}
+            System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("vi-VN");
+            if (!ModelState.IsValid)
+            {
+                try
+                {
+                    IFormatProvider culture = new System.Globalization.CultureInfo("vi-VN", true);
+                    if(signdate != "" && exp_date != "")
+                    {
+                        var sign = DateTime.Parse(signdate, culture, System.Globalization.DateTimeStyles.AssumeLocal);
+                        var exp = DateTime.Parse(exp_date, culture, System.Globalization.DateTimeStyles.AssumeLocal);
+                       
+                        if (DateTime.Parse(signdate) > DateTime.Parse(exp_date))
+                        {
+                            return Json(new AjaxResponseViewModel()
+                            {
+                                message = Messege.VALIDATION_SIGNDATE_EXPIREDATE,
+                                result = false
+                            }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    var entity = _repoContract.GetById(model.Id);
+                    if (entity == null)
+                    {
+                        if (_repoContract.Get(a => a.str_Code.ToLower() == model.Code.ToLower()).Any())
+                        {
+                            return Json(new AjaxResponseViewModel { result = false, message = Messege.EXISTING_CODE }, JsonRequestBehavior.AllowGet);
+                        }
+                        _repoContract.Insert(model, form);
+                    }
+                    else
+                    {
+                        if (_repoContract.Get(a => a.str_Code.ToLower() == model.Code.ToLower() && a.id != model.Id).Any())
+                        {
+                            return Json(new { result = false, message = Messege.EXISTING_CODE }, JsonRequestBehavior.AllowGet);
+                        }
+                        _repoContract.Update(model, form);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogEvent(UtilConstants.LogType.EVENT_TYPE_ERROR, UtilConstants.LogEvent.Error, "Contract/Modify", ex.Message);
+                    return Json(new AjaxResponseViewModel()
+                    {
+                        message = Messege.UNSUCCESS + ex,
+                        result = false
+                    }, JsonRequestBehavior.AllowGet);
+
+                }
+            }
+            var result = new AjaxResponseViewModel
+            {
+                message = Messege.SUCCESS,
+                result = true
+            };
+            TempData[UtilConstants.NotifyMessageName] = result;
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
+
+        [HttpPost]
+        public ActionResult delete(int id = -1)
+        {
+            try
+            {
+                var model = _repoContract.GetById(id);
+                model.isDelete = true;
+                _repoContract.Update(model);
+                return Json(new AjaxResponseViewModel
+                {
+                    message = Messege.SUCCESS,
+                    result = true
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                LogEvent(UtilConstants.LogType.EVENT_TYPE_ERROR, UtilConstants.LogEvent.Error, "Contract/delete", ex.Message);
+                return Json(new AjaxResponseViewModel
+                {
+                    message = ex.Message,
+                    result = false
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        [HttpPost]
+        public ActionResult SubmitSetParticipateContract(int isParticipate, string id, FormCollection form)
+        {
+            try
+            {
+                int idContractor = int.Parse(id);
+                var removeContractor = _repoContract.GetById(idContractor);
+                if (removeContractor == null)
+                {
+                    LogEvent(UtilConstants.LogType.EVENT_TYPE_ERROR, UtilConstants.LogEvent.Error, "Contact/SubmitSetParticipateContract", Messege.ISVALID_DATA);
+                    return Json(new AjaxResponseViewModel()
+                    {
+                        message = Messege.ISVALID_DATA,
+                        result = false
+                    }, JsonRequestBehavior.AllowGet);
+                }
+
+                if (isParticipate == 1)
+                {
+                    removeContractor.bit_Is_active = false;
+                }
+                else
+                {
+                    removeContractor.bit_Is_active = true;
+                }
+                _repoContract.Update(removeContractor);
+
+
+                //return Json(new AjaxResponseViewModel { message = Messege.SUCCESS, result = true }, JsonRequestBehavior.AllowGet);
+                return Json(new AjaxResponseViewModel { message = string.Format(Messege.SET_STATUS_SUCCESS, removeContractor.str_Contractno), result = true }, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+                LogEvent(UtilConstants.LogType.EVENT_TYPE_ERROR, UtilConstants.LogEvent.Error, "Contract/SubmitSetParticipateContract", ex.Message);
+                return Json(new AjaxResponseViewModel { message = ex.Message, result = false }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public JsonResult GenerateCode(int valuetype = -1)
+        {
+            #region[]
+            string contractorCode = "";
+            var Contractor = _repoContract.GetContractorById(valuetype);
+            if (Contractor != null)
+            {
+                contractorCode = Contractor.str_Code;
+            }
+            #endregion
+
+
+            var contracts = _repoContract.Get(x => x.str_Code.StartsWith(contractorCode)).ToList();
+            var contract = contracts.LastOrDefault();
+            var nums = 0;
+            var defaultCode = contractorCode + "_001";
+            var code = contractorCode;
+            if (contract == null)
+                return Json(defaultCode, JsonRequestBehavior.AllowGet);
+            if (Int32.TryParse(contract.str_Code.Replace(code + "_", ""), out nums))
+            {
+                while (true)
+                {
+                    code = (++nums).ToString();
+                    while (code.Length < 3)
+                    {
+                        code = "0" + code;
+                    }
+                    var generateCode = contractorCode + "_" + code;
+                    if (!contracts.Any(a => a.str_Code == generateCode))
+                        return Json(generateCode, JsonRequestBehavior.AllowGet);
+                }
+            }
+            return Json(defaultCode, JsonRequestBehavior.AllowGet);
+        }
+        
+    }
+}

@@ -1,0 +1,604 @@
+﻿@using TMS.Core.App_GlobalResources;
+@using TMS.Core.Utils;
+@model TMS.Core.ViewModels.Certificate.CertificateViewModels
+@{
+    ViewBag.Title = "Modify";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fas fa-database"></i> @Resource.lblMasterData - @Resource.lblCertificateManagement @(!Model.Id.HasValue ? @Resource.lblCreate : @Resource.lblEdit)</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Messege.HOME</a></li>
+                <li>@Resource.lblMasterData</li>
+                <li class="active">@Resource.lblCertificateManagement @(!Model.Id.HasValue ? @Resource.lblCreate : @Resource.lblEdit)</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<style>
+    #drag-me::before {
+        content: "#" attr(id);
+        font-weight: bold;
+    }
+
+    .a_remove {
+        display: none;
+    }
+</style>
+
+<div class="panel  list-panel" id="list-panel">
+    <div class="panel-heading list-panel-heading">
+        <h1 class="panel-title list-panel-title"><i class="fas fa-pencil-alt font-small-byhoa" aria-hidden="true"></i> Create </h1>
+    </div>
+    <div class="panel-body center-block">
+        <div>
+            <input type="hidden" id="field_id" />
+            <input type="hidden" id="avatarcheck" value="0" />
+            <input type="hidden" id="centercheck" value="0" />
+        </div>
+        @using (Html.BeginForm("Modify", "Certificate", FormMethod.Post, new { @class = "form-horizontal bordered-row", id = "createform" }))
+        {
+            @Html.AntiForgeryToken();
+            @Html.HiddenFor(model => model.Id);
+            <div class="panel-body">
+                <div class="row col-md-12" style="margin-top: 10px;">
+                    <label class="col-md-1">Name @*<font color="red">(*)</font>*@</label>
+                    <div class="col-md-3">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                    <label class="col-md-2">Type Certificate</label>
+                    <div class="col-md-3">
+
+                        <select class="form-control" id="TypeCertificate" name="TypeCertificate">
+                            <option value="0" @(Model.TypeCertificateID == 0 ? "selected" : "")>Subject</option>
+                            <option value="1" @(Model.TypeCertificateID == 1 ? "selected" : "")>Group Course</option>
+                        </select>
+
+                    </div>
+                    <div class="col-md-2 pull-right">
+                        @if (User.IsInRole("/Certificate/Modify"))
+                        {
+                            <a href="javascript:void(0)" class="btn btn-primary center-block legitRipple" id="submit" onclick="submit()"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                        }
+
+                    </div>
+
+
+
+                </div>
+                <div class="row col-md-12" style="margin-top:10px;">
+                    <div class="panel panel-primary list-panel" id="list-panel">
+                        <div class="panel-heading list-panel-heading">
+                            <h1 class="panel-title list-panel-title"> Template </h1>
+                        </div>
+                        <div class="panel-body center-block">
+                            <div class="row col-md-9" style="margin-top: 10px;">
+                                <a onclick="Blank_Review()"><i class="fa fa-eye" aria-hidden="true"></i> Review</a>
+                                <div style="width:100%;overflow-x:scroll;overflow-y:scroll;border:dotted;" id="cer_body">@Html.Raw(Model.Template)</div>
+                            </div>
+                            <div class="row col-md-3" id="cer_option">
+                                <div class="col-md-12" style="margin-top:10px;">
+                                    <label><b>Background</b></label>
+                                    <input class="form-control" type="file" name="ImgFile" id="uploadEditorImage" />
+                                </div>
+                                <div class="col-md-12" style="margin-top:10px;">
+                                    <label><b>width-height (px)</b></label>
+                                    <div class="form-group">
+                                        <div class="col-md-6">
+                                            <input class="form-control" type="number" id="txt_width" onkeyup="reload_ratio()" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input class="form-control" type="number" id="txt_height" onkeyup="reload_ratio()" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12" style="margin-top:10px;">
+                                    <label><b>Field</b></label>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" id="txt_Field" />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default legitRipple" type="button" onclick="add_field()">
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="text-left">
+                                        <label style="margin-top:5px"> -- KEYWORDS ARE ALLOWED TO USE --</label><br>
+                                        @*@Html.Raw(Model.KeyTagMail)*@
+                                        <p>&nbsp;&nbsp;@UtilConstants.CERTIFICATE_COURSE_NAME</p><p>&nbsp;&nbsp; @UtilConstants.CERTIFICATE_FULLNAME</p><p>&nbsp;&nbsp;  @UtilConstants.CERTIFICATE_JOBTITLE_NAME</p><p>&nbsp;&nbsp; @UtilConstants.CERTIFICATE_GRADE</p><p>&nbsp;&nbsp; @UtilConstants.CERTIFICATE_POINT</p> <p>&nbsp;&nbsp; @UtilConstants.CERTIFICATE_SR_NO</p><p>&nbsp;&nbsp; @UtilConstants.CERTIFICATE_ATO</p><p>&nbsp;&nbsp; @UtilConstants.CERTIFICATE_SUBJECT_NAME</p><p>&nbsp;&nbsp; @UtilConstants.CERTIFICATE_SUBJECT_DATEFROM</p><p>&nbsp;&nbsp;@UtilConstants.CERTIFICATE_SUBJECT_DATETO</p><p>&nbsp;&nbsp;@UtilConstants.CERTIFICATE_DATE_COMPLELTED </p>
+                                        <p>&nbsp;&nbsp;@UtilConstants.CERTIFICATE_TRAINEE_AVATAR </p>
+                                        <p>&nbsp;&nbsp;@UtilConstants.CERTIFICATE_DATE_OF_BIRTH </p>
+                                        <p>&nbsp;&nbsp;@UtilConstants.CERTIFICATE_PLACE_OF_BIRTH </p>
+                                        <p>&nbsp;&nbsp;@UtilConstants.CERTIFICATE_COURSE_DATE_FROM </p>
+                                        <p>&nbsp;&nbsp;@UtilConstants.CERTIFICATE_COURSE_DATE_TO </p>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row col-md-12" style="margin-top: 10px;">
+
+                </div>
+            </div>
+        }
+
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    @*<div class="modal-header">
+                            Edit
+                        </div>*@
+                    <div class="modal-body">
+                        <div class="row col-md-12" style="margin-top: 10px;">
+                            <div class="col-md-4">
+                                <label><b>Value</b></label>
+                                <input class="form-control" type="text" id="review_value" onkeyup="reload_review()" />
+                            </div>
+                            <div class="col-md-1">
+                                <label><b>font-size</b></label>
+                                <input class="form-control" type="text" id="review_font_size" onkeyup="reload_review()" />
+                            </div>
+                            <div class="col-md-1">
+                                <label><b>color</b></label>
+                                <input class="form-control" type="text" id="review_color" onkeyup="reload_review()" />
+                            </div>
+                            <div class="col-md-2">
+                                <label><b>font-family</b></label>
+                                <input class="form-control" type="text" id="review_font_family" onkeyup="reload_review()" />
+                            </div>
+                            <div class="col-md-2">
+                                <label><b>font-weight</b></label>
+                                <input class="form-control" type="text" id="review_font_weight" onkeyup="reload_review()" />
+                            </div>
+                            <div class="col-md-2">
+                                <label><b>font-style</b></label>
+                                <select class="form-control" id="review_font_style" onchange="reload_review()">
+                                    <option value="normal">normal</option>
+                                    <option value="italic">italic</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label><b>text-align</b></label>
+                                <select class="form-control" id="review_text_align" onchange="reload_review()">
+                                    <option value="left">left</option>
+                                    <option value="center">center</option>
+                                    <option value="right">right</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label><b>width-height (px or %)</b></label>
+                                <input class="form-control" type="text" id="review_width" onkeyup="reload_review()" />
+                                <input class="form-control" type="text" id="review_height" onkeyup="reload_review()" />
+                                <input type="hidden" id="review_x" />
+                                <input type="hidden" id="review_y" />
+                            </div>
+                            <div class="col-md-2">
+                                <label><b>Is Center</b></label>
+                                <input class="checkbox" type="checkbox" id="review_is_center" name="review_is_center" onkeyup="reload_review()" />
+                            </div>
+                            <div class="col-md-2">
+                                <label><b>Is CheckAvatar</b></label>
+                                <input class="checkbox" type="checkbox" id="review_is_checkavatar" name="review_is_checkavatar" onkeyup="reload_review()" />
+                            </div>
+
+                            <div class="col-md-12">
+                                <input class="btn btn-primary pull-right" type="submit" value="Delete field" onclick="deletefield()" />
+                            </div>
+                        </div>
+                        <div class="row col-md-12" id="review" style="width:100%;border:solid;"></div>
+                    </div>
+                    <div class="modal-footer" id="Modal_Footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+@section Scripts{
+
+    <script>
+        // target elements with the "draggable" class
+        interact('.draggable')
+            .draggable({
+                // enable inertial throwing
+                inertia: true,
+                // keep the element within the area of it's parent
+                restrict: {
+                    restriction: "parent",
+                    endOnly: true,
+                    elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+                },
+                // enable autoScroll
+                autoScroll: true,
+
+                // call this function on every dragmove event
+                onmove: dragMoveListener,
+                // call this function on every dragend event
+                onend: function (event) {
+
+                }
+            });
+        function dragMoveListener(event) {
+            var target = event.target,
+                // keep the dragged position in the data-x/data-y attributes
+                x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+                y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+            $(target).css('top', y);
+            $(target).css('left', x);
+            //// translate the element
+            //target.style.webkitTransform =
+            //    target.style.transform =
+            //    'translate(' + x + 'px, ' + y + 'px)';
+
+            // update the posiion attributes
+            target.setAttribute('data-x', x);
+            target.setAttribute('data-y', y);
+        }
+        // this is used later in the resizing and gesture demos
+        window.dragMoveListener = dragMoveListener;
+        $("#uploadEditorImage").change(function () {
+            //debugger
+            readURL(this);
+
+        });
+        function readURL(input) {
+
+            var _URL = window.URL || window.webkitURL;
+            var fsize = 1024 * 1024 * 2;
+            var file, img;
+            if ((file = input.files[0])) {
+                img = new Image();
+                img.onload = function () {
+                    $('#txt_width').val(this.width);
+                    $('#txt_height').val(this.height);
+                    //reload();
+                    reload_ratio();
+
+                };
+                img.src = _URL.createObjectURL(file);
+            }
+            if (input.files[0].size < fsize) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#Template').css('background-image', 'url(' + e.target.result + ')');
+                        $('#Template').css('position', 'relative');
+                          $('#Template').css('background-repeat', 'no-repeat');
+                        $('#Template').css('background-size', 'contain');
+                        $('#Template').css('background-position-x', 'left');
+                        $('#Template').css('background-position-y', 'top');
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            else {
+
+                notify.alert("Allowed file size exceeded. (Max. 2 MB)", 'Warning', TITLE_STATUS_DANGER);
+
+            }
+        }
+        function reload() {
+            //Get value image
+            var txt_width = $('#txt_width').val();
+            var txt_height = $('#txt_height').val();
+            //Set value image
+            $('#Template').css('width', txt_width);
+            $('#Template').css('height', txt_height);
+            //Set height container certificate equal height container options
+            var h_certificate_box = $('#cer_option').height();
+            $('#cer_body').css('height', h_certificate_box);
+        }
+
+        function reload_ratio() {
+            //Get value image want to change
+            var txt_width = $('#txt_width').val(); //get_width_value_textbox
+            var txt_height = $('#txt_height').val(); //get_height_value_textbox
+
+            //Get current value image
+            var current_width_image = $('#Template').width(); //current_width
+            var current_height_image = $('#Template').height(); //current_height
+
+            //Get new value image width
+            if (txt_width != "" && txt_width > 0) {
+                var change_width_image = txt_width;
+            }
+            else {
+                var change_width_image = current_width_image;
+            }
+
+            //Get new value image height
+            if (txt_height != "" && txt_height > 0) {
+                var change_height_image = txt_height;
+            }
+
+            else {
+                var change_height_image = current_height_image;
+            }
+
+            //Calculate ratio
+            var ratio_width = change_width_image / current_width_image; //ratio base on width
+            var ratio_height = change_height_image / current_height_image; //ratio base on height
+
+            //Get current font-size,top,left value
+            var el_para_list = document.querySelectorAll('.draggable');
+            count = 1;
+            for (i = 0; i < el_para_list.length; i++) {
+                var el_para = document.querySelector('#draggable_' + count);
+                if (el_para != null) {
+
+                    //Init 
+                    var change_fontsize;
+                    var change_top;
+                    var change_left;
+
+                    //Get current value font-size
+                    var el_para_fontsize = window.getComputedStyle(el_para).getPropertyValue("font-size"); //Get current value of font-size (px)
+                    var el_para_fontsize_rs = el_para_fontsize.substring(0, el_para_fontsize.length - 2); //Remove "px" character
+
+                    //Get current value top
+                    var el_para_top = window.getComputedStyle(el_para).getPropertyValue("top"); //Get current value of top (px)
+                    var el_para_top_rs = el_para_top.substring(0, el_para_top.length - 2); //Remove "px" character
+
+                    //Get current value left
+                    var el_para_left = window.getComputedStyle(el_para).getPropertyValue("left"); //Get current value of left (px)
+                    var el_para_left_rs = el_para_left.substring(0, el_para_left.length - 2); //Remove "px" character
+
+                    //Calculate new value: Width change, Height not change
+                    if (ratio_width != 1 && ratio_height == 1) { 
+                        change_fontsize = el_para_fontsize_rs * ratio_width;  
+                        change_top = el_para_top_rs;
+                        change_left = el_para_left_rs * ratio_width;
+                    }
+                    //Calculate new value: Width not change, Height change
+                    else if (ratio_width == 1 && ratio_height != 1) {
+                        change_fontsize = el_para_fontsize_rs * ratio_height;
+                        change_top = el_para_top_rs * ratio_height;
+                        change_left = el_para_left_rs;
+                    }
+                    //Calculate new value: Width change, Height change
+                    else if (ratio_width != 1 && ratio_height != 1) {
+                        change_fontsize = el_para_fontsize_rs * ratio_height;
+                        change_top = el_para_top_rs * ratio_height;
+                        change_left = el_para_left_rs * ratio_width;
+                    }
+                    //Calculate new value: Nothing change
+                    else {
+                        change_fontsize = el_para_fontsize_rs;
+                        change_top = el_para_top_rs;
+                        change_left = el_para_left_rs;
+                    }
+
+                    //Set new value
+                    $(el_para).css('font-size', change_fontsize + 'px');
+                    $(el_para).css('top', change_top + 'px');
+                    $(el_para).css('left', change_left + 'px');
+                }
+                count++;
+            }
+
+            //Set value image
+            $('#Template').css('width', change_width_image);
+            $('#Template').css('height', change_height_image);
+
+            //Set height container certificate equal height container options
+            var h_certificate_box = $('#cer_option').height();
+            $('#cer_body').css('height', h_certificate_box);
+        }
+
+        function reload_review() {
+            //review_font_family
+            var review_font_family = $('#review_font_family').val();
+            $('#P_review').css('font-family', review_font_family);
+            //review_font_size
+            var review_font_size = $('#review_font_size').val();
+            $('#P_review').css('font-size', review_font_size);
+            //review_width review_height
+            var review_width = $('#review_width').val();
+            $('#P_review').css('width', review_width);
+            var review_height = $('#review_height').val();
+            $('#P_review').css('height', review_height);
+            //review_color
+            var review_color = $('#review_color').val();
+            $('#P_review').css('color', review_color);
+            //review_font_weight
+            var review_font_weight = $('#review_font_weight').val();
+            $('#P_review').css('font-weight', review_font_weight);
+            //review_font_style
+            var review_font_style = $('#review_font_style').val();
+            $('#P_review').css('font-style', review_font_style);
+            //review_text_align
+            var review_text_align = $('#review_text_align').val();
+            //console.log(review_text_align);
+            $('#P_review').css('text-align', review_text_align);
+            var review_is_center = $("input[name='review_is_center']:checked").length;
+            if (review_is_center > 0) {
+                $('#P_review').css('left', 0);
+                $('#P_review').css('right', 0);
+                $('#centercheck').val(1);
+            }
+            var review_is_center = $("input[name='review_is_checkavatar']:checked").length;
+            if (review_is_center > 0) {
+                $('#P_review').css('left', 234.023438);
+                $('#P_review').css('top', 563.5);
+                $("#avatarcheck").val(1);
+            }
+            //review_value
+            var review_value = $('#review_value').val();
+
+            $('#P_review').text(review_value);
+        }
+        function save_review() {
+            //debugger
+            var field_id = $('#field_id').val();
+            var avatarcheck = $('#avatarcheck').val();
+            var centercheck = $('#centercheck').val();
+            //save style
+            $("#" + field_id).attr('style', $('#P_review').attr("style"));
+            //save review_x review_y
+            var review_x = $('#review_x').val();
+            var review_y = $('#review_y').val();
+            //$("#" + field_id).css('transform', 'translate(' + review_x + 'px,' + review_y + 'px)');
+
+            $("#" + field_id).css('position', 'absolute');
+            if (avatarcheck == 1) {
+                $("#" + field_id).css('top', 563.5);
+                $("#" + field_id).css('left', 234.023438);
+
+            }
+            else if (centercheck == 1) {
+                $("#" + field_id).css('top', review_y);
+            }
+            else {
+                $("#" + field_id).css('top', review_y);
+                $("#" + field_id).css('left', review_x);
+            }
+
+
+
+            //save text
+            var review_value = $('#review_value').val();
+            $("#" + field_id).html(review_value);
+            $("#myModal").modal("hide");
+        }
+        $('#myModal').on('hidden.bs.modal', function () {
+            save_review();
+        })
+        function edit(event) {
+            //debugger
+            var contentPanelId = $(event).closest('p').attr("id");
+            var content = $(event).closest('p').text();
+            event = $(event).closest('p');
+            $('#field_id').val();
+            $('#field_id').val(contentPanelId);
+
+            var review_font_family = $(event).css("font-family");
+            $('#review_font_family').val(review_font_family);
+            var review_font_size = $(event).css("font-size");
+            $('#review_font_size').val(review_font_size);
+            //var review_width = $(event).css("width");
+            //$('#review_width').val(review_width);
+            //var review_height = $(event).css("height");
+            //$('#review_height').val(review_height);
+            //var review_x = $(event).css("transform");
+            //if (review_x != 'none') {
+            //    var review_x = $(event).css("transform").split(/[()]/)[1];
+            //    $('#review_x').val(review_x.split(',')[4]);
+            //    var review_y = $(event).css("transform").split(/[()]/)[1];
+            //    $('#review_y').val(review_y.split(',')[5]);
+            //}
+
+            var review_x = $(event).css("Left");
+            $('#review_x').val(review_x);
+            var review_y = $(event).css("top");
+            $('#review_y').val(review_y);
+
+
+
+            var review_color = $(event).css("color");
+            $('#review_color').val(review_color);
+            var review_font_weight = $(event).css("font-weight");
+
+            $("#review_font_weight").val(review_font_weight);
+            var review_font_style = $(event).css("font-style");
+            $("#review_font_style").val(review_font_style);
+            var review_text_align = $(event).css("text-align");
+            $("#review_text_align").val(review_text_align);
+            var review_value = $(event).text();
+            $('#review_value').val(review_value);
+
+
+            $('#review').empty();
+            $('#review').append('<p id="P_review" style="display: inline-block;">' + content + '</p>');
+            $('#myModal').modal('show');
+            reload_review();
+
+        }
+
+        function deletefield() {
+            var field_id = $('#field_id').val();
+            $("#" + field_id).remove();
+            $("#myModal").modal("hide");
+        }
+        function Blank_Review() {
+
+            var headContent = document.getElementsByTagName('head')[0].innerHTML;
+            $('#cer_body a').addClass('hidden');
+          
+            var bd = $('#cer_body').html();
+             var current_width_image = $('#Template').width(); //current_width
+            var current_height_image = $('#Template').height(); //current_height
+            var winPrint = window.open('', '', 'left=0,top=0,width='+current_width_image+'px,height='+current_height_image+'px,toolbar=0,scrollbars=0,status=0');
+            winPrint.document.write(headContent + bd.replace("position: initial","position: fixed"));
+            winPrint.document.close();
+            winPrint.focus();
+            $('#cer_body a').removeClass('hidden');
+        }
+
+        function add_field() {
+            var count_id = new Array();
+            if ($("#Template > p").length > 0) {
+                $("#Template > p").each(function (i, v) {
+                    var stringid = ($(v).attr('id')).split("_");
+                    count_id.push(parseInt(stringid[1]));
+                });
+                count_id.sort(function (a, b) {
+                    return parseInt(a) - parseInt(b);
+                });
+            }
+            var count_field = count_id.length > 0 ? count_id[count_id.length - 1] + 1 : $("#Template > p").length + 1; //$("#Template > p").length + 1;
+            var content = $("#txt_Field").val();
+            $("#Template").append('<p class="draggable" id="draggable_' + count_field + '" style="    top: 0;    left: 0;position: absolute;" ondblclick="edit(this)" >' + content + '</p>');
+        }
+        function submit() {
+            spinner.open();
+            var data = {
+                Name: $('#Name').val(),
+                Template: $('#cer_body').html(),
+                Id: $('#Id').val(),
+                TypeCertificate: $("#TypeCertificate").val(),
+            };
+            $.ajax({
+                type: 'POST',
+                url: "/Certificate/Modify",
+                datatype: 'json',
+                data: data,
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                    }
+                    else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                }
+                , complete: function () {
+
+                    spinner.close();
+                    window.location.href = "/Certificate/index";
+                }
+            });
+        }
+    </script>
+
+}

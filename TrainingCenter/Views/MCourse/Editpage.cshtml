@@ -1,0 +1,114 @@
+﻿@using DAL.Entities
+@using DAL.Repositories
+@using DAL.UnitOfWork
+@model CAT_GROUPSUBJECT
+@{
+    int id = ViewBag.id;
+    var mModel = Model;
+    UnitOfWork _uow = new UnitOfWork();
+    IRepository<CAT_GROUPSUBJECT> _repoCAT_GROUPSUBJECT = _uow.Repository<CAT_GROUPSUBJECT>();
+    IRepository<CAT_GROUPSUBJECT_ITEM> _repoCAT_GROUPSUBJECT_ITEM = _uow.Repository<CAT_GROUPSUBJECT_ITEM>();
+    IRepository<Course_Type> _repoCourse_Type = _uow.Repository<Course_Type>();
+    IEnumerable<Course_Type> coursetype = _repoCourse_Type.Get(a=>a.Course_Type_Id != (int)Constants.CourseType.General, x => x.OrderBy(a => a.str_Name));
+
+    int type_ = -1;
+    var data = _repoCAT_GROUPSUBJECT_ITEM.Get(a=>a.id_groupsubject == mModel.id);
+    if(data.Count() > 0)
+    {
+        type_ = (int)data.FirstOrDefault().Subject.int_Course_Type;
+    }
+
+    string listtype = string.Empty;
+    foreach (var item in coursetype)
+    {
+        if(item.Course_Type_Id == type_)
+        {
+            listtype += "<option value='" + @item.Course_Type_Id + "' selected >" + @item.str_Name + "</option>";
+        }
+        else
+        {
+            listtype += "<option value='" + @item.Course_Type_Id + "'  >" + @item.str_Name + "</option>";
+        }
+
+    }
+}
+
+<div class="panel panel-danger list-panel" id="list-panel">
+    <div class="panel-heading list-panel-heading">
+        <h1 class="panel-title list-panel-title"> Edit </h1>
+    </div>
+    <div class="panel-body center-block">
+        @using (Html.BeginForm("Modify", "MCourse", FormMethod.Post, new { id = "createform" }))
+        {
+            <div class="form-group col-lg-12">
+                <label>Group Course <font color="red">(*)</font></label>
+                <input type="text" name="str_Name" value="@mModel.str_Name" class="form-control">
+            </div>
+            <div class="form-group col-lg-12">
+                <label>Code <font color="red">(*)</font></label>
+                <input type="text" name="str_Code" value="@mModel.str_Code" data-parsley-required-message="Required Fields" required class="form-control">
+            </div>
+
+            <div class="form-group col-lg-12">
+                <label>Type</label>
+                <select class="form-control" name="int_subject_type" id="int_subject_type" data-placeholder="-- Subject Type --" onchange="Changetype(this.value,@id)">
+                    <option></option>
+                    @Html.Raw(listtype)
+                </select>
+            </div>
+
+            <div class="form-group col-lg-12">
+                <label>Subject</label>
+                <select class="form-control" name="int_subject" id="int_subject" data-placeholder="-- Subject --" multiple="multiple">
+                    <option></option>
+                    <optgroup id="showsubject"></optgroup>
+                </select>
+            </div>
+
+            <div class="form-group col-lg-12">
+                <label>Description </label>
+                @Html.TextArea("str_Description", @mModel.str_Description, new { id = "str_Description", @class = "form-control", @rows = "7" })
+            </div>
+
+            <div class="divider"></div>
+            <div class="divider"></div>
+            <div class="form-group col-lg-12">
+                <div id="messageout">
+                </div>
+            </div>
+            <div class="pull-right pad10R">
+                @{
+                    if (CMSUtils.Is_Edit("/MCourse/Index")) // neu co
+                    {
+                        <a class="btn btn-md btn-danger min-width-100" onclick="submit()">Update</a>
+                        <a href="javascript:void(0)" onclick="active(0,'create')" class="btn btn-md btn-danger min-width-100">Cancel</a>
+                    }
+                }
+
+            </div>
+                    }
+    </div>
+</div>
+
+
+    <script type="text/javascript">
+        Changetype(@type_,@id);
+        function Changetype(val, id) {
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "/MCourse/ChangetypeReturnSubject",
+                dataType: "json",
+                data: { id_type: val, id: id },
+                success: function (result) {
+                    $("#showsubject").empty();
+                    $("#showsubject").append(result.htmlout);
+                    $('select:not([name$="_length" ])').select2({
+                        width: '100%',
+                        allowClear: true
+                    }).addClass('form-control searchText1');
+                }
+            });
+        }
+
+    </script>

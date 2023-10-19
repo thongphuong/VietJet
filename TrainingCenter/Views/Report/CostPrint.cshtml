@@ -1,0 +1,200 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.ReportModels.CostModelRp
+@{
+    ViewBag.Title = "TrainingPlanPrint";
+
+}
+<style>
+    #reportpage table > thead > tr > th,
+    #reportpage .table > thead > tr > th,
+    #reportpage table > tbody > tr > th,
+    #reportpage .table > tbody > tr > th,
+    #reportpage table > tfoot > tr > th,
+    #reportpage .table > tfoot > tr > th,
+    #reportpage table > thead > tr > td,
+    #reportpage .table > thead > tr > td,
+    #reportpage table > tbody > tr > td,
+    #reportpage .table > tbody > tr > td,
+    #reportpage table > tfoot > tr > td,
+    #reportpage .table > tfoot > tr > td {
+        border: 1px solid #000;
+        color: black;
+    }
+
+    .text-left {
+        text-align: left;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-right {
+        text-align: right;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-center {
+        text-align: center;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .header-title {
+        color: black;
+        font-weight: bold;
+    }
+
+    .td_course {
+        padding-left: 10px;
+        background: #ccc;
+    }
+
+    .footer_date {
+        color: black;
+        padding-top: 20px;
+        font-style: italic;
+    }
+</style>
+
+<link href="~/Content/assets/css/vietjet-print.css" rel="stylesheet" media="print" />
+<div class="col-sm-3 text-left">
+    <img src="~/Content/assets/img/report/logoreport.png" style="width: 40%;" />
+</div>
+
+
+
+<div class="col-sm-12 text-center">
+    <table width="100%" border="1">
+        <tr>
+            @*<td width="20%">
+                    <div class="col-sm-12 text-center">
+                        <img src="~/Content/assets/img/report/logoreport.png" style="width: 80%;margin-top: 12px;" />
+                    </div>
+                </td>*@
+            <td colspan="3">
+                <div class="col-sm-12 text-center">
+                    <h4 class="header-title"> @Resource.lblCostReport @*@trainingcenter*@ REV ......</h4>
+                    @*<h4 class="header-title">COURSE NAME: .....................</h4>*@
+                    @*<h4 class="header-title">TIME: FROM @DateUtil.DateToString(course.FirstOrDefault().dtm_StartDate, "dd/MM/yyyy") TO @DateUtil.DateToString(course.FirstOrDefault().dtm_EndDate, "dd/MM/yyyy") </h4>*@
+                </div>
+            </td>
+            @*<td  width="20%">
+                    <div class="col-sm-12 text-right pull-right">
+                        VJC-VTC-F-001 <br />
+                        ISS 01/REV<br />
+                        01/01/2017
+                    </div>
+                </td>*@
+        </tr>
+    </table>
+</div>
+<div class="col-sm-12 text-center">
+    <table width="100%" border="1">
+        <tr>
+            <th class="text-center">@Resource.lblStt</th>
+            <th class="text-center">@Resource.lblCourseCode</th>
+            <th class="text-center">@Resource.lblCourseName</th>
+            <th class="text-center">@Resource.REPORT_COST_GROUPCOST</th>
+            <th class="text-center">@Resource.lblSubject</th>
+
+            <th class="text-center">@Messege.lblStart</th>
+            <th class="text-center">@Messege.lblEnd</th>
+            @foreach (var item in Model.CourseCosts.GroupBy(a => new { a.CAT_COSTS.str_Code, a.CAT_COSTS.str_Name }))
+            {
+                if (item.Key != null)
+                {
+                    <th>@(item.Key.str_Code + " - " + item.Key.str_Name)</th>
+                }
+
+            }
+        </tr>
+        @if (Model.CourseCosts != null)
+        {
+            var count = 0;
+            foreach (var item in Model.CourseCosts)
+            {
+
+                count++;
+                <tr>
+                    <td>@count</td>
+                    <td>@item.Course.Code</td>
+                    <td>@item.Course.Name</td>
+                    <td>@item.CAT_COSTS.CAT_GROUPCOST.Name</td>
+                    <td>@item.SubjectDetail.Name</td>
+                    <td>@item.Course.StartDate.ToString("dd/MM/yyyy")</td>
+                    <td>@item.Course.EndDate.ToString("dd/MM/yyyy")</td>
+                    @{
+                        var groups = Model.CourseCosts.GroupBy(a => a.cost_id).Where(b => b.Count() > 1).Select(c => c.Key).ToList();
+                    }
+                    @foreach (var itemgroup in groups)
+                    {
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>    </td>
+                        </tr>
+                    }
+                    <td>@item.cost</td>
+                    
+                </tr>
+            }
+
+                        }
+
+
+
+
+
+
+    </table>
+</div>
+<h2>Chua lam xong</h2>
+<div class="col-sm-12 text-left">
+    <h5 class="header-title">
+        Notes: The class will start from 08:30 to 17:00 (From Mon - Sat). The training plan does not include the recheck, any failure must be reported to VTC for arrangement.<br /> Please contact  Training Center for any change or further information. Contact No. : (+84) xxxx Ext: 400 or Mail: trainingcenter@tinhvan.com . eL: e-Learning, cR: Class Room Learning.
+    </h5>
+</div>
+@*<div class="col-sm-12 text-right footer_date">
+        <h4 class="header-title">Ho Chi Minh City,...................................................</h4>
+    </div>*@
+<div class="col-sm-4 text-center">
+    <p>
+        <h4 class="header-title">
+            Approved by
+        </h4>
+    </p>
+    <p>
+        <h4 class="header-title">
+            HEAD OF TRAINING
+        </h4>
+    </p>
+    <p>Date .....................................</p>
+</div>
+<div class="col-sm-4 text-center">
+    <p>
+        <h4 class="header-title">
+            Verified by
+        </h4>
+    </p>
+    <p>
+        <h4 class="header-title">
+            HEAD OF DEPARTMENT
+        </h4>
+    </p>
+    <p>Date .....................................</p>
+</div>
+<div class="col-sm-4 text-center">
+    <p>
+        <h4 class="header-title">
+            Prepared by
+        </h4>
+    </p>
+    <p>
+        <h4 class="header-title">
+            <font color="red">@*@trainingcenter*@ TRAINING MANAGER</font>
+        </h4>
+    </p>
+    <p>Date .....................................</p>
+</div>

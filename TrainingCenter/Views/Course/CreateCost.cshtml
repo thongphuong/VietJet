@@ -1,0 +1,146 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.ViewModel.CourseCodeModifyModel
+
+@{
+    ViewBag.Title = "CreateCost";
+}
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-graduation-cap"></i>  @Resource.lblCourseManagement - @Resource.lblInputCost</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblCourseManagement</li>
+                <li class="active">@Resource.lblInputCost</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="panel">
+    <div class="panel-heading">
+        <h1 class="panel-title list-panel-title"><i class="fas fa-pencil-alt font-small-byhoa" aria-hidden="true"></i> @Resource.lblModify</h1>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm("Cost", "Course", FormMethod.Post, new { id = "createform" }))
+        {
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <div class="col-md-3">
+                            <b>@Resource.lblCourseName</b>
+                        </div>
+                        <div class="col-md-9 disabled">
+                            <input type="text" disabled="disabled" value="@Model.CourseName" class="form-control"/>
+                            <input type="hidden" name="CourseId" value="@Model.CourseId"/>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <div class="col-md-3">
+                            <b>@Resource.lblFromTo</b>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="text" value="@Model.DateFromTo" disabled="disabled" id="dtm_course" class="form-control"/>
+                            @*<b id="dtm_course"></b>*@
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-6 form-group">
+                        <div class="col-md-3">
+                            <b>@Resource.lblCostName <font color="red">&nbsp;(*)</font></b>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.DropDownListFor(a => a.Cost, Model.Costes, "--" + @Resource.lblCostList + "--", new {@class = "form-control", id = "CostList"})
+                            @Html.ValidationMessage("Cost", null, new {@class = "text-danger"})
+                            <div class="col-md-2" style="display: none;">
+                                @*  <b>@Html.DropDownList("UnitList", (SelectList)ViewBag.UnitList, "-- Unit List --", new { @class = "form-control" })</b>*@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <div class="col-md-3">
+                            <b>@Resource.lblSubject <font color="red">&nbsp;(*)</font></b>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.DropDownListFor(a => a.CourseDetailId, Model.Subjects, "--" + @Resource.lblSubjectList + "--", new {@class = "form-control"})
+                            @Html.ValidationMessage("CourseDetailId", null, new {@class = "text-danger"})
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+                    <div class="col-md-6 form-group">
+                        <div class="col-md-3">
+                            <b>@Resource.lblCost</b>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => model.CostValue, new {htmlAttributes = new {@class = "form-control", @type = "number"}})
+                            @Html.ValidationMessageFor(model => model.CostValue, "", new {@class = "text-danger"})
+                        </div>
+                    </div>
+                    @*<div class="col-md-6 form-group">
+                        <div class="col-md-3">
+                            <b>@Resource.lblExpectedCost</b>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => model.ExpectedCost, new {htmlAttributes = new {@class = "form-control", @type = "number"}})
+                            @Html.ValidationMessageFor(model => model.ExpectedCost, "", new {@class = "text-danger"})
+                        </div>
+                    </div>*@
+                    <div class="clearfix"></div>
+                </div>
+                
+        }
+        <div class="row">
+            <div class="action-form text-right">
+                <a href="javascript:void(0);" class="btn btn-primary  legitRipple" id="submit" onclick="create()"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                @*@Html.ActionLink("Back", "Cost", "Course", null, new { @class = "btn btn-default" })*@
+                <a onclick="goBack()" class="btn btn-default"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div id="messageout">
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <!-- timepicker -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#btFilter').click(function (e) {
+                sTable.fnDraw();
+            });
+        });
+        function create() {
+            spinner.open();
+            $('#submit').hide();
+            var form = $("#createform").serialize();
+            //if ($forms.valid()) {
+            $.ajax({
+                type: 'POST',
+                url: "/Course/CreateCost",
+                datatype: 'json',
+                data: form,
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                        window.location.href = '/Course/Cost';
+                    }
+                    else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    spinner.close();
+                    $('#submit').show();
+                }
+            });
+        }
+        $(".line_6").addClass("active");
+    </script>
+}

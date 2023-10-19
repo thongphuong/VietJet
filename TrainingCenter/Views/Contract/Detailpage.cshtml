@@ -1,0 +1,120 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@model TMS.Core.ViewModels.Contracts.ContractModels
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-file-signature"></i> @Resource.lblContractManagement - @Resource.lblDetails</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li> @Resource.lblContractManagement</li>
+                <li class="active">@Resource.lblDetails</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div id="Detail-contract">
+    <div class="panel list-panel" id="list-panel">
+        <div class="panel-heading list-panel-heading">
+            <h1 class="panel-title list-panel-title"><i class="fas fa-list font-small-byhoa" aria-hidden="true"></i> @Resource.lblDetails </h1>
+        </div>
+        <div class="panel-body center-block">
+            @using (Html.BeginForm("Modify", "Contract", FormMethod.Post, new { id = "createform" }))
+            {
+                <input type="hidden" id="hd_id" name="id" value="@Model.Id" />
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label>@Resource.lblCode </label>
+                        <input disabled type="text" id="str_Code" name="str_Code" value="@Model.Code" data-parsley-required-message="Required Fields" required class="form-control">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>@Resource.lblContractor </label>
+                        @Html.DropDownListFor(m => m.ContractorID, new SelectList(Model.ContractorList, "Key", "Value", Model.ContractorID), new Dictionary<string, object> { { "class", "form-control" }, { "data-placeholder", "--Contractor--" }, { "disabled", "true" } })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>@Resource.lblContractNo </label>
+                        <input disabled type="text" name="str_Contractno" value="@Model.ContractNO" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label>@Resource.lblDescription </label>
+                        <input disabled type="text" name="str_Description" value="@Model.Description" class="form-control">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>@Resource.lblSignDate</label>
+                        <input disabled type="text" name="dtm_Signdate" value="@Model.SignDate" class="form-control date-picker">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>@Resource.lblExpireDate </label>
+                        <input disabled type="text" name="dtm_Expiredate" value="@Model.Expiredate" class="form-control date-picker">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label>@Resource.lblStatus </label>
+                        @Html.DropDownListFor(m => m.StatusID, new SelectList(Model.StatusList, "Key", "Value", Model.StatusID), new Dictionary<string, object> { { "class", "form-control" }, { "data-placeholder", "--Status--" }, { "disabled", "true" } })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>@Resource.lblCreatedDate </label>
+                        <input type="text" disabled value="@(Model.CreatedDate != null ? Model.CreatedDate.Value.ToString("dd/MM/yyyy") :"")" class="form-control">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>@Resource.lblCreatedBy </label>
+                        <input type="text" disabled value="@Model.CreatedBy" class="form-control">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>@Resource.lblLastUpdatedDate  </label>
+                        <input type="text" disabled value="@(Model.UpdateDate != null ? Model.UpdateDate.Value.ToString("dd/MM/yyyy") : "")" class="form-control">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Last Update By </label>
+                        <input type="text" disabled value="@Model.UpdateBy" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label>@Resource.lblType </label>
+                        @Html.DropDownListFor(m => m.TypeID, new SelectList(Model.TypeList, "Key", "Value", Model.TypeID), new Dictionary<string, object> { { "class", "form-control" }, { "data-placeholder", "--Type--" }, { "disabled", "true" } })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>@Resource.lblPrice </label>
+                        <input type="number" name="mon_Price" value="@Model.Price" class="form-control" disabled>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>@Resource.lblCurrency </label>
+                        @Html.DropDownListFor(m => m.Currency, new SelectList(Model.Curencylist, "Key", "Value", Model.Currency), new { @class = "form-control", @disabled = "true" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label>@Resource.lblNote</label>
+                        <textarea disabled name="str_Note" value="@Model.Note" class="form-control" rows="3">@Model.Note</textarea>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="divider"></div>
+                <div class="form-group col-lg-12">
+                    <div id="messageout">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <a onclick="goBack()" class="btn  center-block legitRipple"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            formatDatetimepicker('.date-picker', '@Resource.lblLanguage');
+        });
+    </script>
+}
+

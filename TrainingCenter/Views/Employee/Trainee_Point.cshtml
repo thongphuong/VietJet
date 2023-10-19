@@ -1,0 +1,302 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@model TMS.Core.ViewModels.Employee.EmployeeModelPoint
+@{
+    ViewBag.Title = "Trainee_Point";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-header"><i class="fa fa-group"></i> @Resource.lblTraineeManagement -  @Resource.lblDetails</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblTraineeManagement</li>
+                <li>@Resource.lblDetails</li>
+                <li class="active">Point</li>
+            </ol>
+        </div>
+    </div>
+}
+<style>
+    td {
+        border: 1px solid #000 !important;
+        color: black;
+    }
+
+    th {
+        border: 1px solid #000 !important;
+        color: black;
+    }
+
+    #reportpage table > thead > tr > th,
+    #reportpage .table > thead > tr > th,
+    #reportpage table > tbody > tr > th,
+    #reportpage .table > tbody > tr > th,
+    #reportpage table > tfoot > tr > th,
+    #reportpage .table > tfoot > tr > th,
+    #reportpage table > thead > tr > td,
+    #reportpage .table > thead > tr > td,
+    #reportpage table > tbody > tr > td,
+    #reportpage .table > tbody > tr > td,
+    #reportpage table > tfoot > tr > td,
+    #reportpage .table > tfoot > tr > td {
+        border: 1px solid #000;
+        color: black;
+    }
+
+    .text-left {
+        text-align: left;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-right {
+        text-align: right;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-center {
+        text-align: center;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .header-title {
+        color: black;
+        font-weight: bold;
+    }
+
+    .td_course {
+        padding-left: 10px;
+        background: #ccc;
+    }
+
+    .footer_date {
+        color: black;
+        padding-top: 20px;
+        font-style: italic;
+    }
+
+    h4 {
+        color: black;
+    }
+
+    .images {
+        width: 25%;
+    }
+
+    .content {
+        width: 75%;
+    }
+
+    .col-lg-6 {
+        width: 50%;
+    }
+
+    .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11 {
+        float: left;
+    }
+
+    .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+        float: right;
+    }
+</style>
+<link href="~/Content/assets/css/vietjet-print.css" rel="stylesheet" media="print" />
+<div class="col-sm-12" style="margin-bottom:21px; padding-top: 20px; padding-bottom: 20px; padding-left: 30px; padding-right: 15px; ">
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="text-right">
+                <a id="btnPrint" class="btn btn-danger legitRipple ">Print</a>
+                <a id="btnExport" onclick="submitExport()" class="btn btn-danger legitRipple pull-right">Export</a> &nbsp;
+            </div>
+        </div>
+    </div>
+
+</div>
+<input hidden id="TraineeID" value="@Model.Id" />
+<div class="panel list-panel" id="list-panel">
+    <div class="panel-body">
+        <div id="reportpage" style="padding-top: 20px; padding-bottom: 20px; padding-left: 30px; padding-right: 15px; ">
+            <div class="col-sm-12">
+                <div class="col-sm-12 text-center">
+                    <input type="hidden" id="id_survey" name="id_survey" value="id_survey" />
+                    <input type="hidden" id="id_member" name="id_member" value="id_member" />
+                    <input type="hidden" id="courseDetailID" name="courseDetailID" value="courseDetailID" />
+                    <table width="100%" border="1">
+                        <tr>
+                            <th width="20%">
+                                <div class="col-sm-12 text-center">
+                                    <img src="~/Content/assets/img/report/logoreport.png" style="width: 80%; margin-top: 12px;" />
+                                </div>
+                            </th>
+                            <td>
+                                <div class="col-sm-12 text-center">
+                                    <h4 class="header-title"><b>TRAINEE TRANSCRIPT FORM</b></h4>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="col-sm-12 text-left pull-left">
+                                    <h4></h4>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="col-sm-2">
+                        <h4>Name:</h4>
+                    </div>
+                    <div class="col-sm-4 custom">
+                        <h4>@Model.FullName</h4>
+                    </div>
+                    @*<div class="col-sm-2">
+                        </div>*@
+                    <div class="col-sm-2">
+                        <h4>Date Of Birth:</h4>
+                    </div>
+                    <div class="col-sm-4 custom">
+                        <h4>@Model.DateOfBirth</h4>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="col-sm-2">
+                        <h4>Phone Number:</h4>
+                    </div>
+                    <div class="col-sm-4 text-left pull-left">
+                        <h4>@Model.Phone</h4>
+                    </div>
+                    @*<div class="col-sm-2">
+                        </div>*@
+                    <div class="col-sm-2">
+                        <h4>Email:</h4>
+                    </div>
+                    <div class="col-sm-4 custom">
+                        <h4>@Model.Email</h4>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="col-sm-2">
+                        <h4>Department:</h4>
+                    </div>
+                    <div class="col-sm-4 custom">
+                        <h4>@Model.Department</h4>
+                    </div>
+                    @*<div class="col-sm-2">
+                        </div>*@
+                    <div class="col-sm-2">
+                        <h4>Jobtitle:</h4>
+                    </div>
+                    <div class="col-sm-4 custom">
+                        <h4>@Model.Jobtitle</h4>
+                    </div>
+                </div>
+                <div class="col-sm-12 text-center">
+                    <br />
+                    @{
+                        var no = 1;
+
+
+
+                        <table width="100%" border="1">
+                            <tr>
+                                <th class="text-center" style="width: 5%;">No</th>
+                                <th class="text-center" style="width: 10%;">Course Code</th>
+                                <th class="text-center" style="width: 20%;">Course Name</th>
+                                <th class="text-center" style="width: 20%;">Time</th>
+                                <th class="text-center" style="width: 10%;">Point</th>
+                                <th class="text-center" style="width: 10%;">Građe</th>
+                            </tr>
+                            @{
+
+                                foreach (var item in Model.trainee_point)
+                                {
+                                    <tr>
+                                        <td height="35" class="text-center">@no</td>
+                                        <td height="35" class="text-center">@item.SubjectCode</td>
+                                        <td height="35" class="text-center">@item.subjectName</td>
+                                        <td height="35" class="text-center">@item.dtm_from_to</td>
+                                        <td height="35" class="text-center">@item.point</td>
+                                        <td height="35" class="text-center">@item.grade</td>
+                                    </tr>
+                                    no++;
+                                }
+                            }
+                        </table>
+                        <div class="col-sm-12 text-right" style="margin-top:20px">
+                            <b style="font-weight:bold">Total :</b> @(no - 1)
+                        </div>
+                    }
+                </div>
+            </div>
+            <br />
+
+            <div class="col-sm-12" style="margin-top:10px">
+                <div class="col-sm-4 text-center">
+                    <p>
+                        <h5 class="header-title">
+                            Request by
+                        </h5>
+                    </p>
+                    <p>
+                        <h4 class="header-title">
+                            <font color="red">TRAINEE</font>
+                        </h4>
+                    </p>
+                    <p>Date .....................................</p>
+                </div>
+                <div class="col-sm-4 text-center">
+
+
+                </div>
+                <div class="col-sm-4 text-center">
+                    <p>
+                        <h5 class="header-title">
+                            Approved by
+                        </h5>
+                    </p>
+                    <p>
+                        <h4 class="header-title">
+                            HEAD OF TRAINING
+                        </h4>
+                    </p>
+                    <p>Date .....................................</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            document.getElementById("btnPrint").onclick = function () {
+                printElement(document.getElementById("reportpage"));
+                window.print();
+            };
+        });
+        function printElement(elem) {
+            var domClone = elem.cloneNode(true);
+            var $printSection = document.getElementById("printSection");
+
+            if (!$printSection) {
+                var $printSection = document.createElement("div");
+                $printSection.id = "printSection";
+                document.body.appendChild($printSection);
+            }
+            $printSection.innerHTML = "";
+            $printSection.appendChild(domClone);
+        }
+        function submitExport() {
+            var value = $('#TraineeID').val();
+            var id = value == null ? -1 : value;
+            var params = {
+                id: id,
+            };
+            var str = jQuery.param(params);
+            window.location.href = "/Employee/ExportTraineeTranscript?" + str;
+        }
+    </script>
+}
+

@@ -1,0 +1,116 @@
+﻿
+@{
+    var code = "";
+    var lvl = 1;
+    var currentlvl = 1;
+    var root = "";
+    if (Model != null && Model.DepartmentViewModels.Any())
+    {
+        root = Model.DepartmentViewModels.First().Ancestor.Split(new char[] { '!' })[0];
+    }
+    var permissionIndex = 0;
+}
+@model TMS.Core.ViewModels.Departments.UserPermissionViewModel
+@if (Model != null)
+{
+    foreach (var permission in Model.DepartmentViewModels)
+    {
+        if (!string.IsNullOrEmpty(code))
+        {
+            if (permission.Ancestor.StartsWith(root + "!"))
+                {
+                    currentlvl = permission.Ancestor.Count(a => a.Equals('!')) + 1;
+                    if (currentlvl > lvl && permission.Ancestor.StartsWith(code))
+                    {
+                    @:<ul class='nav-second-level'>
+                }
+                else
+                {
+                    @:</li>
+                    if (currentlvl > lvl && lvl > 1)
+                    {
+                        currentlvl = lvl - 1;
+                        @:</ul>
+                    }
+                    else
+                    {
+                        var closeNode = lvl - currentlvl;
+                        if (closeNode == 0 && lvl > 1)
+                        {
+                            @:</li>
+                        }
+                        for (var i = 0; i < closeNode; i++)
+                        {
+                            @:</li></ul>
+                        }
+                    }
+                }
+            }
+            else
+            {
+                for (var i = 1; i < lvl; i++)
+                {
+                    @:</li></ul>
+                }
+                currentlvl = 1;
+                lvl = 1;
+                root = permission.Ancestor.Split(new char[] { '!' })[0];
+            }
+        }
+        code = permission.Ancestor;
+        lvl = currentlvl;
+        if (Model.IsMaster)
+        {
+            if (Model.GroupUserPermissions.Contains(permission.Id))
+            {
+                <text>
+                    <li class='line_@permission.Id'>
+                            <label title='@permission.Code'>
+                                
+                            </label>
+                </text>
+            }
+            else if (permission.IsActive)
+            {
+                <text>
+                <li class='line_@permission.Id'>
+                    @if (Model.UserId.HasValue)
+                            {
+                        <label title='@permission.Code'>
+                        </label>
+                    }
+
+                    else
+                    {
+                        <label title='@permission.Code'>
+                        </label>
+                    }
+                </text>
+
+            }
+            else
+            {
+                <text>
+                <li class='line_@permission.Id'>
+                    <label title='@permission.Code'>
+                    </label>
+                </text>
+
+            }
+            @:<span>@permission.DepartmentName</span> 
+                    }
+                    else
+                    {
+            <text>
+            <li class='line_@permission.Id'>
+                <a href="javasciprt:void(0)" title='@permission.DepartmentName'> @permission.DepartmentName</a>
+            </text>
+        }
+        permissionIndex++;
+    }
+    for (var i = 1; i < currentlvl; i++)
+    {
+        @:</li></ul>
+                    }
+
+}

@@ -1,0 +1,61 @@
+﻿@using System.Linq
+@using TMS.Core.App_GlobalResources
+@model System.Collections.Generic.IEnumerable<TMS.Core.ViewModels.ViewModel.RoleMenus.MenuViewModel>
+@{
+    ViewBag.Title = "Schedule";
+    var funcs = (Dictionary<int, string>) ViewBag.functions;
+}
+
+<h2>Schedule</h2>
+
+
+    
+    
+<div class="col-md-12" >
+    <div class="panel list-panel" id="list-panel">
+        <div class="panel-heading list-panel-heading">
+            <h1 class="panel-title list-panel-title">@Resource.lblList</h1>
+        </div>
+        <div class="panel-body">
+            <div id="mydiv">
+                <ul class="tree" id="tree">
+                    @{Html.RenderAction("MenuListView","Menu");}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+    
+
+@section Scripts
+{
+    <script type="text/template" id="menu-funcs">
+        @*<span class="input-group-addon">Function</span>*@
+        <select id="menu-func" class="form-control">
+            <option value="" >---- Select function ----</option>
+            @foreach (var func in funcs)
+            {
+                <option value="@func.Key" >@func.Value</option>
+            }
+        </select>
+    </script>
+    <script type="text/template" id="menu-node">
+       <div class="form-group">
+           <div class="col-md-4"><input type="text" id="menu-title"/></div>
+           <div class="col-md-8"><button class="btn btn-primary" onclick="menu.saveNode(this)">Submit</button></div>
+       </div>
+    </script>
+    <script src="~/Content/Js/tree/jquery.treegrid.min.js"></script>
+    <link href="~/Content/app.css" rel="stylesheet" />
+    <script src="~/Scripts/js/app.js"></script>
+<script src="~/Scripts/js/common.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#tree').treegrid();
+            $('#tree').on('click', 'span.updatestatus', menu.confirmActive);
+            $('#tree').on('click', 'span.deletePermission', menu.confirmDelete);
+        });
+    </script>
+}

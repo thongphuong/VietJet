@@ -1,0 +1,51 @@
+﻿@using TMS.Core.App_GlobalResources
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout_LMS.cshtml";
+}
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li class="active">@Resource.lblDetails</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="panel " style="margin-top: 10px;" id="frmFilter">
+    <div class="panel-heading">
+    </div>
+    <div class="panel-body">
+        <div class="form-login">
+                <div class="text-left" style="margin-bottom:-5px;">
+                    <div class="icon-object border-slate-300 text-slate-300"><i class="icon-reading"></i></div>
+                    <h2 class="content-group form-title" id="title-login">Chuyển đổi dữ liệu</h2>
+                    <label style="color:aquamarine">@ViewBag.Message</label>
+                </div>
+                <br />
+                <div class="form-group" style="text-align:right;" id="div-submit">
+                    <button type="button" id="btnConvert" class="btn btn-primary ">Chuyển đổi<i class="icon-circle-right2 position-right"></i></button>
+                </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+@section Scripts{
+    <script type="text/javascript">
+        $('#btnConvert').click(function () {
+            Convert();
+        });
+        function Convert() {
+            window.location.href = "/Convert/ConvertPassword";
+        }
+    </script>
+
+}
+

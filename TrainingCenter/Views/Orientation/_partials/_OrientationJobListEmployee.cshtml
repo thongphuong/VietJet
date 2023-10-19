@@ -1,0 +1,59 @@
+﻿@using TMS.Core.Utils
+@model TMS.Core.ViewModels.Orientation.OrientationJobRouteEmployeeViewModel
+@{
+    <style>
+        li.clearfix:hover {
+            background: #f1f1f1;
+        }
+        .activelistemp {
+            background: #ccc;
+        }
+        .him-counts {
+            font-weight: bold;
+            padding: 1px 5px;
+            background: #F44336;
+            color: #FFF;
+            -ms-border-radius: 50%;
+            border-radius: 50%;
+            font-size: 14px;
+        }
+    </style>
+    <label>Employee</label>
+    <div class="col-md-12" style="height: 400px; overflow-y: scroll;">
+        <ul class="chat">
+            @foreach (var item in Model.TrainedEmployee)
+            {
+                <li class="left clearfix cusor-pointer" id="liEmp@(item.Id)" onclick="GetSubject(@item.Id,0)">
+                    <span class="chat-img pull-left">
+                        @if (string.IsNullOrEmpty(item.Employee.avatar) || item.Employee.avatar.StartsWith("NoAvata"))
+                        {
+                            <img src="@(UtilConstants.PathImage + "NoAvata.png")" alt="User Avatar" class="img-circle" style="width: 50px;">
+                        }
+                        else
+                        {
+                            <img src="@(UtilConstants.PathImage + item.Employee.avatar)" alt="User Avatar" class="img-circle" style="width: 50px;">
+                        }
+                        
+                    </span>
+                    <div class="chat-body clearfix">
+                        <div class="header">
+                            <strong class="primary-font">@item.Employee.str_Staff_Id - @item.FullName </strong>
+                            <small class="pull-right text-muted">
+                                 <span class="him-counts">@item.AmountSubjects</span>
+                            </small>
+                        </div>
+                        <p>
+                            Current Position: @item.Employee.JobTitle.Name
+                        </p>
+                    </div>
+                </li>
+
+            }
+        </ul>
+    </div>
+
+
+
+
+    
+}

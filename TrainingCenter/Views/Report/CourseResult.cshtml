@@ -1,0 +1,144 @@
+﻿@using DAL.Entities
+@model Course_Detail
+@{
+    ViewBag.Title = "CourseResult";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.ActiveSubMenu = "Report";
+}
+
+
+
+
+<div class="nav-tabs-custom" id="detailTabs">
+    <!-- Tabs within a box -->
+    <ul class="nav nav-tabs pull-right ui-sortable-handle">
+        <li class="pull-left header"><i class="fa fa-tags"></i>Reports - Course Result</li>
+    </ul>
+    <div class="tab-content padding">
+        <div class="chart tab-pane active" id="FlowBoard" style="position: relative; padding: 15px; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+            <div class="row">
+
+                @using (Html.BeginForm("CourseResult", "Report", FormMethod.Post, new { @id = "MainForm", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="col-md-12" style="border-right: solid 1px #e5e5e5">
+                        <div class="row">
+                            <div class="col-md-4">
+
+                                <span>Filter Start Date</span>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" name="fSearchDate" id="fSearchDate" placeholder="Search Start Date" onchange="ChangeDate()" value="@ViewBag.SearchDateRange">
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+                                <p>
+                                    <span>Course List</span>
+                                    @Html.DropDownListFor(m => m.CourseId, (SelectList)ViewBag.CourseList, "- - - Select - - -", new { @class = "form-control" })
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-md-10">
+                                <p>
+                                    <span>Subject</span>
+                                    @Html.DropDownListFor(m => m.Id, (SelectList)ViewBag.SubjectList, "- - - Select - - -", new { @class = "form-control" })
+                                    @*<select id="SubjectSelect" class="form-control" name="Course_Detail_Id"></select>*@
+                                </p>
+                            </div>
+                            <div class="col-md-2">
+                                <p>
+                                    <span style="width: 5px; display: block">&nbsp;</span>
+                                    <button class="btn btn-block btn-info" name="SubmitButton" value="View Report">View Report</button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+
+
+            @if (Model != null)
+            {               
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-xs-12">
+                        <div class="box box-danger">
+                            <div class="box-header" style="border-bottom: solid 1px #e5e5e5">
+                                <h3 class="box-title">Report Result</h3>
+                                <div class="box-tools pull-right" data-toggle="tooltip">
+                                    <div class="btn-group" data-toggle="btn-toggle" id="functionMenu" style="padding-top: 5px;">
+                                        <a href="/Template/Report/ExportReportFile?ReportType=PDF&pageWidth=8.5in&pageHeight=12in"><i class="fa fa-file-text" style="color: #cb0202"></i> Export PDF</a>
+                                        <a href="/Template/Report/ExportReportFile?ReportType=Excel&pageWidth=8.5in&pageHeight=12in" style="margin-left: 10px"><i class="fa fa-table" style="color: #52ca00"></i> Export Excel</a>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-12" style="text-align: center">
+                                        <img  src="@Url.Action("ViewCourseResult", "Report", new { CourseDetailId = Model.Id })"   style="margin:auto"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+
+    $('#fSearchDate').daterangepicker({
+        format: 'DD MMM YYYY'
+    },
+    function (start, end, label) {
+        $("#Course_Id").text("");
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "/Template/Report/GetCourseList",
+            dataType: "json",
+            data: { DateRange: $("#fSearchDate").val() },
+            success: function (data) {
+                if (data.code == "Success") {
+                    $.each(data.CourseList, function (i, item) {
+                        $("#Course_Id").append('<option value="' + item.CourseId + '"' + (i == 0 ? ' selected="true"' : '') + '>' + item.CourseName + '</option>');
+                    });
+                    if (data.CourseList.length > 0) {
+                        $("#Course_Id").val(data.CourseList[0].CourseId);
+                        $("#Course_Id").change();
+                    }
+                }
+            }
+        });
+
+    });
+
+
+
+
+
+    $("#Course_Id").change(function () {
+        $("#Course_Detail_Id").text("");
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "/Template/Report/GetCourseDetailList",
+            dataType: "json",
+            data: { CourseId: $("#Course_Id").val() },
+            success: function (data) {
+                if (data.code == "Success") {
+                    $.each(data.SubjectList, function (i, item) {
+                        $("#Course_Detail_Id").append('<option value="' + item.CourseDetailId + '">' + item.SubjectName + '</option>');
+                    });
+                }
+            }
+        });
+    });
+</script>

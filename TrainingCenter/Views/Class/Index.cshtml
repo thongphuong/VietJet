@@ -1,0 +1,213 @@
+﻿@model IEnumerable<TrainingCenter.Models.Class>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.ActiveMenu = "Training";
+    ViewBag.ActiveSubMenu = "Class";
+}
+
+@section pageTitle {
+    <h1><i class="fa fa-user"></i>
+        Class
+                        <small>Management</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+        <li class="active"><i class="fa fa-puzzle-piece"></i> Class management</li>
+    </ol>
+}
+
+<div class="row">
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-danger">
+            <div class="box-header">
+
+                <h3 class="box-title">Class List</h3>
+                <div class="box-tools pull-right" data-toggle="tooltip">
+                    <div class="btn-group" data-toggle="btn-toggle" id="functionMenu">
+                        @*<button type="button" class="btn btn-default btn-sm"><i class="fa fa-plus"></i></button>*@
+
+
+                        <button class="btn btn-primary" id="btCreate">
+                            <i class="fa fa-plus"></i>
+                            Create Class
+                        </button>
+                        <button class="btn btn-success" id="btRefreshPage">
+                            <i class="fa fa-refresh"></i>
+                            Refresh Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="box-body table-responsive">
+                <table id="defaultTable" class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>#
+                            </th>
+                            <th>Subject
+                            </th>
+                            <th>Course
+                            </th>
+                            <th>Star Date
+                            </th>
+                            <th>End Date
+                            </th>
+                            <th>Trainer
+                            </th>
+                            <th>Status
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr data-id="@item.Class_Id">
+                                <td></td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Subject.str_Name)
+                                </td>
+                                <td class="colClassName">
+                                    @Html.DisplayFor(modelItem => item.Course.str_Name)
+                                </td>
+                                <td>
+                                    @(item.dtm_Start_Date == null ? "" : item.dtm_Start_Date.Value.ToString("dd MMM yyyy"))
+                                </td>
+                                <td>
+                                    @(item.dtm_End_Date == null ? "" : item.dtm_End_Date.Value.ToString("dd MMM yyyy"))
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UserProfile.UserName)
+                                </td>
+                                <td>
+                                    @(item.int_Status == 0 ? "Proccessing" : (item.int_Status == 1 ? "End" : (item.int_Status == 2 ? "Valid" : "Expired")))
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+</div>
+<div class="modal fade" id="dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    //$('.editBut').click(function () {
+    //    window.location.href("/UserProfile/Edit/" + $(this).data("id"));
+    //});
+    //$('.detailBut').click(function () {
+    //    window.location.href("/UserProfile/Detail/" + $(this).data("id"));
+    //});
+    //$('.deleteBut').click(function () {
+    //    window.location.href("/UserProfile/Delete/" + $(this).data("id"));
+    //});
+
+    $("#btCreate").click(function () {
+        window.location.href = "/Class/Create";
+    });
+    $("#btRefreshPage").click(function () {
+        location.reload();
+    });
+
+    $(document).ready(function () {
+        var table = $('#defaultTable').DataTable({
+            "bLengthChange": false,
+            "fnDrawCallback": function (oSettings) {
+                /* Need to redo the counters if filtered or sorted */
+                if (oSettings.bSorted || oSettings.bFiltered) {
+                    for (var i = 0, iLen = oSettings.aiDisplay.length ; i < iLen ; i++) {
+                        $('td:eq(0)', oSettings.aoData[oSettings.aiDisplay[i]].nTr).html(i + 1);
+                    }
+                }
+            },
+            "aoColumnDefs": [
+                { "bSortable": false, "aTargets": [0] }
+            ],
+            "aaSorting": [[1, 'asc']]
+        });
+        $('#defaultTable tbody').on('click', 'tr', function () {
+            if (!$(this).hasClass('selected')) {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+                $('#functionMenu').find('#btDelete').remove();
+                $('#functionMenu').find('#btEdit').remove();
+                $('#functionMenu').find('#btDetail').remove();
+                if (typeof $('tr.selected').data("id") != "undefined") {
+                    $('#functionMenu').prepend("<button class='btn btn-danger' id='btDelete'><i class='fa fa-times'></i> Delete</button>"
+                        + "<button class='btn btn-warning' id='btEdit'><i class='fa fa fa-pencil'></i> Edit</button>"
+                        + "<button class='btn btn-info' id='btDetail'><i class='fa fa fa-bars'></i> Detail</button>");
+                }
+            }
+        });
+
+        $(document).on("click", '#btEdit', function () {
+            window.location.href = "/Class/Edit/" + $('#defaultTable .selected').data("id");
+        });
+
+        $(document).on("click", '#btSubjectClass', function () {
+            window.location.href = "/Class/SubjectList/" + $('#defaultTable .selected').data("id");
+        });
+
+
+        $(document).on("click", '#btDetail', function () {
+            window.location.href = "/Class/Details/" + $('#defaultTable .selected').data("id");
+        });
+
+        $(document).on("click", '#btDelete', function () {
+            //window.location.href("/UserProfile/Delete/" + $('#defaultTable .selected').data("id"));            
+            setPopUpInform('Confirm Delete',
+                '<p>You are about to delete Class, this procedure is irreversible.</p>'
+                + '<p>Do you want to proceed?</p><p>Class name: <strong>' + $('tr.selected').find('.colClassName').text() + '</strong></p>',
+                'Cancel,Delete');
+            $('#dialog').modal('show');
+
+        });
+
+        $(document).on('click', '#deletePop', function () {
+            var selectedRow = $('tr.selected');
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "/Class/ajaxDelete",
+                dataType: "json",
+                data: { Id: selectedRow.data('id') },
+                success: function (result) {
+                    if (result.code == "Success") {
+                        table.rows(selectedRow).remove().draw();
+                        $('#functionMenu').find('#btDelete').remove();
+                        $('#functionMenu').find('#btEdit').remove();
+                        $('#functionMenu').find('#btDetail').remove();
+                    }
+                    else {
+                        setPopUpInform('Delete Fail',
+                '<p>' + result.message + '</p>',
+                'Close');
+                        setTimeout(function () { $('#dialog').modal('show'); }, 500)
+                        //$('#ShowPopUp').click();
+                    }
+                }
+            });
+        });
+    });
+
+</script>
+

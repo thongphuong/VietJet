@@ -1,0 +1,136 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Role.RoleModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    #DepTable i {
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    #DepTable td:nth-child(3), #DepTable td:nth-child(4), #DepTable td:nth-child(5), #DepTable td:nth-child(6), #DepTable td:nth-child(7), #DepTable td:nth-child(8), #DepTable td:nth-child(9),
+    #DepTable td:nth-child(3), #DepTable th:nth-child(4), #DepTable th:nth-child(5), #DepTable th:nth-child(6), #DepTable th:nth-child(7), #DepTable th:nth-child(8), #DepTable th:nth-child(9) {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .tree, .tree ul {
+        color: #666;
+    }
+</style>
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-cogs"></i>  @Resource.lblSystemManagement - @Resource.lblRole @Resource.lblModify</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblSystemManagement</li>
+                <li class="active">@Resource.lblRole @Resource.lblModify</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="panel list-panel">
+
+    <div class="panel-heading list-panel-heading">
+        <h1 class="panel-title list-panel-title"><i class="fas fa-pencil-alt font-small-byhoa" aria-hidden="true"></i> @Resource.lblModify</h1>
+    </div>
+    <div class="panel-body">
+        <input type="hidden" value="@Model.Id" id="roleId" />
+        <div class="row col-md-12">
+            <form class="form-horizontal bordered-row" action="@Url.Action("Modify", "Role")" method="post" id="createform" data-parsley-validate onsubmit = "return false;">
+                <div class="form-group col-md-12">
+                    <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+                    <div class="col-md-4">
+                        <label class="col-md-4 control-label">@Resource.lblRoleName</label>
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(m => m.Name, new { id = "Name", @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-3 control-label">@Resource.lblDescription</label>
+                        <div class="col-md-7">
+                            @Html.TextAreaFor(model => model.Description, new { id = "Description", @class = "form-control", @rows = "1" })
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        @if (User.IsInRole("/Role/Modify"))
+                        {
+                            <a href="javascript:void(0)" onclick="actionSubmit()" class="btn btn-primary center-block legitRipple"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                        }
+                    </div>
+                    <div class="col-md-1">
+                        <a onclick=" goBack() " class="btn btn-block  center-block legitRipple"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+
+        <div class="row col-md-12">
+            <hr />
+            <ul class="tree" id="tree"></ul>
+        </div>
+    </div>
+
+</div>
+
+
+@section Scripts{
+
+    <script src="~/Scripts/js/app.js"></script>
+    <script type="text/javascript">
+        loadRoleData(@Model.Id);
+        function actionSubmit() {
+            spinner.open();
+            var form = $("#createform").serialize();
+            $.ajax({
+                type: 'POST',
+                url: "/Role/Modify",
+                datatype: 'json',
+                data: form,
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, 'SUCCESS', TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, 'ERROR', TITLE_STATUS_DANGER);
+                    }
+                },
+                complete: function () {
+                    spinner.close();
+                }
+            });
+        }
+
+        $.fn.pressEnter = function (fn) {
+
+            return this.each(function () {
+                $(this).bind('enterPress', fn);
+                $(this).keyup(function (e) {
+                    if (e.keyCode == 13) {
+                        $(this).trigger("enterPress");
+                    }
+                });
+            });
+        };
+        $(".line_1").addClass("active");
+
+        $('#availableFunc').tree({
+        });
+        $('#assignedFunc').tree({
+        });
+        $("#Name").pressEnter(function () {
+            actionSubmit();
+        });
+        $("#Description").pressEnter(function () {
+            actionSubmit();
+        });
+    </script>
+
+}

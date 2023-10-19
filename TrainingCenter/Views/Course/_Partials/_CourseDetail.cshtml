@@ -1,0 +1,282 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@using TMS.Core.ViewModels.UserModels
+@model TMS.Core.ViewModels.Courses.CourseModifyModel
+
+@{
+    var data = (UserModel)HttpContext.Current.Session["UserA"];
+}
+
+<script type="text/template" id="course-detail">
+    <div data-index="{index}" class="col-md-12  notice notice-info course-detail-{index} get-detail-{index} ">
+        <div class="col-md-12  course-detail-content course-detail-{index} course-detail-value-{index}">
+            <div class="classicCourseDetail">
+                <div class="col-md-12 row">
+                    <son class="col-md-3">
+                        <label>@Resource.lblSubject</label> <span style="color:#d43f3a; font-weight:bold" id="course-average-label{index}"></span>
+                        <select class="form-control subject_filter reselect input-sm js-example-templating" data-coursedetail="0" data-monitor="0" id="course-detail-subject" name="CourseDetailModels[{index}].SubjectId" onchange="onchangesubject(this,1)" data-index="{index}">
+                            @foreach (var subject in Model.ListSubjects.Where(a => a.IsActive == true))
+                            {
+                                <option title="AverageCal: @(subject.Average_Calculator ? "YES" : "NO") &#13; PassScore: @subject.PassScore &#13; Duration: @subject.Duration &#13; Recurrent: @subject.Recurrent" data-type="@subject.int_Course_Type" data-duration="@subject.Duration" data-average="@subject.Average_Calculator" value="@subject.Id">@subject.Name - @subject.string_Course_Type</option>
+                            }
+                        </select>
+                    </son>
+                    <son class="form-group col-md-2">
+                        <label style="color:#d43f3a">@Resource.lblMethod</label>
+                        <select class="form-control input-sm default TypeLearning " data-index="{index}" data-placeholder="-- @Resource.lblMethod --" title="Learning Type " id="course-detail-type-learning" name="CourseDetailModels[{index}].LearningType" onchange="typeLearningclick(this)">
+                            @foreach (var m in Model.DictionaryLearningTypes)
+                            {
+                                <option value="@m.Key">@m.Value</option>
+                            }
+                        </select>
+                    </son>
+                    <son class="form-group col-md-1">
+                        <label>@Resource.lblRegisable</label>
+                        <select class="form-control input-sm default reselect" title="-- @Resource.lblRegisable--" data-placeholder="-- @Resource.lblRegisable--" id="course-detail-regisable" name="CourseDetailModels[{index}].Registable" data-index="{index}" onchange="onChangeRegistry(this)">
+                            @foreach (var m in Model.DictionarySurvey)
+                            {
+                                <option value="@m.Key">@m.Value</option>
+                            }
+                        </select>
+                    </son>
+                    <son class="form-group col-md-2">
+                        <label>@Resource.lblFromDate</label>
+                        <input type="text" id="course-detail-from-date" name="CourseDetailModels[{index}].DateFrom" class="form-control input-sm course-detail-from-date date-picker date_from" onclick="check()">
+                    </son>
+                    <son class="form-group col-md-2"><label>@Messege.lblToDate</label><input type="text" name="CourseDetailModels[{index}].DateTo" id="course-detail-to-date" class="form-control input-sm course-detail-to-date date-picker date_validate date_to" onclick="check()"></son>
+                    <son class="form-group col-md-1"><label>@Messege.lblFromTime</label><input type="text" value="8:30" name="CourseDetailModels[{index}].TimeFrom" id="course-detail-from-time" class="form-control input-sm date TimeFrom_{index}"></son>
+                    <son class="form-group col-md-1"><label>@Messege.lblToTime</label><input type="text" value="16:45" name="CourseDetailModels[{index}].TimeTo" id="course-detail-to-time" class="form-control input-sm date TimeTo_{index}"></son>
+                    <son class="form-group col-md-2">
+                        <label>@Resource.lblMonitor</label>
+                        <select class="form-control default input-sm reselect  Mentor" name="CourseDetailModels[{index}].Mentor" id="course-detail-Mentor" data-index="{index}" onchange="displayCostMonitor(this)">
+                            @*<option value="-1">-- @Resource.lblMonitor --</option>*@
+                        </select>
+                    </son>
+                    <son class="form-group col-md-2 MonitorDuration" id="MonitorDuration_{index}" style="display:none">
+                        <label>Duration (Hours)</label>
+                        <input class="form-control" value="0" name="CourseDetailModels[{index}].MonitorDuration" id="course-detail-MonitorDuration" />
+                    </son>
+                    <son class="form-group col-md-2 MonitorAllowance" id="MonitorAllowance_{index}" style="display:none">
+                        <label>Cost</label>
+                        <input class="form-control course-detail-MonitorAllowance_{index}" value="0" name="CourseDetailModels[{index}].MonitorAllowance" id="course-detail-MonitorAllowance" readonly="readonly" />
+                    </son>
+                    <son class="form-group col-md-2 divExaminer" id="divExaminer_{index}">
+                        <label>@Resource.lblExaminer</label>
+                        <select class="form-control default input-sm reselect Hannah" name="CourseDetailModels[{index}].Hannah" id="course-detail-Hannah" data-index="{index}" onchange="displayCostExaminer(this)">
+                            <option value="-1">-- @Resource.lblExaminer --</option>
+                            @*@foreach (var item in Model.DictionaryHannah)
+                                {
+                                    <option value="@item.Key">@item.Value</option>
+                                }*@
+                        </select>
+                    </son>
+                    <son class="form-group col-md-2" id="divExaminerDuration_{index}" style="display:none">
+                        <label>Duration (Hours)</label>
+                        <input class="form-control" value="0" name="CourseDetailModels[{index}].ExaminerDuration" id="course-detail-ExaminerDuration" />
+                    </son>
+                    <son class="form-group col-md-2" id="divExaminerAllowance_{index}" style="display:none">
+                        <label>Cost</label>
+                        <input class="form-control course-detail-ExaminerAllowance_{index}" value="0" name="CourseDetailModels[{index}].ExaminerAllowance" id="course-detail-ExaminerAllowance" readonly="readonly" />
+                    </son>
+                </div>
+                <div class="col-md-12 row">
+                    <son class="form-group col-md-2 mark_type" id="divmarkType_{index}">
+                        <label style="color:#d43f3a">Test</label>
+                        <select class="form-control  marktype input-sm" data-placeholder="--Mark Type --" title="Mark Type" id="course-detail-marktype" name="CourseDetailModels[{index}].MarkType">
+                            <option value="0">@Resource.lblManual</option>
+                            <option value="1">@Resource.lblAuto</option>
+                        </select>
+                    </son>
+
+                    <div id="hiddenRoom_{index}">
+                        <son class="form-group col-md-4">
+                            <label>@Resource.lblRoom</label>
+                            <select class="form-control reselect roomCheck_{index} input-sm" data-placeholder="--@Resource.lblRoom --" title="Class Room" onchange="checkRoom(this)" id="course-detail-room" name="CourseDetailModels[{index}].Room">
+                                <option value="-1">-- @Resource.lblRoom --</option>
+                                @foreach (var room in Model.DictionaryRooms.Where(p => !p.Value.Contains("Deleted") || !p.Value.Contains("DeActive")))
+                                {
+                                    <option value="@room.Key">@room.Value</option>
+                                }
+                            </select>
+                        </son>
+                    </div>
+                </div>
+                @*@if (data.ConfigSite.Contains(UtilConstants.KEY_MENTOR)) //mentor = monitor
+                    {
+                        <son class="form-group col-md-3">
+                            <label>@Resource.lblMonitor</label>
+                            <i class="zmdi zmdi-help-outline classHelp" data-toggle="tooltip" data-html="true" title="@Resource.HELP_COURSE_MENTOR"></i>
+                            <select class="form-control default input-sm reselect  Mentor" name="CourseDetailModels[{index}].Mentor" id="course-detail-Mentor" data-index="{index}">
+                                <option value="-1">-- @Resource.lblMonitor --</option>
+                                @foreach (var item in Model.DictionaryMentor)
+                                {
+                                    <option value="@item.Key">@item.Value</option>
+                                }
+                            </select>
+                        </son>
+                    }
+                    @if (data.ConfigSite.Contains(UtilConstants.KEY_HANNAH)) //hannah = examiner
+                    {
+                        <son class="form-group col-md-3">
+                            <label>@Resource.lblExaminer</label>
+                            <i class="zmdi zmdi-help-outline classHelp" data-toggle="tooltip" data-html="true" title="@Resource.HELP_COURSE_HANNAH"></i>
+                            <select class="form-control default input-sm reselect  Hannah" name="CourseDetailModels[{index}].Hannah" id="course-detail-Hannah" data-index="{index}">
+                                <option value="-1">-- @Resource.lblExaminer --</option>
+                                @foreach (var item in Model.DictionaryHannah)
+                                {
+                                    <option value="@item.Key">@item.Value</option>
+                                }
+                            </select>
+                        </son>
+                    }*@
+
+                <div id="hiddenRegisable_{index}" class="collapse">
+                    <son class="form-group col-md-2">
+                        <label>@Resource.lblRegistryDate</label>
+                        <input type="text" id="course-detail-registrydate" name="CourseDetailModels[{index}].RegistryDate" class="form-control input-sm date_validate date_res " onclick="checkRes(this)" />
+                    </son>
+                    <son class="form-group col-md-2">
+                        <label>@Resource.lblExpiryDate</label><input type="text" name="CourseDetailModels[{index}].ExpiryDate" id="course-detail-expirydate" class="form-control input-sm course-detail-from-date date-picker date_validate date_exp" onclick="check(this)" />
+                    </son>
+                </div>
+                <!-- phan lam them -->
+                @*<son class="form-group col-md-2">
+                        <label>Time(hours) (M/H)</label>
+                        <input type="text" id="course-detail-time" name="CourseDetailModels[{index}].Time" class="form-control input-sm" value="1">
+                    </son>
+                    <son class="form-group col-md-2">
+                        <label>Time Block(min) (M/H)</label>
+                        <input type="text" id="course-detail-time-block" name="CourseDetailModels[{index}].TimeBlock" class="form-control input-sm" value="5">
+                    </son>*@
+                <!--end phan lam them-->
+            </div>
+            @* <div id="divExpandCourseDetail_{index}">
+                    <div id="hiddenTypeLearning_{index}">
+                       <son class="form-group col-md-2">
+                            <label>@Resource.lblAttemptsAllowed</label>
+                            <select name="CourseDetailModels[{index}].attempts" id="course-detail-attempts" class="form-control input-sm default reselect">
+                                @foreach (var room in Model.DictionaryAttemptsAllowed)
+                                {
+                                    <option value="@room.Key">@room.Value</option>
+                                }
+                            </select>
+                        </son>
+                        <son class="form-group col-md-2">
+                            <label>@Resource.lblGradingMethod</label>
+                            <select name="CourseDetailModels[{index}].grademethod" id="course-detail-grademethod" class="form-control input-sm default reselect">
+                                @foreach (var room in Model.DictionaryGradingMethod)
+                                {
+                                    <option value="@room.Key">@room.Value</option>
+                                }
+                            </select>
+                        </son>
+                    </div>
+
+                    @if (Model.CheckCostPerPerson)
+                    {
+                        <son class="form-group col-md-2"><label>@Resource.lblCostPerPerson</label>
+                            <i class="zmdi zmdi-help-outline classHelp" data-toggle="tooltip" data-html="true" title="@Resource.HELP_COURSE_PER_PERSON"></i>
+                    <input type="number" name="CourseDetailModels[{index}].allowance" id="course-detail-allowance" class="form-control input-sm course-detail-allowance " onchange="totalAllowance()" pattern="(\d{3})([\.])(\d{2})"></son>
+                    }
+
+
+                    @if (Model.CheckCommitment)
+                    {
+                        <son class="form-group col-md-2 ">
+                            <label>@Resource.lblCommitment</label>
+                            <i class="zmdi zmdi-help-outline classHelp" data-toggle="tooltip" data-html="true" title="@Resource.HELP_COURSE_COMMITMENT"></i>
+                            <select class="form-control input-sm default reselect" data-index="{index}" title="-- @Resource.lblCommitment--" data-placeholder="-- @Resource.lblCommitment--" id="course-detail-commitment" name="CourseDetailModels[{index}].commitment" onchange="commitmentclick(this)">
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </son>
+
+                        <div id="hiddenCommitment_{index}">
+                            <son class="form-group col-md-2">
+                                <label>@Resource.lblCommitmentPeriod</label>
+                                <input type="number" id="course-detail-CommitmentExpiredate" name="CourseDetailModels[{index}].CommitmentExpiredate" class="form-control input-sm course-detail-CommitmentExpiredate " />
+                            </son>
+                        </div>
+                    }
+                </div>*@
+            <son class="form-group col-md-12">
+                <div class="text-danger">
+                    @*<a onclick="addEx(this)" id="expandCourseDetail_{index}" toggle="tooltip" data-index="{index}" class="pull-right" style="text-decoration: underline">@Resource.lblAdvanced</a>*@
+                </div>
+                <div class="text-danger div-blended collapse" id="div_Blended_{index}">
+                    <a href="javasciprt:void(0)" title="Blended" data-toggle="tooltip">Method: <b style="color:#d43f3a">cRo</b></a>
+                    &nbsp; <span class="text-success action" data-toggle="collapse" data-target="#div_Detail_Blended_{index}"><i class="fa fa-search" data-toggle="tooltip" title="View Details"></i></span>
+                    &nbsp; <span class="text-success action" title="Add new" data-toggle="tooltip" data-index="{index}" onclick="modalBlended(this)" style="font-size:13pt;color:forestgreen;cursor:pointer"><i class="far fa-plus-square"></i></span>
+                </div>
+            </son>
+            <div class="col-md-12 detail-blended collapse" id="div_Detail_Blended_{index}">
+                <son class="form-group col-md-6">
+                </son>
+            </div>
+            @*<son class="form-group col-md-12" id="son_Ingredient_{index}">
+                    <div class="text-danger">
+                    </div>
+                    <div class="div-Ingredient" id="div_Ingredient_{index}">
+                        &nbsp; <span class="text-success action" data-toggle="collapse" data-target="#div_Detail_Ingredient_{index}">@Resource.lblIngredient&nbsp;<i class="fa fa-search" data-toggle="tooltip" title="View Details"></i></span>
+                        &ndash; &nbsp;<a href="javascript:void(0)" data-toggle="tooltip" title="@Resource.lblADDNEW @Resource.lblIngredient" data-index="{index}" onclick="actionShowModifyIngredient(this)"><i class="fas fa-edit"></i>&nbsp;@Resource.lblADDNEW @Resource.lblIngredient</a>
+
+                    </div>
+
+                    <div class="col-md-9 detail-Ingredient collapse" id="div_Detail_Ingredient_{index}">
+                        <div class="text-danger margin-top-30">
+                            &nbsp; <span class="text-success action" title="New @Resource.lblIngredient" data-toggle="tooltip" data-index="{index}" onclick="AddRowIngredient({index})"><i class="far fa-plus-square"></i>&nbsp;New @Resource.lblIngredient</span>
+                        </div>
+                        <son class=" col-md-12 Ingredientfor" data-index="{index}" id="son_Detail_Ingredient_{index}">
+                            <div class="form-group col-md-1 margin-top-10">
+
+                                &nbsp;
+                            </div>
+                            <div class="form-group col-md-5 margin-top-10">
+                                <select class="form-control input-sm default required" data-index="{index}" data-toggle="tooltip" title="Ingredients" id="course-detail-Ingredient-select">
+                                    <option value="-1" disabled selected>-- Ingredient --</option>
+                                    @if (Model.DictionaryIngredients.Any() || Model.DictionaryIngredients != null)
+                                    {
+                                        foreach (var item in Model.DictionaryIngredients)
+                                        {
+                                            if (item.Key == 1)
+                                            {
+                                                <option value="@item.Key" @(item.Key == 1 ? "selected" : "")>@item.Value</option>
+                                            }
+
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2 margin-top-10">
+                                <input type="hidden" id="course-detail-Ingredient-id" name="course-detail-Ingredient-id" />
+                                <input type="text" class="form-control input-sm percentIngredient" id="course-detail-Ingredient-percent" value="100" pattern="^[1-9][0-9]?$|^100$" />
+                            </div>
+                            <div class="form-group col-md-4 margin-top-20-md">
+                                &nbsp;
+                            </div>
+                        </son>
+                    </div>
+                </son>*@
+            <br />
+            <br />
+        </div>
+        <div data-index="{index}" class="col-md-12  course-detail-{index}">
+            <son class="form-group col-md-6">
+                <label>@Resource.lblInstructors</label>
+                <select class="form-control InstructorSubject intructor_dura" multiple="multiple" id="course-detail-instructor" data-index="{index}" disabled><option value="-1">-- @Resource.lblInstructors --</option></select>
+            </son>
+            <son class="form-group col-md-6 intrustorList">
+                <div></div>
+            </son>
+            <son class="form-group col-md-12 strremark">
+                <label>Remark</label>
+                <textarea class="form-control" cols="20" id="course-detail-remark" name="CourseDetailModels[{index}].str_remark" rows="4"></textarea>
+            </son>
+        </div>
+        <son class="form-group col-md-12">
+            <div style="font-size: 15pt;color: #df3333;cursor:pointer;">
+                <i onclick="DelRow(this)" data-index="{index}" class="far fa-minus-square action"></i>
+            </div>
+        </son>
+    </div>
+</script>

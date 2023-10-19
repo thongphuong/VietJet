@@ -1,0 +1,254 @@
+﻿@model List<TrainingCenter.Models.UserProfile>
+@{
+    ViewBag.Title = "AddSubjects";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.ActiveMenu = "Training";
+    ViewBag.ActiveSubMenu = "Class";
+}
+@section headContent{
+    <style type="text/css">
+        #tableSubject thead {
+            display: none;
+        }
+
+        #tableSubject {
+            margin-top: 1em;
+        }
+    </style>
+}
+@section pageTitle {
+    <h1><i class="fa fa-tag"></i>
+        Class
+                        <small>Trainees of Class</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+        <li><a href="/Class"><i class="fa fa-puzzle-piece"></i>Class management</a></li>
+        <li><a href="/Class/Details/@ViewBag.ClassID"><i class="fa fa-puzzle-piece"></i>Detail</a></li>
+        <li class="active">Trainees of Class</li>
+    </ol>
+}
+
+@Html.Hidden("CurrentClass",(int)ViewBag.ClassId)
+
+<input type="hidden" value="@ViewBag.ClassId" id="ClassId" />
+<div class="row">
+
+    <div class="col-md-8">
+        <div class="box box-danger">
+            <div class="box-header">
+                <h3 class="box-title">Course's Member List</h3>
+                <div class="box-tools pull-right" data-toggle="tooltip">
+                    @Html.DropDownList("CourseId",(SelectList)ViewBag.CourseList, "- - - Select - - -", new { @class = "form-control", style="display:inline-block; width:auto;", id="selectCourse" })
+                    <div class="btn-group" data-toggle="btn-toggle">
+                        @*<button type="button" class="btn btn-default btn-sm"><i class="fa fa-plus"></i></button>*@
+                        
+                        <button class="btn btn-danger " id="btAddAll" style="margin-top:-3px">
+                            <i class="fa fa-plus"></i>
+                            Add All
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="defaultTable" class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 20px">#</th>
+                            <th>Staff ID
+                            </th>
+                            <th>Username
+                            </th>
+                            <th>Fullname
+                            </th>
+                            <th style="width: 5px"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="SubjectDict">
+                        @for (int i = 0; i < Model.Count(); i++)
+                        {
+                            <tr  data-id="@Model[i].UserId">
+                                <td></td>
+                                <td>
+                                    @Html.DisplayFor(model => model[i].str_File_No)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => model[i].UserName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => model[i].str_Firstname) @Html.DisplayFor(model => model[i].str_Lastname)
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-success btn-xs btAddMoreTrainee" data-toggle="on" data-id="@Model[i].UserId"><i class="fa fa-arrow-right"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="box box-info">
+            <div class="box-header">
+                <h3 class="box-title">Trainees List</h3>
+                <div class="box-tools pull-right" data-toggle="tooltip">
+                    <div class="btn-group" data-toggle="btn-toggle">
+                        @*<button type="button" class="btn btn-default btn-sm"><i class="fa fa-plus"></i></button>*@
+                        <button class="btn btn-primary " id="btDone">
+                            <i class="fa fa-check"></i>
+                            Done
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+                <table class="table table-striped" id="tableTrainee">
+                    <thead>
+                        <tr>
+                            <td style="width: 15px"></td>
+                            <td></td>
+                            <td style="width: 15px"></td>
+                        </tr>
+                    </thead>
+                    <tbody id="subjectListBody">
+                        @{
+                            var TraineeList = (IEnumerable<TrainingCenter.Models.Class_Member>)ViewBag.TraineeList;
+                            for (int i = 0; i < TraineeList.Count(); i++)
+                            {                                
+                            <tr  data-id="@TraineeList.ElementAt(i).UserId">
+                                <td style="width: 15px">@(i + 1)</td>
+                                <td>@TraineeList.ElementAt(i).UserProfile.str_Firstname @TraineeList.ElementAt(i).UserProfile.str_Lastname </td>
+                                <td style="width: 15px">
+                                    <button type="button" class="btn btn-danger btn-xs btRemoveTrainee" data-toggle="on" data-id="@TraineeList.ElementAt(i).UserId" data-course="@TraineeList.ElementAt(i).Class_Id"><i class="fa fa-times"></i></button>
+                                </td>
+                            </tr>                            
+                            }
+                            
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var table = $('#defaultTable')
+            .DataTable(
+            {
+                "bLengthChange": false,
+                "fnDrawCallback": function (oSettings) {
+                    /* Need to redo the counters if filtered or sorted */
+                    if (oSettings.bSorted || oSettings.bFiltered) {
+                        for (var i = 0, iLen = oSettings.aiDisplay.length ; i < iLen ; i++) {
+                            $('td:eq(0)', oSettings.aoData[oSettings.aiDisplay[i]].nTr).html(i + 1);
+                        }
+                    }
+                },
+                "aoColumnDefs": [
+                    { "bSortable": false, "aTargets": [0] }
+                ],
+                "aaSorting": [[1, 'asc']]
+            });
+
+        var tableTrainee = $('#tableTrainee').DataTable({
+            "bFilter": false,
+            "bJQueryUI": true,
+            "sPaginationType": "full_numbers",
+            "bPaginate": false,
+            "bInfo": false,
+            "fnDrawCallback": function (oSettings) {
+                /* Need to redo the counters if filtered or sorted */
+                if (oSettings.bSorted || oSettings.bFiltered) {
+                    for (var i = 0, iLen = oSettings.aiDisplay.length ; i < iLen ; i++) {
+                        $('td:eq(0)', oSettings.aoData[oSettings.aiDisplay[i]].nTr).html(i + 1);
+                    }
+                }
+            },
+            "aoColumnDefs": [
+                { "bSortable": false, "aTargets": [0] }
+            ],
+            "aaSorting": [[1, 'asc']]
+        });
+
+        $(document).on("click", '.btAddMoreTrainee', function () {
+            var dataId = $(this).data('id');
+            var theRow = $(this).closest('tr');
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "/Class/AddTrainee",
+                dataType: "json",
+                data: { ClassId: $('#ClassId').val(), UserId: dataId },
+                success: function (result) {
+                    if (result.code == "Success") {
+                        tableTrainee.row.add([
+                            "",
+                            result.firstname + " " + result.lastname,
+                            '<button type="button" class="btn btn-danger btn-xs btRemoveTrainee" data-toggle="on" data-id="' + dataId + '"><i class="fa fa-times"></i></button>'
+                        ]).draw();
+                        table.rows(theRow).remove().draw();
+                    }
+                    else {
+                        setPopUpInform('Fail', '<p>' + result.message + '</p>', 'Close');
+                        $('#dialog').modal('show');
+                    }
+                }
+            });
+        });
+
+
+        $(document).on("click", '.btRemoveTrainee', function () {
+            var dataId = $(this).data('id');
+            var dataDept = $(this).data('dept');
+            var theRow = $(this).closest('tr');
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "/Class/RemoveTrainee",
+                dataType: "json",
+                data: { ClassId: $('#ClassId').val(), UserId: dataId },
+                success: function (result) {
+                    if (result.code == "Success") {
+                        tableTrainee.rows(theRow).remove().draw();
+                        if (dataDept == $('#selectDept').val()) {
+                            table.row.add([
+                                "",
+                                result.staffId,
+                                result.username,
+                                result.firstname + " " + result.lastname,
+                                '<button type="button" class="btn btn-success btn-xs btAddMoreTrainee" data-toggle="on" data-id="' + result.UserId + '"><i class="fa fa-arrow-right"></i></button>'
+                            ]).draw();
+                        }
+                    }
+                    else {
+                        setPopUpInform('Fail', '<p>' + result.message + '</p>', 'Close');
+                        $('#dialog').modal('show');
+                    }
+                }
+            });
+        });
+    });
+
+    $('#btDone').click(function () {
+        window.location.href = '/Class/Details/' + $('#CurrentClass').val();
+    });
+    
+    $(document).on("change", '#selectCourse', function () {
+        location.href = $('#CurrentClass').val() + "?CourseId=" + $('#selectCourse').val();
+    });
+
+    $(document).on("click", '#btAddAll', function () {
+        location.href = "../AddAllCourse/" + $('#CurrentClass').val() + "?CourseId=" + $('#selectCourse').val();
+    });
+
+</script>

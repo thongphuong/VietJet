@@ -1,0 +1,139 @@
+﻿@using TMS.Core.App_GlobalResources
+@{
+    ViewBag.Title = "UpdateAssignTrainee";
+    Layout = "~/Views/Shared/_Layout_LMS.cshtml";
+}
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li class="active">@Resource.lblDetails</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12" style="margin-top: 50px;">
+        <div class="panel  list-panel" id="list-panel">
+            <div class="panel-body table-responsive">
+                <div id="panel-search" class="collapse1 panel">
+                    <form id="createform">
+                        <div class="panel-body">
+                            <div class="row col-md-12">
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-2">
+                                        <label>@Resource.lblCourseCode</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        @Html.TextBox("coursecode", null, new { @class = "form-control createform" })
+                                    </div>
+
+                                    <div class="col-md-1">
+                                        <button type="submit" id="btFiltercourse" class="btn btn-primary">@Resource.lblFilterCourse</button>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-2">
+                                        <b>@Resource.lblCourseName</b>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <select class="form-control selectpicker createform" id="CourseList" onchange="OnChangeCourseList(this.value)" data-placeholder="-- @Resource.lblCourseList --">
+                                            <option></option>
+                                            @if (Model.Courseses != null)
+                                            {
+                                                foreach (var item in Model.Courseses)
+                                                {
+                                                    <option value="@item.Key">@item.Value</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-2">
+                                        <b>@Resource.lblSubjectName</b>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <select class='form-control selectpicker createform' id="ddl_subject" name="ddl_subject" data-placeholder="-- @Resource.lblSubjectList --">
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-11">
+                                    </div>
+                                    <div class="col-md-1">
+                                        <a class="btn btn-primary pull-right" id="btnUpdate"><i class="fa fa-search"></i> Update</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $('#btnUpdate').click(function () {
+            var id = $("#CourseList").val();
+            var detail = $("#ddl_subject").val();
+            Update(id, detail);
+        });
+        function Update(id, detail) {
+            window.location.href = "/Convert/UpdateAssign?courseid=" + id + "&detail=" + detail;
+        }
+
+
+        $('#btFiltercourse').click(function (e) {
+            spinner.open();
+            e.preventDefault();
+            var form = $("#createform").serialize();
+            $.ajax({
+                type: 'POST',
+                url: "/Convert/Filtercourse",
+                datatype: 'json',
+                data: form,
+                success: function (result) {
+                    $('#CourseList').empty();
+                    $('#CourseList').prop('selectedIndex', 0);
+                    $('#CourseList').append(result.value_option);
+                    $('#ddl_subject').empty();
+                    $('#ddl_subject').prop('selectedIndex', 0);
+                }, complete: function () {
+                    spinner.close();
+                }
+            });
+        });
+
+        function OnChangeCourseList(val) {
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "/Convert/ChangeCourseReturnSubjectResult",
+                dataType: "json",
+                data: { courseId: val, reportsubjectresult: 1 },
+                success: function (result) {
+                    $('#ddl_subject').empty();
+                    $('#ddl_subject').prop('selectedIndex', 0);
+                    if (result.value_null == "0") {
+                        $('#ddl_subject').append(result.value_option);
+                    }
+                    else {
+                        $('#ddl_subject').append("<option value='0'></option>");
+                    }
+                }
+            });
+        }
+
+    </script>
+}

@@ -1,0 +1,2310 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@using TMS.Core.ViewModels.UserModels
+@model TMS.Core.ViewModels.Courses.CourseModifyModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var data = (UserModel)HttpContext.Current.Session["UserA"];
+    var i = 0;
+    var b = 0;
+    var e = 0;
+}
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-graduation-cap"></i>  @Resource.lblCourseManagement - @(!Model.Id.HasValue ? @Resource.lblCreate : @Resource.lblEdit)</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblCourseManagement</li>
+                <li class="active">@(!Model.Id.HasValue ? @Resource.lblCreate : @Resource.lblEdit)</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="panel list-panel">
+    <div class="panel-heading list-panel-heading">
+        <h1 class="panel-title list-panel-title">
+            <i class="fas fa-pencil-alt font-small-byhoa" aria-hidden="true"></i> @Resource.lblCreate
+            <p class="btn-group pull-right">
+                @*<a href="/Course/ExpiredInstructors" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-link" aria-hidden="true"></i> @Resource.lblExpiredInstructors</a>*@
+            </p>
+        </h1>
+    </div>
+    <div class="panel-body">
+        <div class="tab-content">
+            <div class="tab-pane fade active in" id="home">
+                <nochange>
+                    @using (Html.BeginForm("Create", "Course", FormMethod.Post, new { id = "createform" }))
+                    {
+                        @Html.HiddenFor(m => m.Id)
+                        <div class="panel box-shadow">
+                            <div class="row">
+                                <div class="panel-body center-block">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <input type="hidden" value="" id="submit-type" />
+                                            <label>@Resource.lblCourseName <font color="red">(*)</font></label>
+                                            @if (Model.InProcess)
+                                            {
+                                                @Html.DropDownListFor(m => m.GroupSubjectId, new SelectList(Model.DictionaryGroupSubjects, "Key", "Value", Model.GroupSubjectId), "-- " + Resource.SELECT_COURSE_NAME + " --", new { @class = "form-control", @disabled = "disabled" })
+                                            }
+                                            else
+                                            {
+                                                @Html.DropDownListFor(m => m.GroupSubjectId, new SelectList(Model.DictionaryGroupSubjects, "Key", "Value", Model.GroupSubjectId), "-- " + Resource.SELECT_COURSE_NAME + " --", new { @class = "form-control" })
+                                            }
+
+                                            @Html.ValidationMessageFor(m => m.GroupSubjectId, null, new { @class = "text-danger" })
+                                        </div>
+                                        <div class="form-group ">
+                                            <label>@Resource.lblRelevantTrainingDepartment <font color="red">(*)</font></label>
+                                            <select class="form-control" name="DepartmentIds" id="DepartmentIds" data-placeholder="-- @Resource.lblRelevantTrainingDepartment --" onchange="onchangetrainingcenter()">
+                                                <option></option>
+                                                @Html.Raw(Model.Departments)
+                                                @*@foreach (var dictionaryDepartment in Model.DictionaryDepartments)
+                                                    {
+                                                        <option value="@dictionaryDepartment.Key" @(Model.DepartmentIds.Contains(dictionaryDepartment.Key) ? "selected" : "")> @dictionaryDepartment.Value</option>
+                                                    }*@
+                                            </select>
+
+                                            @Html.ValidationMessageFor(m => m.DepartmentIds, null, new { @class = "text-danger" })
+                                        </div>
+                                        <div class="form-group no-padding">
+                                            <label>@Resource.lblFrom <font color="red">(*)</font></label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                @Html.TextBoxFor(m => m.dtm_startdate, new { id = "txt_STARTDATE", @class = "form-control pull-right" })
+                                                @Html.ValidationMessageFor(m => m.dtm_startdate, null, new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        @*<div class="form-group no-padding">
+                                                @Html.LabelFor(m => m.ProgramCost)
+                                                <input type="number" name="ProgramCost" id="ProgramCost" class="form-control " pattern="(\d{3})([\.])(\d{2})" value="@Model.ProgramCost">
+                                            </div>*@
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Customer)
+                                            @Html.DropDownListFor(m => m.Customer, new SelectList(Model.DictionaryCourseAreas, "Key", "Value", Model.Customer), null, new Dictionary<string, object>() { { "id", "ddl_TYPE" }, { "class", "form-control" }, { "data-placeholder", "-- " + @Resource.lblType + " --" } })
+                                            @Html.ValidationMessageFor(m => m.Customer, null, new { @class = "text-danger" })
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Venue)
+                                            @Html.TextBoxFor(m => m.Venue, new { id = "txt_VENUE", @class = "form-control ", placeholder = @Resource.lblVenue })
+                                            @Html.ValidationMessageFor(m => m.Venue, null, new { @class = "text-danger" })
+                                        </div>
+                                        @if (data.ConfigSite.Contains(UtilConstants.KEY_MIN_TRAINEE))
+                                        {
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.MinTranineeMembers)
+                                                @Html.TextBoxFor(m => m.MinTranineeMembers, new { id = "txt_MinTRAINEE", @class = "form-control ", type = "number", placeholder = Resource.lblMinTranineeMembers })
+                                                @Html.ValidationMessageFor(m => m.MinTranineeMembers, null, new { @class = "text-danger" })
+                                            </div>
+                                        }
+                                    </div>
+                                    @*<div class="col-lg-3">
+                                            <div class="form-group">
+                                                <div class="col-md-3">
+                                                    <input class="checkbox" type="checkbox" @(Model != null && Model.IsPublic == (int)UtilConstants.BoolEnum.Yes ? "checked" : "") id="IsPublic" name="IsPublic" value="1" />&nbsp;
+                                                    <label>
+                                                        @Resource.COURSE_PUBlIC
+                                                    </label>
+                                                </div>
+                                                <label>&nbsp;</label>
+                                                <input class="checkbox" type="checkbox" @(Model != null && Model.IsBindSubject == (int)UtilConstants.BoolEnum.Yes ? "checked" : "") id="IsBindSubject" name="IsBindSubject"  onclick="myFunction()" value="1" />&nbsp;
+                                                <label>
+                                                    Bind to subject
+                                                </label>
+                                                @Html.ValidationMessageFor(model => model.IsPublic, null, new {@class = "text-danger"})
+                                            </div>
+                                        </div>*@
+                                    <div class="col-lg-6" sty>
+                                        <div class="form-group">
+                                            <label>@Resource.lblName</label>
+                                            @Html.TextBoxFor(m => m.Name, new { id = "lastnamecourse", @class = "form-control ", placeholder = @Resource.lblName })
+                                            @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label>@Resource.lblCourseCode <font color="red">(*)</font></label>
+                                            @Html.TextBoxFor(m => m.Code, new { id = "txt_COURSECODE", @class = "form-control", placeholder = @Resource.lblCourseCode, @readonly = "readonly" })
+                                            @Html.ValidationMessageFor(m => m.Code, null, new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group no-padding">
+                                            <label>@Resource.lblTo <font color="red">(*)</font></label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                @Html.TextBoxFor(m => m.dtm_enddate, new { id = "txt_ENDDATE", @class = "form-control pull-right", @onclick = "check(this)" })
+                                                @Html.ValidationMessageFor(m => m.dtm_enddate, null, new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.CourseType)
+                                            @Html.DropDownListFor(m => m.CourseType, new SelectList(Model.DictionaryCourseTypes, "Key", "Value", Model.CourseType), "", new Dictionary<string, object>() { { "id", "ddl_TYPECOURSE" }, { "class", "form-control" }, { "data-placeholder", "-- " + @Resource.lblCourseType + " --" } })
+                                            @Html.ValidationMessageFor(m => m.CourseType, null, new { @class = "text-danger" })
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.PartnerId)
+                                            @Html.DropDownListFor(m => m.PartnerId, new SelectList(Model.DictionaryCompanies, "Key", "Value", Model.PartnerId), "", new Dictionary<string, object>() { { "id", "ddl_PARTNER" }, { "data-placeholder", "-- " + @Resource.lblCompany + " --" } })
+                                            @Html.ValidationMessageFor(m => m.PartnerId, null, new { @class = "text-danger" })
+                                        </div>
+
+                                        <div class="form-group " hidden>
+                                            @Html.LabelFor(m => m.Survey)
+                                            @Html.DropDownListFor(m => m.Survey, new SelectList(Model.DictionarySurvey, "Key", "Value", Model.Survey), "", new Dictionary<string, object>() { { "id", "ddl_SURVEY" }, { "data-placeholder", "--" + @Resource.lblSurvey + "--" } })
+                                            @Html.ValidationMessageFor(m => m.Survey, null, new { @class = "text-danger" })
+                                        </div>
+                                        @*<div class="form-group">
+                                                @Html.LabelFor(m => m.MaxGrade)
+                                                <i class="zmdi zmdi-help-outline classHelp" data-toggle="tooltip" data-html="true" title="@Resource.HELP_COURSE_MAXTRAINEE"></i>
+                                                @Html.TextBoxFor(m => m.MaxGrade, new { @class = "form-control ", type = "number", placeholder = @Resource.lblMaxGrade })
+                                                @Html.ValidationMessageFor(m => m.MaxGrade, null, new { @class = "text-danger" })
+                                            </div>*@
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.MaxTranineeMembers)
+                                            @Html.TextBoxFor(m => m.MaxTranineeMembers, new { id = "txt_NOTRAINEE", @class = "form-control ", type = "number", placeholder = @Resource.lblMaxTranineeMembers })
+                                            @Html.ValidationMessageFor(m => m.MaxTranineeMembers, null, new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 form-group">
+                                    <div class="col-lg-12 form-group">
+                                        @Html.LabelFor(m => m.Note)
+                                        @Html.TextAreaFor(model => model.Note, new { id = "txt_NOTE", @class = "form-control", @rows = "4" })
+                                        @Html.ValidationMessageFor(m => m.Note, null, new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <div class="form-group col-lg-12">
+                                        <div class="authorization-edit-lsbox-title" id="bindcheck" style="display:none ">
+                                            <label>SUBJECT</label>
+                                            <div class="form-group row">
+                                                <div class="col-md-10">
+                                                    <input type="text" id="FilterCodeOrName" name="FilterCodeOrName" placeholder="@Resource.lblCode / @Resource.lblName" class="form-control" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <a id="btFilter" class="btn btn-primary center-block legitRipple" onclick="FilterSubject()">@Resource.lblFilter</a>
+                                                </div>
+                                            </div>
+                                            <div class="authorization-edit-wrapper-lsBox" style="overflow-y: scroll; overflow-x: hidden;">
+                                                <div id="assignedFunc" class="authorization-edit-lstBox2" style="border: none; ">
+                                                    <div id="subjectlist"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="row">
+                                    <div class="panel-body center-block">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <a id="expandCreateCourse" class="pull-right" style="text-decoration: underline">Expand</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>*@
+                        </div>
+                        <div class="panel box-shadow hidden" id="GroupSubjectWrapper">
+                            <div class="panel-heading list-panel-heading">
+                                <h1 class="panel-title list-panel-title" id="GroupSubjectHeader"></h1>
+                            </div>
+                            <div class="panel-body center-block">
+                                <div class="table-responsive">
+                                    @*<table id="group-subjects" class="table table-stripe  "></table>*@
+                                    <sonbig id="group-subjects" class="table table-stripe" style="font-size:14px;"></sonbig>
+                                    <div style="width:100%;text-align: center;display:none;" id="loading2"><img src="/Content/img/ajax-loader1.gif" style="width: 3%;"></div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <div class="table-responsive">
+                                    <sonbig id="GroupSubject" class="table table-stripe  " style="font-size: 14px;">
+                                        @if (Model.CourseDetailModels != null)
+                                        {
+                                            foreach (var courseDetail in Model.CourseDetailModels)
+                                            {
+                                                <div data-index="@(@i)" class="col-md-12 notice notice-info course-detail-@(@i) get-detail-@(@i) ">
+                                                    <div class="col-md-12  course-detail-content course-detail-@(@i) course-detail-value-@(@i)">
+                                                        <div class="classicCourseDetail">
+                                                            <div class="col-md-12 row">
+                                                                <son class="form-group col-md-3">
+                                                                    <label>@Resource.lblSubject</label><span style="color:#d43f3a; font-weight:bold" id="course-average-label3"> Average Calculate: @(Model.ListSubjects.FirstOrDefault(a => a.Id == courseDetail.SubjectId).Average_Calculator ? "YES": "NO")</span>
+                                                                    <input type="hidden" class="course-detail-Id@(@i)" data-index="@(@i)" name="CourseDetailModels[@i].Id" id="course-detail-Id" value="@courseDetail.Id" />
+                                                                    <select class="form-control input-sm default subject_filter reselect js-example-templating subjectOnChange" data-coursedetail="@courseDetail.Id" data-monitor="@courseDetail.Mentor" id="course-detail-subject" name="CourseDetailModels[@i].SubjectId" onchange=" onchangesubject(this,1) " disabled="disabled" data-index="@(@i)">
+                                                                        @if (Model.ListSubjects != null)
+                                                                        {
+                                                                            foreach (var subject in Model.ListSubjects)
+                                                                            {
+                                                                                <option title="AverageCal: @(subject.Average_Calculator ? "YES" : "NO") &#13; PassScore: @subject.PassScore &#13; Duration: @subject.Duration &#13; Recurrent: @subject.Recurrent" data-type="@subject.int_Course_Type" data-duration="@subject.Duration" data-average="@subject.Average_Calculator" value="@subject.Id" @(subject.Id == courseDetail.SubjectId ? "selected" : "")> @subject.Name - @subject.string_Course_Type </option>
+                                                                            }
+                                                                        }
+                                                                    </select>
+                                                                </son>
+                                                                <son class="form-group col-md-2">
+                                                                    <label style="color:#d43f3a">@Resource.lblMethod</label>
+                                                                    <select class="form-control input-sm default methodlearning" data-index="@(@i)" data-placeholder="--@Resource.lblMethod --" title="Learning Type " id="course-detail-type-learning" name="CourseDetailModels[@i].LearningType" onchange=" typeLearningclick(this) ">
+                                                                        @foreach (var m in Model.DictionaryLearningTypes)
+                                                                        {
+                                                                            <option value="@m.Key" @(m.Key == courseDetail.LearningType ? "selected" : "")>@m.Value</option>
+                                                                        }
+                                                                    </select>
+                                                                </son>
+                                                                <son class="form-group col-md-1">
+                                                                    <label>@Resource.lblRegisable</label>
+                                                                    <select class="form-control input-sm default reselect" title="-- @Resource.lblRegisable--" data-placeholder="-- @Resource.lblRegisable--" data-index="@(@i)" id="course-detail-regisable" name="CourseDetailModels[@i].Registable" onchange="onChangeRegistry(this)">
+                                                                        @foreach (var m in Model.DictionarySurvey)
+                                                                        {
+                                                                            <option value="@m.Key" @(m.Key == courseDetail.Registable ? "selected" : "")>@m.Value</option>
+                                                                        }
+                                                                    </select>
+                                                                </son>
+                                                                <son class="form-group col-md-2">
+                                                                    <label>@Resource.lblFromDate</label>
+                                                                    <input type="text" id="course-detail-from-date" name="CourseDetailModels[@i].DateFrom" value="@(courseDetail.dtm_time_from)" class="form-control input-sm course-detail-from-date date-picker date_validate date_from" onclick=" check(this) " />
+                                                                </son>
+                                                                <son class="form-group col-md-2">
+                                                                    <label>@Messege.lblToDate</label><input type="text" name="CourseDetailModels[@i].DateTo" id="course-detail-to-date" class="form-control input-sm course-detail-to-date date-picker date_validate date_to" value="@(courseDetail.dtm_time_to)" onclick=" check(this) " />
+                                                                </son>
+                                                                <son class="form-group col-md-1"><label>@Messege.lblFromTime</label><input type="text" value="@courseDetail.TimeFrom" name="CourseDetailModels[@i].TimeFrom" id="course-detail-from-time" class="form-control input-sm date TimeFrom_@i" onchange=" checkInstructor(this) " /></son>
+                                                                <son class="form-group col-md-1"><label>@Messege.lblToTime</label><input type="text" value="@courseDetail.TimeTo" name="CourseDetailModels[@i].TimeTo" id="course-detail-to-time" class="form-control input-sm date TimeTo_@i" /></son>
+                                                            </div>
+
+                                                            <div class="col-md-12 row">
+                                                                <input type="hidden" id="value_monitor" value="@(courseDetail.Mentor.HasValue ? courseDetail.Mentor : 0)" />
+                                                                <son class="form-group col-md-2">
+                                                                    <label>@Resource.lblMonitor</label>
+                                                                    <select class="form-control input-sm default reselect Mentor" name="CourseDetailModels[@i].Mentor" id="course-detail-Mentor" data-index="@i" onchange="displayCostMonitor(this)">
+                                                                    </select>
+                                                                </son>
+                                                                <son class="form-group col-md-2 MonitorDuration" id="MonitorDuration_@i" style="display:none">
+                                                                    <label>Duration (Hours)</label>
+                                                                    <input class="form-control " value="@(courseDetail.MonitorDuration.HasValue ? courseDetail.MonitorDuration.Value : 0)" name="CourseDetailModels[@i].MonitorDuration" id="course-detail-MonitorDuration" />
+                                                                </son>
+                                                                <son class="form-group col-md-2 MonitorAllowance" id="MonitorAllowance_@i" style="display:none">
+                                                                    <label>Cost</label>
+                                                                    <input class="form-control course-detail-MonitorAllowance_@i" value="@courseDetail.MonitorAllowance" name="CourseDetailModels[@i].MonitorAllowance" id="course-detail-MonitorAllowance" readonly="readonly" />
+                                                                </son>
+                                                                <son class="form-group col-md-2 divExaminer" id="divExaminer_@i">
+                                                                    <label>@Resource.lblExaminer</label>
+                                                                    <select class="form-control input-sm default reselect Hannah" name="CourseDetailModels[@i].Hannah" id="course-detail-Hannah" onchange="displayCostExaminer(this)" data-index="@i">
+                                                                    </select>
+                                                                </son>
+                                                                <son class="form-group col-md-2 divExaminerDuration" id="divExaminerDuration_@i" style="display:none">
+                                                                    <label>Duration (Hours)</label>
+                                                                    <input class="form-control " value="@(courseDetail.ExaminerDuration.HasValue ? courseDetail.ExaminerDuration.Value : 0)" name="CourseDetailModels[@i].ExaminerDuration" id="course-detail-ExaminerDuration" />
+                                                                </son>
+                                                                <son class="form-group col-md-2 divExaminerAllowance" id="divExaminerAllowance_@i" style="display:none">
+                                                                    <label>Cost</label>
+                                                                    <input class="form-control course-detail-ExaminerAllowance_@i" value="@courseDetail.ExaminerAllowance" name="CourseDetailModels[@i].ExaminerAllowance" id="course-detail-ExaminerAllowance" readonly="readonly" />
+                                                                </son>
+                                                            </div>
+
+                                                            <div class="col-md-12 row">
+                                                                <son class="form-group col-md-2 mark_type" id="divmarkType_@i">
+                                                                    <label style="color:#d43f3a">Test</label>
+                                                                    <select class="form-control marktype  default input-sm" data-index="@(@i)" data-placeholder="-- Mark Type --" title="Mark Type" id="course-detail-marktype" name="CourseDetailModels[@i].MarkType">
+                                                                        <option value="0" @(courseDetail.MarkType == 0 ? "selected" : "")>@Resource.lblManual</option>
+                                                                        <option value="1" @(courseDetail.MarkType == 1 ? "selected" : "")>@Resource.lblAuto</option>
+                                                                    </select>
+                                                                </son>
+
+                                                                <div id="hiddenRoom_@(@i)" @*class="@(courseDetail.LearningType == (int)UtilConstants.LearningTypes.Offline ? "in" : "collapse")"*@>
+                                                                    <son class="form-group col-md-4">
+                                                                        <label>@Resource.lblRoom</label>
+                                                                        <select class="form-control input-sm default reselect roomCheck_@i" data-placeholder="-- @Resource.lblRoom --" title="Class Room" onchange=" checkRoom(this) " id="course-detail-room" name="CourseDetailModels[@i].Room">
+                                                                            <option value="-1">-- @Resource.lblRoom --</option>
+                                                                            @foreach (var room in Model.DictionaryRooms)
+                                                                            {
+                                                                                <option value="@room.Key" @(room.Key == courseDetail.Room ? "selected" : "")>@room.Value</option>
+                                                                            }
+                                                                        </select>
+                                                                    </son>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <son class="form-group col-md-12">
+                                                            <div class="text-danger">
+                                                            </div>
+                                                            <div class="text-danger div-blended @(courseDetail.LearningType == (int)UtilConstants.LearningTypes.OfflineOnline ? "in" : "collapse")" id="div_Blended_@(@i)">
+                                                                <a href="javasciprt:void(0)" title="classRoom Online" data-toggle="tooltip">Method: <b style="color:#d43f3a">cRo</b></a>
+                                                                &nbsp; <span class="text-success action" data-toggle="collapse" data-target="#div_Detail_Blended_@(@i)"><i class="fa fa-search" data-toggle="tooltip" title="View Details"></i></span>
+                                                                &nbsp; <span class="text-success action" title="@Resource.lblADDNEW" data-index="@(@i)" data-toggle="tooltip" onclick="modalBlended(this)"><i class="far fa-plus-square"></i></span>
+                                                            </div>
+                                                        </son>
+                                                        <div class="col-md-12 detail-blended @(courseDetail.LearningType == (int)UtilConstants.LearningTypes.OfflineOnline ? "in" : "collapse")" id="div_Detail_Blended_@(@i)">
+                                                            <son class="form-group col-md-9">
+                                                                @if (courseDetail.Blended != null && courseDetail.Blended.Any())
+                                                                {
+                                                                    foreach (var blended in courseDetail.Blended)
+                                                                    {
+                                                                        <div class="col-md-12">
+                                                                            <a href="javasciprt:void(0)" title="@blended.dtm_DateFrom_blend - @blended.dtm_DateTo_blend - @blended.LearningTypeName @(blended.RoomId != null ? ("- " + blended.Room) : "")" data-index='@(@i)' onclick='modalBlended(this)' data-toggle="tooltip">
+                                                                                @blended.dtm_DateFrom_blend - @blended.dtm_DateTo_blend - @blended.LearningTypeName @(blended.RoomId != null ? ("- " + blended.Room) : "") - @blended.Examiner
+                                                                            </a>&nbsp;
+                                                                            <span class="text-success action" data-index='@(@i)' onclick='modalBlended(this)'>
+                                                                                <i class="fa fa-pencil-alt" data-toggle="tooltip" title="@Resource.lblEdit"></i>
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="col-md-12 hidden hidden_input">
+                                                                            <div class="form-group col-md-12 blendedfor" data-index="@(@b)" id="didetail-blendedv_Remove_Blended_@(@b)">
+                                                                                <input type="hidden" name="Blended[@(@b)].Id" id="detail-blended-id" value="@blended.Id" />
+                                                                                <input type="hidden" name="Blended[@(@b)].DateFrom" id="detail-blended-datefrom" value="@(blended.dtm_DateFrom_blend)" />
+                                                                                <input type="hidden" name="Blended[@(@b)].DateTo" id="detail-blended-dateto" value="@(blended.dtm_DateTo_blend)" />
+                                                                                <input type="hidden" name="Blended[@(@b)].Room" id="detail-blended-roomid" value="@blended.RoomId" />
+                                                                                <input type="hidden" name="Blended[@(@b)].LearningType" id="detail-blended-learningtype" value="@blended.LearningTypeName" />
+                                                                                <input type="hidden" name="Blended[@(@b)].Examiner" id="detail-blended-examiner" value="@blended.ExaminerId" />
+                                                                                <input type="hidden" name="Blended[@(@b)].BlendedDuration" id="detail-blended-BlendedDuration" value="@blended.BlendedDuration" />
+                                                                                <input type="hidden" name="Blended[@(@b)].BlendedAllowance" id="detail-blended-BlendedAllowance" value="@blended.BlendedAllowance" />
+                                                                            </div>
+                                                                        </div>
+                                                                        b++;
+                                                                    }
+                                                                }
+                                                            </son>
+                                                        </div>
+                                                        <br />
+                                                        <br />
+
+                                                    </div>
+                                                    <div data-index="@i" class="col-md-12 course-detail-@i">
+                                                        <son class="form-group col-md-12">
+                                                            <label>@Resource.lblInstructor</label>
+                                                            <select class="form-control InstructorSubject intructor_dura default" multiple="multiple" id="course-detail-instructor" data-index="@i">
+                                                            </select>
+                                                        </son>
+                                                        <son class="form-group col-md-12 intrustorList">
+                                                            @for (var j = 0; j < courseDetail.SubjectInstructors.Count(); j++)
+                                                            {
+                                                                var subjectInstructor = courseDetail.SubjectInstructors.ElementAt(j);
+                                                                <div class="row insdura_@(subjectInstructor.InstructorId) subjectInstructor">
+                                                                    <input type="hidden" value="@subjectInstructor.Id" name="CourseDetailModels[@i].SubjectInstructors[@j].Id" id="editor-insdra-Id" />
+                                                                    <div class="form-group col-md-4">
+                                                                        <label>@Resource.lblInstructor</label>
+                                                                        <input class="" type="hidden" name="CourseDetailModels[@i].SubjectInstructors[@j].SubjectId" id="editor-insdra-subjectId" value="@subjectInstructor.SubjectDetailId" />
+                                                                        <input class="" type="hidden" name="CourseDetailModels[@i].SubjectInstructors[@j].Name" id="editor-insdra-instructorId" value="@subjectInstructor.InstructorId" />
+                                                                        <input class="instructorValue" type="hidden" id="editor-insdra-id" name="CourseDetailModels[@i].SubjectInstructors[@j].Id" data-index="@i" value="@subjectInstructor.Id" />
+                                                                        <input type="text" id="editor-insdra-instructorName" class="form-control input-sm" readonly="readonly" value="@subjectInstructor.Name" />
+                                                                    </div>
+                                                                    <div class="form-group col-md-4">
+                                                                        <label>@Resource.lblDuration</label>
+                                                                        <input type="text" class="form-control input-sm" id="editor-insdra-duration" name="CourseDetailModels[@i].SubjectInstructors[@j].Duration" value="@subjectInstructor.Duration">
+                                                                    </div>
+                                                                    <div class="form-group col-md-4">
+                                                                        <label>@Resource.lblAllowance</label>
+                                                                        <input type="text" class="form-control input-sm" id="editor-insdra-allowance" readonly="readonly" name="CourseDetailModels[@i].SubjectInstructors[@j].Allowance" value="@subjectInstructor.InstructorAllowance">
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        </son>
+                                                        <son class="form-group col-md-12 strremark">
+                                                            <label>Remark</label>
+                                                            <textarea class="form-control" cols="20" id="course-detail-remark" name="CourseDetailModels[@i].str_remark" rows="4" value="@(courseDetail.str_remark)">@(courseDetail.str_remark)</textarea>
+                                                        </son>
+                                                    </div>
+                                                    <son class="form-group col-md-12">
+                                                        <div class="text-danger">
+                                                            <i onclick="DelRow(this) " data-index="@i" class="far fa-minus-square action" style="font-size: 15pt;color: #df3333; cursor:pointer "></i>
+                                                        </div>
+                                                    </son>
+                                                </div>
+                                                e++;
+                                                i++;
+                                            }
+                                        }
+                                    </sonbig>
+                                </div>
+                                <i class="far fa-plus-square action" id="addrowid" onclick="AddRow('#GroupSubject') " style="font-size: 15pt;color: forestgreen; cursor:pointer "></i>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="action-form text-right">
+                                @if (User.IsInRole("/Course/Create")) // neu co
+                                {
+                                    if (!Model.ProcessStepRequirement)// ProcessStepRequirement = false, không tồn tại thì vào
+                                    {
+                                        if (Model.ProcessStep) //ProcessStep = true dô
+                                        {
+                                            if (!Model.HiddenButton)
+                                            {
+                                                <label for="submit1" class="btn btn-primary"><i class="fas fa-paper-plane"></i>&nbsp;@Resource.lblSubmit</label>
+                                                <input type="button" class="btn btn-primary hidden" id="submit1" data-submittype="0" value="@Resource.lblSubmit" onclick="SubmitRequest(this) " />
+                                                <label for="submit2" class="btn btn-primary"><i class="fas fa-save"></i>&nbsp;@Resource.lblSave</label>
+                                                <input type="button" class="btn btn-primary hidden" id="submit2" data-submittype="1" value="@Resource.lblSave" onclick="actionSubmit(this)" />
+                                            }
+                                            if (Model.HiddenButton)
+                                            {
+                                                if (!Model.IsFinalApproved)
+                                                {
+                                                    <label for="cancelRequest" class="btn btn-primary"><i class="fas fa-paper-plane"></i>&nbsp;@Resource.lblCancelRequest</label>
+                                                    <input type="button" class="btn btn-primary hidden" id="cancelRequest" value="@Resource.lblCancelRequest" data-courseId="@(Model.CourseId)" onclick="CancelRequest(this)" />
+                                                }
+
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            <label for="submit2" class="btn btn-primary"><i class="fas fa-paper-plane"></i>&nbsp;@Resource.lblSave</label>
+                                            <input type="button" class="btn btn-primary" id="submit2" data-submittype="0" value="@Resource.lblSave" onclick="actionSubmit(this)" />
+                                        }
+                                    }
+                                    <a href="#" class="btn btn-primary" onclick='nextStep()'><i class="fas fa-users" aria-hidden="true"></i> @Resource.lblAssignTrainee</a>
+                                }
+
+                                <a onclick="goBack()" class="btn btn-default"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+                            </div>
+                        </div>
+                    }
+                    <nochange>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p id="lblModelMessage"></p>
+                <label>Note</label>
+                <textarea class="form-control" name="txtNote" id="txtNote" rows="5"></textarea>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div id="messageout">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="Modal_Footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal addtrainee-->
+<div class="modal fade" id="myModal2" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header panel-oran">
+                <button type="button" class="close btnClose" data-dismiss="modal">&times;</button>
+                <div class="panel-heading list-panel-heading">
+                    <h5 class="modal-title panel-title list-panel-title" id="modal-header">@Resource.lblWARNING</h5>
+                </div>
+            </div>
+            <div class="modal-body">
+                <label id="lblmyModal"></label>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Continue" class="btn btn-primary" id="btnContinue" />
+
+                <button type="button" class="btn btn-secondary btnClose" data-dismiss="modal">@Resource.lblClose</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal fade" id="Modal-Blended" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="messageoutBlended">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="Modal-Footer-Blended">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--END Modal addtrainee -->
+@Html.Partial("_Partials/_CourseDetail", Model)
+@Html.Partial("_Partials/_Blended", Model)
+
+<script src="~/Scripts/js/app.js"></script>
+@section Scripts{
+    <script type="text/javascript">
+    const MyRequestsCompleted = (function() {
+	    var numRequestToComplete, requestsCompleted, callBacks, singleCallBack;
+
+	    return function(options) {
+	        if (!options) options = {};
+
+	        numRequestToComplete = options.numRequest || 0;
+	        requestsCompleted = options.requestsCompleted || 0;
+	        callBacks = [];
+	        var fireCallbacks = function() {
+	            for (var i = 0; i < callBacks.length; i++) callBacks[i]();
+	        };
+	        if (options.singleCallback) callBacks.push(options.singleCallback);
+
+	        this.addCallbackToQueue = function(isComplete, callback) {
+	            if (isComplete) requestsCompleted++;
+	            if (callback) callBacks.push(callback);
+	            if (requestsCompleted == numRequestToComplete) fireCallbacks();
+	        };
+	        this.requestComplete = function(isComplete) {
+	            if (isComplete) requestsCompleted++;
+	            if (requestsCompleted == numRequestToComplete) fireCallbacks();
+	        };
+	        this.setCallback = function(callback) {
+	            callBacks.push(callBack);
+	        };
+	    };
+	})();
+
+	// Usage
+
+    // $(".js-example-templating").select2();
+
+    //$('#GroupSubjectId').on('click', function () {
+    //    $(".js-example-templating").select2();
+    //});
+
+    var index = @i;
+    var b_index = @b;
+    var e_index = @e;
+    var sTable1;
+    var sTable2;
+    var row = 0;
+    var count = 0;
+    $(document).ready(function() {
+        //myFunction();
+        var idRecord = $("#Id").val();
+        var idNumber = idRecord != null ? idRecord : 0;
+        expandHiddenFields(idNumber);
+        $(".subject_filter").each(function (i, v) {
+
+            onchangesubject($(v),0);
+            count++;
+        });
+
+        $(".reselect").each(function (i, v) {
+
+            $(v).select2();
+        });
+        $(".methodlearning").each(function (i, v) {
+            var checkid = @(!Model.Id.HasValue ? "true": "false");
+            var value_method = $(v).val();
+            var div_content = $(v).closest("div").parent().find(".divExaminer");
+            var div_content_mark_type = $(v).closest("div").parent().find(".mark_type");
+            var div_time_from = $(v).closest("div").find("#course-detail-from-time");
+            var div_time_to = $(v).closest("div").find("#course-detail-to-time");
+            var div_room = $(v).closest("div").parent().find("#course-detail-room");
+            if (value_method == "0") {
+                div_content.removeAttr("style", "display");
+                div_content_mark_type.removeAttr("style", "display");
+
+                if (checkid == "true") {
+                     div_time_from.val("08:30");
+                     div_time_to.val("16:45");
+                }
+
+            }
+            else if (value_method == "2") {
+                debugger
+                div_content.removeAttr("style", "display");
+                div_content.css('display', 'none');
+                div_content_mark_type.removeAttr("style", "display");
+                div_room.val(83);
+                div_room.select2();
+                if (checkid == "true") {
+                     div_time_from.val("08:30");
+                    div_time_to.val("16:30");
+                }
+
+
+            } else {
+                debugger
+                div_content_mark_type.removeAttr("style", "display");
+                div_content_mark_type.css('display', 'none');
+                div_room.val(72);
+                div_room.select2();
+                if (checkid == "true") {
+                    div_time_from.val("00:00");
+                    div_time_to.val("23:59");
+                }
+
+
+            }
+
+        });
+
+        $(".expandcourse").css("display", "none");
+        //$(".line_310").addClass("active");
+        //$("#ddl_TYPE").val(1);
+        $('.date').datetimepicker({
+            format: "HH:mm"
+        });
+        $('.date_validate').datetimepicker({
+            format: 'DD/MM/YYYY',
+            //locale: '@Resource.lblLanguage',
+             useCurrent: false
+
+        });
+        formatDatetimepicker('#txt_STARTDATE', '@Resource.lblLanguage');
+        formatDatetimepicker('#txt_ENDDATE', '@Resource.lblLanguage');
+        $("#txt_STARTDATE").on("dp.change",
+            function (e) {
+                moment.locale('vi');
+                var date = e.date;
+                $('#txt_ENDDATE').data("DateTimePicker").minDate(date);
+                $('.course-detail-from-date').each(function (i, o) {
+                    $(o).data("DateTimePicker").minDate(date);
+                });
+                $('.course-detail-to-date').each(function (i, o) {
+                   $(o).data("DateTimePicker").minDate(date)
+                });
+
+            });
+
+         $("#txt_ENDDATE").on("dp.change",
+            function (e) {
+                moment.locale('vi');
+                var date = e.date;
+                $('#txt_STARTDATE').data("DateTimePicker").maxDate(date);
+                $('.course-detail-from-date').each(function (i, o) {
+                    $(o).data("DateTimePicker").maxDate(date);
+                });
+                $('.course-detail-to-date').each(function (i, o) {
+                   $(o).data("DateTimePicker").maxDate(date)
+                });
+
+             });
+
+        $('#GroupSubjectId').change(function() {
+            var $this = $(this);
+            var id = $this.val();
+            if (id == null) {
+                $('#GroupSubjectWrapper').addClass('hidden');
+                $('#GroupSubjectHeader').text('');
+            } else {
+                $('#GroupSubjectWrapper').removeClass('hidden');
+                $('#GroupSubjectHeader').text('Group Subjects: ' + $this.find('option:selected').text());
+            }
+            var pageSize = 1;
+            var pageIndex = 0;
+            $("#group-subjects").html('');
+            ajaxGetCourseDetail(id, pageIndex, pageSize);
+        });
+        $("#ddl_TYPECOURSE").change(function () {
+
+            var val = $(this).val();
+            subjectFilter(val);
+        });
+        $(".btnClose").click(function() {
+            $('#lblmyModal').val("");
+            $('#btnContinue').off("click");
+        });
+        $("#expandCreateCourse").click(function() {
+            if ($(".expandcourse").css('display') == 'none') {
+                $(".expandcourse").css('display', 'block');
+                $("#expandCreateCourse").html("Hidden");
+            } else {
+                $(".expandcourse").css('display', 'none');
+                $("#expandCreateCourse").html("Expand");
+            }
+        });
+
+        $("select.subjectOnChange").each(function (i, v) {
+            var index = i;
+            var average = $('[name="CourseDetailModels[' + index + '].SubjectId"]').find("option:selected").data('average');
+            if (average == "False") {
+                    $('[name="CourseDetailModels['+index+'].LearningType"]').find("option:contains('Online')").hide();
+                    $('[name="CourseDetailModels['+index+'].MarkType"]').find("option:contains('Auto')").hide();
+                } else {
+                    $('[name="CourseDetailModels['+index+'].LearningType"]').find("option:contains('Online')").show();
+                    $('[name="CourseDetailModels['+index+'].MarkType"]').find("option:contains('Auto')").show();
+                }
+        });
+
+    });
+    function reloadata(type) {
+
+            if (type == 0) {
+                $(".Mentor").each(function (i, v) {
+                    var value_method = $(v).val();
+                    var div_content = $(v).closest("div").find(".MonitorDuration");
+                    var div_content_ = $(v).closest("div").find(".MonitorAllowance");
+                    if (!value_method || value_method == "-1" || value_method == -1) {
+                        div_content.removeAttr("style", "display");
+                        div_content.css('display', 'none');
+                        div_content_.removeAttr("style", "display");
+                        div_content_.css('display', 'none');
+                    }
+                    else {
+                        div_content.removeAttr("style", "display");
+                        div_content.css('display', 'block');
+                        div_content_.removeAttr("style", "display");
+                        div_content_.css('display', 'block');
+                    }
+
+                });
+            }
+            else {
+                $(".Hannah").each(function (i, v) {
+                var value_method = $(v).val();
+                var div_content = $(v).closest("div").find(".divExaminerDuration");
+                 var div_content_ = $(v).closest("div").find(".divExaminerAllowance");
+                if (!value_method || value_method == "-1" || value_method == -1) {
+                    div_content.removeAttr("style", "display");
+                    div_content.css('display', 'none');
+                    div_content_.removeAttr("style", "display");
+                    div_content_.css('display', 'none');
+                }
+                else {
+                    div_content.removeAttr("style", "display");
+                    div_content.css('display', 'block');
+                    div_content_.removeAttr("style", "display");
+                    div_content_.css('display', 'block');
+                }
+
+            });
+            }
+        }
+    function ajaxGetCourseDetail(id, pageIndex, pageSize) {
+            $('#loading2').css("display", "block");
+            $("#GroupSubjectId").prop("disabled", true);
+             //spinner.open();
+            $.ajax({
+                async: true,
+                url: '/Course/AjaxSelectGroupCourse',
+                data: { id: id , pageIndex: pageIndex, pageSize: pageSize},
+                type: 'POST',
+                success: function (response) {
+                    if (response.result) {
+                        GenerateSubjects('#group-subjects', response.data);
+                        if (response.typecourse != -1) {
+                            $("#ddl_TYPECOURSE").val(response.typecourse);
+                            $('#ddl_TYPECOURSE').next().remove();
+
+                            $('#ddl_TYPECOURSE').select2();
+                            $("#ddl_TYPECOURSE").change();
+                        }
+                        if (response.Runs) {
+                            ajaxGetCourseDetail(id, pageIndex + 1, pageSize);
+                        }
+                        else {
+                            $('#loading2').css("display", "none");
+                            $("#GroupSubjectId").prop("disabled", false);
+                        }
+                    } else {
+                         $('#loading2').css("display", "none");
+                         $("#GroupSubjectId").prop("disabled", false);
+                         notify.alert(response.message, 'Warning', TITLE_STATUS_WARNING);
+                    }
+                },
+                complete: function () {
+
+                }
+            });
+        }
+    function subjectFilter(val) {
+
+            $('.subject_filter option').each(function () {
+                var type = $(this).data('type');
+                if (type == val) {
+                    $(this).removeAttr('hidden');
+                }
+                else {
+                    $(this).attr('hidden', true);
+                }
+            });
+        }
+    function onchangetrainingcenter() {
+
+            var valuetype = $('#DepartmentIds').val();
+            $.ajax({
+                type: 'POST',
+                url: "/Course/CreateEID",
+                datatype: 'json',
+                data: { valuetype: valuetype },
+                success: function (data) {
+                    $("#txt_COURSECODE").val(data);
+                }
+            });
+        }
+    function expandHiddenFields(id) {
+        if (id != 0) {
+            var multi = $('.datanumber');
+            var index_array = [];
+            $.each(multi,
+                function(index, item) {
+                    index_array.push({ name: 'index', value: $(item).data('index') });
+                });
+            if (index_array.length > 0) {
+                for (var i = 0; i < index_array.length; i++) {
+                    $("#divExpandCourseDetail_" + i).css("display", "none");
+                }
+            }
+        }
+    }
+    function pageInit() {
+        var $this = $("#GroupSubject");
+        formatDatetimepicker($this.find('.date-picker'));
+        $('.date').datetimepicker({
+            format: "HH:mm",
+           // locale: '@Resource.lblLanguage'
+        });
+    }
+    function commitmentclick(id) {
+        var dataIndex = $(id).data("index");
+        var value = id.value;
+        if (value == 0) {
+            $('#hiddenCommitment_' + dataIndex).attr("hidden", true);
+        } else {
+            $('#hiddenCommitment_' + dataIndex).removeAttr("hidden");
+        }
+    }
+    // ddlInstructor: <options>
+    function optionclick(ddlInstructor, subjectId, duration) {
+        var $tr = ddlInstructor.closest('div');
+
+        var rowIndex = $tr.data('index');
+        var idins = ddlInstructor.val();
+        var nameins = ddlInstructor.text();
+        var $instructorList = $tr.find('.intrustorList');
+
+        var rowId = $instructorList.data('index') == undefined ? 0 : $instructorList.data('index');
+        if (!ddlInstructor.hasClass('active')) {
+
+            ddlInstructor.addClass('active');
+            ddlInstructor.data('none', false);
+            var loacaldurration = "";
+            if ($tr.find('.instructorValue').length == 0) {
+                loacaldurration = duration;
+            }
+            var loacalallowance = ddlInstructor.data('allowance');
+
+            var htmlInstructor = '<div class="row insdura_' + idins + ' subjectInstructor">';
+            htmlInstructor += '<div class="form-group col-md-4"><label>@Resource.lblInstructor</label>' +
+                '<input class="instructorValue" id="editor-insdra-instructorId" type="hidden" data-index="' +
+                rowIndex +
+                '" name="CourseDetailModels[' +
+                rowIndex +
+                '].SubjectInstructors[' +
+                rowId +
+                '].InstructorId" value="' +
+                idins +
+                '"/> <input class="" id="editor-insdra-subjectId" type="hidden" name="CourseDetailModels[' +
+                rowIndex +
+                '].SubjectInstructors[' +
+                rowId +
+                '].SubjectId" value="' +
+                subjectId +
+                '"/> <input type="text" id="editor-insdra-instructorName" class="form-control input-sm" readonly="readonly"  value="' +
+                nameins +
+                '"/></div>';
+            htmlInstructor +=
+                '<div class="form-group col-md-4"><label>@Resource.lblDuration</label><input type="text" class="form-control input-sm" id="editor-insdra-duration" name="CourseDetailModels[' +
+                rowIndex +
+                '].SubjectInstructors[' +
+                rowId +
+                '].Duration" value="' +
+                loacaldurration +
+                '"></div>';
+             htmlInstructor +=
+                '<div class="form-group col-md-4"><label>@Resource.lblAllowance</label><input type="text" readonly="readonly" class="form-control input-sm" id="editor-insdra-allowance" name="CourseDetailModels[' +
+                rowIndex +
+                '].SubjectInstructors[' +
+                rowId +
+                '].Allowance" value="' +
+                loacalallowance +
+                '"></div>';
+            htmlInstructor += '</div>';
+
+            $instructorList.append(htmlInstructor);
+            rowId++;
+            $instructorList.data('index', rowId);
+        } else {
+
+            ddlInstructor.removeClass('active');
+            ddlInstructor.data('none', true);
+            ddlInstructor.removeAttr('selected');
+            $tr.find('.insdura_' + idins).remove();
+        }
+    }
+    function format(contentHtml, subjectId) {
+        return contentHtml;
+    }
+    function checkRoom(this_control) {
+        var dateFrom = $(this_control).parent().parent().find("[name='form_addsubject_dtm_from']").val();
+        var dateTo = $(this_control).parent().parent().find("[name='form_addsubject_dtm_to']").val();
+        var timeFrom = $(this_control).parent().parent().find("[name='form_addsubject_time_from']").val();
+        var timeTo = $(this_control).parent().parent().find("[name='form_addsubject_time_to']").val();
+        var roomId = $(this_control).val();
+        var type = $(this_control).parent().parent().find("[name='form_addsubject_type_Leaning']").val();
+        if (type == 0) {
+            $.ajax({
+                type: 'POST',
+                url: "/Course/CheckRoom",
+                datatype: 'json',
+                data: {
+                    date_form: dateFrom,
+                    date_to: dateTo,
+                    time_from: timeFrom,
+                    time_to: timeTo,
+                    room_id: roomId,
+                },
+                success: function(data) {
+
+                    if (data.result) {
+                        notify.alert("The room in use!", "Warning!", TITLE_STATUS_WARNING);
+                    }
+                }
+            });
+        }
+    }
+    function GenerateSubjects(selectorToRender, subjects) {
+
+        var $this = $(selectorToRender);
+        //$this.html('');
+        if (subjects != null) {
+            $.each(subjects,
+                function(i, o) {
+                    var $row = AddRow_New(selectorToRender);
+                    $row.find('#course-detail-subject').val(o);
+                    onchangesubject($row.find('#course-detail-subject'),0);
+                    $(".reselect").each(function (index, v) {
+                        $(v).select2();
+                    });
+                });
+        }
+    }
+
+        function LoadLabel(id, average) {
+            if (average == "True") {
+                $("#course-average-label" + id).text(" Average Calculate: YES")
+            }
+            else {
+                $("#course-average-label" + id).text(" Average Calculate: NO")
+            }
+        }
+    function AddRow(dataTable) {
+        moment.locale("vi");
+        var html = $('#course-detail').html();
+        html = html.replace(/{index}/g, index);
+        var $this = $(html);
+        $(dataTable).append($this);
+        var minDate = $("#txt_STARTDATE").data('DateTimePicker').date() == null
+            ? moment().startOf('day').add(-100, 'y')
+            : moment($("#txt_STARTDATE").data('DateTimePicker').date().startOf('day'));
+        var maxDate = $("#txt_ENDDATE").data('DateTimePicker').date() == null
+            ? moment().startOf('day').add(3, 'y')
+            : moment($("#txt_ENDDATE").data('DateTimePicker').date().endOf("day"));
+        $this.find('.date-picker').datetimepicker({
+            format: 'DD/MM/YYYY',
+            //locale: moment.locale("vi"),
+                minDate: minDate,
+                maxDate: maxDate,
+        });
+        $this.find('.date_validate').datetimepicker({
+
+                format: 'DD/MM/YYYY',
+                //locale: 'vi',
+                maxDate: maxDate
+        });
+        $this.find('.date').datetimepicker({
+            format: "HH:mm"
+        });
+        var typeFormGroup = $("#ddl_TYPECOURSE").val();
+
+        if (typeof typeFormGroup === "undefined" || typeFormGroup === "") {
+            $('.subject_filter option').removeAttr('hidden');
+        } else {
+
+            $('.subject_filter option').each(function () {
+                var type = $(this).data('type');
+                if (type == typeFormGroup) {
+                    $(this).removeAttr('hidden');
+                } else {
+                    $(this).attr('hidden', true);
+                }
+            });
+        }
+        onchangesubject($this.find('.subject_filter'),0);
+            index++;
+            e_index++;
+            $("#divExpandCourseDetail_" + (index - 1)).css("display", "none");
+            // $(".js-example-templating").select2();
+                 $(".reselect").each(function (i, v) {
+                        $(v).select2();
+                 });
+            reloadata(0);
+        reloadata(1);
+            return $this;
+    }
+    function AddRow_New(dataTable) {
+        moment.locale("vi");
+        var html = $('#course-detail').html();
+        html = html.replace(/{index}/g, index);
+        var $this = $(html);
+        $(dataTable).append($this);
+        var minDate = $("#txt_STARTDATE").data('DateTimePicker').date() == null
+            ? moment().startOf('day').add(-100, 'y')
+            : moment($("#txt_STARTDATE").data('DateTimePicker').date().startOf('day'));
+        var maxDate = $("#txt_ENDDATE").data('DateTimePicker').date() == null
+            ? moment().startOf('day').add(3, 'y')
+            : moment($("#txt_ENDDATE").data('DateTimePicker').date().endOf("day"));
+        $this.find('.date-picker').datetimepicker({
+            format: 'DD/MM/YYYY',
+            //locale: moment.locale("vi"),
+                minDate: minDate,
+                maxDate: maxDate,
+        });
+        $this.find('.date_validate').datetimepicker({
+
+                format: 'DD/MM/YYYY',
+                //locale: 'vi',
+                maxDate: maxDate
+        });
+        $this.find('.date').datetimepicker({
+            format: "HH:mm"
+        });
+        var typeFormGroup = $("#ddl_TYPECOURSE").val();
+
+        if (typeof typeFormGroup === "undefined" || typeFormGroup === "") {
+            $('.subject_filter option').removeAttr('hidden');
+        } else {
+
+            $('.subject_filter option').each(function () {
+                var type = $(this).data('type');
+                if (type == typeFormGroup) {
+                    $(this).removeAttr('hidden');
+                } else {
+                    $(this).attr('hidden', true);
+                }
+            });
+        }
+            index++;
+            e_index++;
+            $("#divExpandCourseDetail_" + (index - 1)).css("display", "none");
+            return $this;
+        }
+    function addEx(this_control) {
+            var $this = $(this_control);
+            var index = $this.data('index');
+            if ($("#divExpandCourseDetail_" + index).css('display') == 'none') {
+                $("#divExpandCourseDetail_" + index).css('display', 'block');
+                $("#expandCourseDetail_" + index).html("Hidden");
+                var valuecommit = $("#course-detail-commitment").val();
+                if (valuecommit == 0) {
+                    $('#hiddenCommitment_' + index).attr("hidden", true);
+                } else {
+                    $('#hiddenCommitment_' + index).removeAttr("hidden");
+                }
+            } else {
+                $("#divExpandCourseDetail_" + index).css('display', 'none');
+                $("#expandCourseDetail_" + index).html("Advanced");
+            }
+        }
+    function DelRow(this_control) {
+            var $this = $(this_control);
+            var index = '.course-detail-' + $this.data('index');
+            var id = $('.course-detail-Id' + $this.data('index')).val();
+            if (typeof(id) != "undefined") {
+                $.ajax({
+                    type: "GET",
+                    url: "/Course/CheckCourse",
+                    dataType: "json",
+                    data: { id: id },
+                    success: function(result) {
+                        if (result.result) {
+                            notify.confirm(result.message +  "</br> Are you sure to delete ? ", 'ERROR', TITLE_STATUS_DANGER, del_this);
+                            //$(this_control).closest('sonbig').find(index).remove();
+                            function del_this() {
+                                $(this_control).closest('sonbig').find(index).remove()
+                            }
+                        } else {
+                            $(this_control).closest('sonbig').find(index).remove();
+                        }
+                    }
+                });
+            } else {
+                $(this_control).closest('sonbig').find(index).remove();
+            }
+        }
+    function nextStep() {
+            var code = $('#txt_COURSECODE').val();
+            var url ="/Course/AssignTrainee/" + "?code=" + code + "#EXTENTTRAINEE";
+            window.open(url);
+    }
+        function onchangesubject(control, type) {
+                var $this = $(control);
+                var value = $this.val();
+                var index = $this.data('index');
+                var coursedetailID = $this.data('coursedetail');
+                var monitorID = $this.data('monitor');
+                var average = $this.find("option:selected").data('average');
+                if (average == "False") {
+                    $('[name="CourseDetailModels['+index+'].LearningType"]').find("option:contains('Online')").hide();
+                    $('[name="CourseDetailModels['+index+'].MarkType"]').find("option:contains('Auto')").hide();
+                } else {
+                    $('[name="CourseDetailModels['+index+'].LearningType"]').find("option:contains('Online')").show();
+                    $('[name="CourseDetailModels['+index+'].MarkType"]').find("option:contains('Auto')").show();
+                }
+                $.ajax({
+                    async: true,
+                    type: "POST",
+                    url: "/Course/GetValueTeacher",
+                    dataType: "json",
+                    data: { value_subject: value, coursedetailID: coursedetailID, monitor: monitorID , index: index},
+                    success: function (result) {
+                        var $mentorWrapper = $this.closest(".course-detail-value-" + index);
+                            //--------get monitor
+                        $mentorWrapper.find("select.Mentor").empty();
+                        if (result.value_null_mentor == "0") {
+                            $mentorWrapper.find("select.Mentor").append(result.value_option_mentor);
+                        } else {
+                            $mentorWrapper.find("select.Mentor").append("<option value='-1'>--@(Resource.lblMonitor)--</option>");
+                        }
+                        reloadata(0);
+                        $mentorWrapper.find("select.Mentor").change();
+                        //--------get exam
+                        $mentorWrapper.find("select.Hannah").empty();
+                        if (result.value_null_exam == "0") {
+                            $mentorWrapper.find("select.Hannah").append(result.value_option_exam);
+                        } else {
+                            $mentorWrapper.find("select.Hannah").append("<option value='-1'>--@(Resource.lblExaminer)--</option>");
+                        }
+                        reloadata(1);
+                        $mentorWrapper.find("select.Hannah").change();
+                        //----------get Instructor
+                        var $instructorWrapper = $this.closest(".course-detail-value-" + index).next();
+                        $instructorWrapper.find("#course-detail-instructor").empty();
+                        $instructorWrapper.find("#course-detail-instructor").prop('disabled', 'disabled');
+                        var id = @(Model.CourseId);
+                        if (type == 1) {
+                            var $subjectInstructor = $instructorWrapper.find(".intrustorList").html("");
+                        }
+                        if (result.value_null == "0") {
+                            $instructorWrapper.find("select.InstructorSubject").append(result.value_option);
+                        } else {
+                            $instructorWrapper.find("select.InstructorSubject")
+                                    .append("<option value='-1'>--@(Resource.lblInstructor)--</option>");
+                            $instructorWrapper.find(".intrustorList").empty();
+                        }
+                        $instructorWrapper.find("#course-detail-instructor").prop('disabled', false);
+                        LoadLabel(index, average);
+                    },complete: function () {
+
+                    }
+                });
+        }
+        function ChangeDateModal(CoursedetailFrom, CoursedetailTo) {
+            $('.check_dp_dateto').each(function (i, o) {
+                $(o).data("DateTimePicker").minDate(CoursedetailFrom);
+                $(o).data("DateTimePicker").maxDate(CoursedetailTo)
+
+            });
+            $('.check_dp_datefrom').each(function (i, o) {
+                $(o).data("DateTimePicker").minDate(CoursedetailFrom)
+                $(o).data("DateTimePicker").maxDate(CoursedetailTo)
+            });
+        }
+
+
+
+
+    $('#GroupSubject').on('click',
+        '.InstructorSubject option',
+        function() {
+            var check = $(this).closest(".InstructorSubject");
+            if (check.prop('disabled') != true) {
+                 var $this = $(this);
+                var value = $this.val();
+                var duration = $this.data('duration');
+                optionclick($this, value, duration);
+            }
+
+        });
+    $('#group-subjects').on('click',
+        '.InstructorSubject option',
+        function() {
+            var check = $(this).closest(".InstructorSubject");
+           if (check.prop('disabled') != true) {
+                var $this = $(this);
+                var value = $this.val();
+                var duration = $this.data('duration');
+                optionclick($this, value, duration);
+           }
+
+        });
+    function showMessage(status, msg) {
+        var $modal = $('#myModal');
+        $modal.find('#modal-title').attr('class', status).text(msg);
+        $modal.modal("show");
+    }
+    function CancelRequest(e) {
+        var dataid = $(e).attr('data-courseId');
+        if (dataid == 0) {
+            notify.alert('@Messege.ISVALID_DATA', 'ERROR', TITLE_STATUS_DANGER);
+        } else {
+            $("#myModal").modal("show");
+            $("#Modal_Footer").empty();
+            $('#txtNote').val("");
+            $("#lblModelMessage").text("");
+            $("#lblModelMessage").text("@Messege.Message_CancelRequest");
+            $("#Modal_Footer").append(" <a href='javascript:void(0)' onclick='submitCancelRequest(" +
+                dataid +
+                ")' class='btn btn-primary'>Cancel Request</a><button type='button' class='btn btn-primary' data-dismiss='modal'>Close</button>");
+        }
+
+    }
+    function SubmitRequest(selector) {
+
+        $("#myModal").modal("show");
+        $("#Modal_Footer").empty();
+        $('#txtNote').val("");
+        $("#lblModelMessage").text("");
+        $("#lblModelMessage").text("@Messege.WARNING_REQUEST");
+        $("#Modal_Footer")
+            .append(
+                "<input type='button' class='btn btn-danger' id='submit1' data-submittype='0' value='@Resource.lblSubmit' onclick='actionSubmit(this)' /><button type='button' class='btn btn-primary' data-dismiss='modal'>Close</button>");
+    }
+    function submitCancelRequest(id) {
+        spinner.open();
+        var note = $('#txtNote').val();
+        $.ajax({
+            type: 'POST',
+            url: "/Course/CancelRequest",
+            datatype: 'json',
+            data: { id: id, note: note },
+            success: function(data) {
+                if (data.result) {
+                    notify.alert(data.message, 'SUCCESS', TITLE_STATUS_SUCCESS);
+                     window.location.href = '/Course/Create/'+id;
+                } else {
+                    notify.alert(data.message, 'ERROR', TITLE_STATUS_DANGER);
+                }
+            },
+            complete: function() {
+                $("#myModal").modal("hide");
+                spinner.close();
+                window.location.href = '/Course/Create/'+id;
+            }
+        });
+    }
+    function actionSubmit(selector) {
+        $('label[for=submit2]').hide();
+        $('label[for=submit1]').hide();
+        var data = getData();
+        spinner.open();
+        data.SubmitType = $(selector).data('submittype');
+        var note = $('#txtNote').val();
+        $.ajax({
+            type: 'POST',
+            url: "/Course/Create",
+            datatype: 'json',
+            data: { model: data, note: note },
+            success: function(data) {
+                if (data.result) {
+                    notify.alert(data.message, 'SUCCESS', TITLE_STATUS_SUCCESS);
+                    //window.location.href = '/Course';
+                } else {
+                    notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                }
+            },
+            complete: function() {
+                $('label[for=submit2]').show();
+                $('label[for=submit1]').show();
+                $("#myModal").modal("hide");
+
+                spinner.close();
+            }
+        });
+
+
+    }
+    function getData() { // sửa ở đây nhớ copy qua index chổ sontt, nhớ xóa cột id để duplicate
+        var $root = $('#createform');
+        var rs = {
+            Id: $root.find('#Id').val(),
+            GroupSubjectId: $root.find('#GroupSubjectId').val(),
+            DepartmentIds: $root.find('#DepartmentIds').val(),
+            dtm_startdate: $root.find('#txt_STARTDATE').val(),
+            Customer: $root.find('#ddl_TYPE').val(),
+            Venue: $root.find('#txt_VENUE').val(),
+            MaxTranineeMembers: $root.find('#txt_NOTRAINEE').val(),
+            MinTranineeMembers: $root.find('#txt_MinTRAINEE').val(),
+            Name: $root.find('#lastnamecourse').val(),
+            Code: $root.find('#txt_COURSECODE').val(),
+            dtm_enddate: $root.find('#txt_ENDDATE').val(),
+            CourseType: $root.find('#ddl_TYPECOURSE').val(),
+            PartnerId: $root.find('#ddl_PARTNER').val(),
+            Survey: $root.find('#ddl_SURVEY').val(),
+            Note: $root.find('#txt_NOTE').val(),/*.replace(/\n/g, "<br />"),*/
+            ProgramCost: $root.find('#ProgramCost').val(),
+            IsPublic: $root.find('#IsPublic:checked').val(),
+            IsBindSubject: $root.find('#IsBindSubject:checked').val(),
+            CourseDetailModels: [],
+            BindToSubject: [],
+        }
+        $root.find('.BindToSubject:checked').each(function(i) {
+            rs.BindToSubject[i] = $(this).val();
+        });
+
+
+
+        var $details = $root.find('div.course-detail-content');
+        $.each($details,
+            function(i, o) {
+                var $this = $(this);
+                var id = $this.find('#course-detail-Id').val();
+                var detail = {
+                    Id: id == undefined ? null : id,
+                    SubjectId: $this.find('#course-detail-subject').val(),
+                    LearningType: $this.find('#course-detail-type-learning').val(),
+                    Registable: $this.find('#course-detail-regisable').val(),
+                    dtm_time_from: $this.find('#course-detail-from-date').val(),
+                    dtm_time_to: $this.find('#course-detail-to-date').val(),
+                    TimeFrom: $this.find('#course-detail-from-time').val(),
+                    TimeTo: $this.find('#course-detail-to-time').val(),
+                    Room: $this.find('#course-detail-room').val(),
+                    attempts: $this.find('#course-detail-attempts').val(),
+                    grademethod: $this.find('#course-detail-grademethod').val(),
+                    allowance: $this.find('#course-detail-allowance').val(),
+
+                    Commitment: $this.find('#course-detail-commitment').val(),
+
+                    Mentor: $this.find('#course-detail-Mentor').val(), //Mentor
+
+                    Hannah: $this.find('#course-detail-Hannah').val(), //Hannah
+                    MarkType: $this.find('#course-detail-marktype').val(),
+                    CommitmentExpiredate: $this.find('#course-detail-CommitmentExpiredate').val(),
+                    RegistryDate:$this.find('#course-detail-registrydate').val(),
+                    ExpiryDate:$this.find('#course-detail-expirydate').val(),
+                    //phan them moi
+                    Time:$this.find('#course-detail-time').val(),
+                    TimeBlock:$this.find('#course-detail-time-block').val(),
+                    MonitorAllowance: $this.find('#course-detail-MonitorAllowance').val(),
+                    MonitorDuration: $this.find('#course-detail-MonitorDuration').val(),
+                    ExaminerDuration: $this.find('#course-detail-ExaminerDuration').val(),
+                    ExaminerAllowance: $this.find('#course-detail-ExaminerAllowance').val(),
+                    str_remark: $this.next().find('.strremark').find('#course-detail-remark').val(),/*.replace(/\n/g, "<br />"),*/
+                    SubjectInstructors: [],
+                    Blended: [],
+                    CourseIngredient:[],
+                }
+                var $insuctors = $this.next().find('.intrustorList').find('.subjectInstructor');
+                $.each($insuctors,
+                    function(index, obj) {
+
+                        var $obj = $(obj);
+                        var _id = $obj.find('#editor-insdra-id').val();
+                        detail.SubjectInstructors.push({
+                            Id: _id == undefined ? null : _id,
+                            InstructorId: $obj.find('#editor-insdra-instructorId').val(),
+                            SubjectId: $obj.find('#editor-insdra-subjectId').val(),
+                            Name: $obj.find('#editor-insdra-instructorName').val(),
+                            Duration: $obj.find('#editor-insdra-duration').val(),
+                        });
+                    });
+
+                var $blended = $this.find('.detail-blended son .hidden_input');
+                $.each($blended,
+                    function (index, obj) {
+
+                        var $obj = $(obj);
+                        var _id = $obj.find('#detail-blended-id').val();
+                        detail.Blended.push({
+                            Id: _id == undefined ? null : _id,
+                            dtm_DateFrom_blend: $obj.find('#detail-blended-datefrom').val(),
+                            dtm_DateTo_blend: $obj.find('#detail-blended-dateto').val(),
+                            RoomId: $obj.find('#detail-blended-roomid').val(),
+                            LearningTypeName: $obj.find('#detail-blended-learningtype').val(),
+                            //MarkTypecRo: $obj.find('#detail-blended-marktype').val(),
+                            ExaminerId: $obj.find('#detail-blended-examiner').val(),
+                            BlendedDuration: $obj.find('#detail-blended-BlendedDuration').val(),
+                            BlendedAllowance : $obj.find('#detail-blended-BlendedAllowance').val(),
+                        });
+                    });
+                var $Ingredient = $this.find('.detail-Ingredient son');
+                $.each($Ingredient,
+                    function(index, obj) {
+                        var $obj = $(obj);
+                        var _id = $obj.find('#course-detail-Ingredient-id').val();
+                        detail.CourseIngredient.push({
+                            Id: _id == undefined ? null : _id,
+                            Percent: $obj.find('#course-detail-Ingredient-percent').val(),
+                            IngredientId: $obj.find('#course-detail-Ingredient-select').val(),
+                        });
+                    });
+                rs.CourseDetailModels.push(detail);
+            });
+
+        return rs;
+    }
+    function totalAllowance() {
+        var arr = document.getElementsByClassName('course-detail-allowance');
+        var tot = 0;
+        for (var i = 0; i < arr.length; i++) {
+            if (parseInt(arr[i].value))
+                tot += parseInt(arr[i].value);
+        }
+        document.getElementById('course-allowance').value = tot;
+    }
+        function check(e) {
+
+        moment.locale("vi");
+        var minDate = $("#txt_STARTDATE").data('DateTimePicker').date() == null
+            ? moment().startOf('day').add(-100, 'y')
+            : moment($("#txt_STARTDATE").data('DateTimePicker').date().startOf('day'));
+          $('#txt_ENDDATE').data("DateTimePicker").minDate(minDate);
+        var maxDate = $("#txt_ENDDATE").data('DateTimePicker').date() == null
+            ? moment().startOf('day').add(3, 'y')
+            : moment($("#txt_ENDDATE").data('DateTimePicker').date().endOf("day"));
+
+        //$('#txt_STARTDATE').data("DateTimePicker").maxDate(maxDate);
+
+
+        $('.date_from').each(function(i, o) { $(o).data("DateTimePicker").minDate(minDate) });
+        $('.date_from').each(function(i, o) { $(o).data("DateTimePicker").maxDate(maxDate) });
+        $('.date_to').each(function(i, o) { $(o).data("DateTimePicker").minDate(minDate) });
+        $('.date_to').each(function(i, o) { $(o).data("DateTimePicker").maxDate(maxDate) });
+        //chek_date_detail();
+    }
+    function chek_date_detail() {
+        var $courseDetail_datefrom = $(".date_from");
+        if ($courseDetail_datefrom.length > 0) {
+            for (i = 0; i < $courseDetail_datefrom.length; i++) {
+                checkRes($courseDetail_datefrom[i]);
+            }
+        }
+        var $courseDetail_dateto = $(".date_to");
+        if ($courseDetail_dateto.length > 0) {
+            for (i = 0; i < $courseDetail_dateto.length; i++) {
+                checkExp($courseDetail_datefrom[i]);
+            }
+        }
+        var $courseDetail_date_res = $(".date_res");
+        if ($courseDetail_date_res.length > 0) {
+            for (i = 0; i < $courseDetail_date_res.length; i++) {
+                checkExp_Res($courseDetail_date_res[i]);
+            }
+        }
+    }
+    function checkRes(e) {
+        var $wallDetail = $(e).parent().parent().parent();
+        $wallDetail.find('#course-detail-registrydate').on("dp.change",
+            function(e) {
+                var date = e.date;
+                $wallDetail.find('.date_exp').each(function(i, o) { $(o).data("DateTimePicker").minDate(date) });
+            });
+    }
+    function checkExp(e) {
+        var $wallDetail = $(e).parent().parent().parent();
+        $wallDetail.find('#course-detail-to-date').on("dp.change",
+            function(e) {
+                var date = e.date;
+                $wallDetail.find('.date_res').each(function(i, o) { $(o).data("DateTimePicker").maxDate(date) });
+                $wallDetail.find('.date_exp').each(function(i, o) { $(o).data("DateTimePicker").maxDate(date) });
+            });
+    }
+    function checkExp_Res(e) {
+        var $wallDetail = $(e).parent().parent().parent();
+        $wallDetail.find('#course-detail-to-date').on("dp.change",
+            function(e) {
+                var date = e.date;
+                $wallDetail.find('.date_res').each(function(i, o) { $(o).data("DateTimePicker").maxDate(date) });
+                $wallDetail.find('.date_exp').each(function(i, o) { $(o).data("DateTimePicker").maxDate(date) });
+            });
+    }
+    function typeLearningclick(id) {
+
+        var dataIndex = $(id).data("index");
+        var value = id.value;
+        $('#div_Detail_Blended_' + dataIndex).addClass('collapse');
+        $('#div_Blended_' + dataIndex).addClass('collapse');
+        //$('#hiddenRoom_' + dataIndex).addClass('collapse');
+        $('#son_Ingredient_' + dataIndex).addClass('collapse');
+        if (value == 0) {
+            $(".TimeFrom_" + dataIndex).val("08:30");
+            $(".TimeTo_" + dataIndex).val("16:45");
+            $("#divExaminer_" + dataIndex).removeAttr("style", "display");
+            $("#divExaminerDuration_" + dataIndex).removeAttr("style", "display");
+            $("#divExaminerAllowance_" + dataIndex).removeAttr("style", "display");
+            $("#divmarkType_"+dataIndex).removeAttr("style", "display");
+            $('#hiddenTypeLearning_' + dataIndex).addClass('collapse');
+            $('#hiddenTypeLearning_' + dataIndex).removeClass('in');
+            $('#div_Detail_Blended_' + dataIndex).addClass('collapse');
+            $('#div_Detail_Blended_' + dataIndex).removeClass('in');
+            $('#div_Blended_' + dataIndex).addClass('collapse');
+            $('#div_Blended_' + dataIndex).removeClass('in');
+          
+            //$('#hiddenRoom_' + dataIndex).addClass('collapse');
+            //$('#hiddenRoom_' + dataIndex).removeClass('in');
+            //$("#hiddenRoom_" + dataIndex).css('display', 'initial');
+            $('#son_Ingredient_' + dataIndex).removeClass('in');
+            $('#son_Ingredient_' + dataIndex).addClass('collapse');
+            var setRoomDefault = $('#hiddenRoom_' + dataIndex).find("select");
+            setRoomDefault.val(-1);
+            var select = $(id).parent().parent().parent().find('.InstructorSubject option.active');
+
+            select.each(function(index) {
+                checkInstructor(this);
+            });
+        } else if (value == 2) {
+            $(".TimeFrom_" + dataIndex).val("00:00");
+            $(".TimeTo_" + dataIndex).val("23:59");
+             $("#divExaminer_"+dataIndex).removeAttr("style", "display");
+            $("#divExaminer_" + dataIndex).css('display', 'none');
+            $("#divExaminerDuration_" + dataIndex).css('display', 'none');
+            $("#divExaminerAllowance_" + dataIndex).css('display', 'none');
+            $("#divmarkType_"+dataIndex).removeAttr("style", "display");
+            //$('#hiddenRoom_' + dataIndex).addClass('collapse');
+            //$('#hiddenRoom_' + dataIndex).removeClass('in');
+            //$("#hiddenRoom_" + dataIndex).css('display', 'initial');
+
+            $('#div_Blended_' + dataIndex).addClass('in');
+            $('#div_Blended_' + dataIndex).removeClass('collapse');
+            $('#div_Detail_Blended_' + dataIndex).addClass('in');
+            $('#div_Detail_Blended_' + dataIndex).removeClass('collapse');
+            $('#div_Detail_Blended_' + dataIndex).addClass('in');
+
+            $('#son_Ingredient_' + dataIndex).removeClass('collapse');
+            $('#son_Ingredient_' + dataIndex).addClass('in');
+            $('.roomCheck_' + dataIndex).val(83);
+            $('.roomCheck_' + dataIndex).select2();
+        } else if (value == 1) {
+            $(".TimeFrom_" + dataIndex).val("00:00");
+            $(".TimeTo_" + dataIndex).val("23:59");
+            $('.roomCheck_' + dataIndex).val(72);
+            $('.roomCheck_' + dataIndex).select2();
+            $("#divExaminer_" + dataIndex).removeAttr("style", "display");
+            $("#divExaminerDuration_" + dataIndex).removeAttr("style", "display");
+            $("#divExaminerAllowance_" + dataIndex).removeAttr("style", "display");
+            $("#divmarkType_"+dataIndex).removeAttr("style", "display");
+              $("#divmarkType_"+dataIndex).css('display','none');
+            $('#div_Detail_Blended_' + dataIndex).addClass('collapse');
+            $('#div_Detail_Blended_' + dataIndex).removeClass('in');
+
+            $('#div_Blended_' + dataIndex).addClass('collapse');
+            $('#div_Blended_' + dataIndex).removeClass('in');
+
+            $('#hiddenTypeLearning_' + dataIndex).addClass('in');
+            $('#hiddenTypeLearning_' + dataIndex).removeClass('collapse');
+
+            //$('#hiddenRoom_' + dataIndex).addClass('in');
+            //$('#hiddenRoom_' + dataIndex).removeClass('collapse');
+            //$("#hiddenRoom_" + dataIndex).css('display', 'none');
+
+            $('#div_Detail_Blended_' + dataIndex).addClass('collapse');
+            $('#div_Detail_Blended_' + dataIndex).removeClass('in');
+
+            $('#son_Ingredient_' + dataIndex).removeClass('collapse');
+            $('#son_Ingredient_' + dataIndex).addClass('in');
+        }
+
+    }
+    function displayCostMonitor(id) {
+
+            var dataIndex = $(id).data("index");
+            var value = id.value;
+
+            if (!value || value == -1 || value == '-1') {
+                $("#MonitorDuration_" + dataIndex).removeAttr("style", "display");
+                $("#MonitorDuration_" + dataIndex).css('display', 'none');
+                $("#MonitorAllowance_" + dataIndex).removeAttr("style", "display");
+                $("#MonitorAllowance_" + dataIndex).css('display', 'none');
+            } else {
+                $("#MonitorDuration_" + dataIndex).removeAttr("style", "display");
+                $("#MonitorDuration_" + dataIndex).css('display', 'block');
+                $("#MonitorAllowance_" + dataIndex).removeAttr("style", "display");
+                $("#MonitorAllowance_" + dataIndex).css('display', 'block');
+                  var loacalallowance = $(id).select2().find(":selected").data("allowance");
+                $(".course-detail-MonitorAllowance_" + dataIndex).val(loacalallowance);
+            }
+        }
+    function displayCostExaminer(id) {
+            var dataIndex = $(id).data("index");
+            var value = id.value;
+            if (!value || value == -1 || value == '-1') {
+                $("#divExaminerDuration_" + dataIndex).removeAttr("style", "display");
+                $("#divExaminerDuration_" + dataIndex).css('display', 'none');
+                $("#divExaminerAllowance_" + dataIndex).removeAttr("style", "display");
+                $("#divExaminerAllowance_" + dataIndex).css('display', 'none');
+            } else {
+                $("#divExaminerDuration_" + dataIndex).removeAttr("style", "display");
+                $("#divExaminerDuration_" + dataIndex).css('display', 'block');
+                $("#divExaminerAllowance_" + dataIndex).removeAttr("style", "display");
+                $("#divExaminerAllowance_" + dataIndex).css('display', 'block');
+                 var loacalallowance = $(id).select2().find(":selected").data("allowance");
+                $(".course-detail-ExaminerAllowance_" + dataIndex).val(loacalallowance);
+            }
+        }
+    function checkInstructor(e) {
+        if (!$(e).hasClass('active')) {
+            var arr = [];
+            var dataIndex = $(e).parent().data("index");
+            var instructorId = e.value;
+            $(".instructorValue").each(function (i, v) {
+
+
+                var index = $(v).data('index');
+                if (dataIndex != index)
+                {
+                    var trainee = $(v).val();
+                    var parent = $(v).closest('son').closest('div').parent();
+                    var dateFrom = parent.find("[name='CourseDetailModels[" + index + "].DateFrom']").val();
+                    var dateTo = parent.find("[name='CourseDetailModels[" + index + "].DateTo']").val();
+                    var timeFrom = parent.find("[name='CourseDetailModels[" + index + "].TimeFrom']").val();
+                    var timeTo = parent.find("[name='CourseDetailModels[" + index + "].TimeTo']").val();
+                    arr.push('{"instructorId":"' + trainee + '","dtm_time_from":"' + dateFrom + '","dtm_time_to":"' + dateTo + '","time_from":"' + timeFrom + '","time_to":"' + timeTo + '"}');
+                }
+            });
+            var dateFrom = $(e).parent().parent().parent().parent()
+                .find("[name='CourseDetailModels[" + dataIndex + "].DateFrom']").val();
+            var dateTo = $(e).parent().parent().parent().parent()
+                .find("[name='CourseDetailModels[" + dataIndex + "].DateTo']").val();
+            var timeFrom = $(e).parent().parent().parent().parent()
+                .find("[name='CourseDetailModels[" + dataIndex + "].TimeFrom']").val();
+            var timeTo = $(e).parent().parent().parent().parent()
+                .find("[name='CourseDetailModels[" + dataIndex + "].TimeTo']").val();
+            var courseDetailId = $(e).parent().parent().parent().parent()
+                .find("[name='CourseDetailModels[" + dataIndex + "].Id']").val();
+            var learningType = $(e).parent().parent().parent().parent()
+                .find("[name='CourseDetailModels[" + dataIndex + "].LearningType']").val();
+            if (instructorId != 'undefined') {
+                $('label[for=submit2]').hide();
+                $('label[for=submit1]').hide();
+                spinner.open();
+                $.ajax({
+                    type: 'POST',
+                    url: "/Course/CheckInstructor",
+                    datatype: 'json',
+                    data: {
+                        date_from: dateFrom,
+                        date_to: dateTo,
+                        time_from: timeFrom,
+                        time_to: timeTo,
+                        learningType: learningType,
+                        instructorId: instructorId,
+                        courseDetailId: courseDetailId,
+                        listInstructor: arr.toString(),
+                    },
+                    success: function(data) {
+                        if (data.result) {
+                            if (data.type == 1) {
+                                notify.alert(data.message, 'WARNING', TITLE_STATUS_WARNING);
+                            }
+                        } else {
+                            notify.alert(data.message, 'ERROR', TITLE_STATUS_DANGER);
+                        }
+                    },
+                    complete: function() {
+                        $('label[for=submit2]').show();
+                        $('label[for=submit1]').show();
+                        $("#myModal").modal("hide");
+
+                        spinner.close();
+                    }
+                });
+            }
+        }
+
+    }
+        function addBlended(div_append_blended, from, to, room, roomLearn, learningtype, id, data_index, blendedDuration, blendedAllowance,CoursedetailFrom,CoursedetailTo) {
+        var html = $('#course-detail-blended').html();
+        html = html.replace(/{index}/g, b_index);
+        var $this = $(html);
+        $this.find('#detail-blended-id').val(id);
+
+
+        $this.find('.learningtype_' + b_index).val(learningtype);
+        if (room != "") {
+            $this.find('.examiner_'+ b_index).val(room).trigger('change');
+        }
+         if (roomLearn != "") {
+            $this.find('.room_'+ b_index).val(roomLearn).trigger('change');
+        }
+
+        $this.find('.date_validate').datetimepicker({
+            format: 'DD/MM/YYYY',
+            //locale: '@Resource.lblLanguage',
+        });
+        $this.find('.BlendedDuration').val(blendedDuration);
+        $this.find('.BlendedAllowance').val(blendedAllowance);
+        $(div_append_blended).append($this);
+        var modalbody = $('#messageoutBlended');
+        var divCourseDetail = $('.get-detail-' + data_index);
+
+        //minDate : lấy ngày kết thúc của giai đoạn trước '#detail-blended-dateto-'+ (b_index - 1) hoặc lấy ngày bắt đầu của môn học
+        var divRemoveBlended = modalbody.find('#div_Remove_Blended_' + (b_index - 1));
+
+        var toDate = divRemoveBlended.find('#detail-blended-dateto-' + (b_index - 1));
+        var minDate = toDate.length
+            ? (toDate.data('DateTimePicker').date() != null ? toDate.data('DateTimePicker').date().add(+1, 'days').startOf('day') : divCourseDetail.find("#course-detail-from-date").data('DateTimePicker').date().startOf('day'))
+            : divCourseDetail.find("#course-detail-from-date").data('DateTimePicker').date().startOf('day');
+        //maxDate :lấy ngày kết thúc của môn học
+        var maxDate = divCourseDetail.find("#course-detail-to-date").data('DateTimePicker').date().endOf('day');
+        learningTypeBlended($(div_append_blended).find('.learningtype_' + b_index));
+
+        $(div_append_blended).find('.start_date_' + b_index).datetimepicker({
+            format: 'DD/MM/YYYY',
+            //locale: '@Resource.lblLanguage',
+            minDate: minDate,
+            maxDate: maxDate
+        });
+        if (id == 'undefined' || id == '') {
+            $(div_append_blended).find('.end_date_' + b_index).datetimepicker({
+                format: 'DD/MM/YYYY',
+               // locale: '@Resource.lblLanguage',
+                minDate: minDate,
+                maxDate: maxDate
+            });
+        } else {
+            $(div_append_blended).find('.end_date_' + b_index).datetimepicker({
+               format: 'DD/MM/YYYY',
+               // locale: '@Resource.lblLanguage',
+                minDate: minDate,
+                maxDate: maxDate
+            });
+            };
+            ChangeDateModal(CoursedetailFrom, CoursedetailTo);
+        $(div_append_blended).find('.start_date_' + b_index).val(from);
+        $(div_append_blended).find('.end_date_' + b_index).val(to);
+            b_index++;
+
+
+        return $this;
+    }
+    function check_dateto_modal(index) {
+
+        var div_next = $('#div_Remove_Blended_' + (index + 1));
+        var input_from_next = div_next.find('.start_date_' + (index + 1));
+        var input_to_next = div_next.find('.end_date_' + (index + 1));
+        var div_default = $('#div_Remove_Blended_' + (index));
+        var input_to_default = div_default.find('#detail-blended-dateto-' + (index));
+        if (input_from_next.length) {
+            //set lai datetimepicker
+            var input_to_value = input_to_default.val();
+
+            var div_big_parent = div_default.parent();
+            var index_course_detail = $(div_big_parent).data('index')
+            var divCourseDetail = $('.get-detail-' + index_course_detail);
+            var valuecoursedetail = divCourseDetail.find("#course-detail-to-date").val();
+            var minDate;
+            var valuemindate;
+            if (input_to_value < valuecoursedetail) {
+                minDate = input_to_default.data('DateTimePicker').date().add(+1, 'days').startOf('day');
+                valuemindate = input_to_default.data('DateTimePicker').date().add(+1, 'days');
+            }
+            else {
+                minDate = divCourseDetail.find("#course-detail-from-date").data('DateTimePicker').date().endOf("day");
+                valuemindate = divCourseDetail.find("#course-detail-from-date").data('DateTimePicker').date();
+            }
+            var maxDate = divCourseDetail.find("#course-detail-to-date").data('DateTimePicker').date().endOf("day");
+            //input_from_next.data('DateTimePicker').destroy();
+
+            input_from_next.val(valuemindate.format("DD/MM/YYYY"));
+            input_from_next.datetimepicker({
+                format: 'DD/MM/YYYY',
+                minDate: minDate,
+                maxDate: maxDate,
+            });
+
+
+            //input_from_next.on("dp.change",
+            //    function(e) {
+            //
+            //        var date = e.date;
+            //        input_to_next.data("DateTimePicker").minDate(date);
+            //    });
+        }
+    }
+    $("body").on("dp.change",
+        ".check_dp_dateto",
+        function() {
+            var index = $(this).data("index");
+            check_dateto_modal(index);
+        });
+    function saveBlended(id) {
+        var index = $(id).data('index');
+
+        //  $(id).find('.hidden_input').addClass('hidden');
+        var detail = $('#div_Detail_Blended_' + index).find('son');
+        var hidden = $('#div_Detail_Blended_' + index).find('hidden_input');
+        var blendedParent = $('#div_modal_blended_' + index).find('.blendedfor').not(".isRemove");
+        var labelDisplay = "";
+
+
+        blendedParent.each(function () {
+            var childIndex = $(this).data("index");
+            var id = $(this).find('#detail-blended-id').val();
+            var datefrom = $(this).find('.date_from').val();
+            var dateto = $(this).find('.date_to').val();
+            var roomText = $(this).find('.room_' + childIndex + ' option:selected').text();
+            var roomValue = $(this).find('.room_' + childIndex + ' option:selected').val();
+             var marktype = $(this).find('.marktype_'+ childIndex).val();
+            //var learningtypeText = $(this).find('.learningtype_' + childIndex + ' option:selected').text();
+            var learningtypeValue = $(this).find('.learningtype_' + childIndex).val();
+            var examinerid = $(this).find('.examiner_' + childIndex).val();
+            var examiner = $(this).find('.examiner_' + childIndex + ' option:selected').html();
+            var blendedDuration = $(this).find('.BlendedDuration').val();
+            var blendedAllowance = $(this).find('.BlendedAllowance').val();
+            labelDisplay += "<div class='col-md-12'>" +
+                "<a href='javasciprt:void(0)' title='" +
+                datefrom +
+                " - " +
+                dateto +
+                " - " +
+                learningtypeValue +
+                " - " +
+                (examinerid != "" ? (" - " + examiner) : "") +
+                (roomValue != "" ? (" - " + roomText) : "") +
+                "' data-toggle='tooltip' data-index='" +
+                index +
+                "' onclick='modalBlended(this)' data-toggle='tooltip'>" +
+                datefrom +
+                " - " +
+                dateto +
+                " - " +
+                learningtypeValue +
+                " - " +
+               (examinerid != "" ? (" - " + examiner) : "") +
+                (roomValue != "" ? (" - " + roomText) : "") +
+                "</a>&nbsp; " +
+                "<span class='text-success action' data-index='" +
+                index +
+                "' onclick='modalBlended(this)' >" +
+                "<i class='fa fa-pencil-alt' data-toggle='tooltip' title='@Resource.lblEdit'></i></span>" +
+                "</div>" +
+                "<div class='col-md-12 hidden  hidden_input'>" +
+                "<div class='form-group col-md-12 blendedfor' data-index='" +
+                childIndex +
+                "' id='div_Remove_Blended_" +
+                childIndex +
+                "'>" +
+                 "<input type='hidden' name='Blended[" +
+                childIndex +
+                "].LearningType' id='detail-blended-learningtype' value='" +
+                learningtypeValue +
+                "'/>" +
+                "<input type='hidden' name='Blended[@(@b)].Id' id='detail-blended-id' value='" +
+                id +
+                "' />" +
+                "<input type='hidden' name='Blended[" +
+                childIndex +
+                "].DateFrom' id='detail-blended-datefrom' value='" +
+                datefrom +
+                "' />" +
+                "<input type='hidden' name='Blended[" +
+                childIndex +
+                "].DateTo' id='detail-blended-dateto' value='" +
+                dateto +
+                "' />" +
+                "<input type='hidden' name='Blended[" +
+                childIndex +
+                "].Examiner' id='detail-blended-examiner' value='" +
+                (examinerid != "" ? examinerid : "") +
+                "' />" +
+                                "<input type='hidden' name='Blended[" +
+                childIndex +
+                "].Room' id='detail-blended-roomid' value='" +
+                (roomValue != "" ? roomValue : "") +
+                "' />" +
+                    "<input type='hidden' name='Blended[" +
+                childIndex +
+                "].BlendedDuration' id='detail-blended-BlendedDuration' value='" +
+                blendedDuration +
+                "' />" +
+                    "<input type='hidden' name='Blended[" +
+                childIndex +
+                "].BlendedAllowance' id='detail-blended-BlendedAllowance' value='" +
+               blendedAllowance +
+                "' />" +
+
+                "</div>" +
+                "</div>";
+
+        });
+
+        detail.empty();
+        detail.append(labelDisplay);
+
+        $("#Modal-Blended").modal("hide");
+        $('#div_Detail_Blended_' + index).addClass('in');
+    }
+        function modalBlended(id) {
+         $(".reselect").each(function (i, v) {
+
+              $(v).select2();
+         });
+        var index = $(id).data('index');
+        //  $(id).find('.hidden_input').addClass('hidden');
+        var detail = $('#div_Detail_Blended_' + index).parent();
+        var blendedParent = detail.find('.hidden_input .blendedfor');
+        var divAppent = "#div_modal_blended_" + index;
+        var datefrom = "";
+        var dateto = "";
+        var roomValue = "";
+         var room = "";
+        var id = "";
+        var learningType = "";
+            var CoursedetailFrom = "";
+            var CoursedetailTo = ""
+            var blendedDuration = 0;
+
+        var blendedAllowance = 0;
+            if (detail.find("#course-detail-from-date").data('DateTimePicker').date() == null) {
+                notify.alert("@(Messege.VALIDATION_COURSE_TODATE)", 'WARNING', TITLE_STATUS_WARNING);
+                return;
+            }
+            else {
+                CoursedetailFrom = moment(detail.find("#course-detail-from-date").data('DateTimePicker').date().startOf("day"));
+
+            }
+            if (detail.find("#course-detail-to-date").data('DateTimePicker').date() == null) {
+                notify.alert("@(Messege.VALIDATION_COURSE_TODATE)", 'WARNING', TITLE_STATUS_WARNING);
+                return;
+            }
+            else {
+                CoursedetailTo = moment(detail.find("#course-detail-to-date").data('DateTimePicker').date().endOf("day"));
+            }
+        detail.find("#course-detail-from-date").addClass('course-detail-from-date-' + index);
+        detail.find("#course-detail-to-date").addClass('course-detail-to-date-' + index);
+        $("#Modal-Blended").modal("show");
+        $("#messageoutBlended").empty();
+        $("#messageoutBlended").append("<div class='col-md-12'>" +
+            "<h3 class='text-center'>Set information for cRo</h3>" +
+            "</div>" +
+            "<hr/>" +
+            "<div class='form-group col-md-12' data-index='" +
+            index +
+            "'  id='div_modal_blended_" +
+            index +
+            "'>" +
+            // addBlended("'#div_modal_blended_" + index + "',' ',' ',' ' ")
+            "</div>" +
+            "<div class='form-group col-md-12'>" +
+            "<a href='javascript:void(0)' data-toggle='tooltip' title='Add' style='font-size:13pt;color:forestgreen;cursor:pointer' data-index='" +
+            index +
+            "'  onclick=\"addBlended(\'" +
+            divAppent +
+            "\',\'" +
+            datefrom +
+            "\',\'" +
+            dateto +
+            "\',\'" +
+            roomValue +
+            "\',\'" +
+            room +
+            "\',\'" +
+            learningType +
+            "\',\'" +
+            id +
+            "\',\'" +
+            index +
+            "\',\'" +
+            blendedDuration +
+            "\',\'" +
+            blendedAllowance +
+            "\',\'" +
+            CoursedetailFrom +
+            "\',\'" +
+            CoursedetailTo +
+            "\')\" >" +
+            "<i class='far fa-plus-square action' >&nbsp;</i>" +
+            "</a>" +
+            "</div>");
+
+        if (blendedParent.length > 0) {
+            blendedParent.each(function () {
+                var id = $(this).find('#detail-blended-id').val();
+                var datefrom = $(this).find('#detail-blended-datefrom').val();
+                var dateto = $(this).find('#detail-blended-dateto').val();
+                var roomValue = $(this).find('#detail-blended-examiner').val();
+                var room = $(this).find('#detail-blended-roomid').val();
+                var learningValue = $(this).find('#detail-blended-learningtype').val();
+                //var marktype = $(this).find('#detail-blended-marktype').val();
+                var blendedDuration = $(this).find('#detail-blended-BlendedDuration').val();
+                var blendedAllowance = $(this).find('#detail-blended-BlendedAllowance').val();
+
+                addBlended(divAppent, datefrom, dateto, roomValue, room, learningValue, id, index, blendedDuration, blendedAllowance, CoursedetailFrom, CoursedetailTo);
+            });
+        } else {
+            addBlended(divAppent, "", "", "", "", "Online", "", index, 0, 0, CoursedetailFrom, CoursedetailTo);
+            addBlended(divAppent, "", "", "", "", "Classroom", "", index, 0, 0, CoursedetailFrom, CoursedetailTo);
+        }
+
+        $("#Modal-Footer-Blended").empty();
+        $("#Modal-Footer-Blended").append("<input type='button' data-index='" +
+            index +
+            "' class='btn btn-primary' value='Save' onclick='saveBlended(this)' /><button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>");
+
+    }
+    function removeModalBlended(id) {
+        var index = $(id).data("index");
+        $(id).parent().parent().addClass("isRemove");
+        $(id).parent().parent().find("div").addClass("hidden");
+        var remove = "<div class='col-md-3'><a href='javasciprt:void(0)' data-toggle='tooltip' data-index='" +
+            index +
+            "' onclick='UnremoveModalBlended(this)' title='UnRemove' class='legitRipple'><i class='fas fa-trash'></i>&nbsp;UnRemove</a></div>";
+        $(id).parent().parent().append(remove);
+    }
+    function UnremoveModalBlended(id) {
+        $(id).parent().parent().find("div").removeClass("hidden");
+        $(id).parent().parent().removeClass("isRemove");
+        $(id).parent().remove();
+    }
+    function learningTypeBlended(id) {
+        var dataIndex = $(id).data("index");
+        var aaa = id.value;
+
+        var value = 9999;
+        if (typeof aaa != 'undefined') {
+            value = aaa;
+        } else {
+            value = id.val();
+        }
+
+        if (value == 0) {
+            $('#div_room_' + dataIndex).addClass("collapse");
+            $('#div_room_' + dataIndex).removeClass("in");
+            var setRoomDefault = $('#div_room_' + dataIndex).find("select");
+            setRoomDefault.val("");
+        } else if (value == 1) {
+            $('#div_room_' + dataIndex).addClass("in");
+            $('#div_room_' + dataIndex).removeClass("collapse");
+        } else {
+            $('#div_room_' + dataIndex).addClass("collapse");
+            $('#div_room_' + dataIndex).removeClass("in");
+        }
+    }
+    function onChangeRegistry(id) {
+        var dataIndex = $(id).data("index");
+        if (id.value == 1) //UtilConstants.BoolEnum.Yes
+        {
+            $('#hiddenRegisable_' + dataIndex).addClass("in");
+            $('#hiddenRegisable_' + dataIndex).removeClass("collapse");
+        } else {
+            $('#hiddenRegisable_' + dataIndex).addClass("collapse");
+            $('#hiddenRegisable_' + dataIndex).removeClass("in");
+        }
+    }
+    //#region Ingredient
+    function addIngredient(div_append_element) {
+        var html = $('#course-detail-Ingredient').html();
+        html = html.replace(/{index}/g, e_index);
+        var $this = $(html);
+        $(div_append_element).append($this);
+        e_index++;
+        return $this;
+    }
+    function actionShowModifyIngredient(id) {
+        var index = $(id).data("index");
+        var $sector = "son_Detail_Ingredient_" + index;
+
+        spinner.open();
+        $.ajax({
+            url: '/Course/ModifyIngredient',
+            success: function (response) {
+                var $modal = $(response).modal('show');
+                $modal.on('submit', 'form', function (e) {
+                    actionModifyIngredient($modal,$sector);
+                    //e.preventDefault();
+                    return false;
+                });
+            },
+            complete: function () {
+                spinner.close();
+            }
+        });
+    }
+    function actionModifyIngredient($modal,$sector) {
+        var $this = $modal.find('form');
+        var formData = $this.serializeArray();
+        var data = mergArrayObject(formData);
+        $.ajax({
+            url: $this.attr('action'),
+            data: data,
+            type: 'POST',
+            success: function (response) {
+                if (response.result) {
+                    loadIngredient($sector);
+                    $modal.on('hidden.bs.modal', function () { $(this).remove(); });
+                    $modal.modal('hide');
+                    //notify.alert(response.message, 'Notification', TITLE_STATUS_SUCCESS);
+                } else {
+                    notify.alert(response.message, 'Warning', TITLE_STATUS_DANGER);
+                }
+            },
+            complete: function () {
+                spinner.close();
+            }
+        });
+    }
+    function calldelete(id) {
+        notify.confirm('@(string.Format(Messege.DELETE_OBJECT,Resource.COST_GROUPCOST))', 'Confirm', TITLE_STATUS_WARNING, actionDeleteGroupCost, id);
+    }
+    function actionDeleteGroupCost(id) {
+        $.ajax({
+            url: "/Cost/DeleteGroupCost",
+            type: 'POST',
+            datatype: 'json',
+            data: { id: id },
+            success: function (response) {
+                if (response.result) {
+                    loadGroupCost();
+                    $('.modal').modal('hide');
+                    notify.alert(response.message, 'Notification', TITLE_STATUS_SUCCESS);
+                } else {
+                    notify.alert(response.message, 'Warning', TITLE_STATUS_DANGER);
+                }
+            },
+            complete: function () {
+                spinner.close();
+            }
+        });
+    }
+    function loadIngredient($sector) {
+        var $select = $(document).find('#' + $sector + ' select.DictionaryIngredients');
+        spinner.open();
+        $.ajax({
+            type: 'POST',
+            url: "/Course/filterIngredient",
+            datatype: 'json',
+            success: function (result) {
+                $select.empty();
+                $select.prop('selectedIndex', 0);
+                $select.append(result.value_option);
+            },complete : function() {
+                spinner.close();
+            }
+        });
+    }
+    function oncheckIngredient(id) {
+        var checkbox = $(id);
+        if (checkbox.context.checked) {
+            checkbox.parent().parent().parent().find('#course-detail-Ingredient').attr("disabled", true);
+        } else {
+            checkbox.parent().parent().parent().find('#course-detail-Ingredient').removeAttr('disabled');
+        }
+    }
+    function onchangeIngredient(id) {
+        var  ingreeid = $(id).val();
+        var $this = $(id).parent().parent().parent();
+        $.ajax({
+            type: "GET",
+            url: "/Course/GetRecordIngredient",
+            dataType: "json",
+            data: { id: ingreeid },
+            success: function(result) {
+                if (result.result) {
+                    $this.find('#Name').val(result.name);
+                    $this.find('#Description').val(result.description);
+                    $this.find('#Id').val(result.id);
+                } else {
+                    $this.find('#Name').val('');
+                    $this.find('#Description').val('');
+                    $this.find('#Id').val('');
+                    notify.alert(response.message, 'Warning', TITLE_STATUS_DANGER);
+                }
+            }
+        });
+    }
+    function removeIngredient(id) {
+        var aaa = $(id).parent().parent();
+        aaa.remove();
+    }
+    function myFunction() {
+        var checkBox = document.getElementById("IsBindSubject");
+        var text = document.getElementById("bindcheck");
+        if (checkBox.checked == true){
+            text.style.display = "block";
+            FilterSubject();
+        } else {
+            text.style.display = "none";
+        }
+    }
+    function FilterSubject() {
+        var form = $("#createform").serialize();
+        $.ajax({
+            type: 'POST',
+            @{if(Model.Id  != null)
+               {
+                   @:url: "/Course/AjaxHandlerListSelectSubject/" + @Model.Id +"",
+                            }
+            else
+            {
+            @:url: "/Course/AjaxHandlerListSelectSubject",
+                        }
+            }
+
+            datatype: 'json',
+            data: form,
+            success: function (data) {
+                $("#subjectlist").html('');
+                $("#subjectlist").append(data);
+                $("#checkAll").click(function () {
+                    $(".BindToSubject").prop('checked', $(this).prop("checked"));
+                });
+            }
+        });
+    }
+    $('#FilterCodeOrName').bind("enterKey", function(e) {
+        FilterSubject();
+    });
+    $('#FilterCodeOrName').keyup(function(e) {
+        if (e.keyCode == 13) {
+            $(this).trigger("enterKey");
+        }
+    });
+    // #endregion
+    function AddRowIngredient(row) {
+        //var $this = $(document).find('#div_Detail_Ingredient_'+(index-1));
+        spinner.open();
+        var $this = $('#div_Detail_Ingredient_'+row);
+
+        $.ajax({
+            type: "GET",
+            url: "/Course/AddRowIngredient",
+            dataType: "json",
+            data: { row: e_index },
+            success: function(result) {
+                if (result.result) {
+                    $this.append(result.data);
+                    e_index++;
+                }
+            },complete : function() {
+                spinner.close();
+            }
+        });
+
+    }
+        //$(".line_310").addClass("active");
+        //$(".line_320").find('a').addClass("active");
+
+    function ShowModalResult(val) {
+        var url = $(val).data('href');
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        $('#iframeId').attr('src', url);
+
+        $("#sontttest").modal('show');
+
+        // var win = window.open(url,'null','titlebar=no,location=no,status=no,menubar=no,toolbar=no,directories=no,resizable=yes');
+        // win.focus();
+    }
+    </script>
+
+}

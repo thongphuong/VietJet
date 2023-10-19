@@ -1,0 +1,10 @@
+﻿@using DAL.Entities
+@model Trainee
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var Instructor = ViewBag.Instructer as Trainee;
+}
+
+<h2>@Instructor.str_Fullname</h2>

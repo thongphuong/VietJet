@@ -1,0 +1,454 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@using TMS.Core.ViewModels.UserModels
+@model TMS.Core.ViewModels.Room.MeetingModels
+@{
+    ViewBag.Title = "Modify";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var data = (UserModel)HttpContext.Current.Session["UserA"];
+}
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fas fa-home"></i> @Resource.lblMeetingManagement</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblMeetingManagement</li>
+                <li class="active">@(Model.Id.HasValue ? "Edit" : "Create")</li>
+            </ol>
+        </div>
+    </div>
+}
+<div id="frmFilter">
+    @using (Html.BeginForm("Modify", "Meeting", FormMethod.Post, new { id = "createform" }))
+    {
+        <div class="panel">
+            <div class="panel-heading">
+                <h1 class="panel-title list-panel-title"><i class="fas fa-pencil-alt font-small-byhoa" aria-hidden="true"></i> @(Model.Id.HasValue ? "Edit" : "Create")</h1>
+            </div>
+            <div class="panel-body">
+                <div class="form-group col-md-12">
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <br />
+                            <label>@Resource.lblName : </label>
+                            @Html.TextAreaFor(model => model.Name, new { @class = "form-control", @rows = "1" })
+                        </div>
+                        <div class="col-md-6">
+                            <br />
+                            <label>@Resource.lblRoom : </label>
+                            <select name="RoomID" id="RoomID" class="form-control frmFilter" data-placeholder="@Resource.lblMeetingRoom">
+                                @if (Model.ListRoom != null)
+                                {
+                                    foreach (var item in Model.ListRoom)
+                                    {
+                                        <option value="@item.Key" @(Model.RoomID != null && Model.RoomID == item.Key ? "selected" : "")>@item.Value</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <br />
+                            <label>@Resource.lblStartDate : </label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right frmFilter" name="StartDate" id="StartDate" placeholder="@Resource.lblStartDate" value="@Model.StartDate">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <br />
+                            <label>@Resource.lblEndDate : </label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right frmFilter" name="EndDate" id="EndDate" placeholder="@Resource.lblEndDate" value="@Model.EndDate">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <br />
+                        <div class="col-md-6">
+                            <label>@Resource.lblDescription: </label>
+                            @Html.TextAreaFor(model => model.Description, new { id = "txt_Content", @class = "form-control", @rows = "4" })
+                        </div>
+                        <div class="col-md-6 row">
+                            <div class="col-md-6">
+                                <label>@Messege.lblFromTime : </label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right frmFilter date" name="TimeFrom" id="TimeFrom" placeholder="@Messege.lblFromTime" value="@Model.TimeFrom">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>@Messege.lblToTime : </label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right frmFilter date" name="TimeTo" id="TimeTo" placeholder="@Messege.lblToTime" value="@Model.TimeTo">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <hr />
+                <div class="col-md-12" style="margin-top: 10px;">
+                    <div class="panel-heading list-panel-heading">
+                        <h1 class="panel-title list-panel-title">Select Participants</h1>
+                    </div>
+                    <div class="col-md-12" style="margin-top: 10px;">
+                        <div class="col-md-1">
+                            <label>@Resource.lblDepartment</label>
+                        </div>
+                        <div class="col-md-5">
+                            <select class="form-control frmFilter" id="DepartmentList2" name="DepartmentList2" data-placeholder="-- @Resource.lblDepartment --">
+                                <option></option>
+                                @Html.Raw(Model.Departments)
+                                @*@if (Model.Departments != null)
+                        {
+                            foreach (var item in Model.Departments)
+                            {
+                        <option value="@item.Key">@item.Value </option>
+                            }
+                        }*@
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <label>@Resource.lblFullName</label>
+                        </div>
+                        <div class="col-md-5">
+                            @Html.TextBox("FullName2", null, new { @class = "form-control frmFilter" })
+                        </div>
+
+                    </div>
+                    <div class="col-md-12" style="margin-top: 10px;">
+                        <div class="col-md-1">
+                            <label>@Resource.lblJobTitle_Occupation</label>
+                        </div>
+                        <div class="col-md-5">
+                            <select class="form-control frmFilter" id="JobtitleList2" name="JobtitleList2" data-placeholder="-- @Resource.lblJobTitle_Occupation --">
+                                <option></option>
+                                @if (Model.JobTitles != null)
+                                {
+                                    foreach (var item in Model.JobTitles)
+                                    {
+                                        <option value="@item.Key">@item.Value </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-1">
+                            <label>@Messege.EID</label>
+                        </div>
+                        <div class="col-md-5">
+                            @Html.TextBox("EID2", null, new { @class = "form-control frmFilter" })
+                        </div>
+
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-11">
+                        </div>
+                        <div class="col-md-1 text-right">
+                            <button type="button" class="btn btn-primary pull-right" id="btFilter2">
+                                <i class="fa fa-search"></i> @Resource.lblSearch
+                            </button>
+                        </div>
+
+                    </div>
+                    <table id="Trainee2" class="table table-striped table-bordered  table-responsive" style="width: 100%; overflow-y: scroll;">
+                        <thead>
+                            <tr role="row">
+                                <th style="width: 5%;">@Resource.lblStt</th>
+                                <th>@Messege.EID</th>
+                                <th>@Resource.lblFullName</th>
+                                <th>@Resource.lblDepartment</th>
+                                <th>@Resource.lblJobTitle_Occupation</th>
+                                <th style="width: 5%;"><input type="checkbox" name="select_all2" value="1" id="example-select-all2"></th>
+                        </thead>
+                        <tbody></tbody>
+                        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                    </table>
+                </div>
+                <hr />
+                @if (Model.Id.HasValue)
+                {
+                    <input class="frmFilter" type="hidden" id="meeting_ID" name="meeting_ID" value="@Model.Id" />
+                    <div class="col-md-12" style="margin-top: 10px;">
+                        <div class="panel-heading list-panel-heading">
+                            <h1 class="panel-title list-panel-title">
+                                Current Participants
+                            </h1>
+                        </div>
+                        <table id="AssignTrainee" class="table table-striped table-bordered" style="width: 100%">
+                            <thead>
+                                <tr role="row">
+                                    <th style="width: 5%;">@Resource.lblStt</th>
+                                    <th>@Messege.EID</th>
+                                    <th>@Resource.lblFullName</th>
+                                    <th>@Resource.lblDepartment</th>
+                                    <th>@Resource.lblJobTitle_Occupation</th>
+                                    <th>@Resource.lblStatus</th>
+                                    @*<th style="width: 5%;"><input type="checkbox" name="select_all2" value="1" id="example-select-all2"></th>*@
+                            </thead>
+                            <tbody></tbody>
+                            <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                        </table>
+
+                    </div>
+                }
+            <div class="col-md-12">
+                <label>&emsp;</label>
+                <div>
+                    <input class="frmFilter" style="display:inline-block;" type="checkbox" id="check_Meeting" name="check_Meeting" />
+                    <label>Send Email</label>
+                </div>
+            </div>
+                <div class="col-md-12">
+
+                    <div class="action-form text-right">
+                        <a href="javascript:void(0);" class="btn btn-primary legitRipple" id="submit" onclick="save()"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                        <a onclick=" goBack() " class="btn btn-default  legitRipple"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    }
+</div>
+<!-- Modal addtrainee-->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <div class="modal-header panel-oran">
+                <button type="button" class="close btnClose" data-dismiss="modal">&times;</button>
+                <div class="panel-heading list-panel-heading">
+                    <h5 class="modal-title panel-title list-panel-title" id="modal-header">@Resource.lblWARNING</h5>
+                </div>
+            </div>
+            <div class="modal-body">
+                <label id="lblmyModal"></label>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="@Resource.lblAssignTrainee" class="btn btn-primary" id="btnassign" />
+
+                <button type="button" class="btn btn-secondary btnClose" data-dismiss="modal">@Resource.lblClose</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!--END Modal addtrainee -->
+<div class="modal fade" id="myModalRequest" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p id="lblModelMessage"></p>
+                <label>Note</label>
+                <textarea class="form-control" name="txtNote" id="txtNote" rows="5"></textarea>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div id="messageout">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="Modal_FooterRequest">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+            var sTable_tab2;
+            var sTable2_tab2;
+            $(document).ready(function() {
+                var customRowsTable = [
+                     {
+                         "targets": 0 ,
+                         "className": "text-center"
+                     },
+                ];
+
+                sTable_tab2 = initDataTableMaxPageLength("#Trainee2", "/Meeting/AjaxHandlerAvailableParticipants", customRowsTable);
+                sTable2_tab2 = initDataTableMaxPageLength("#AssignTrainee", "/Meeting/AjaxHandlerSelectParticipants", customRowsTable);
+
+                $('.date').datetimepicker({
+                    format: "HH:mm"
+                });
+                formatDatetimepicker('#StartDate', '@Resource.lblLanguage');
+
+                formatDatetimepicker('#EndDate', '@Resource.lblLanguage');
+                $(".btnClose").click(function() {
+                    $('#lblmyModal').val("");
+                    $('#btnassign').off("click");
+                });
+
+                $("#EID2").pressEnter(function() {
+                    $('#btFilter2').trigger('click');
+                });
+                $("#FullName2").pressEnter(function() {
+                    $('#btFilter2').trigger('click');
+                });
+                $('#btFilter2').click(function(e) {
+
+                    LoadDataTable();
+
+                });
+
+                // Handle click on "Select all" control
+                $('#example-select-all2').on('click', function() {
+                    // Get all rows with search applied
+                    var rows = sTable_tab2.rows({ 'search': 'applied' }).nodes();
+                    // Check/uncheck checkboxes for all rows in the table
+                    $('input[type="checkbox"]', rows).prop('checked', this.checked);
+                });
+                // Handle click on checkbox to set state of "Select all" control
+                $('#Trainee2 tbody').on('change', 'input[type="checkbox"]', function() {
+                    // If checkbox is not checked
+                    if (!this.checked) {
+                        var el = $('#example-select-all2').get(0);
+                        // If "Select all" control is checked and has 'indeterminate' property
+                        if (el && el.checked && ('indeterminate' in el)) {
+                            // Set visual state of "Select all" control
+                            // as 'indeterminate'
+                            el.indeterminate = true;
+                        }
+                    }
+                });
+
+                $('#example-select-all-Assign2').on('click', function () {
+                    // Get all rows with search applied
+                    var rows = sTable2_tab2.rows({ 'search': 'applied' }).nodes();
+                    // Check/uncheck checkboxes for all rows in the table
+                    $('input[type="checkbox"]', rows).prop('checked', this.checked);
+                });
+                // Handle click on checkbox to set state of "Select all" control
+                $('#AssignTrainee tbody').on('change', 'input[type="checkbox"]', function () {
+                    // If checkbox is not checked
+                    if (!this.checked) {
+                        var el = $('#example-select-all-Assign2').get(0);
+                        // If "Select all" control is checked and has 'indeterminate' property
+                        if (el && el.checked && ('indeterminate' in el)) {
+                            // Set visual state of "Select all" control
+                            // as 'indeterminate'
+                            el.indeterminate = true;
+                        }
+                    }
+                });
+            });
+
+            $(".line_310").addClass("active");
+
+            function LoadDataTable() {
+                sTable_tab2.draw();
+                $('#role-edit-btnRight2').css('display', 'block');
+                $('#role-edit-btnLeft2').css('display', 'block');
+            }
+
+            function removetrainee() {
+                var form = $("#createform").serialize();
+                spinner.open();
+                $.ajax({
+                    type: 'POST',
+                    url: "/Course/SubmitRemoveAssignTrainee",
+                    datatype: 'json',
+                    data: form,
+                    success: function(data) {
+                        if (data.result) {
+                            LoadDataTable();
+                            notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                            $('.getQuantity').html(data.data).text();
+                            //$('.getQuantity').append(data.data);
+                        } else {
+                            notify.alert(data.message, "ERROR", TITLE_STATUS_DANGER);
+                        }
+                    },
+                    complete: function() {
+                        spinner.close();
+                    }
+                });
+            }
+
+            function save() {
+                var form = $("#createform").serialize();
+                spinner.open();
+                $.ajax({
+                    type: 'POST',
+                    url: "/Meeting/Modify",
+                    datatype: 'json',
+                    data: form,
+                    success: function(data) {
+                        if (data.result) {
+                            LoadDataTable();
+                            notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                            window.location = "/Meeting/Index";
+                        } else {
+                            notify.alert(data.message, "ERROR", TITLE_STATUS_DANGER);
+                        }
+
+                    },
+                    complete: function() {
+                        spinner.close();
+                    }
+                });
+
+            }
+
+            function Set_Participate_Item(isParticipate, id, meeting_id) {
+                spinner.open();
+                $.ajax({
+                    type: 'POST',
+                    url: "/Meeting/SubmitSetParticipate",
+                    datatype: 'json',
+                    data: { isParticipate: isParticipate, id: id, meeting_id: meeting_id },
+                    success: function (data) {
+                        if (data.result) {
+                            notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                        }
+                    }, complete: function () {
+                        sTable2_tab2.draw();
+                        spinner.close();
+                    }
+                });
+            }
+
+
+            $.fn.pressEnter = function(fn) {
+
+                return this.each(function() {
+                    $(this).bind('enterPress', fn);
+                    $(this).keyup(function(e) {
+                        if (e.keyCode == 13) {
+                            $(this).trigger("enterPress");
+                        }
+                    });
+                });
+            };
+
+            $(".line_6").addClass("active");
+    </script>
+}
+
+
+
+

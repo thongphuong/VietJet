@@ -1,0 +1,49 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@model TMS.Core.ViewModels.Courses.RemarkComment
+
+
+
+
+<div class="modal fade" id="myModalFail" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            @using (Html.BeginForm("RemarkComment", "Course", FormMethod.Post))
+            {
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" style="text-align: center;">@Resource.lblRemarkComment</h4>
+                </div>
+                <div class="modal-body">
+                    <label>@Resource.lblTRAINEE : @Model.FullName </label>
+                    <br/>
+                    <label>@Resource.TRAINEE_EID : @Model.EId</label>
+                    <br/>
+                    <label>@Resource.lblRESULT : @Model.Result</label>
+                    <br/>
+                    @Html.HiddenFor(m => m.Id)
+                    @Html.HiddenFor(m => m.TraineeId)
+                    @Html.HiddenFor(m => m.CourseDetailId)
+                    <label>
+                        @Html.CheckBoxFor(m => m.Type) Checked. This trainee will be grade Fail.
+                    </label>
+                    <br/>
+                    <label>Remark</label>
+                    <textarea placeholder="@Resource.lblRemark" class="form-control" name="Remark" id="Remark" rows="5">@Model.Remark</textarea>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-12">
+                            <div id="messageout">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="Modal_Footer">
+
+                    <input type="submit" value=" @Resource.lblSave" class="btn btn-primary"/>
+
+                    <button type="button" class="btn btn-goback" data-dismiss="modal">@Resource.lblClose</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

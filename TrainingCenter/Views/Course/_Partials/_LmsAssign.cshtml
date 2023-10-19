@@ -1,0 +1,60 @@
+﻿@using TMS.Core.App_GlobalResources
+
+
+
+    <div class="col-md-12">
+        <hr/>
+    </div>
+    <div class="col-md-12" style="margin-top: 10px;">
+
+        <div class="col-md-1">
+            <label>@Messege.EID</label>
+        </div>
+        <div class="col-md-2">
+            @Html.TextBox("EID3", null, new {@class = "form-control frmFilter" })
+        </div>
+        <div class="col-md-1">
+            <label>@Resource.lblFullName</label>
+        </div>
+        <div class="col-md-3">
+            @Html.TextBox("FullName3", null, new {@class = "form-control frmFilter" })
+        </div>
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-primary pull-right" id="btFilter3">
+                <i class="fa fa-search"></i> @Resource.lblSearch
+            </button>
+        </div>
+    </div>
+
+
+    <div class="col-md-12">
+        <hr/>
+    </div>
+    <div class="col-md-12" style="margin-top: 10px;">
+        <div class="panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title">@Resource.lblAvailableTrainee&nbsp;<label class="getQuantity"></label></h1>
+            </div>
+            <div class="panel-body table-responsive">
+                <table id="LMSAssginTable" class="table table-striped table-bordered" style="width: 100%">
+                    <thead >
+                    <tr role="row">
+                    <th>@Resource.lblStt</th>
+                    <th>@Resource.lblFullName</th>
+                    <th>@Resource.lblCourse</th>
+                    <th>@Resource.lblSubject</th>
+                    <th>@Resource.ASSIGN_BY</th>
+                    <th><input type="checkbox" name="select_all3" value="1" id="example-select-all-Assign3"></th>
+                    </thead>
+                    <tbody></tbody>
+                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<div class="panel" id="btnLmsAssign" style="display: none">
+    <div class="panel-body text-right" >
+        <input type="button"  class="btn btn-primary" data-id="3"  name="bu_ab_alarm_btnRight" value="@Resource.lblSave" onclick="checktrainee(this)" />
+    </div>
+</div>
+

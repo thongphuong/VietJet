@@ -1,0 +1,124 @@
+﻿@using TMS.Core.Utils
+@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Orientation.OrientationModifyViewModel
+
+<div class="modal fade" id="modal-editor" role="dialog">
+    <div class="modal-dialog modal-lg">
+        @using (Html.BeginForm("ModifyForms", "Orientation", FormMethod.Post, new { id = "createform", enctype = "multipart/form-data" }))
+        {
+            <div class="modal-content">
+                <div class="modal-header panel">
+                    <div class="panel-heading list-panel-heading">
+                        <h5 class="modal-title panel-title list-panel-title" id="modal-header">@Resource.lblInformationPotentialSuccessor</h5>
+                    </div>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $('#checkAll').change(function () {
+                            var $this = $(this);
+                            var isChecked = $this.prop('checked');
+                            $this.closest('li').find('input[id="Abilities"]').prop('checked', isChecked);
+                        });
+                        formatDatetimepicker('.datepicker', '@Resource.lblLanguage');
+                    });
+                </script>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <div class="form-group ">
+                                <label>@Resource.lblEmployee</label>
+                                <div class="panel panel-default list-height-300">
+                                    <div id="panel-body">
+                                        <div id="subjectlist">
+                                            <ul class="list-item ">
+                                                <li>
+                                                    <label>
+                                                        <input class="" value="-1" type="checkbox" id="checkAll" />&nbsp;@Resource.lblAll
+                                                    </label>
+                                                    <ul class="list-item ">
+                                                        @foreach (var employee in Model.TrainedEmployee)
+                                                        {
+                                                            <li>
+                                                                <label>
+                                                                    <input value="@employee.Id" class="" id="Abilities" name="Abilities_@employee.Id" type="checkbox" @(Model.Abilities != null && Model.Abilities.Contains((int)employee.Id) ? "checked" : "") />
+                                                                    &nbsp;@employee.FullName
+                                                                </label>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-2">
+                                    <label>@Resource.lblKindOfSuccessor</label>
+                                </div>
+                                <div class="col-md-4 control-label">
+                                    <select id="IdKindOfSuccessor" required="required" name="IdKindOfSuccessor" class="form-control" data-placeholder="-- Select Kind Of Successor --">
+                                        <option value=""></option>
+                                        @if (Model.OrientationKindOfSuccessorList != null)
+                                        {
+                                            foreach (var m in Model.OrientationKindOfSuccessorList)
+                                            {
+                                                <option value="@m.Key">@m.Value</option>
+                                            }
+                                        }
+                                    </select>
+                                    <input hidden value="@ViewBag.JobID" id="jobID" name="jobID" />
+                                </div>
+                                <div class="col-md-2">
+                                    <label>@Resource.lblCompletedExpectationDate</label>
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" id="ExpectedDate" name="ExpectedDate" class="form-control datepicker" placeholder=" " required/>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-2">
+                                    <b>@Resource.lblRemark</b>
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.TextAreaFor(m => m.Remark, new Dictionary<string, object>() { { "class", "form-control" }, { "placeholder", "Your remark" } })
+                                    @Html.ValidationMessageFor(m => m.Remark, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+
+                        </div>
+                        <div class="col-md-9">
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12 text-right">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> @Resource.lblSave</button>
+                            <button type="button" class="btn btn-secondary btn-default" data-dismiss="modal">@Resource.lblCancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts{
+    <link href="~/Content/css/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css" />
+    <script src="/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/js/common.js"></script>
+}
+

@@ -1,0 +1,195 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Contact.ContactDetails
+
+@{
+    ViewBag.Title = "PrintContact";
+}
+
+<style>
+    #reportpage table > thead > tr > th,
+    #reportpage .table > thead > tr > th,
+    #reportpage table > tbody > tr > th,
+    #reportpage .table > tbody > tr > th,
+    #reportpage table > tfoot > tr > th,
+    #reportpage .table > tfoot > tr > th,
+    #reportpage table > thead > tr > td,
+    #reportpage .table > thead > tr > td,
+    #reportpage table > tbody > tr > td,
+    #reportpage .table > tbody > tr > td,
+    #reportpage table > tfoot > tr > td,
+    #reportpage .table > tfoot > tr > td {
+        border: 1px solid #000;
+        color: black;
+    }
+
+    .text-left {
+        text-align: left;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-right {
+        text-align: right;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-center {
+        text-align: center;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .header-title {
+        color: black;
+        font-weight: bold;
+    }
+
+    .td_course {
+        padding-left: 10px;
+        background: #ccc;
+    }
+
+    .footer_date {
+        color: black;
+        padding-top: 20px;
+        font-style: italic;
+    }
+
+    h4 {
+        color: black;
+    }
+
+    .images {
+        width: 25%;
+    }
+
+    .content {
+        width: 75%;
+    }
+
+    .col-lg-6 {
+        width: 50%;
+    }
+
+    .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11 {
+        float: left;
+    }
+
+    .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+        float: right;
+    }
+</style>
+
+
+
+<div class="col-md-12 text-center">
+    <table width="100%" border="1">
+        <tr>
+            <td width="20%">
+                <div class="col-sm-12 text-center">
+                    <img src="~/Content/img/logo.png" style="width: 80%;margin-top: 12px;" />
+                </div>
+            </td>
+            <td colspan="1">
+                <div class="col-sm-12 text-center">
+                    <h2 class="header-title">Contact Information</h2>
+                </div>
+            </td>
+            <td width="20%">
+                <div class="col-sm-12 text-right pull-right">
+                    FORM: TV-F-010 <br />
+                    ISS 01/REV 02<br />
+                    1/1/2018
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+    <div class="panel-body">
+        <div class="tab-content">
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-12">
+                    <div class="panel box-shadow">
+                        <div class="panel-body center-block">
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>@Resource.lblFullName : </label>
+                                    </div>
+                                    &nbsp;@Model.FullName
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>@Resource.lblEmail : </label>
+                                    </div>
+                                     &nbsp;@Model.Email
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>@Resource.lblPhone : </label>
+                                    </div>
+                                    @Model.Phone
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>@Resource.USER_ADDRESS : </label>
+                                    </div>
+                                     &nbsp;@Model.Address
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>@Resource.lblFullName : </label>
+                                    </div>
+                                    @Model.FullName
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>@Resource.lblCompany : </label>
+                                    </div>
+                                     &nbsp;@Model.Company
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>@Resource.lblSubjectSendMail : </label>
+                                    </div>
+                                     &nbsp;@Model.Subject
+                                </div>
+                            </div>
+                       
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>@Resource.lblContent : </label>
+                                    </div>
+                                     &nbsp;<textarea class="form-control" rows="5" cols="5" readonly="readonly">@Model.Description</textarea>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+

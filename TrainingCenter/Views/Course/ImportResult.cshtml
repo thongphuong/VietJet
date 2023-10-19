@@ -1,0 +1,444 @@
+﻿@using TMS.Core.App_GlobalResources
+@using DAL.Entities
+@{
+    ViewBag.Title = "Result";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .hide_column{
+    display : none;
+}
+</style>
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-graduation-cap"></i>  @Coursess.lblCourseManagement - @Coursess.lblInputResult</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Coursess.lblHome</a></li>
+                <li>@Coursess.lblCourseManagement</li>
+                <li class="active">@Coursess.lblInputResult</li>
+            </ol>
+        </div>
+    </div>
+}
+@using (Html.BeginForm("InsertResult", "Course", FormMethod.Post, new { id = "createform" }))
+{
+    <div class="col-md-12" style="margin-top: 10px;">
+        <div class="panel panel-danger list-panel" id="list-panel">
+            <div class="panel-body">
+                <div class="row col-md-12">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-2">
+                            <b>@Coursess.lblCourseName</b>
+                        </div>
+                        <div class="col-md-10">
+                            <select class="form-control selectpicker" id="CourseList" onchange="OnChangeCourseList(this.value)" data-placeholder="-- Course List --">
+                                <option></option>
+                                @foreach (var variable in (List<Course>)ViewBag.CourseList)
+                                {
+                                    <option value="@variable.Id">@variable.Name</option>
+                                }
+                            </select>
+                            @* @Html.DropDownList("CourseList", (SelectList) ViewBag.CourseList, "-- Course List --", new {@class = "form-control selectpicker", @onchange = "OnChangeCourseList(this.value)", @attribute = "data-live-search=true"})*@
+                        </div>
+
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-2">
+                            <b>@Coursess.lblSubjectName</b>
+                        </div>
+                        <div class="col-md-10">
+                            <select class='form-control selectpicker' id="ddl_subject" name="ddl_subject" data-placeholder="--Subject List--">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-2">
+                            <b>@Traineess.lblFrom</b>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" id="startDate" name="startDate" class="form-control datepicker required">
+                        </div>
+                        <div class="col-md-2">
+                            <b>@Traineess.lblTo</b>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" id="endDate" name="endDate" class="form-control datepicker required">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="button" class="btn btn-danger pull-right" id="btFilter" value="Search" />
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" style="margin-top: 10px;">
+        <div class="panel panel-danger list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title">@Coursess.lblResulList</h1>
+            </div>
+            <div class="panel-body">
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-3">
+
+                    </div>
+                    <div class="col-md-1">
+                        <b>File</b>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="file" class="form-control" id="files" name="files" value=""/>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="button" class="btn btn-danger pull-right" id="btImport" value="Import" />
+                    </div>
+
+                </div>
+                <br/>
+                <div id="tapGET">
+                    <table id="Trainee" class="table table-striped table-bordered" style="width: 100%">
+                        <thead >
+                            <tr role="row">
+                                <th style="width: 3%">NO</th>
+                                <th style="width: 5%">SYS_ID</th>
+                                <th style="width: 5%">SYS TRAINEE ID</th>
+                                <th style="width: 5%">EID</th>
+                                <th style="width: 10%">@Coursess.lblName</th>
+                                <th style="width: 15%">@Coursess.lblDEPARTMENT</th>
+                                <th style="width: 15%">@Coursess.lblLEARNINGTIME1</th>
+                                <th style="width: 10%">@Coursess.lblFIRSTRESULT</th>
+                                <th style="width: 10%">RE RESULT</th>
+                                <th style="width: 15%">@Coursess.lblREMARK1</th>
+                        </thead>
+                        <tbody></tbody>
+                        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                    </table>
+                </div>
+                <div id="tapPOST" class="hidden" >
+                    <table id="Trainee1" class="table table-striped table-bordered" style="width: 100%">
+                        <thead >
+                            <tr role="row">
+                                <th style="width: 3%">NO</th>
+                                <th style="width: 5%">SYS_ID</th>
+                                <th style="width: 5%">SYS TRAINEE ID</th>
+                                <th style="width: 5%">EID</th>
+                                <th style="width: 10%">@Coursess.lblName</th>
+                                <th style="width: 15%">@Coursess.lblDEPARTMENT</th>
+                                <th style="width: 15%">@Coursess.lblLEARNINGTIME1</th>
+                                <th style="width: 10%">@Coursess.lblFIRSTRESULT</th>
+                                <th style="width: 10%">RE RESULT</th>
+                                <th style="width: 15%">@Coursess.lblREMARK1</th>
+                        </thead>
+                        <tbody></tbody>
+                        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                    </table>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div id="messageout">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-sm-2">
+                        @*<input type="button" class="btn btn-danger pull-right" id="" value="Request Approve" />*@
+                    </div>
+                    <div class="col-sm-8">
+
+                    </div>
+                    <div class="col-sm-2">
+                        @if (CMSUtils.Is_Add("/Course/ListResultHasInsert"))
+                        {
+                            @:<text id="ResultGetButtom"></text>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+@section Scripts{
+
+
+
+    <link href="/Content/css/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css"/>
+    <!-- timepicker -->
+    
+
+
+<script src="~/Content/trainingtime/buttons.html5.min.js" type="text/javascript"></script>
+
+<script src="~/Content/trainingtime/jquery.blockUI.js" type="text/javascript"></script>
+<script src="~/Content/trainingtime/jszip.min.js" type="text/javascript"></script>
+<script src="~/Content/trainingtime/xlsx.core.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        function insertpoint(id, gd) {
+            alert(id + "||" + gd);
+        }
+
+
+        function OnChangeCourseList(val) {
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "/Course/ChangeCourseReturnSubjectForImport",
+                dataType: "json",
+                data: { id_course: val },
+                success: function(result) {
+                    $('#ddl_subject').empty();
+                    $('#ddl_subject').prop('selectedIndex', 0);
+                    if (result.value_null == "0") {
+                        $('#ddl_subject').append(result.value_option);
+                        $('#ddl_subject').selectpicker('refresh');
+                    } else {
+                        $('#ddl_subject').append("<option></option>");
+                    }
+                }
+            });
+        }
+
+        $(document).ready(function() {
+
+            //$('.datepicker').datetimepicker({
+            //    format: "DD/MM/YYYY"
+            //});
+            $('#startDate').daterangepicker({
+                format: 'DD MMM YYYY'
+            });
+            $('#endDate').daterangepicker({
+                format: 'DD MMM YYYY'
+            });
+
+            // -----
+            var buttonCommon = {
+                exportOptions: {
+                    format: {
+                        body: function(data, row, column, node) {
+                            // Strip $ from salary column to make it numeric
+                            if (column === 8)
+                                return "";
+                            else
+                                return data;
+                        }
+                    }
+
+                }
+            };
+            //datatable serverside
+            var sTable = $("#Trainee").dataTable({
+                "responsive:": true,
+                "searching": false,
+              "pageLength": 900000,
+                "order": [[5, "asc"]],
+                "columnDefs": [
+                    {
+                        "targets": 0,
+                        "data": null,
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+
+                    }
+                ],
+                "aaSorting": [],
+                "bServerSide": true,
+                "sAjaxSource": "/Course/AjaxHandlerListResultForImport",
+                "bProcessing": true,
+                "fnServerParams": function(aoData) {
+                    aoData.push({ "name": "CourseList", "value": $('#CourseList').val() },
+                    { "name": "ddl_subject", "value": $('#ddl_subject').val() },
+                    { "name": "ToDate", "value": $('#endDate').val() },
+                    { "name": "FromDate", "value": $('#startDate').val() });
+                },
+                "fnDrawCallback ": function() {
+
+
+                },
+                "initComplete": function(settings, json) {
+                    $("#Trainee_wrapper a").addClass("btn btn-danger");
+                    $("#Trainee_wrapper a.dt-button").css("position", "absolute");
+                    $("#Trainee_wrapper a.dt-button").css("right", "0");
+                    $("#Trainee_wrapper a.dt-button").css("top", "0");
+                },
+                dom: 'lBfrtip',
+                buttons: [
+                    $.extend(true, {}, buttonCommon, {
+                        extend: 'excelHtml5',
+                        text: 'Export Excel',
+                        title: 'ImportResult',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8,9]
+                        }
+                    })
+                ]
+
+            });
+
+            var sTable1 = $("#Trainee1").dataTable({
+                "scrollX": true,
+                "searching": false,
+                "aaSorting": [],
+                "pageLength": 9000000
+
+            });
+
+
+            $('#btFilter').click(function(e) {
+                sTable.fnDraw();
+                $("#tapPOST").addClass("hidden");
+                $("#tapGET").removeClass("hidden");
+
+                var xxx = $('#ddl_subject').val();
+                if (xxx != "") {
+                    $.ajax({
+                        type: 'POST',
+                        url: "/Course/ResultGetButtomInResult",
+                        datatype: 'json',
+                        data: { courseId: $('#CourseList').val(), subjectId: $('#ddl_subject').val() },
+                        success: function(data) {
+                            $("#ResultGetButtom").html('');
+                            $("#ResultGetButtom").append(data);
+                        }
+                    });
+                }
+            });
+            $('#btImport').click(function(e) {
+                $.blockUI();
+                $("#tapGET").addClass("hidden");
+                $("#tapPOST").removeClass("hidden");
+
+                handleFile();
+
+
+                var xxx = $('#ddl_subject').val();
+                if (xxx != "") {
+                    $.ajax({
+                        type: 'POST',
+                        url: "/Course/ResultGetButtomInResult",
+                        datatype: 'json',
+                        data: { courseId: $('#CourseList').val(), subjectId: $('#ddl_subject').val() },
+                        success: function (data) {
+                            $("#ResultGetButtom").html('');
+                            $("#ResultGetButtom").append(data);
+                        }
+                    });
+                }
+
+            });
+        });
+
+        function submit() {
+            //$("#submit").hide();
+            //$("#createform :input").attr('disabled', 'disabled');
+            //if ($forms.valid()) {
+            var form = $("#createform").serialize();
+            var data = $("#Trainee1").dataTable().fnGetData();
+            $.ajax({
+                type: 'POST',
+                url: "/Course/InsertResultFromImport",
+                datatype: 'json',
+                data: form,
+                success: function(data) {
+                    $("#messageout").html('');
+                    $("#messageout").append(data);
+                    //$("#Trainee").dataTable().fnDraw();
+                }
+            });
+            //}
+        }
+
+        function handleFile(e) {
+            var result;
+            var input = document.getElementById('files');
+            //Get the files from Upload control
+            var files = input.files;
+            var i, f;
+            //Loop through files
+            for (i = 0, f = files[i]; i != files.length; ++i) {
+                var reader = new FileReader();
+                var name = f.name;
+                reader.onload = function(e) {
+                    var data = e.target.result;
+
+                    var workbook = XLSX.read(data, { type: 'binary' });
+
+                    var sheet_name_list = workbook.SheetNames;
+                    sheet_name_list.forEach(function(y) { /* iterate through sheets */
+                        //Convert the cell value to Json
+                        var headers = [];
+                        var sheet = workbook.Sheets[y];
+                        var range = XLSX.utils.decode_range(sheet['!ref']);
+                        var C, R = range.s.r;
+                        /* start in the first row */
+                        /* walk every column in the range */
+                        for (C = range.s.c; C <= range.e.c; ++C) {
+                            var cell = sheet[XLSX.utils.encode_cell({ c: C, r: R })];
+                            /* find the cell in the first row */
+
+                            var hdr = "UNKNOWN " + C; // <-- replace with your desired default
+                            if (cell && cell.t) {
+                                hdr = XLSX.utils.format_cell(cell);
+                            }
+                            headers.push(hdr);
+                        }
+
+
+                        var roa = XLSX.utils.sheet_to_json(workbook.Sheets[y]);
+                        if (roa.length > 0) {
+                            roa.forEach(function(row) {
+                                // Set empty cell to ''.
+                                headers.forEach(function(hd) {
+                                    if (row[hd] == undefined) {
+                                        row[hd] = '';
+                                    }
+                                });
+                            });
+                            result = roa;
+                        }
+                        var current = 0;
+
+                        for (var i = 0; i < roa.length; i++) {
+
+                            var data = result[i];
+
+                            var arr = $.map(data, function(el, i) {
+                                if (i === "FIRST RESULT") {
+                                    return "<input type='text' name='Frist' class='form-control'' value='" + el + "' />";
+                                }
+                                else if (i === "SYS_ID") { 
+                                    return el+ "<input type='hidden' name='ID' class='form-control'' value='" + el + "' />";
+                                }
+                                else if (i === "SYS TRAINEE ID") {
+                                    return el + "<input type='hidden' name='TID' class='form-control'' value='" + el + "' />";
+                                }
+                                else if (i === "RE RESULT") {
+                                    return "<input type='text' name='Re' class='form-control'' value='" + el + "' />";
+                                }
+                                else if (i === "REMARK") {
+                                    return "<input type='text' name='Remark' class='form-control'' value='" + el + "' />";
+                                }
+                                else {
+                                    return el;
+                                }
+                            });
+
+                            $("#Trainee1").DataTable().row.add(arr).draw();
+                        }
+                    });
+                    //Get the first column first cell value
+                };
+                reader.readAsArrayBuffer(f);
+            }
+
+            $.unblockUI();
+        }
+
+        $(".line_6").addClass("active");
+    </script>
+}

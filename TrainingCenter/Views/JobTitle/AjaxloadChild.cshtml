@@ -1,0 +1,21 @@
+﻿@using System.Web.Mvc.Html
+@model  IQueryable<TMS.Core.ViewModels.Jobtitles.JobtitleViewModel>
+@{
+    
+}
+  @foreach (var item in Model)
+  {
+    <li>
+        <span>
+            <a href='javascript:void(0)' onclick=" active('@item.Id', 'view' ) "><b color="red">@item.Name </b> </a>
+            @Html.Raw((User.IsInRole("/JobTitle/Detail")
+                                            ? "<a title='View' href='/JobTitle/Detail/" + item.Id + "'><i class='fa fa-search' aria-hidden='true' style=' font-size: 18px; '></i></a>&nbsp;"
+                                            : ""))
+            @Html.Raw((User.IsInRole("/JobTitle/Edit")) ? "<a title='Edit' href='/JobTitle/Edit/" + item.Id + "'><i class='fa fa-pencil-square-o' aria-hidden='true' style=' font-size: 18px; '></i></a>&nbsp;" : "")
+            @Html.Raw(((User.IsInRole("/JobTitle/Delete"))
+                                    ? "<a title='Delete' href='javascript:void(0)' onclick='calldelete(" + item.Id + "'><i class='fa fa-trash-o' aria-hidden='true' style=' font-size: 18px; '></i></a>"
+                                    : ""))
+        </span>
+    </li>
+  }
+

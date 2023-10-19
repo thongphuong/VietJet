@@ -1,0 +1,976 @@
+﻿@using TMS.Core.App_GlobalResources;
+@using TMS.Core.Utils;
+@model TMS.Core.ViewModels.ViewModel.Trainee_Validation
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var i = 0;
+}
+<link href="~/Content/assets/css/fileinput.min.css" rel="stylesheet" />
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-group"></i>  @Messege.Trainee_Management</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Messege.HOME</a></li>
+                <li>@Messege.Trainee_Management</li>
+                @if (Model == null || Model.Id == null)
+                {
+                    <li class="active">@Messege.Create</li>
+                }
+                else
+                {
+                    <li class="active">@Messege.Edit</li>
+                }
+            </ol>
+        </div>
+    </div>
+}
+<div class="panel">
+
+    @if (Model.Id == null)
+    {
+        <div class="panel-heading">
+            <h1 class="panel-title list-panel-title">
+                <i class="fa fa-user-md"></i> @Messege.Create
+            </h1>
+
+        </div>
+    }
+    else
+    {
+        <div class="panel-heading">
+            <h1 class="panel-title list-panel-title">
+                <i class="fa fa-user-md"></i> @Messege.Edit
+            </h1>
+
+        </div>
+    }
+
+
+    <div class="panel-body">
+        @if (ViewContext.RouteData.Values["id"] == null)
+        {
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#home" data-toggle="tab" aria-expanded="false">@Resource.lblManual</a>
+                </li>
+                <li class="">
+                    <a href="#profile" data-toggle="tab" aria-expanded="false">@Resource.lblImport</a>
+                </li>
+            </ul>
+        }
+    <div class="tab-content">
+    <div class="tab-pane fade  active in" id="home">
+
+    @using (Html.BeginForm("Create", "Trainee", FormMethod.Post, new {id = "createform", enctype = "multipart/form-data"}))
+    {
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.nameImage, (string) ViewBag.hiden_avatar)
+        <input type="hidden" id="avatarID" name="ImagePath" value="-1"/>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="profile-sidebar box-shadow">
+                    <p id="showavatar">
+                        @*<img src="@((string.IsNullOrEmpty(Model.nameImage) || Model.nameImage.StartsWith("NoAvata")) ? "/Content/img/NoAvata.png" : string.Format("{0}{1}", UtilConstants.PathImage, Model.nameImage))" class="img-responsive center-block" id="blah2"/>*@
+                        <img src="@(UtilConstants.PathImage + ((string.IsNullOrEmpty(Model.nameImage) || Model.nameImage.StartsWith("NoAvata")) ? "NoAvata.png" :
+                                        Model.nameImage))" class="img-responsive center-block" id="blah2"/>
+
+                    </p>
+
+                    <div class="profile-button">
+                        <label class="btn btn-default btn-file">
+                            <i class="fa fa-camera" aria-hidden="true" style="font-size: 22px;"></i> <input type="file" name="ImgFile" id="uploadEditorImage" style="display: none;"/>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="panel box-shadow">
+                    <div class="panel-body center-block">
+                        <div class="row">
+                            <div class="form-group col-md-9">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @Html.LabelFor(m => m.FullName)&nbsp;<font color="red">(*)</font>
+                                        @Html.TextBoxFor(model => model.FullName, new {@class = "form-control"})
+                                        @Html.ValidationMessageFor(model => model.FullName, null, new {@class = "text-danger"})
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3 margin-top-20-md">
+                                <label class="control-label">
+                                    <input class="checkbox" type="checkbox" @(Model != null && Model.Role == (int) UtilConstants.ROLE.Instructor ? "checked" : "") id="Role" name="Role" value="1"/>
+                                    @Resource.lblISINSTRUCTOR
+                                </label>
+                                @Html.ValidationMessageFor(model => model.Role, null, new {@class = "text-danger"})
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                @Html.LabelFor(m => m.eid)&nbsp;<font color="red">(*)</font>
+                                @(Model.Id.HasValue ? Html.TextBoxFor(model => model.eid, new {id = "txt_EID", @class = "form-control searchText1", @readonly = "readonly"}) : Html.TextBoxFor(model => model.eid, new {id = "txt_EID", @class = "form-control searchText1"}))
+                                @Html.ValidationMessageFor(m => m.eid, null, new {@class = "text-danger"})
+                            </div>
+                            <div class="form-group col-lg-3">
+                                @Html.LabelFor(m => m.str_id)
+                                @Html.TextBoxFor(model => model.str_id, new {id = "txt_id", @class = "form-control searchText1"})
+                            </div>
+                            <div class="form-group col-lg-3">
+                                @Html.LabelFor(m => m.passport)
+                                @Html.TextBoxFor(model => model.passport, new {id = "txt_PASSPORT", @class = "form-control searchText1"})
+                                @Html.ValidationMessageFor(model => model.passport, null, new {@class = "text-danger"})
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                @Html.LabelFor(m => m.type)&nbsp;<font color="red">(*)</font>
+                                @Html.DropDownListFor(model => model.type, (SelectList) ViewBag.ddl_TYPE, "", new {@id = "ddl_TYPE", @class = "form-control", @onchange = "onchangetype()", @data_placeholder = "-- " + @Messege.TYPE + " --"})
+                                @Html.ValidationMessageFor(model => model.type, null, new {@class = "text-danger"})
+                            </div>
+                            <div class="form-group col-lg-6">
+                                @Html.LabelFor(m => m.Company_Id)
+                                @Html.DropDownListFor(model => model.Company_Id, (SelectList) ViewBag.ddl_PARTNER, "", new {@id = "ddl_PARTNER", @class = "form-control", @onchange = "onchangetype()", @data_placeholder = "--" + @Resource.lblCompany + "--"})
+                                @Html.ValidationMessageFor(model => model.Company_Id, null, new {@class = "text-danger"})
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                @Html.LabelFor(m => m.Department_Id)&nbsp;<font color="red">(*)</font>
+                                <select class="form-control" name="Department_Id" id="ddl_DEPARTMENT" data-placeholder="-- @Messege.DEPARTMENT --" onchange=" Changedepartment(this.value) ">
+                                    <option></option>
+                                    @Html.Raw(ViewBag.LoadDepartment)
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                @Html.LabelFor(m => m.Job_Title_id)&nbsp;<font color="red">(*)</font>
+                                @Html.DropDownListFor(m => m.Job_Title_id, new SelectList(Model.JobtitleDictionary, "Key", "Value", Model.Job_Title_id), new Dictionary<string, object> {{"class", "form-control"}, {"data-placeholder", @Messege.JOBTITLE}})
+                                @Html.ValidationMessageFor(model => model.Job_Title_id, null, new {@class = "text-danger"})
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                @Html.LabelFor(m => m.dtm_Birthdate)
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <div>
+                                        @Html.TextBoxFor(model => model.dtm_Birthdate, new {@class = "form-control date-picker"})
+                                        @Html.ValidationMessageFor(model => model.dtm_Birthdate, null, new {@class = "text-danger"})
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                @Html.LabelFor(m => m.gender)
+                                @Html.DropDownListFor(model => model.gender, (SelectList) ViewBag.ddl_GENDER, "", new {@id = "ddl_GENDER", @class = "form-control", @data_placeholder = "-- " + @Messege.GENDER + " --"})
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                @Html.LabelFor(m => m.str_Place_Of_Birth)
+                                @Html.DropDownListFor(model => model.str_Place_Of_Birth, (SelectList) ViewBag.ddl_PLACEOFBIRTH, "", new {@class = "form-control", @data_placeholder = "-- " + @Messege.PLACEOFBIRTH + " --"})
+                                @Html.ValidationMessageFor(model => model.str_Place_Of_Birth, null, new {@class = "text-danger"})
+                            </div>
+                            <div class="form-group col-lg-6">
+                                @Html.LabelFor(m => m.mail)&nbsp;<font color="red">(*)</font>
+                                @Html.TextBoxFor(model => model.mail, new {id = "txt_EMAIL", @class = "form-control searchText1"})
+                                @Html.ValidationMessageFor(model => model.mail, null, new {@class = "text-danger"})
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                @Html.LabelFor(m => m.nation)
+                                @Html.DropDownListFor(model => model.nation, (SelectList) ViewBag.ddl_NATIONALITY, "", new {@id = "ddl_NATIONALITY", @class = "form-control", @data_placeholder = "-- " + @Messege.NATIONALITY + " --"})
+                                @Html.ValidationMessageFor(model => model.nation, null, new {@class = "text-danger"})
+                            </div>
+                            <div class="form-group col-lg-6">
+                                @Html.LabelFor(m => m.phone)
+                                @Html.TextBoxFor(model => model.phone, new {id = "txt_PHONE", @class = "form-control searchText1"})
+                                @Html.ValidationMessageFor(model => model.phone, null, new {@class = "text-danger"})
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                @Html.LabelFor(m => m.dtm_Join_Date)
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    @Html.TextBoxFor(model => model.dtm_Join_Date, new {@class = "form-control date-picker"})
+                                    @Html.ValidationMessageFor(model => model.dtm_Join_Date, null, new {@class = "text-danger"})
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                @Html.LabelFor(m => m.Resignation_Date)
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    @Html.TextBoxFor(model => model.Resignation_Date, new {@class = "form-control date-picker"})
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel box-shadow">
+            <div class="panel-body center-block">
+                <div class="form-group col-lg-12">
+                    <label>@Messege.EDUCATION</label>
+                    <div id="edu_form_Group">
+                        @if (Model != null)
+                        {
+                            if (Model.Educations.Any())
+                            {
+                                foreach (var record in Model.Educations)
+                                {
+                                    <div id="edu_form_@(i)">
+                                        <div class="row" style="margin-top: 10px;">
+                                            <div class="col-md-2">
+                                              
+                                            </div>
+                                            <div class="col-md-10" style="border: 1px solid #ccc;">
+                                                <div class="row" style="margin-top: 10px;">
+                                                    <a href="javascript:void(0)" onclick="removeedu(@(i))" style="position: absolute; top: 0; right: 5px;">
+                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                    </a>
+                                                    <input type="hidden" id="edu_hd_id" name="Educations[@i].Id" value="@record.Id" />
+                                                    <input type="hidden" id="IsDeleted@(i)" name="Educations[@i].IsDeleted" value="@(record.IsDeleted)" />
+                                                </div>
+                                                <div class="row" style="margin-top: 10px;">
+                                                    <div class="col-md-2">
+                                                        @Messege.TIME
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="col-md-6">
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon">
+                                                                    <i class="fa fa-calendar"></i>
+                                                                </div>
+                                                                <input type="text" id="edu_txt_date_from" value="@(record.TimeFrom != null ? record.TimeFrom.Value.ToString() : null)" name="Educations[@i].TimeFrom" class="form-control  date-picker" />
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon">
+                                                                    <i class="fa fa-calendar"></i>
+                                                                </div>
+                                                                <input type="text" id="edu_txt_date_to" value="@(record.TimeTo != null ? record.TimeTo.Value.ToString() : null)" name="Educations[@i].TimeTo" class="form-control  date-picker" />
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        @Resource.lblCourseName
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <input type="text" id="edu_txt_course" value="@(record.CourseName != null ? record.CourseName : null)" name="Educations[@i].CourseName" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="row" style="margin-top: 10px;">
+                                                    <div class="col-md-2">
+                                                        @Messege.ORGANIZATION
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <input type="text" id="edu_txt_organization" value="@(record.Organization != null ? record.Organization : null)" name="Educations[@i].Organization" class="form-control" />
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        @Messege.NOTE
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <input type="text" id="edu_txt_note" value="@(record.Note != null ? record.Note : null)" name="Educations[@i].Note" class="form-control" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="row" style="margin-top: 10px;">
+                                                    <div class="col-md-2">
+                                                        <div class="profile-button">
+                                                            <label class="btn btn-default btn-file">
+                                                                <i class="fa fa-upload" aria-hidden="true" style="font-size: 22px;"></i> <input type="file" name="Educations[@i].FileUploads[@i].FIleImage" onchange="preview(this,@i);" multiple="multiple" style="display: none;">
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        <div id="previewImg@(i)">
+                                                            @if (record.FileUploads != null)
+                                                            {
+                                                                foreach (var item in record.FileUploads)
+                                                                {
+                                                                    <div class="col-md-2" id="removedivimg_@(item.Id)">
+                                                                        <a href="javascript:void(0)" onclick="removeimg(@(item.Id))" style="position: absolute; top: 0; right: 5px;">
+                                                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                                                        </a>
+                                                                            <input type="hidden" id="Educations[@i].FileUploads[@i].NameImage" name="Educations[@i].FileUploads[@i].NameImage" value="1" />
+
+                                                                            <img src="@(Model.PathEducation + item.ModelNameImg)" name="Educations[@i].FileUploads[@i].ListNameImage" class="thumb" style="margin: 5px;" width="100" height="50" />
+                                                                            <input type="hidden" name="Educations[@i].FileUploads[@i].IsDeleted" id="updateIsDeleted_@(item.Id)" value="@(item.IsDeleted)" />
+                                                                            <input type="hidden" name="Educations[@i].FileUploads[@i].Id" value="@(item.Id)" />
+                                                                    </div>
+                                                                   
+                                                                }
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="row" style="margin-top: 10px;">
+                                                    <div class="col-md-12">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-top: 10px;"></div>
+                                    </div>
+                                    i++;
+                                }
+                            }
+                        }
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-10">
+                            <a href="javascript:void(0)" id='addButton'><i class="fa fa-plus-square-o" aria-hidden="true" style="font-size: 25px;"></i></a>
+                            <a href="javascript:void(0)" id='removeButton'><i class="fa fa-minus-square-o" aria-hidden="true" style="font-size: 25px;"></i></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            @if (ViewContext.RouteData.Values["id"] == null)
+            {
+                if (User.IsInRole("/Trainee/Create"))
+                {
+                    <div class="col-md-1">
+                        <a href="javascript:void(0)" class="btn btn-primary center-block legitRipple" id="submit" onclick=" create() "><i class="fa fa-floppy-o" aria-hidden="true"></i> @Resource.lblSave</a>
+
+                    </div>
+                }
+            }
+            else
+            {
+                if (User.IsInRole("/Trainee/Create"))
+                {
+                    <div class="col-md-1">
+                        <a href="javascript:void(0)" class="btn btn-primary center-block legitRipple" id="submit" onclick=" save_edit() "><i class="fa fa-floppy-o" aria-hidden="true"></i> @Resource.lblSave</a>
+
+                    </div>
+                }
+            }
+            <div class="col-md-1">
+                <a onclick=" goBack() " class="btn  center-block legitRipple"><i class="fa fa-sign-out" aria-hidden="true"></i> @Resource.lblBack</a>
+            </div>
+        </div>
+    }
+
+
+
+    </div>
+    <div class="tab-pane fade" id="profile">
+        @using (Html.BeginForm("Import", "Trainee", FormMethod.Post, new {id = "createform"}))
+        {
+            <div class="col-md-12" style="margin-top: 10px;">
+                <div class="panel panel list-panel" id="list-panel">
+                    <div class="panel-body">
+                        <div class="row col-md-12">
+                            <div class="row" style="margin-top: 10px;">
+                            </div>
+                            <div class="row" style="margin-top: 10px;">
+                                <div class="col-md-2">
+                                    <b>@Resource.lblImport</b>
+                                </div>
+                                <div class="col-md-6">
+                                    <input id="files" type="file"/>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="button" class="btn btn-primary pull-right" id="btImport" value="@Resource.lblImport"/>
+                                </div>
+                                <div class="col-md-2">
+                                    @*<a class="btn btn- pull-right" href="~/Template/TMS-Intructor.xlsx" target="_blank">Download Template</a>*@
+                                    <input type="button" class="btn btn-primary pull-right" id="btnDownLoad" value="@Resource.lblDownloadTemplate"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" style="margin-top: 10px;">
+                <div class="panel panel list-panel" id="list-panel">
+                    <div class="panel-heading list-panel-heading">
+                        <h1 class="panel-title list-panel-title">@Resource.lblImportList</h1>
+                    </div>
+                    <div class="panel-body">
+                        <table id="Trainee" class="table  table-striped table-bordered" width="100%">
+                            <thead>
+                            <tr role="row">
+                                <th> @Resource.lblError </th>
+                                <th> @Resource.lblErrorNote&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</th>
+                                <th> No </th>
+                                <th> @Messege.EID </th>
+                                <th> @Resource.lblFullName </th>
+                                <th> Passport </th>
+                                <th> @Resource.lblType </th>
+                                <th> @Resource.lblDepartment </th>
+                                <th></th>
+                                <th> @Resource.lblJobTitle_Occupation </th>
+                                <th></th>
+                                <th> @Resource.lblDateOfBirth </th>
+                                <th> @Resource.lblPlaceOfBirth </th>
+                                <th> @Resource.lblNationality </th>
+                                <th> @Resource.lblGender </th>
+                                <th> @Resource.lblEmail </th>
+                                <th> @Resource.lblPhone </th>
+                                <th> @Resource.lblDateOfJoin </th>
+                                <th> @Resource.lblCompany </th>
+                                <th> @Resource.lblTrainingAllowance </th>
+                                <th> @Resource.lblISINSTRUCTOR </th>
+                                <th> @Resource.lblContractNo </th>
+                                <th> @Resource.lblContract _ @Resource.lblExprieDate </th>
+                                <th> @Resource.lblContract _ @Resource.lblDescription </th>
+                                <th> @Resource.lblEducation _ @Resource.lblFrom </th>
+                                <th> @Resource.lblEducation _ @Resource.lblTo </th>
+                                <th> @Resource.lblCourse </th>
+                                <th> @Resource.lblOrganization </th>
+                                <th> @Resource.lblNote </th>
+                                <th> @*EX_EDUCATION_FROM*@ </th>
+                                <th> @*EX_EDUCATION_TO*@ </th>
+                                <th> @*EX_EDUCATION_COURSE*@ </th>
+                                <th> @*EX_EDUCATION_ORGANIZATION*@ </th>
+                                <th> @*EX_EDUCATION_NOTE*@ </th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                        </table>
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-md-12">
+                                <div id="messageout">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-2">
+                <input type="button" class="btn btn-primary pull-left " id="btImport2" value=" @Resource.lblSave "/>
+            </div>
+        }
+    </div>
+
+    </div>
+        
+    </div>
+
+</div>
+
+
+@section Scripts{
+    <script src="~/Scripts/DataTables/dataTables.buttons.min.js"></script>
+    <script src="~/Scripts/DataTables/buttons.html5.min.js"></script>
+    <script src="~/Scripts/js/app.js"></script>
+<script src="~/Scripts/js/common.js"></script>
+
+
+<link href="~/Content/css/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css" />
+
+<script src="~/Content/trainingtime/buttons.html5.min.js" type="text/javascript"></script>
+
+<script src="~/Content/trainingtime/jquery.blockUI.js" type="text/javascript"></script>
+<script src="~/Content/trainingtime/jszip.min.js" type="text/javascript"></script>
+<script src="~/Content/trainingtime/xlsx.core.min.js" type="text/javascript"></script>
+
+    <script>
+        var eduIndex = @i;
+
+        function onchangetype() {
+           
+            @if (Model.Id == null)
+            {
+                <text>
+            
+            var valuetype = $('#ddl_TYPE').val();
+            var valuepartner = $('#ddl_PARTNER').val();
+            var is_instructor = $('#is_instructor').val();
+            if (valuetype == "2") {
+                $.ajax({
+                    type: 'POST',
+                    url: "/Trainee/CreateEID",
+                    datatype: 'json',
+                    data: { valuetype: valuetype  ,valuepartner : valuepartner},
+                    success: function (data) {
+                        $("#txt_EID").val(data);
+                    }
+                });
+            }
+
+            </text>
+            }
+
+        }
+
+
+        $(document).ready(function() {
+            @{if (ViewContext.RouteData.Values["id"] != null)
+              {
+                  @:Changedepartment($("#ddl_DEPARTMENT").val(),@ViewContext.RouteData.Values["id"]);
+                          }
+              else
+              {
+                  @:Changedepartment(-1,-1);
+                          }
+            }
+
+            var counter = 2;
+            $("#removeButton").hide();
+
+            $("#addButton").click(function() {
+                var newTextBoxDiv = $(document.createElement('div'))
+                    .attr("id", 'edu_form_' + counter);
+                newTextBoxDiv.after().html(
+                    '<div class="row" style="margin-top: 10px;">' +
+                    '<div class="col-md-2"><input type="hidden"  id="edu_hd_id" name="Educations[' + eduIndex + '].Id" value="-1"/></div>' +
+                    '<div class="col-md-10" style="border:1px solid #ccc;">' +
+                    '<div class="row" style="margin-top: 10px;">' +
+                    '<div class="col-md-2">@Messege.TIME</div>' +
+                    '<div class="col-md-4">' +
+                    '<div class="col-md-6"><div class="input-group"><div class="input-group-addon"><i class="fa fa-calendar"></i></div>' +
+                    '<input type="text" id="edu_txt_date_from" name="Educations[' + eduIndex + '].TimeFrom" class="form-control  date-picker" /></div>' +
+                    '</div>' +
+                    '<div class="col-md-6"><div class="input-group"><div class="input-group-addon"><i class="fa fa-calendar"></i></div>' +
+                    '<input type="text" id="edu_txt_date_to" name="Educations[' + eduIndex + '].TimeTo" class="form-control  date-picker" /></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-md-2">@Resource.lblCourseName</div>' +
+                    '<div class="col-md-4">' +
+                    '<input type="text" id="edu_txt_course" name="Educations[' + eduIndex + '].CourseName" class="form-control" />' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="row" style="margin-top: 10px;">' +
+                    '<div class="col-md-2">@Messege.ORGANIZATION</div>' +
+                    '<div class="col-md-4">' +
+                    '<input type="text" id="edu_txt_organization" name="Educations[' + eduIndex + '].Organization" class="form-control" />' +
+                    '</div>' +
+                    '<div class="col-md-2">@Messege.NOTE</div>' +
+                    '<div class="col-md-4">' +
+                    '<input type="text" id="edu_txt_note" name="Educations[' + eduIndex + '].Note"  class="form-control" />' +
+                    '</div>' +
+                    '</div>' +
+
+                    '<div class="row" style="margin-top: 10px;">' +
+                    '<div class="col-md-2">' +
+                    '<div class="profile-button">' +
+                    '<label class="btn btn-default btn-file">'+
+                    '<i class="fa fa-upload" aria-hidden="true" style="font-size: 22px;"></i> <input type="file" name="Educations[' + eduIndex + '].FileUploads[' + eduIndex + '].FIleImage" onchange="preview(this,'+eduIndex+');" multiple="multiple" style="display: none;">' +
+                    '</label>'+
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-md-10">' +
+                    '<div id="previewImg'+eduIndex+'"></div>'+
+                    '</div>' +
+                    '</div>'+
+
+                    '<div class="row" style="margin-top: 10px;">' +
+                    '<div class="col-md-12"></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="row" style="margin-top: 10px;"></div>');
+                newTextBoxDiv.appendTo("#edu_form_Group");
+                eduIndex++;
+                $('.date-picker').datetimepicker({
+                    format: 'L',
+                    locale: '@Resource.lblLanguage'
+                });
+                counter++;
+                if (counter > 1) {
+                    $("#removeButton").show();
+                }
+            });
+            $("#removeButton").click(function() {
+                if (counter == 1) {
+                    return false;
+                }
+                counter--;
+                $("#edu_form_" + counter).remove();
+                if (counter < 3) {
+                    $("#removeButton").hide();
+                }
+            });
+
+
+        });
+
+
+        $(function() {
+            $('.date-picker').datetimepicker({
+                format: 'L',
+                locale: '@Resource.lblLanguage'
+            });
+        });
+
+
+
+        function removeedu(id) {
+            $("#edu_form_" + id).hide();
+            $("#IsDeleted" + id).val("@((int)UtilConstants.BoolEnum.Yes)");
+        }
+      
+        function removeimg(id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/Trainee/DeleteImg",
+                datatype: 'json',
+                data: { id: id },
+                success: function (data) {
+                    if (data.result) {
+                        $("#removedivimg_" + id).hide();
+                        notify.alert(data.message, 'SUCCESS', TITLE_STATUS_SUCCESS);
+                    }
+                    else {
+                        notify.alert(data.message, 'ERROR', TITLE_STATUS_DANGER);
+                    }
+
+                }, complete: function () {
+                    spinner.close();
+                }
+            });
+        }
+
+        function readURL(input) {
+
+            var fsize = 1024 * 1024 * 2;
+
+            if (input.files[0].size < fsize) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        $('#blah2').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            else {
+
+                notify.alert("Allowed file size exceeded. (Max. 2 MB)", 'Warning', TITLE_STATUS_DANGER);
+
+            }
+        }
+
+        $("#uploadEditorImage").change(function() {
+            readURL(this);
+        });
+
+        window.preview = function (input,index) {
+            console.log(index);
+            if (input.files && input.files[0]) {
+                $(input.files).each(function () {
+                    var reader = new FileReader();
+                    reader.readAsDataURL(this);
+                    reader.onload = function (e) {
+                        $("#previewImg" + index).append("<img class='thumb' style='margin:5px'  width='100px' height='50px' src='" + e.target.result + "'>");
+                    }
+                });
+            }
+        }
+
+
+        function Changedepartment(val, id) {
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "/Trainee/ChangeDepartmentReturnJobtitle",
+                dataType: "json",
+                data: { id_department: val, id: id },
+                success: function(result) {
+                    $("#showjobtitle").empty();
+                    $("#showjobtitle").append(result.htmlout);
+                    $('select:not([name$="_length" ])').select2({
+                        width: '100%',
+                        allowClear: true
+                    }).addClass('form-control searchText1');
+                }
+            });
+        }
+
+    </script>
+    @if (Model == null || Model.Id == null)
+    {
+        <script>
+
+            function create() {
+                var form = document.getElementById('createform');
+                var formData = new FormData(form);
+
+                //var $forms = $('#createform');
+                //if ($forms.valid()) {
+                $.ajax({
+                    type: 'POST',
+                    url: "/Trainee/Create",
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function(data) {
+                        if (!data.result) {
+                            notify.alert(data.message,"ERROR",TITLE_STATUS_DANGER);
+                        } else {
+                            notify.alert(data.message,"SUCCESS",TITLE_STATUS_SUCCESS);
+                            window.location.href = "/Trainee/Index";
+                        }
+                    },
+                    error: function(jdHRX, textStatus, thrownMessage) {
+                        $("#messageout").html("Server error!!!");
+                    }
+                });
+
+                //}
+            }
+
+        </script>
+    }
+    else
+    {
+        <script>
+
+
+            function save_edit() {
+                var form = document.getElementById('createform');
+                var formData = new FormData(form);
+                $.ajax({
+                    type: 'POST',
+                    url: "/Trainee/Create/@Model.Id",
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function(data) {
+                        if (!data.result) {
+                            notify.alert(data.message,"ERROR",TITLE_STATUS_DANGER);
+                        } else {
+                            notify.alert(data.message,"SUCCESS",TITLE_STATUS_SUCCESS);
+                            window.location.href = "/Trainee/Index";
+                        }
+                    },
+                    error: function(jdHRX, textStatus, thrownMessage, msg) {
+                        $("#messageout").html("Server error!!!");
+                        //console.log(msg);
+                        // notify.alert(msg);
+
+                    }
+                });
+                //}
+            }
+
+        </script>
+    }
+    <link href="~/Content/css/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css" />
+    @*<script src="http://malsup.github.io/jquery.blockUI.js" type="text/javascript"></script>
+        <script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js" type="text/javascript"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.7/xlsx.core.min.js"></script>
+        <script src="//cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js" type="text/javascript"></script>*@
+    <script type="text/javascript">
+
+
+
+        $(document).ready(function () {
+
+            //$('.datepicker').datetimepicker({
+            //    format: "DD/MM/YYYY"
+            //});
+
+            var sTable = $("#Trainee").dataTable({
+                "scrollX": true,
+                "searching": false,
+                "aaSorting": [],
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "visible": false
+                    },
+                    {
+                        "targets": [8],
+                        "visible": false
+                    },
+                    {
+                        "targets": [10],
+                        "visible": false
+                    },
+                    {
+                        "targets": [19],
+                        "visible": false
+                    }],
+                "fnDrawCallback ": function () {
+                },
+                "initComplete": function (settings, json) {
+                    $("#Trainee_wrapper a").addClass("btn btn-primary");
+                    $("#Trainee_wrapper a.dt-button").css("position", "absolute");
+                    $("#Trainee_wrapper a.dt-button").css("right", "0");
+                    $("#Trainee_wrapper a.dt-button").css("top", "0");
+                },
+                dom: 'lBfrtip',
+                buttons: [
+                    $.extend(true, {}, buttonCommon, {
+                        extend: 'excelHtml5',
+                        text: '@Resource.lblEXPORT',
+                        title: 'Reminder Listing'
+                    })
+
+                ]
+            });
+
+
+            var buttonCommon = {
+                exportOptions: {
+                    format: {
+                        body: function (data, row, column, node) {
+                            // Strip $ from salary column to make it numeric
+                            return data;
+                        }
+                    }
+
+                }
+            };
+            // -----
+
+            //datatable serverside
+
+            $('#btImport').click(function (e) {
+                $.blockUI();
+                handleFile(e, "1");
+            });
+            $('#btImport2').click(function (e) {
+                $.blockUI();
+                handleFile(e,"0");
+            });
+            $('#btnDownLoad').click(function() {
+                window.location.href = "@Url.Action("GetTraineeTemplate", "Import")";
+            });
+        });
+
+        $(".line_180").addClass("active");
+
+        function handleFile(e,flagInsert) {
+            var result;
+            var input = document.getElementById('files');
+            //Get the files from Upload control
+            var files = input.files;
+            var i, f;
+            //Loop through files
+            for (i = 0, f = files[i]; i != files.length; ++i) {
+                var reader = new FileReader();
+                var name = f.name;
+                reader.onload = function(e) {
+                    var data = e.target.result;
+
+                    var workbook = XLSX.read(data, { type: 'binary' });
+
+                    var sheet_name_list = workbook.SheetNames;
+                    var countsheet = 0;
+
+                    sheet_name_list.forEach(function (y) { /* iterate through sheets */
+                        countsheet++
+                        if (countsheet == 1)
+                        {
+
+                            //Convert the cell value to Json
+                            var headers = [];
+                            var sheet = workbook.Sheets[y];
+                            var range = XLSX.utils.decode_range(sheet['!ref']);
+                            var C, R = range.s.r;
+                            /* start in the first row */
+                            /* walk every column in the range */
+                            for (C = range.s.c; C <= range.e.c; ++C) {
+                                var cell = sheet[XLSX.utils.encode_cell({ c: C, r: R })];
+                                /* find the cell in the first row */
+
+                                var hdr = "UNKNOWN " + C; // <-- replace with your desired default
+                                if (cell && cell.t) {
+                                    hdr = XLSX.utils.format_cell(cell);
+                                }
+                                headers.push(hdr);
+                            }
+
+
+                            var roa = XLSX.utils.sheet_to_json(workbook.Sheets[y]);
+                            if (roa.length > 0) {
+                                roa.forEach(function (row) {
+
+                                    // Set empty cell to ''.
+                                    headers.forEach(function (hd) {
+                                        if (row[hd] == undefined) {
+                                            row[hd] = '';
+                                        }
+
+                                    });
+                                    row["FlagImport"] = flagInsert;
+
+                                });
+
+                                result = roa;
+                            }
+                            var current = 0;
+
+                            DoAjax(result, current);
+
+                        }
+                    });
+                    //DoAjax(result, current);
+                    //Get the first column first cell value
+                };
+                reader.readAsArrayBuffer(f);
+            }
+        }
+
+        function DoAjax(result, current) {
+            if (current < result.length) {
+                $.ajax({
+                    url: '@Url.Action("InsertEmployees", "Import")',
+                    type: "POST",
+                    data: JSON.stringify(result[current]),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    error: function(data) {
+
+                    },
+                    success: function(data) {
+                        var arr = $.map(data, function(el) {
+                            if (el == null) {
+                                return "";
+                            } else {
+                                return el;
+                            }
+                        });
+                        $("#Trainee").DataTable().row.add(arr).draw();
+                        current++;
+                        DoAjax(result, current);
+                    }
+                });
+            } else {
+                $.unblockUI();
+            }
+        }
+
+
+    </script>
+}

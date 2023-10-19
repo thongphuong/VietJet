@@ -1,0 +1,120 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Departments.DepartmentModifyViewModel
+
+<div class="panel list-panel" id="list-panel">
+    <div class="panel-heading list-panel-heading">
+        <h1 class="panel-title list-panel-title"><i class="fas fa-pencil-alt font-small-byhoa" aria-hidden="true"></i> @(Model.Id.HasValue && Model.Id != 0 ? Resource.lblEdit : Resource.lblCreate)</h1>
+    </div>
+    <div class="panel-body">
+
+        @using (Html.BeginForm("Modify", "Department", FormMethod.Post, new { id = "createform" }))
+        {
+
+            <input type="hidden" id="hd_id" name="Id" value="@Model.Id" />
+
+            <div id="divtraining_">
+                <div class="form-group col-md-12">
+                    @if (Model.is_training.HasValue && Model.is_training == true)
+                    {
+                        <input type="checkbox" id="is_trainingg" name="is_trainingg" checked>
+                    }
+                    else
+                    {
+                        <input type="checkbox" id="is_trainingg" name="is_trainingg">
+                    }
+
+                    <label> @Resource.lblRelevantTrainingDepartment </label>
+                </div>
+                <div id="divtraining">
+                    <div class="form-group col-md-12">
+                        <label>Head Name</label>
+                        <select class="form-control searchText1 select2-hidden-accessible" name="HeadName" id="HeadName" tabindex="-1" aria-hidden="true">
+                            @foreach (var item in Model.DictionaryInstructor)
+                            {
+                                <option value="@item.Key" @(item.Key == Model.HeadName ? "selected" : "")>@item.Value</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 form-group">
+                <label>@Resource.lblName</label>
+                @Html.TextBoxFor(a => a.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(a => a.Name, null, new { @class = "text-danger" })
+            </div>
+            <div class="col-md-12 form-group">
+                <label>@Resource.lblCode</label>
+                @Html.TextBoxFor(a => a.Code, new { @class = "form-control disabled" })
+                @Html.ValidationMessageFor(a => a.Name, null, new { @class = "text-danger" })
+            </div>
+            <div class="col-md-12 form-group">
+                <label> @Resource.lblParentId </label>
+                @Html.DropDownListFor(a => a.ParentId, new SelectList(Model.Departments, "Key", "Value", Model.ParentId), "--- " + @Resource.lblParentId + " ---", new { @class = "form-control" })
+                @Html.ValidationMessageFor(a => a.ParentId, null, new { @class = "text-danger" })
+            </div>
+            <div class="col-md-12 form-group">
+                <label>@Resource.lblDescription</label>
+                @Html.TextAreaFor(a => a.Description, new { @class = "form-control", @rows = "10" })
+                @Html.ValidationMessageFor(a => a.Description, null, new { @class = "text-danger" })
+            </div>
+
+            @*<div class="divider"></div>
+                <div class="divider"></div>
+                <div class="form-group col-lg-12">
+                    <div id="messageout">
+                    </div>
+                </div>*@
+            <div class="col-md-12 pull-right">
+                <a class="btn btn-md btn-danger min-width-100" onclick="submit()">@(Model.Id.HasValue && Model.Id != 0 ? Resource.lblEdit : Resource.lblCreate)</a>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#ParentId").select2();
+        $('#divtraining').hide();
+        if ($('#is_trainingg').is(":checked")) {
+            $('#divtraining').show();
+            $("#HeadName").select2();
+        } else {
+            $('#divtraining').hide();
+        }
+        $('#is_trainingg').change(function () {
+            if ($(this).is(":checked")) {
+                $('#divtraining').show();
+                 $("#HeadName").select2();
+            } else {
+                $('#divtraining').hide();
+            }
+        });
+
+    });
+    function submit() {
+        spinner.open();
+        var form = $("#createform").serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: "/Department/Modify",
+            datatype: 'json',
+            data: form,
+            success: function (data) {
+                if (!data.result) {
+                    notify.alert(data.message, "WARNING", TITLE_STATUS_DANGER);
+
+                } else {
+                    notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                }
+                $("#mydiv").load(location.href + " #mydiv");
+                 active(0);
+            },
+            complete: function () {
+                spinner.close();
+            }
+        });
+    }
+</script>
+
+
+

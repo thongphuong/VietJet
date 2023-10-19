@@ -1,0 +1,473 @@
+﻿@using DAL.Entities
+@using DAL.Repositories
+@using DAL.UnitOfWork
+@using TMS.Core.Utils
+@using TrainingCenter.Serveices
+@{
+    ViewBag.Title = "SurveyTotalDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var data_question = ViewBag.DataQuestion ?? null;
+    var qs = data_question != null ? data_question["question"] : null;
+    var list_trainee = data_question != null ? data_question["users"] : null;
+    int id_survey = ViewBag.Idsurvey ?? null;
+    int courseDetailID = ViewBag.coursedetailId ?? null;
+
+    var DbContext = new EFDbContext();
+    UnitOfWork _uow = new UnitOfWork(DbContext);
+
+    IRepository<Trainee> _repoTrainee = _uow.Repository<Trainee>();
+    IRepository<Course_Detail> _repoCourseDetail = _uow.Repository<Course_Detail>();
+    IRepository<Course_Detail_Instructor> _repoCourseDetaiInstruc = _uow.Repository<Course_Detail_Instructor>();
+
+    var courseDetailItem = _repoCourseDetail.Get(p => p.Id == courseDetailID);
+
+    var datefrom = courseDetailItem.dtm_time_from != null ? DateUtil.DateToString(courseDetailItem.dtm_time_from, "dd/MM/yyyy") : "";
+    var dateto = courseDetailItem.dtm_time_to != null ? DateUtil.DateToString(courseDetailItem.dtm_time_to, "dd/MM/yyyy") : "";
+    string[] header = GetConfig.ByKey("Survey_Header") != null ? GetConfig.ByKey("Survey_Header").Split(new char[] { ',' }) : new string[] { };
+}
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-list-alt"></i> Survey Detail </h1>
+            <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li>Survey</li>
+                <li class="active">Detail</li>
+            </ol>
+        </div>
+    </div>
+}
+<style>
+    td {
+        border: 1px solid #000 !important;
+        color: black;
+    }
+
+    th {
+        border: 1px solid #000 !important;
+        color: black;
+    }
+
+    .LeaveSpace p {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 250px;
+    }
+</style>
+<div class="col-sm-12" style="margin-bottom:21px; padding-top: 20px; padding-bottom: 20px; padding-left: 30px; padding-right: 15px; ">
+    <div class="col-sm-12">
+        <a id="btnPrint" class="btn btn-danger legitRipple pull-left">Print</a>
+        <a id="btnExport" class="btn btn-danger legitRipple pull-left" value="1" style="margin-left: 10px">Export</a>
+    </div>
+
+</div>
+<div class="panel panel-danger">
+    <div class="panel-body">
+        <div id="reportpage" style="padding-top: 20px; padding-bottom: 20px; padding-left: 30px; padding-right: 15px;">
+
+            <div class="col-lg-12">
+                <div class="col-lg-12 text-center">
+                    <input type="hidden" id="code_survey" name="code_survey" value="@id_survey" />
+                    <input type="hidden" id="courseDetailID" name="courseDetailID" value="@courseDetailID" />
+                    <input type="hidden" id="typeExport" name="typeExport" value="1" />
+                    <table width="100%" border="1">
+                        <tr>
+                            <th rowspan="3" width="20%">
+                                <div class="col-sm-12 text-center">
+                                    <img src="~/Content/assets/img/report/logoreport.png" style="width: 80%; margin-top: 12px;" />
+                                </div>
+                            </th>
+                            <td rowspan="3">
+                                <div class="col-sm-12 text-center">
+                                    <h4 class="header-title"><b>COURSE EVALUATION FORM </b></h4>
+                                </div>
+                            </td>
+                            <td width="20%">
+                                <div class="col-sm-12 text-left pull-left">
+                                    <h4>@header[0]</h4>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="20%">
+                                <div class="col-sm-12 text-left pull-left">
+                                    <h4>
+                                        @{
+                                            int? count5 = 0;
+                                            foreach (var s in header)
+                                            {
+                                                count5++;
+                                            }
+                                        }
+                                        @(count5 > 1 ? header[1] : string.Empty)
+                                    </h4>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="20%">
+                                <div class="col-sm-12 text-left pull-left">
+                                    <h4>
+                                        @{
+                                            int? count6 = 0;
+                                            foreach (var s in header)
+                                            {
+                                                count6++;
+                                            }
+                                        }
+                                        @(count6 > 2 ? header[2] : string.Empty)
+                                    </h4>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-sm-12">
+                    <br />
+                    <div style="width:40%;float:left;">
+                        <div style="width:50%;float:left;">
+                            <h4>Course code:</h4>
+                        </div>
+                        <div style="width:50%;float:right;">
+                            <h4>@(courseDetailItem.Course.Code)</h4>
+                        </div>
+                    </div>
+                    <div style="width:60%;float:right;">
+                        <div style="width:35%;float:left;">
+                            <h4>Course name:</h4>
+                        </div>
+                        <div style="width:65%;float:right;">
+                            <h4>@(courseDetailItem.Course.Name)</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div style="width:40%;float:left;">
+                        <div style="width:50%;float:left;">
+                            <h4>Subject code:</h4>
+                        </div>
+                        <div style="width:50%;float:right;">
+                            <h4>@(courseDetailItem.SubjectDetail.Code)</h4>
+                        </div>
+                    </div>
+                    <div style="width:60%;float:right;">
+                        <div style="width:35%;float:left;">
+                            <h4>Subject name:</h4>
+                        </div>
+                        <div style="width:65%;float:right;">
+                            <h4>@(courseDetailItem.SubjectDetail.Name)</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div style="width: 40%; float: left;">
+                        <div style="width: 50%; float: left;">
+                            <h4>Instructor:</h4>
+                        </div>
+                        <div style="width: 50%; float: right;">
+                            @{
+                                var X = _repoCourseDetaiInstruc.GetAll(a => a.Course_Detail_Id == courseDetailItem.Id  && a.Type == (int)UtilConstants.TypeInstructor.Instructor);
+                                var instruc = "";
+                                if (X.Count() != 0)
+                                {
+                                    foreach (var item in X)
+                                    {
+                                        instruc += item.Trainee.LastName + " " + item.Trainee.FirstName + ", ";
+
+                                    }
+                                }
+                                instruc = instruc.Remove(instruc.Length - 2);
+                            }
+                            <h4>@(instruc)</h4>
+                        </div>
+                    </div>
+                    <div style="width: 60%; float: right;">
+                        <div style="width: 35%; float: left;">
+                            <h4>Date:</h4>
+                        </div>
+                        <div style="width: 65%; float: right;">
+                            <h4>@(datefrom + " - " + dateto)</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div style="width: 40%; float: left;">
+                        <div style="width: 50%; float: left;">
+                            <h4>Venue:</h4>
+                        </div>
+                        <div style="width: 50%; float: right;">
+                            <h4>@(courseDetailItem.Course.Venue)</h4>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm-12">
+
+                    <div class="col-sm-12 text-center">
+                        <br />
+                        <table width="100%" border="1">
+                            <tr>
+                                <th class="text-left" style="width: 50%;">&nbsp; Criteria</th>
+                                <th class="text-center" style="width: 8%;">Strongly <br /> agree <br /> 5</th>
+                                <th class="text-center" style="width: 8%;">Agree<br /><br /> 4</th>
+                                <th class="text-center" style="width: 8%;">Not<br /> sure<br /> 3</th>
+                                <th class="text-center" style="width: 8%;">Disagree<br /><br /> 2</th>
+                                <th class="text-center" style="width: 8%;">Strongly<br /> disagree<br /> 1</th>
+                                <th class="text-center" style="width: 8%;">Average rank</th>
+                            </tr>
+                            @{
+                                var no = 1;
+                                foreach (var item in qs)
+                                {
+                                    if (item["name_type"] == "response_rank")
+                                    {
+                                        double total_avg = 0;
+                                        var no_header = no + ".";
+                                        double num_ = 1;
+                                        foreach (var item_ in item["choise"])
+                                        {
+                                            if (list_trainee != null)
+                                            {   var count_ = 0;
+                                                var count1_ = 0;
+                                                var count2_ = 0;
+                                                var count3_ = 0;
+                                                var count4_ = 0;
+                                                double avg_ = 1;
+                                                foreach (var item2_ in list_trainee)
+                                                {
+                                                    foreach (var item3_ in item2_["response_rank"])
+                                                    {
+
+                                                        if (item3_["choice_id"] == item_["id_choice"] && item["id_question"] == item3_["question_id"])
+                                                        {
+                                                            int value_rank = Convert.ToInt32(item3_["rank"].ToString());
+                                                            switch (value_rank)
+                                                            {
+                                                                case 4:
+                                                                    count_++;
+                                                                    break;
+                                                                case 3:
+                                                                    count1_++;
+                                                                    break;
+                                                                case 2:
+                                                                    count2_++;
+                                                                    break;
+                                                                case 1:
+                                                                    count3_++;
+                                                                    break;
+                                                                case 0:
+                                                                    count4_++;
+                                                                    break;
+                                                                default:
+                                                                    count_ = 0;
+                                                                    break;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                double sum = count_ + count1_ + count2_ + count3_ + count4_;
+                                                double total = (count_ * 5) + (count1_ * 4) + (count2_ * 3) + (count3_ * 2) + count4_;
+                                                avg_ = Convert.ToDouble((total / sum).ToString("N1"));
+                                                total_avg += avg_ ;
+                                                
+                                            }
+                                            num_++;
+                                        }
+                                        <tr>
+                                            <td height="35" colspan="6" class="text-left" style="font-weight: bold;">&nbsp; @(no_header + " " + item["name"])</td>
+                                            <td height="35" class="text-center" id ="TotalHeader" style="font-weight: bold;">@((total_avg / (num_ - 1)).ToString("N1"))</td>
+                                        </tr>
+                                    
+                                        var num = 1;
+
+                                        foreach (var item1 in item["choise"])
+                                        {
+
+                                            var no_header1 = no + "." + num;
+                                            var count = 0;
+                                            var count1 = 0;
+                                            var count2 = 0;
+                                            var count3 = 0;
+                                            var count4 = 0;
+                                            double pecent = 0;
+                                            double pecent1 = 0;
+                                            double pecent2 = 0;
+                                            double pecent3 = 0;
+                                            double pecent4 = 0;
+                                            var avg = "";
+                                            <tr>
+                                                @{
+                                                    if (list_trainee != null)
+                                                    {
+                                                        foreach (var item2 in list_trainee)
+                                                        {
+                                                            foreach (var item3 in item2["response_rank"])
+                                                            {
+
+                                                                if (item3["choice_id"] == item1["id_choice"] && item["id_question"] == item3["question_id"])
+                                                                {
+                                                                    int value_rank = Convert.ToInt32(item3["rank"].ToString());
+                                                                    switch (value_rank)
+                                                                    {
+                                                                        case 4:
+                                                                            count++;
+                                                                            break;
+                                                                        case 3:
+                                                                            count1++;
+                                                                            break;
+                                                                        case 2:
+                                                                            count2++;
+                                                                            break;
+                                                                        case 1:
+                                                                            count3++;
+                                                                            break;
+                                                                        case 0:
+                                                                            count4++;
+                                                                            break;
+                                                                        default:
+                                                                            count = 0;
+                                                                            break;
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        double sum = count + count1 + count2 + count3 + count4;
+                                                        double total = (count * 5) + (count1 * 4) + (count2 * 3) + (count3 * 2) + count4;
+                                                        avg = (total / sum).ToString("N1");
+                                                        pecent = Math.Round(((count * 100) / sum), 0, MidpointRounding.AwayFromZero);
+                                                        pecent1 = Math.Round(((count1 * 100) / sum), 0, MidpointRounding.AwayFromZero);
+                                                        pecent2 = Math.Round(((count2 * 100) / sum), 0, MidpointRounding.AwayFromZero);
+                                                        pecent3 = Math.Round(((count3 * 100 )/ sum), 0, MidpointRounding.AwayFromZero);
+                                                        pecent4 = Math.Round(((count4 * 100) / sum), 0, MidpointRounding.AwayFromZero);
+                                                    }
+
+
+                                                }
+                                                <td height="35" class="text-left">&nbsp; @(no_header1 + " " + item1["content"])</td>
+                                                <td height="35">
+                                                    @(count == 0 ? "" : count + " (" + pecent + "%" + ")")
+                                                </td>
+                                                <td height="35">
+                                                    @(count1 == 0 ? "" : count1 + " (" + pecent1 + "%" + ")")
+                                                </td>
+                                                <td height="35">
+                                                    @(count2 == 0 ? "" : count2 + " (" + pecent2 + "%" + ")")
+                                                </td>
+                                                <td height="35">
+                                                    @(count3 == 0 ? "" : count3 + " (" + pecent3 + "%" + ")")
+                                                </td>
+                                                <td height="35">
+                                                    @(count4 == 0 ? "" : count4 + " (" + pecent4 + "%" + ")")
+                                                </td>
+                                                <td height="35">@avg</td>
+                                            </tr>
+                                            num++;
+                                        }
+                                        no++;
+                                    }
+                                }
+                            }
+                        </table>
+                        <br />
+                    </div>
+                </div>
+                @{foreach (var item in qs)
+                    {
+                        if (item["name_type"] == "response_text")
+                        {
+                            <div class="col-sm-12">
+                                <div class="col-sm-12 text-left">
+
+                                    <h4 class="header-title">
+                                        <b>@Html.Raw(item["content"])</b>
+                                    </h4>
+
+                                </div>
+                                <div class="col-sm-12 text-center">
+
+                                    @{
+
+                                        if (list_trainee != null)
+                                        {
+                                            foreach (var item2 in list_trainee)
+                                            {
+                                                string traineeEId = item2["userid"];
+                                                var traineeId = _repoTrainee.Get(a => a.str_Staff_Id.ToLower() == traineeEId && a.IsDeleted == false);
+                                                if (traineeId != null)
+                                                {
+                                                    foreach (var item3 in item2["response_text"])
+                                                    {
+                                                        if (item3["choice_id"] == item["id_choice"] && item["id_question"] == item3["question_id"])
+                                                        {
+                                                            <div class="row">
+                                                                <div class="col-md-2 text-left">
+                                                                    @traineeId.LastName @traineeId.FirstName
+                                                                </div>
+                                                                <div class="col-md-10 text-left">
+                                                                    @Html.Raw(item3["response"])
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+
+                <div class="col-sm-12 text-center">
+                    <br />
+                    <h4 class="header-title">
+                        <b style="font-style: italic">Thank you for taking the time to help us improve our training.</b>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            document.getElementById("btnPrint").onclick = function () {
+                printElement(document.getElementById("reportpage"));
+                window.print();
+            };
+            $('#btnExport').click(function () {
+                exportExcel();
+            });
+        });
+        function exportExcel(o) {
+
+            var params = {
+                idsurvey: $('#code_survey').val(),
+                courseDetailID: $('#courseDetailID').val(),
+                type: $('#typeExport').val(),
+                idmember: ""
+            };
+            var str = jQuery.param(params);
+            window.location.href = "/Survey/ExportSurveyTotal?" + str;
+        }
+        function printElement(elem) {
+            var domClone = elem.cloneNode(true);
+            var $printSection = document.getElementById("printSection");
+
+            if (!$printSection) {
+                var $printSection = document.createElement("div");
+                $printSection.id = "printSection";
+                document.body.appendChild($printSection);
+            }
+            $printSection.innerHTML = "";
+            $printSection.appendChild(domClone);
+        }
+    </script>
+}

@@ -1,0 +1,56 @@
+﻿@using TMS.Core.App_GlobalResources
+@{
+    ViewBag.Title = "ConvertSubjectIndex";
+    Layout = "~/Views/Shared/_Layout_LMS.cshtml";
+}
+@section breadcrumb{
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li class="active">@Resource.lblDetails</li>
+            </ol>
+        </div>
+    </div>
+}
+<div class="panel " style="margin-top: 10px;" id="frmFilter">
+    <div class="panel-heading">
+    </div>
+    <div class="panel-body">
+        <div class="form-login">
+            <div class="text-left" style="margin-bottom:-5px;">
+                <div class="icon-object border-slate-300 text-slate-300"><i class="icon-reading"></i></div>
+                <h2 class="content-group form-title" id="title-login">Chuyển đổi dữ liệu - &nbsp; @ViewBag.Count</h2> 
+                <label style="color:aquamarine">@ViewBag.Message</label>
+            </div>
+            <br />
+            <div class="form-group" style="text-align:right;" id="div-submit">
+                <button type="button" id="btnConvert" class="btn btn-primary ">Chuyển đổi<i class="icon-circle-right2 position-right"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $('#btnConvert').click(function () {
+             spinner.open();
+            $.ajax({
+                url: "/Convert/ConvertCertificateSubjet",
+                type: 'POST',
+                success: function (response) {
+                    if (response.result) {
+                         notify.alert(response.message, 'Success', TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(response.message, 'Warning', TITLE_STATUS_DANGER);
+                    }
+                },
+                complete: function () {
+                    spinner.close();
+                }
+            });
+        });
+        
+    </script>
+
+}

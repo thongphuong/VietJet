@@ -1,0 +1,58 @@
+﻿@using TrainingCenter.Utilities
+@model System.Linq.IOrderedEnumerable<TrainingCenter.Models.MENU>
+@{
+    var rolemenu = (int[])ViewBag.ListRoleMenu;
+}
+
+<aside>
+
+    <div class="navbar-default sidebar">
+        <div class="sidebar-nav navbar-collapse">
+            <div class="nav side-nav-white" id="side-menu">
+
+                <ul class="list-unstyled sidebar-left">
+                    <li class="home">
+                        <a href="/"><i class="zmdi zmdi-view-dashboard"></i> Home</a>
+                    </li>
+
+                    @foreach (var menu in Model)
+                    {
+                        if (!CMSUtils.Is_View(menu.ID))
+                        {
+                            continue;
+                        }
+                        var childmenus = menu.MENU1.Where(a => rolemenu.Contains(a.ID) && a.ISMENU == (int)UtilConstants.Bool.True && a.ISACTIVE == 1).OrderBy(a => a.SHOWORDER);
+                        <li class="line_@(menu.ID)">
+                            <a title="@menu.TITLE" href="javascript:void(0);"><i class="@(menu.ICON)"></i> @menu.NAME<span class="zmdi zmdi-plus"></span></a>
+
+
+                                 @if (childmenus.Any())
+                                {
+                                    <ul class="nav nav-second-level">
+                                        @foreach (var childmenu in childmenus.Where(a=>a.ISACTIVE == 1).OrderBy(a=>a.SHOWORDER))
+                                        {
+                                            if (!CMSUtils.Is_View(childmenu.ID))
+                                            {
+                                                continue;
+                                            }
+                                            <li><a  href="@childmenu.URL" title="@childmenu.TITLE">@childmenu.NAME</a></li>
+                                        }
+                                    </ul>
+                                }
+                            </li>
+                        }
+
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+</aside>
+
+
+
+
+
+
+

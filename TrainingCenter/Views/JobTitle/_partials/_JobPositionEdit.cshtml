@@ -1,0 +1,43 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Jobtitles.JobtitlePositionViewModel
+<div class="modal fade" id="modal-editor" role="dialog">
+    <div class="modal-dialog modal-lg">
+        @using (Html.BeginForm("ModifyPosition", "Jobtitle", FormMethod.Post))
+        {
+            @Html.HiddenFor(m => m.Id)
+            <div class="modal-content">
+                <div class="modal-header panel-heading ">
+                    <div class="panel-title">
+                        <h5 class="modal-title list-panel-title" id="modal-header" style="padding-bottom: 0.5em"> @(Resource.lblEdit + " " + @Resource.lblJobTitle_Occupation + " " + @Resource.lblPosition) : @Model.Name</h5>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            @Html.LabelFor(m => m.Name) <span class="text-danger">(*)</span>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(m => m.Name, new Dictionary<string, object>() { { "class", "form-control" }, { "placeholder", @Resource.lblName } })
+                            @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            @Html.LabelFor(m => m.Description)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextAreaFor(m => m.Description, new Dictionary<string, object>() { { "class", "form-control" }, { "placeholder", @Resource.lblDescription } })
+                            @Html.ValidationMessageFor(m => m.Description, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12 text-right">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</button>
+                            <button type="button" class="btn btn-secondary btn-default" data-dismiss="modal"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblCancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

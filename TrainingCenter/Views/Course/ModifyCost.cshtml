@@ -1,0 +1,167 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.ViewModel.CourseCodeModifyModel
+@{
+    ViewBag.Title = "Modify Cost";
+}
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-graduation-cap"></i>  @Resource.lblCourseManagement - @Resource.lblInputCost</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblCourseManagement</li>
+                <li>@Resource.lblInputCost</li>
+                <li class="active">@Resource.lblEdit</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="panel" id="list-panel">
+    <div class="panel-heading">
+        <h1 class="panel-title list-panel-title"><i class="fas fa-pencil-alt font-small-byhoa" aria-hidden="true"></i> @Resource.lblEdit</h1>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm("Cost", "Course", FormMethod.Post, new { id = "createform" }))
+        {
+            @Html.HiddenFor(a=>a.Id)
+            <div class="row">
+                <div class=" col-md-12">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6 form-group">
+                            <div class="col-md-3">
+                                <b>@Resource.lblCourseName</b>
+                            </div>
+                            <div class="col-md-9">
+                                @Html.HiddenFor(a => a.CourseId)
+                                @Html.DropDownListFor(a => a.CourseId, Model.Courses, "-- Course List --", new { @class = "form-control", @onchange = "OnChangeCourseList(this.value)", @disabled = "disabled" })
+                                @Html.ValidationMessageFor(a => a.CourseId, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="col-md-3">
+                                <b>@Resource.lblTime</b>
+                            </div>
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(a => a.DateFromTo, new { @class = "form-control", id = "dtm_course", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(a => a.DateFromTo, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-6 form-group">
+                            <div class="col-md-3">
+                                <b>@Resource.lblType</b>
+                            </div>
+                            <div class="col-md-9">
+                                @Html.HiddenFor(a => a.Cost)
+                                @Html.DropDownListFor(a => a.Cost, Model.Costes, "-- Cost List --", new { @class = "form-control", id = "CostList", @disabled = "disabled" })
+                                @Html.ValidationMessageFor(a => a.Cost, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="col-md-3">
+                                <b>@Resource.lblSubjectName</b>
+                            </div>
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(a => a.SubjectName, new { @class = "form-control", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(a => a.SubjectName, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-6 form-group">
+                            <div class="col-md-3">
+                                <b>@Resource.lblCost</b>
+                            </div>
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(a => a.CostValue, null, new { @class = "form-control", @Value = Model.CostValue.Value.ToString("###") })
+                                @Html.ValidationMessageFor(a => a.CostValue, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @*<div class="col-md-6 form-group">
+                            <div class="col-md-3">
+                                <b>@Resource.lblExpectedCost</b>
+                            </div>
+                            <div class="col-md-9">
+                                @Html.EditorFor(model => model.ExpectedCost, null, new { htmlAttributes = new { @class = "form-control", @type = "number", @Value = Model.ExpectedCost.Value.ToString("###") } })
+                                @Html.ValidationMessageFor(model => model.ExpectedCost, "", new { @class = "text-danger" })
+                            </div>
+                        </div>*@
+                    </div>
+
+                </div>
+            </div>
+            
+            
+        }
+        <div class="row">
+            <div class="action-form text-right">
+                <a href="javascript:void(0);" class="btn btn-primary  legitRipple" id="submit" onclick="create()"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                @*@Html.ActionLink("Back", "Cost", "Course", null, new { @class = "btn btn-default" })*@
+                <a onclick="goBack()" class="btn btn-default"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div id="messageout">
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <!-- timepicker -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#btFilter').click(function (e) {
+                sTable.fnDraw();
+            });
+        });
+
+        function OnChangeCourseList(id) {
+            $.ajax({
+                type: 'POST',
+                url: "/Course/OnChangeCourseListInCost",
+                datatype: 'json',
+                data: { id: id },
+                success: function (data) {
+                    $("#dtm_course").val("");
+                    $("#dtm_course").val(data);
+                }
+            });
+        }
+
+        function create() {
+            spinner.open();
+            $('#submit').hide();
+            var form = $("#createform").serialize();
+            var $forms = $('#createform');
+            //if ($forms.valid()) {
+            $.ajax({
+                type: 'POST',
+                url: "/Course/ModifyCost",
+                datatype: 'json',
+                data: form,
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                        window.location.href = '/Course/Cost';
+                    }
+                    else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    spinner.close();
+                    $('#submit').show();
+                }
+            });
+        }
+        $(".line_6").addClass("active");
+    </script>
+}

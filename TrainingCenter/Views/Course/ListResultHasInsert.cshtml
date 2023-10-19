@@ -1,0 +1,559 @@
+﻿@using DAL.Entities
+@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@model TMS.Core.ViewModels.Courses.CourseModifyModel
+
+@{
+    ViewBag.Title = "Result";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-graduation-cap"></i>  @Resource.lblCourseManagement - @Messege.lblResults1</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblCourseManagement</li>
+                <li class="active">@Messege.lblResults1</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div id="frmFilter">
+    @*@{Html.RenderAction("FormFilter1", "Home");}*@
+
+    @using (Html.BeginForm("RequestApproveCourse", "Course", FormMethod.Post, new { id = "submitcourse" }))
+    {
+        <input type="hidden" id="RemarkTrainee" name="RemarkTrainee" class="form-control frmFilter" />
+
+        <div class="col-md-12" style="margin-top: 10px;">
+            <div class="panel  list-panel" id="list-panel">
+                <div class="panel-heading list-panel-heading">
+                    <h1 class="panel-title list-panel-title">@Resource.lblFilter</h1>
+                </div>
+                <div class="panel-body">
+                    <div class="row col-md-12">
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-md-2">
+                                <label>@Resource.lblCourseCode</label>
+                            </div>
+                            <div class="col-md-2">
+                                @Html.TextBox("coursecode", null, new
+                                {
+                                    @class = "form-control",
+                                    @placeholder = Resource.lblCourseCode
+                                })
+                            </div>
+                            <div class="col-md-1">
+                                <label>@Resource.lblFromTo</label>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" name="fSearchDate_from" id="fSearchDate_from" placeholder="@Resource.lblStartDate">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" name="fSearchDate_to" id="fSearchDate_to" placeholder="@Resource.lblEndDate">
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <button type="submit" id="btFiltercourse" class="btn btn-primary">@Resource.lblFilter</button>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-md-2">
+                                <b>@Resource.lblCourseName</b>
+                            </div>
+                            <div class="col-md-10">
+                                <select class="form-control selectpicker frmFilter" id="CourseList" name="CourseList" data-placeholder="-- @Resource.lblCourseList @*(@Resource.lblCode - @Resource.lblName)*@ --">
+                                    <option></option>
+                                    @if (Model.Courseses != null)
+                                    {
+                                        foreach (var variable in Model.Courseses)
+                                        {
+
+                                            <option value="@variable.Key" @((!string.IsNullOrEmpty(Request["course"]) &&  variable.Key ==Convert.ToInt32(Request["course"])) ? "selected" : "") >@variable.Value</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-md-11">
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-primary pull-right" id="btFilter">
+                                    <i class="fa fa-search"></i> @Resource.lblSearch
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="panel  list-panel" id="list-panel">
+                <div class="panel-body">
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#TRAINEE" data-toggle="tab" aria-expanded="false">@Resource.lblRESULTS</a>
+                        </li>
+                        <li class="">
+                            <a href="#EXTENTTRAINEE" data-toggle="tab" aria-expanded="false"> @Messege.lblFINALRESULTS</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade   active in" id="TRAINEE">
+                            <br />
+                            <div class="table-responsive">
+                                <table id="Trainee" class="table table-striped table-bordered" style="width: 100%">
+                                    <thead>
+                                        <tr role="row">
+                                            <th style="width: 2%">@Resource.lblStt</th>
+                                            <th style="width: 7%">@Resource.lblSubjectCode</th>
+                                            <th style="width: 15%">@Resource.lblSubjectName</th>
+                                            <th style="width: 5%">@Resource.lblType</th>
+                                            <th class="text-center" style="width: 5%">@Resource.lblDuration</th>
+                                            <th style="width: 10%">@Resource.lblActions</th>
+                                            <th class="text-center" style="width: 10%">@Resource.lblStatus</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <div class="tab-pane fade" id="EXTENTTRAINEE">
+                            <br />
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <p class="btn-group pull-left" id="ExportFinal" style="display:none">
+                                        <button type="button" id="btnExportFinal" onclick="ExportFinal()" name="btnExportFinal" class="btn btn-danger legitRipple">Export</button>
+                                    </p>
+                                </div>
+                                <div class="col-md-1">
+                                    <b>@Resource.lblPass</b>
+                                </div>
+                                <div class="col-md-1">
+                                    <input type="number" class="form-control frmFilter" id="txt_coursepass" name="txt_coursepass" value="80" />
+                                </div>
+                                <div class="col-md-1">
+                                    <b>@Resource.lblDistinction</b>
+                                </div>
+                                <div class="col-md-1">
+                                    <input type="number" class="form-control frmFilter" id="txt_coursedistinction" name="txt_coursedistinction" value="90" />
+                                </div>
+                            </div>
+                            <br />
+                            <input type="hidden" name="hdcourseid" id="hdcourseid" value="-1" />
+                            <input type="hidden" id="submitType" name="submitType" value="@((int) UtilConstants.EStatus.Pending)" />
+                            <div class="table-responsive">
+                                <table id="Trainee2" class="table table-striped table-bordered" style="width: 100%">
+                                    <thead>
+                                        <tr role="row">
+                                            <th style="width: 2%">@Resource.lblStt</th>
+                                            <th style="width: 7%">@Messege.EID</th>
+                                            <th style="width: 15%">@Resource.lblName</th>
+                                            <th style="width: 10%">@Resource.lblJobTitle_Occupation</th>
+                                            <th style="width: 10%">@Resource.lblDepartment</th>
+                                            <th style="width: 15%">@Resource.lblPoint</th>
+                                            <th style="width: 15%">@Resource.lblGrade</th>
+                                            <th style="width: 15%">@Resource.lblRemark</th>
+                                            <th style="width: 15%">@Resource.lblActions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @if (User.IsInRole("/Course/ListResultHasInsert"))
+                                    {
+                                        @*@:<text id="ResultGetButtom1" style="display: block">
+                                            @:<a class="btn btn-primary legitRipple" id="submitcourse" onclick="notify.alert('You have not selected Program ', 'UnSuccess', TITLE_STATUS_SUCCESS)"> @Resource.lblRequestApprove </a></text>*@
+                                        @:<text id="ResultGetButtom" style="display: block"></text>
+                                        @*if (!Model.ProcessStep)
+                                            {
+                                                <a class='btn btn-primary legitRipple' onclick='submitcourse()'>update</a>
+                                            }*@
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-2">
+                            @*<input type="submit" class="btn btn-danger pull-right" id="" value="Request Approve" />*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p id="lblModelMessage"></p>
+                <label>Note</label>
+                <textarea class="form-control" name="txtNote" id="txtNote" rows="5"></textarea>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div id="messageout">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="Modal_Footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        var $dataTable;
+        var $dataTablefinal;
+        var arrall = [];
+        $(document).ready(function () {
+            getButton();
+            $("#txt_coursepass,#txt_coursedistinction").keyup(function () {
+                $dataTable.draw();
+                $dataTablefinal.draw();
+            });
+            $("#btFilter").click(function (e) {
+                arrall = [];
+               var courseId = $('#CourseList').val();
+                $("#hdcourseid").val(courseId);
+                $.ajax({
+                    type: 'POST',
+                    url: "/Course/ResultGetButtom_Export",
+                    datatype: 'json',
+                    data: {courseId: courseId},
+                    success: function (result) {
+                        if (result.result) {
+
+                            $("#ExportFinal").removeAttr("style");
+                        }
+                        else {
+                            $("#ExportFinal").css("display","none")
+                        }
+                    }
+                });
+
+                $dataTable.draw();
+                $dataTablefinal.draw();
+                $('#ResultGetButtom').removeAttr('style');
+                $("#ResultGetButtom").css("display", "block");
+                getButton();
+                e.preventDefault();
+            });
+            var customRow2 = [
+                {
+                    "targets": 0,
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {
+                    "targets": 3,
+                    "className": "text-left",
+                },
+                {
+                    "targets": 5,
+                    "className": "text-center",
+                },
+                {
+                    "targets": 6,
+                    "className": "text-center",
+                }
+            ];
+            var customRow = [
+               {
+                   "targets": 0,
+                   "data": null,
+                   render: function (data, type, row, meta) {
+                       return meta.row + meta.settings._iDisplayStart + 1;
+                   }
+                },
+                {
+                    "targets": 5,
+                    "className": "text-center",
+
+                }
+                ,
+                {
+                    "targets": 6,
+                    "className": "text-center",
+
+                }
+            ];
+            $dataTable = initDataTable("#Trainee", "/Course/AjaxHandleListResultHasInsert", customRow2);
+            $dataTablefinal = initDataTable_hung("#Trainee2", "/Course/AjaxHandleListResultFinal", customRow);
+
+            $('.datepicker').datetimepicker({
+                format: "L"
+            });
+
+            formatDatetimepicker('#fSearchDate_from', '@Resource.lblLanguage');
+            formatDatetimepicker('#fSearchDate_to', '@Resource.lblLanguage');
+
+            $(".line_310").addClass("active");
+        });
+
+        $('#btFiltercourse').click(function (e) {
+            e.preventDefault();
+            spinner.open();
+            arrall =[]
+            var form = $("#submitcourse").serialize();
+            $.ajax({
+                type: 'POST',
+                url: "/Course/filtercourse",
+                datatype: 'json',
+                data: form,
+                success: function (result) {
+                     $('#CourseList').empty();
+                    $('#CourseList').prop('selectedIndex', 0);
+                    $('#CourseList').append(result.value_option);
+                    $('#CourseList').select2();
+
+                },complete : function() {
+                    spinner.close();
+                }
+
+            });
+        });
+        function getButton()
+        {
+            var courseId = $('#CourseList').val();
+                $("#hdcourseid").val(courseId);
+                $.ajax({
+                    type: "POST",
+                    url: "/Course/ResultGetButtom",
+                    datatype: 'json',
+                    data: { courseId: courseId },
+                    success: function (data) {
+                        if (data.result) {
+                            $("#ResultGetButtom").html("");
+                            $("#ResultGetButtom").append(data.data);
+
+                        } else {
+                            $("#ResultGetButtom").html("");
+                        }
+                    }
+                });
+        }
+        //function filtercourse() {
+        //    var form = $("#frmFilter").serialize();
+        //    $.ajax({
+        //        type: "POST",
+        //        url: "/Course/Filtercourse",
+        //        datatype: "json",
+        //        data: form,
+        //        success: function (result) {
+        //            $("#CourseList").empty();
+        //            $("#CourseList").prop("selectedIndex", 0);
+        //            $("#CourseList").append(result.value_option);
+        //            $("#CourseList").datepicker("refresh");
+        //        }
+        //    });
+        //}
+
+        //document.getElementById("btFilter").onclick = function () {
+        //    var id = $("#CourseList").val();
+        //    $.ajax({
+        //        type: 'POST',
+        //        url: "/Course/GetATO",
+        //        datatype: 'json',
+        //        data: { id: id },
+        //        success: function (data) {
+        //            $("#courseId").val(data.courseId);
+        //        }
+        //    });
+        //}
+
+        function submitcourse(id) {
+
+            
+            $("textarea[name='txt_Remark']").each(function (i, v) {
+                var remark = $(v).val();
+                if (!(remark === "")) {
+                    var trainee = $(v).data("traineeid");
+                    if (arrall.some(remark => remark.idTrainee === trainee)) {
+                        objIndex = arrall.findIndex((obj => obj.idTrainee == trainee));
+                        myArray[objIndex].remarkTrainee = "remark";
+                    } else {
+                        arrall.push('{"remarkTrainee":"' + remark + '","idTrainee":"' + trainee + '"}');
+                    }
+                }
+            });
+            $("#RemarkTrainee").val(arrall.join(","));
+
+            spinner.open();
+            var form = $("#submitcourse").serialize();
+            $.ajax({
+                type: "POST",
+                url: "/Course/RequestApproveCourse",
+                datatype: "json",
+                data: form,
+                success: function (data) {
+                    if (data.result) {
+                        // window.location.href = '/Course/ListResultHasInsert';
+                        $('#ResultGetButtom').removeAttr('style');
+                        $("#ResultGetButtom").css("display", "none");
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    $("#myModal").modal("hide");
+                    spinner.close();
+                }
+            });
+        }
+        function updateResult(this_control) {
+            var courseID = $(this_control).data('courseid');
+            var traineeID = $(this_control).data('traineeid');
+            $.ajax({
+                type: 'POST',
+                url: "/Course/UpdateResult",
+                datatype: 'json',
+                data: { CourseId: courseID, TraineeId: traineeID },
+                success: function (data) {
+                    $("#messageout").html('');
+                    $("#messageout").append(data);
+                    $("#Trainee").dataTable().fnDraw();
+                    $("#Trainee2").dataTable().fnDraw();
+                }
+            });
+        }
+        function callrequestSubject(id,type) {
+
+            $("#myModal").modal("show");
+            $("#Modal_Footer").empty();
+            $('#txtNote').val("");
+            $("#lblModelMessage").text("");
+            $("#lblModelMessage").text("@Messege.WARNING_REQUEST");
+            $("#Modal_Footer").append("<input type='button' class='btn btn-danger' data-submittype='0' value='@Resource.lblSubmit' onclick='actionSubmit(" + id + "," + type + ")' /><button type='button' class='btn btn-primary' data-dismiss='modal'>Close</button>");
+        }
+        function callrequestFinal() {
+
+            $("#myModal").modal("show");
+            $("#Modal_Footer").empty();
+            $('#txtNote').val("");
+            $("#lblModelMessage").text("");
+            $("#lblModelMessage").text("@Messege.WARNING_REQUEST");
+            $("#Modal_Footer").append("<input type='button' class='btn btn-danger' value='@Resource.lblSubmit' onclick='submitcourse()' /><button type='button' class='btn btn-primary' data-dismiss='modal'>Close</button>");
+
+            //var arr = [];
+            //$("textarea[name='txt_Remark']").each(function (i, v) {
+            //var remark = $(v).val();
+            //arr.push('{"remarkTrainee":"' + remark + '"}');
+            //});
+            //$("#RemarkTrainee").val(arr.join(","));
+        }
+        function actionSubmit(id, type) {
+            var courseId = $('#hdcourseid').val();
+            var courseDetailId = id;
+            var note = $('#txtNote').val();
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/Course/SubmitRequest",
+                datatype: 'json',
+                data: { courseId: courseId, type: type, note: note, courseDetailId: courseDetailId },
+                success: function (data) {
+                    if (data.result) {
+                        $dataTable.draw();
+                        notify.alert(data.message, 'SUCCESS', TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, 'ERROR', TITLE_STATUS_DANGER);
+                    }
+                },
+                complete: function () {
+                    $("#myModal").modal("hide");
+                    spinner.close();
+                }
+            });
+        }
+        function ExportFinal() {
+
+            var param = {
+                courseId: $("#CourseList").val() == "" ? 0 : parseInt($("#CourseList").val()),
+                txtCoursepass: $("#txt_coursepass").val() == "" ? 0 : parseInt($("#txt_coursepass").val()),
+                txtCoursedistinction: $("#txt_coursedistinction").val() == "" ? 0 : parseInt($("#txt_coursedistinction").val()),
+            };
+            var str = jQuery.param(param);
+            window.location.href = "/Course/ExportFinalCourseResult?" + str;
+        }
+
+        function initDataTable_hung(selector, url, customRows) {
+            if (customRows == null) customRows = [];
+
+            customRows.unshift({
+                "targets": 0,
+                "className": "text-center",
+                "sortable": false,
+                "data": null,
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            });
+            return $(selector).DataTable({
+                //"scrollY": 300,
+                //"scrollX": true,
+                "responsive:": true,
+                "searching": false,
+                "aaSorting": [],
+                "columnDefs": customRows,
+                "fnServerParams": getTblFilter_hung,
+                "bServerSide": true,
+                "sAjaxSource": url,
+                "bProcessing": true,
+                "drawCallback": function (settings) {
+
+                    $('[data-toggle="tooltip"]').tooltip();
+
+                },
+            });
+
+        }
+
+        function getTblFilter_hung(oData) {
+            $("textarea[name='txt_Remark']").each(function (i, v) {
+                var remark = $(v).val();
+                if (!(remark === "")) {
+                    var trainee = $(v).data("traineeid");
+                    if (arrall.some(remark => remark.idTrainee === trainee)) {
+                        objIndex = arrall.findIndex((obj => obj.idTrainee == trainee));
+                        myArray[objIndex].remarkTrainee = "remark";
+                    } else {
+                        arrall.push('{"remarkTrainee":"' + remark + '","idTrainee":"' + trainee + '"}');
+                    }
+                }
+            });
+            $("#RemarkTrainee").val(arrall.join(","));
+            var $filter = $('#frmFilter').find('.frmFilter');
+            $.each($filter, function (i, o) {
+                oData.push({ "name": $(o).attr('name'), "value": $(o).val() });
+            });
+        }
+    </script>
+}

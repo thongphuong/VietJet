@@ -1,0 +1,239 @@
+﻿@using DAL.Entities
+@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.ReportModels.FinalCourseResultModeltModelRp
+@{
+    ViewBag.Title = "FinalCourseResultPrint";
+
+    int count = 0;
+    Course course = ViewBag.Course;
+    IEnumerable<Course_Detail> course_Details = ViewBag.course_Details;
+    int No_Certificate = ViewBag.No_Certificate;
+    int test = course_Details.Count() * 2;
+}
+
+
+<style>
+    #reportpage table > thead > tr > th,
+    #reportpage .table > thead > tr > th,
+    #reportpage table > tbody > tr > th,
+    #reportpage .table > tbody > tr > th,
+    #reportpage table > tfoot > tr > th,
+    #reportpage .table > tfoot > tr > th,
+    #reportpage table > thead > tr > td,
+    #reportpage .table > thead > tr > td,
+    #reportpage table > tbody > tr > td,
+    #reportpage .table > tbody > tr > td,
+    #reportpage table > tfoot > tr > td,
+    #reportpage .table > tfoot > tr > td {
+        border: 1px solid #000;
+        color: black;
+    }
+
+    .text-left {
+        text-align: left;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-right {
+        text-align: right;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-center {
+        text-align: center;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .header-title {
+        color: black;
+        font-weight: bold;
+    }
+
+    .td_course {
+        padding-left: 10px;
+        background: #ccc;
+    }
+
+    .footer_date {
+        color: black;
+        padding-top: 20px;
+        font-style: italic;
+    }
+
+    h4 {
+        color: black;
+    }
+</style>
+
+<link href="~/Content/assets/css/vietjet-print.css" rel="stylesheet" media="print" />
+<div class="col-sm-12 text-center">
+    <table width="100%" border="1">
+        <tr>
+            <td width="20%">
+                <div class="col-sm-12 text-center">
+                    <img src="~/Content/assets/img/report/logoreport.png" style="width: 80%;margin-top: 12px;" />
+                </div>
+            </td>
+            <td colspan="3">
+                <div class="col-sm-12 text-center">
+                    <h3 class="header-title">FINAL COURSE RESULT</h3>
+                </div>
+            </td>
+            <td width="20%">
+                <div class="col-sm-12 text-left pull-left" style="text-align:left">
+                    @Model.header[0]<br />
+                    @Model.header[1]<br />
+                    @Model.header[2]
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div style="padding-top:2px !important;padding-bottom:1px !important" class="col-sm-12">
+    <div class="col-sm-2">
+        <h4 style="margin-left:-20px; margin-top:2px !important;margin-bottom:1px !important">@Resource.lblCourseName:</h4>
+    </div>
+    <div class="col-sm-8">
+        <h4 style="margin-top:2px !important;margin-bottom:1px !important"><b>@(Model.CourseName)</b></h4>
+    </div>
+</div>
+<div style="padding-top:2px !important;padding-bottom:1px !important" class="col-sm-12">
+    <div class="col-sm-2">
+        <h4 style="margin-left:-20px; margin-top:2px !important;margin-bottom:1px !important">@Resource.lblCourseCode:</h4>
+    </div>
+    <div class="col-sm-8">
+        <h4 style="margin-top:2px !important;margin-bottom:1px !important"><b>@(Model.CourseCode)</b></h4>
+    </div>
+</div>
+<div style="padding-top:2px !important;padding-bottom:5px !important" class="col-sm-12">
+    <div class="col-sm-2">
+        <h4 style="margin-left:-20px;margin-top:2px !important;margin-bottom:1px !important">@Resource.lblVenue:</h4>
+    </div>
+    <div class="col-sm-8">
+        <h4 style="margin-top:2px !important;margin-bottom:1px !important"><b>@(Model.Venue)</b></h4>
+    </div>
+</div>
+<div style="margin-top:2px !important;margin-bottom:5px !important" class="col-sm-12">
+    <div class="col-sm-2">
+        <h4 style="margin-left:-20px;margin-top:2px !important;margin-bottom:1px !important">@Resource.lblDate:</h4>
+    </div>
+    <div class="col-sm-8">
+        <h4 style="margin-top:2px !important;margin-bottom:1px !important"><b>@(Model.TimeFrom) - @(Model.TimeTo)</b></h4>
+    </div>
+</div>
+
+<div class="col-sm-12 text-center" style="margin-top:20px;">
+    <table width="100%" border="1">
+        <tr>
+            <th rowspan="3" class="text-center">@Resource.lblStt</th>
+            <th rowspan="3" class="text-center">@Resource.lblName</th>
+            <th rowspan="3" class="text-center">@Messege.EID</th>
+            <th rowspan="3" class="text-center">Dept.</th>
+            <th colspan="@test" class="text-center">@Resource.lblRESULT</th>
+            <th rowspan="3" class="text-center">Average Score</th>
+            <th rowspan="3" class="text-center">@Resource.lblGrade</th>
+            <th rowspan="3" class="text-center">@Resource.lblRemarks</th>
+        </tr>
+        <tr>
+            @{
+                foreach (var detail in course_Details)
+                {
+                    if (detail != null)
+                    {
+                        <th colspan="2" class="text-center">@detail.SubjectDetail.Name</th>
+                    }
+                }
+            }
+        </tr>
+        <tr>
+            @{
+                foreach (var detail in course_Details)
+                {
+                    <th class="text-center" style="font-weight:normal"><div>First Attempt</div> </th>
+                    <th class="text-center" style="font-weight:normal"><div>Second Attempt</div> </th>
+                }
+            }
+        </tr>
+        <tr>
+        </tr>
+
+
+        @if (Model.Trainees != null)
+        {
+            int row = 1;
+            int x = 0;
+            foreach (var item in Model.Trainees)
+            {
+                count++;
+                <tr>
+
+                    <td class="text-center">@(count)</td>
+                    <td class="text-left">@(item.FullName)</td>
+                    <td class="text-center">@(item.Eid)</td>
+                    <td class="text-center">@(item.DepartmentCode)</td>
+                    @foreach (var item1 in course_Details)
+                    {
+                        var courseResult = item1.Course_Result.FirstOrDefault(a => a.CourseDetailId == item1.Id && a.TraineeId == item.Id);
+                        if (courseResult != null)
+                        {
+                            <td>@(courseResult.First_Check_Score)</td>
+                            <td>@(courseResult.Re_Check_Score)</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                            <td></td>
+                        }
+
+                    }
+                    <td class="text-center">@(!string.IsNullOrEmpty(item.Point) ? float.Parse(item.Point) + "" : "" )</td>
+                    <td class="text-center">@(item.Grace)</td>
+                    <td class="text-center">@(item.ReMark)</td>
+                </tr>
+            }
+        }
+
+    </table>
+</div>
+<div class="col-sm-12 text-right" style="text-align:right;">@*@Resource.lblNumberOfCertificatesIssued*@ Number of certificates to be issued: @No_Certificate</div>
+<div class="col-sm-4 text-center">
+    <p>
+        <h5 class="header-title">
+            Approved by
+        </h5>
+    </p>
+    <p>
+        <h4 class="header-title">
+            HEAD OF TRAINING
+        </h4>
+    </p><br /><br /><br />
+    <p>Date .....................................</p>
+</div>
+<div class="col-sm-4 text-center">
+    <p>
+        <h4 class="header-title">
+            Verified by
+        </h4>
+    </p>
+    <p>
+        <h4 class="header-title">
+            <font color="red">VTC TRAINING MANAGER</font>
+        </h4>
+    </p><br /><br /><br />
+    <p>Date .....................................</p>
+</div>
+<div class="col-sm-4 text-center">
+    <p>
+        <h4 class="header-title">
+            Prepared by
+        </h4>
+    </p>
+    <p>
+        <h4 class="header-title">
+            <font color="red">ATM DEPARTMENT</font>
+        </h4>
+    </p><br /><br /><br />
+    <p>Date .....................................</p>
+</div>
+
+

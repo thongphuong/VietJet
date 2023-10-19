@@ -1,0 +1,122 @@
+﻿@using TMS.Core.Utils
+@using TMS.Core.ViewModels.Common
+@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.UserModels.UserModel
+@{
+    ViewBag.Title = "ForgotPass";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+@{
+    var staticData = TempData[UtilConstants.NotifyMessageName];
+    var staticMessage = (AjaxResponseViewModel)staticData;
+}
+<style>
+    .btn {
+        border-radius: 0px
+    }
+
+    .form-control {
+        border-radius: 0px;
+    }
+</style>
+<div class="form-login" style="display:none;">
+    <form action="@Url.Action("ForgotPass","Authenticate")"  method="post" style="width: 95%; margin: 0 auto;  ">
+        @*<div class="panel panel-body login-form">*@
+        <div class="form-group text-center">
+            <img src="@ViewBag.PrivateLogo" style="width:100%;" />
+        </div>
+        <div class="form-group">
+            <div class="text-center">
+                <div class="icon-object border-slate-300 text-slate-300"><i class="icon-reading"></i></div>
+                <h2 class="content-group">@Resource.lblForgotYourPassword </h2>
+                @if (staticMessage != null)
+                {
+                    <div class="alert @(staticMessage.result ? "alert-info" : "alert-danger")" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        @staticMessage.message
+                    </div>
+                }
+            </div>
+        </div>
+        <br />
+        <div class="form-group has-feedback has-feedback-left">
+            <input type="text" class="form-control" name="email" placeholder="@Resource.lblEmailAddress">
+            <div class="form-control-feedback">
+                <i class="icon-lock2 text-muted"></i>
+            </div>
+        </div>
+        <div class="text-right small"><b><a href="/Authenticate">@Resource.lblLogin</a></b></div>
+        <br />
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary form-control">@Resource.lblSubmit <i class="icon-circle-right2 position-right"></i></button>
+        </div>
+        <div class="form-group">
+            <div style="font-size: 11px; margin-top: 45px;">
+               
+            </div>
+
+        </div>
+        @*</div>*@
+    </form>
+</div>
+<div class="form-login">
+    <form action="@Url.Action("ForgotPass","Authenticate")" method="post" style="width: 95%; margin: 0 auto;  ">
+        @*<div class="panel panel-body login-form">*@
+        <div class="text-left">
+            <img src="@ViewBag.PrivateLogo" style="width:35%;" />
+        </div>
+        <div class="">
+            <div class="text-left">
+                <div class="icon-object border-slate-300 text-slate-300"><i class="icon-reading"></i></div>
+                <h2 class="content-group form-title">@Resource.lblForgotYourPassword </h2>
+                @if (staticMessage != null)
+                {
+                    <div class="alert @(staticMessage.result ? "alert-info" : "alert-danger")" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        @staticMessage.message
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="form-group has-feedback has-feedback-left">
+            <input type="text" class="form-control" name="email" placeholder="@Resource.lblEmailAddress">
+            <div class="form-control-feedback">
+                <i class="icon-lock2 text-muted"></i>
+            </div>
+        </div>
+        <div class="text-right small"><b><a href="/Authenticate">@Resource.lblLogin</a></b></div>
+        <br />
+
+        <div class="form-group" style="text-align:right;">
+            <button type="submit" class="btn btn-primary">@Resource.lblSubmit <i class="icon-circle-right2 position-right"></i></button>
+        </div>
+    </form>
+</div>
+
+<div class="content-wrapper" style="display:none;">
+    <!-- Simple login form -->
+    <!-- /simple login form -->
+</div>
+<div class="footer-fixed">
+    <span class="copyright">
+        © Copyright 2018 TinhVan. All rights reserved.
+        @{
+            HttpCookie cookie = HttpContext.Current.Request.Cookies["language"];
+            if (cookie.Value == "en")
+            {
+                @:<a href="@Url.Action("ChangeLanguage", "ChangeLanguage", new { culture = "vi" })" style="cursor: pointer;">Tiếng Việt</a> | <span style="color: #999999;">English </span>
+            }
+            else
+            {
+                @:<span style="color: #999999;">Tiếng Việt</span> | <a href="@Url.Action("ChangeLanguage", "ChangeLanguage", new { culture = "en" })" style="cursor: pointer;">English</a>
+
+
+
+
+            }
+        }
+
+
+    </span>
+</div>

@@ -1,0 +1,39 @@
+System.ArgumentNullException: Value cannot be null.
+Parameter name: address
+   at System.Net.Mail.MailAddress..ctor(String address, String displayName, Encoding displayNameEncoding)
+   at System.Net.Mail.MailAddress..ctor(String address, String displayName)
+   at TMS.API.Utilities.Command.MailUtil.SendMail(String MailTo, String Subject, String Content) in D:\PROJECT_TINHVAN\VietjetAir_Solution\VJ_Upgrade_Ver2\TMS_FixBug\TMS.API\Constants\Command.cs:line 564
+System.ArgumentNullException: Value cannot be null.
+Parameter name: address
+   at System.Net.Mail.MailAddress..ctor(String address, String displayName, Encoding displayNameEncoding)
+   at System.Net.Mail.MailAddress..ctor(String address, String displayName)
+   at TMS.API.Utilities.Command.MailUtil.SendMail(String MailTo, String Subject, String Content) in D:\PROJECT_TINHVAN\VietjetAir_Solution\VJ_Upgrade_Ver2\TMS_FixBug\TMS.API\Constants\Command.cs:line 565
+System.ArgumentNullException: Value cannot be null.
+Parameter name: address
+   at System.Net.Mail.MailAddress..ctor(String address, String displayName, Encoding displayNameEncoding)
+   at System.Net.Mail.MailAddress..ctor(String address, String displayName)
+   at TMS.API.Utilities.Command.MailUtil.SendMail(String MailTo, String Subject, String Content) in D:\PROJECT_TINHVAN\VietjetAir_Solution\VJ_Upgrade_Ver2\TMS_FixBug\TMS.API\Constants\Command.cs:line 565
+System.Net.Mail.SmtpException: The SMTP server requires a secure connection or the client was not authenticated. The server response was: 5.7.0 Authentication Required. Learn more at
+   at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.Send(SmtpConnection conn, Byte[] command, MailAddress from, Boolean allowUnicode)
+   at System.Net.Mail.SmtpTransport.SendMail(MailAddress sender, MailAddressCollection recipients, String deliveryNotify, Boolean allowUnicode, SmtpFailedRecipientException& exception)
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at TMS.API.Utilities.Command.MailUtil.SendMail(String MailTo, String Subject, String Content) in D:\PROJECT_TINHVAN\VietjetAir_Solution\VJ_Upgrade_Ver2\TMS_FixBug\TMS.API\Constants\Command.cs:line 578
+System.Net.Mail.SmtpException: The SMTP server requires a secure connection or the client was not authenticated. The server response was: 5.7.0 Authentication Required. Learn more at
+   at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.Send(SmtpConnection conn, Byte[] command, MailAddress from, Boolean allowUnicode)
+   at System.Net.Mail.SmtpTransport.SendMail(MailAddress sender, MailAddressCollection recipients, String deliveryNotify, Boolean allowUnicode, SmtpFailedRecipientException& exception)
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at TMS.API.Utilities.Command.MailUtil.SendMail(String MailTo, String Subject, String Content) in D:\PROJECT_TINHVAN\VietjetAir_Solution\VJ_Upgrade_Ver2\TMS_FixBug\TMS.API\Constants\Command.cs:line 578
+System.Net.Mail.SmtpException: The SMTP server requires a secure connection or the client was not authenticated. The server response was: 5.7.0 Authentication Required. Learn more at
+   at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.Send(SmtpConnection conn, Byte[] command, MailAddress from, Boolean allowUnicode)
+   at System.Net.Mail.SmtpTransport.SendMail(MailAddress sender, MailAddressCollection recipients, String deliveryNotify, Boolean allowUnicode, SmtpFailedRecipientException& exception)
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at TMS.API.Utilities.Command.MailUtil.SendMail(String MailTo, String Subject, String Content) in D:\PROJECT_TINHVAN\VietjetAir_Solution\VJ_Upgrade_Ver2\TMS_FixBug\TMS.API\Constants\Command.cs:line 578
+System.Net.Mail.SmtpException: The SMTP server requires a secure connection or the client was not authenticated. The server response was: 5.7.0 Authentication Required. Learn more at
+   at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.Send(SmtpConnection conn, Byte[] command, MailAddress from, Boolean allowUnicode)
+   at System.Net.Mail.SmtpTransport.SendMail(MailAddress sender, MailAddressCollection recipients, String deliveryNotify, Boolean allowUnicode, SmtpFailedRecipientException& exception)
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at TMS.API.Utilities.Command.MailUtil.SendMail(String MailTo, String Subject, String Content) in D:\PROJECT_TINHVAN\VietjetAir_Solution\VJ_Upgrade_Ver2\TMS_FixBug\TMS.API\Constants\Command.cs:line 578

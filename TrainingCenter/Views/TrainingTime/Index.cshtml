@@ -1,0 +1,731 @@
+﻿@using TMS.Core.App_GlobalResources;
+@model TMS.Core.ViewModels.ReportModels.TrainingAllowanceModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .dt-right {
+        text-align: right;
+    }
+</style>
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fas fa-chart-pie"></i> @Resource.lblTrainingAllowance</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblReport</li>
+                <li class="active">@Resource.lblTrainingAllowance</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<ul class="nav nav-tabs">
+    <li class="tabAprroval active">
+        <a href="#Test" data-toggle="tab" aria-expanded="false" id="tabAprroval">Date Approval</a>
+    </li>
+    <li class="tabRequest ">
+        <a href="#Nomal" data-toggle="tab" aria-expanded="false" id="tabRequest">Date Request</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="Test">
+        @using (Html.BeginForm("ExportPaymentApproval", "TrainingTime", FormMethod.Post, new { id = "createformApprove" }))
+        {
+            <input type="hidden" class="RequestOrApproval" name="RequestOrApproval2" value="1" />
+            <div class="col-md-12" style="margin-top: 10px;">
+                <div id="panel-search" class="panel">
+                    <div class="panel-body">
+                        <div class="row col-md-12">
+                            <div class="row" style="margin-top:10px;">
+                                <div class="col-md-12">
+                                    <div class="col-md-3">
+                                        <label>@Resource.TRAINEE_EID</label>
+                                        <input type="text" name="code2" id="Code2" class="form-control searchText1" placeholder="@Messege.EIDGV" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>@Resource.lblFullName</label>
+                                        <input type="text" name="fullname2" id="Name2" class="form-control searchText1" placeholder="@Resource.lblFullName" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>@Resource.lblRelevantTrainingDepartment</label>
+                                        <select class="form-control" name="int_khoidaotao2" id="int_khoidaotao2" data-placeholder="-- @Resource.lblDepartment --" multiple="multiple">
+                                            <option></option>
+                                            @foreach (var item in Model.Department)
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row col-md-12">
+                            <div class="row" style="margin-top:10px;">
+                                <div class="col-md-12">
+                                    <div class="col-md-2">
+                                        <label>@Resource.lblFrom</label>
+                                        <input type="text" name="from2" id="from2" value="@Model.From.ToString("dd/MM/yyyy")" class="form-control" placeholder="@Resource.lblFrom" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>@Resource.lblTo</label>
+                                        <input type="text" name="to2" id="to2" value="@Model.To.ToString("dd/MM/yyyy")" class="form-control" placeholder="@Resource.lblTo" />
+                                    </div>
+                                    <div class="col-md-1 pull-right">
+                                        <label>&nbsp;</label>
+                                        <button type="button" class="btn btn-primary pull-right legitRipple" id="btFilter2">
+                                            <i class="fa fa-search"></i> @Resource.lblSearch
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+            </div>
+            <div class="col-md-12" style="margin-top: 10px;">
+                <div class="panel  list-panel" id="list-panel">
+                    <div class="panel-heading list-panel-heading">
+                        <h1 class="panel-title list-panel-title">
+                            <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> @Resource.lblTrainingAllowance
+                        </h1>
+                    </div>
+                    <div class="panel-body table-responsive" style="margin-top: 10px;">
+                        <div class="pull-right">
+                            <a href="javascript:void(0)" class="btn btn-danger dropdown-toggle legitRipple" id="btnExport" onclick="document.getElementById('createformApprove').submit();"><i class="fa fa-download" aria-hidden="true"></i> @Resource.lblEXPORT</a>
+                            <a href="/TrainingTime/Payment" class="btn btn-danger">@Resource.lblPayment</a>
+                        </div>
+                        <table id="DepTable2" class="table table-striped table-bordered " cellspacing="0" width="100%">
+                            <thead>
+                                <tr role="row" class="">
+                                    <th>@Resource.lblNo</th>
+                                    <th>@Resource.TRAINEE_EID</th>
+                                    <th>@Resource.lblFullName</th>
+                                    <th>@Resource.lblDuration (Hours)</th>
+                                    <th class="text-right">@Resource.lblTOTAL</th>
+                                    <th class="text-right">@Resource.lblPaid</th>
+                                    <th class="text-right">@Resource.lblNoPayment</th>
+                                    <th class="text-right">@Resource.lblPending</th>
+                                    <th style="width: 5%;"></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="hidden">
+                <table id="subject2" class="table table-striped table-bordered" cellspacing="1" style="width: 100%">
+                    <thead class="">
+                        <tr role="row">
+                            <th style="width: 5%;">@Resource.lblNo</th>
+                            <th style="width: 10%;">@Resource.lblCourseCode</th>
+                            <th style="width: 10%;">@Resource.lblCourseName</th>
+                            <th style="width: 15%;">@Resource.lblSubjectName</th>
+                            <th>@Resource.lblDate</th>
+                            <th>@Resource.lblTime</th>
+                            <th style="width: 8%;">@Resource.lblDuration</th>
+                            <th>@Resource.lblDateApproval</th>
+                            <th>@Resource.lblAllowance</th>
+                            <th style="width: 8%;">@Resource.lblStatus</th>
+                    </thead>
+                    <tbody></tbody>
+                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                </table>
+            </div>
+        }
+    </div>
+    <div class="tab-pane fade " id="Nomal">
+        @using (Html.BeginForm("ExportPaymentRequest", "TrainingTime", FormMethod.Post, new { id = "createformRequest" }))
+        {
+            <input type="hidden" class="RequestOrApproval" name="RequestOrApproval" value="1" />
+            <div class="col-md-12" style="margin-top: 10px;">
+                <div id="panel-search" class="panel">
+                    <div class="panel-body">
+                        <div class="row col-md-12">
+                            <div class="row" style="margin-top:10px;">
+                                <div class="col-md-12">
+                                    <div class="col-md-3">
+                                        <label>@Resource.TRAINEE_EID</label>
+                                        <input type="text" name="code" id="Code" class="form-control searchText1" placeholder="@Messege.EIDGV" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>@Resource.lblFullName</label>
+                                        <input type="text" name="fullname" id="Name" class="form-control searchText1" placeholder="@Resource.lblFullName" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>@Resource.lblRelevantTrainingDepartment</label>
+                                        <select class="form-control" name="int_khoidaotao" id="int_khoidaotao" data-placeholder="-- @Resource.lblDepartment --" multiple="multiple">
+                                            <option></option>
+                                            @foreach (var item in Model.Department)
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row col-md-12">
+                            <div class="row" style="margin-top:10px;">
+                                <div class="col-md-12">
+                                    <div class="col-md-2">
+                                        <label>@Resource.lblFrom</label>
+                                        <input type="text" name="from" id="from" value="@Model.From.ToString("dd/MM/yyyy")" class="form-control" placeholder="@Resource.lblFrom" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>@Resource.lblTo</label>
+                                        <input type="text" name="to" id="to" value="@Model.To.ToString("dd/MM/yyyy")" class="form-control" placeholder="@Resource.lblTo" />
+                                    </div>
+                                    <div class="col-md-1 pull-right">
+                                        <label>&nbsp;</label>
+                                        <button type="button" class="btn btn-primary pull-right legitRipple" id="btFilter">
+                                            <i class="fa fa-search"></i> @Resource.lblSearch
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+            </div>
+            <div class="col-md-12" style="margin-top: 10px;">
+                <div class="panel  list-panel" id="list-panel">
+                    <div class="panel-heading list-panel-heading">
+                        <h1 class="panel-title list-panel-title">
+                            <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> @Resource.lblTrainingAllowance
+                        </h1>
+                    </div>
+                    <div class="panel-body table-responsive" style="margin-top: 10px;">
+                        <div class="pull-right">
+                            <a href="javascript:void(0)" class="btn btn-danger dropdown-toggle legitRipple" id="btnExport" onclick="document.getElementById('createformRequest').submit();"><i class="fa fa-download" aria-hidden="true"></i> @Resource.lblEXPORT</a>
+                            <a href="/TrainingTime/Payment" class="btn btn-danger">Payment</a>
+                        </div>
+                       
+                        <table id="DepTable" class="table table-striped table-bordered " cellspacing="0" width="100%">
+                            <thead>
+                                <tr role="row" class="">
+                                    <th>No.</th>
+                                    <th>EID</th>
+                                    <th>Full Name</th>
+                                    <th>Duration(Hours)</th>
+                                    <th class="text-right">Total</th>
+                                    <th class="text-right">Paid</th>
+                                    <th class="text-right">No Payment</th>
+                                    <th class="text-right">Pending</th>
+                                    <th style="width: 5%;"></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="hidden">
+                <table id="subject" class="table table-striped table-bordered" cellspacing="1" style="width: 100%">
+                    <thead class="">
+                        <tr role="row">
+                            <th>No.</th>
+                            <th>Course Code</th>
+                            <th>Course Name</th>
+                            <th>Subject Name</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Duration</th>
+                            <th>Date Approval</th>
+                            <th>Allowance</th>
+                            <th style="width: 6%;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+
+
+<style>
+    select {
+        color: #000 !important;
+    }
+
+    .bootstrap-timepicker-widget table td input {
+        min-width: 55px;
+        margin: 0;
+        text-align: center;
+    }
+
+    #tableProgram td {
+        border: 0;
+    }
+
+    .mysymbol {
+        font-size: 16px;
+        color: green;
+    }
+</style>
+
+@section Scripts{
+    @*<script src="~/Content/trainingtime/buttons.html5.min.js" type="text/javascript"></script>
+    <script src="~/Content/trainingtime/jszip.min.js" type="text/javascript"></script>
+    <script src="~/Content/trainingtime/xlsx.core.min.js" type="text/javascript"></script>*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //datatable serverside
+            var sTable = $("#DepTable").DataTable({
+                "responsive:": true,
+                "searching": false,
+                "columnDefs": [{
+                    "targets": 0,
+                    "className": "text-center",
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },{
+                    "targets": 1,
+                    "className": "text-center",
+
+                    },
+                     {
+                    "targets": 3,
+                    "className": "text-center",
+
+                    }, {
+                        "targets": 4,
+                        "className": "text-right",
+
+                    },{
+                        "targets": 5,
+                        "className": "text-right",
+
+                    },{
+                        "targets": 6,
+                        "className": "text-right",
+
+                    },{
+                        "targets": 7,
+                        "className": "text-right",
+
+                    },{
+                        "targets": -1,
+                        "className": "text-right",
+
+                    }
+                ],
+                "aaSorting": [],
+
+                "bServerSide": true,
+                "sAjaxSource": "/TrainingTime/AjaxHandlerPaymentRequest",
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                    aoData.push(
+                                { "name": "Code", "value": $('#Code').val() },
+                                { "name": "FullName", "value": $('#Name').val() },
+                                { "name": "from", "value": $('#from').val() },
+                                { "name": "DepartmentId", "value": $('#int_khoidaotao').val() },
+                                { "name": "to", "value": $('#to').val() });
+                },
+                "initComplete": function (settings, json) {
+                    $("#DepTable_wrapper").css("margin-top", "50px");
+                    $("#DepTable_wrapper a").addClass("btn btn-danger");
+                    $("#DepTable_wrapper a.dt-button").css("position", "absolute");
+                    $("#DepTable_wrapper a.dt-button").css("right", "0");
+                    $("#DepTable_wrapper a.dt-button").css("top", "-50px");
+                },
+            });
+
+               var sTable2 = $("#DepTable2").DataTable({
+                "responsive:": true,
+                "searching": false,
+                "pageLength": 9000,
+                "columnDefs": [{
+                    "targets": 0,
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                }],
+                "aaSorting": [],
+
+                "bServerSide": true,
+                "sAjaxSource": "/TrainingTime/AjaxHandlerPaymentApproval",
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                    aoData.push(
+                                { "name": "Code2", "value": $('#Code2').val() },
+                                { "name": "FullName2", "value": $('#Name2').val() },
+                                { "name": "from2", "value": $('#from2').val() },
+                                { "name": "DepartmentId2", "value": $('#int_khoidaotao2').val() },
+                                { "name": "to2", "value": $('#to2').val() });
+                },
+                "initComplete": function (settings, json) {
+                    $("#DepTable_wrapper").css("margin-top", "50px");
+                    $("#DepTable_wrapper a").addClass("btn btn-danger");
+                    $("#DepTable_wrapper a.dt-button").css("position", "absolute");
+                    $("#DepTable_wrapper a.dt-button").css("right", "0");
+                    $("#DepTable_wrapper a.dt-button").css("top", "-50px");
+                },
+            });
+
+            //$('#from').datetimepicker({
+            //    format: 'DD/MM/YYYY'
+            //});
+            formatDatetimepicker('#from', '@Resource.lblLanguage');
+            formatDatetimepicker('#to', '@Resource.lblLanguage');
+            formatDatetimepicker('#from2', '@Resource.lblLanguage');
+            formatDatetimepicker('#to2', '@Resource.lblLanguage');
+            //$('#to').datetimepicker({
+            //    format: 'DD/MM/YYYY'
+            //});
+
+            //var detailRows = [];
+            //$('#DepTable tbody').on('click', 'tr td span.expand', function () {
+            //    var id = $(this).data('value');
+            //    var tr = $(this).closest('tr');
+            //    var row = sTable.row(tr);
+            //    var idx = $.inArray(tr.attr('id'), detailRows);
+
+            //    if (row.child.isShown()) {
+            //        tr.removeClass('details');
+            //        row.child.hide();
+            //        // Remove from the 'open' array
+            //        detailRows.splice(idx, 1);
+            //    }
+            //    else {
+            //        tr.addClass('details');
+            //        row.child(format(id)).show();
+
+            //        // Add to the 'open' array
+            //        if (idx === -1) {
+            //            detailRows.push(tr.attr('id'));
+            //        }
+            //    }
+            //});
+            var detailRows = [];
+            $('#DepTable tbody').on('click', 'tr td span.expand', function () {
+                var id = $(this).data('value');
+                var tr = $(this).closest('tr');
+                var row = sTable.row(tr);
+                var idx = $.inArray(tr.attr('id'), detailRows2);
+
+                if (row.child.isShown()) {
+                    tr.removeClass('details');
+                    row.child.hide();
+                    // Remove from the 'open' array
+                    detailRows2.splice(idx, 1);
+                } else {
+                    tr.addClass('details');
+                    row.child(format(id)).show();
+
+                    // Add to the 'open' array
+                    if (idx === -1) {
+                        detailRows.push(tr.attr('id'));
+                    }
+                }
+            });
+            var detailRows2 = [];
+            $('#DepTable2 tbody').on('click', 'tr td span.expand', function () {
+                var id = $(this).data('value');
+                var tr = $(this).closest('tr');
+                var row = sTable2.row(tr);
+                var idx = $.inArray(tr.attr('id'), detailRows2);
+
+                if (row.child.isShown()) {
+                    tr.removeClass('details');
+                    row.child.hide();
+                    // Remove from the 'open' array
+                    detailRows2.splice(idx, 1);
+                } else {
+                    tr.addClass('details');
+                    row.child(format2(id)).show();
+
+                    // Add to the 'open' array
+                    if (idx === -1) {
+                        detailRows2.push(tr.attr('id'));
+                    }
+                }
+            });
+            
+       
+
+            //sTable.on('draw', function () {
+            //    $.each(detailRows, function (i, id) {
+            //        $('#' + id + ' td.details-control').trigger('click');
+            //    });
+            //});
+            $('#btFilter').click(function (e) {
+                e.preventDefault();
+                sTable.draw();
+            });
+            $('#btFilter2').click(function (e) {
+                e.preventDefault();
+                sTable2.draw();
+            });
+             $("#tabRequest").click(function (e) {
+                LoadRequestOrApproval();
+            });
+            $("#tabApproval").click(function (e) {
+
+                LoadRequestOrApproval();
+            });
+        });
+        function LoadRequestOrApproval() {
+            $("#messageout").html('');
+            $("#messageout2").html('');
+            if ($("li.tabRequest").hasClass("active")) {
+            } else if ($("li.tabApproval").hasClass("active")) {
+            }
+        }
+         function format(id) {
+            var table = $("#subject").clone();
+            var sSTable = table.DataTable({
+                "responsive:": true,
+                "searching": false,
+               "pageLength": 900000,
+                "columnDefs": [
+                    {
+                        "targets": 0,
+                        "data": null,
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    }
+                ],
+                "aaSorting": [2, 'asc'],
+                "bServerSide": true,
+                "sAjaxSource": "/TrainingTime/AjaxHandlerDetailSubjectPaymentRequest/",
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                    aoData.push(
+                        { "name": "from", "value": $('#from').val() },
+                        { "name": "to", "value": $('#to').val() },
+                        { "name": "id", "value": id });
+                }
+
+            });
+            return table;
+        }
+            function format2(id) {                
+            var table2 = $("#subject2").clone();
+            var sTable2 = table2.DataTable({
+                "responsive:": true,
+                "searching": false,
+                "pageLength": 900000,
+                "columnDefs": [{
+                    "targets": 0,
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                }],
+                "aaSorting": [2, 'asc'],
+                "bServerSide": true,
+                "sAjaxSource": "/TrainingTime/AjaxHandlerDetailSubjectPaymentApproval/",
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                    aoData.push(
+                    { "name": "from2", "value": $('#from2').val() },
+                        { "name": "to2", "value": $('#to2').val() },
+                        { "name": "id", "value": id },
+                    );
+                }
+
+            });
+            return table2;
+            }
+        //function format(id) {
+        //    var table = $("#subject").clone();
+        //    var sSTable = table.DataTable({
+        //        "responsive:": true,
+        //        "searching": false,
+        //        "pageLength": 9000,
+        //        "columnDefs": [{
+        //            "targets": 0,
+        //            "className": "text-center",
+        //            "data": null,
+        //            render: function (data, type, row, meta) {
+        //                return meta.row + meta.settings._iDisplayStart + 1;
+        //            }
+        //        }],
+        //        "aaSorting": [2, 'asc'],
+        //        "bServerSide": true,
+        //        "sAjaxSource": "/TrainingTime/AjaxHandlerSubject/" + id,
+        //        "bProcessing": true,
+        //        "fnServerParams": function (aoData) {
+        //            aoData.push(
+        //              { "name": "from", "value": $('#from').val() },
+        //              { "name": "to", "value": $('#to').val() });
+        //        }
+        //    });
+        //    return table;
+        //}
+
+                function PaymentAllRequest() {
+            spinner.open();
+            var form = $("#createform").serialize();
+            $.ajax({
+                type: 'POST',
+                url: "/TrainingTime/PaymentAllRequest/",
+                datatype: 'json',
+                data: form,
+                success: function (data) {
+                    if (data.result) {
+                        sTable.draw();
+                        $("#messageout").html('');
+                        $("#messageout").append(data.message);
+                    } else {
+                        $("#messageout").html('');
+                        $("#messageout").append(data.message);
+                    }
+                },
+                complete: function () {
+                    $("#myModal").modal("hide");
+                    spinner.close();
+                }
+            });
+        }
+
+        function PaymentAllApproval() {
+            spinner.open();
+            var form = $("#createform2").serialize();
+            $.ajax({
+                type: 'POST',
+                url: "/TrainingTime/PaymentAllApproval/",
+                datatype: 'json',
+                data: form,
+                success: function (data) {
+                    if (data.result) {
+                        sTable2.draw();
+                        $("#messageout2").html('');
+                        $("#messageout2").append(data.message);
+                    } else {
+                        $("#messageout2").html('');
+                        $("#messageout2").append(data.message);
+                    }
+                },
+                complete: function () {
+                    $("#myModal").modal("hide");
+                    spinner.close();
+                }
+            });
+        }
+        function CancelAllRequest() {
+            spinner.open();
+            var form = $("#createform").serialize();
+            $.ajax({
+                type: 'POST',
+                url: "/TrainingTime/CancelPaymentRequest/",
+                datatype: 'json',
+                data: form,
+                success: function (data) {
+                    if (data.result) {
+                        sTable.draw();
+                        $("#messageout").html('');
+                        $("#messageout").append(data.message);
+                    } else {
+                        $("#messageout").html('');
+                        $("#messageout").append(data.message);
+                    }
+                },
+                complete: function () {
+                    $("#myModal").modal("hide");
+                    spinner.close();
+                }
+            });
+        }
+        function CancelAllApproval() {
+            spinner.open();
+            var form = $("#createform2").serialize();
+            $.ajax({
+                type: 'POST',
+                url: "/TrainingTime/CancelPaymentApproval/",
+                datatype: 'json',
+                data: form,
+                success: function (data) {
+                    if (data.result) {
+                        sTable2.draw();
+                        $("#messageout2").html('');
+                        $("#messageout2").append(data.message);
+                    } else {
+                        $("#messageout2").html('');
+                        $("#messageout2").append(data.message);
+                    }
+                },
+                complete: function () {
+                    $("#myModal").modal("hide");
+                    spinner.close();
+                }
+            });
+        }
+        
+        function SubmitPaymentRequest(selector) {
+            sTable.draw();
+            setTimeout(function () {
+                $("#myModal").modal("show");
+                $("#modal-header").text("");
+                $("#modal-header").text("WARNING");
+                $("#lblmyModal").text("");
+                $("#lblmyModal").text("Are you sure to pay all ?");
+                $("#model-footer").empty();
+                $("#model-footer").append("<input type='button' class='btn btn-danger' value='Payment All' onclick='PaymentAllRequest()' /><button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>");
+            }, 1000);
+        }
+
+        function SubmitPaymentAprroval(selector) {
+            sTable2.draw();
+            setTimeout(function () {
+                $("#myModal").modal("show");
+                $("#modal-header").text("");
+                $("#modal-header").text("WARNING");
+                $("#lblmyModal").text("");
+                $("#lblmyModal").text("Are you sure to pay all ?");
+                $("#model-footer").empty();
+                $("#model-footer").append("<input type='button' class='btn btn-danger' value='Payment All' onclick='PaymentAllApproval()' /><button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>");
+            }, 1000);
+           
+        }
+        function CancelPaymentRequest(selector) {
+            $("#myModal").modal("show");
+            $("#modal-header").text("");
+            $("#modal-header").text("WARNING");
+            $("#lblmyModal").text("");
+            $("#lblmyModal").text("Are you sure to cancel all ?");
+            $("#model-footer").empty();
+            $("#model-footer").append("<input type='button' class='btn btn-danger' value='Cancel' onclick='CancelAllRequest()' /><button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>");
+        }
+        function CancelPaymentAprroval(selector) {
+            $("#myModal").modal("show");
+            $("#modal-header").text("");
+            $("#modal-header").text("WARNING");
+            $("#lblmyModal").text("");
+            $("#lblmyModal").text("Are you sure to cancel all ?");
+            $("#model-footer").empty();
+            $("#model-footer").append("<input type='button' class='btn btn-danger' value='Cancel' onclick='CancelAllApproval()' /><button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>");
+        }
+        function goPayment(id, RequestOrApproval) {
+            var from;;
+            var to;
+            if (RequestOrApproval === 1) {
+                from = $('#from2').val();
+                to = $('#to2').val();
+            } else {
+                from = $('#from').val();
+                to = $('#to').val();
+            }
+            var domain = window.location.origin;
+            var url = domain + '/TrainingTime/Payment?Id=' + id + '&Type='+RequestOrApproval +'&from=' + from + '&to=' + to;
+            window.location.href = url;
+        }
+    </script>
+}

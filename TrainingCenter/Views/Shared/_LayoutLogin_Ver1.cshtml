@@ -1,0 +1,183 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+    <title>Training Management System</title>
+    @Styles.Render("~/bundles/corecss")
+    <link href="~/Content/assets/css/material-design-iconic-font.min.css" rel="stylesheet">
+    <link href="@System.Configuration.ConfigurationManager.AppSettings["PrivateStyle"]" rel="stylesheet" />
+    <style>
+        .profile > a {
+            display: block;
+            height: 129px;
+            width: 100%;
+            background: url(../../Content/assets/img/bg-profile.jpg) left top no-repeat;
+            background-size: 100% 129px;
+        }
+
+        .fa-class-ins {
+            background: url(../../Content/assets/img/home/class-ins.png);
+            background-repeat: no-repeat;
+            background-position: 50% 25%;
+            background-size: 145%;
+            height: 20px;
+            width: 20px;
+        }
+
+        .fa-class-desktop {
+            background: url('../../Content/assets/img/home/e-learning.png');
+            background-repeat: no-repeat;
+            background-position: 50% 25%;
+            background-size: 125%;
+            height: 15px;
+            width: 14px;
+        }
+    </style>
+    <style>
+        [touch-action="none"] {
+            -ms-touch-action: none;
+            touch-action: none;
+        }
+
+        [touch-action="pan-x"] {
+            -ms-touch-action: pan-x;
+            touch-action: pan-x;
+        }
+
+        [touch-action="pan-y"] {
+            -ms-touch-action: pan-y;
+            touch-action: pan-y;
+        }
+
+        [touch-action="scroll"], [touch-action="pan-x pan-y"], [touch-action="pan-y pan-x"] {
+            -ms-touch-action: pan-x pan-y;
+            touch-action: pan-x pan-y;
+        }
+
+       
+        h2 {
+            font-family: "Open Sans","Helvetica Neue",Arial,sans-serif;
+        }
+    </style>
+    <style id="style-1-cropbar-clipper">
+        .en-markup-crop-options {
+            top: 18px !important;
+            left: 50% !important;
+            margin-left: -90px !important;
+            width: 180px !important;
+            border: 2px rgba(255,255,255,.38) solid !important;
+            border-radius: 4px !important;
+        }
+
+            .en-markup-crop-options div div:first-of-type {
+                margin-left: 0px !important;
+            }
+    </style>
+    <style type="text/css">
+        body {
+            zoom: 100%;
+            background: #fff;
+        }
+
+        #fullbrower {
+            height: 100vh;
+        }
+
+        
+        .bglogin {
+            background: url('/Content/assets/img/home/DSJ_3732.jpg') 0% 0% / cover no-repeat scroll transparent;
+        }
+
+
+  
+       .login-form .form-login {
+           box-shadow: 6px 6px 15px -5px #000;
+           max-width: 42rem;
+           padding: 1rem;
+           background-color: rgba(255, 255, 255, 0.9);
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           padding-bottom: 0px;
+           -webkit-transform: translate(-50%, -50%);
+           -ms-transform: translate(-50%, -50%);
+           transform: translate(-50%, -50%);
+       }
+    </style>
+</head>
+
+<body>
+    <section class="login-form">
+        @RenderBody()
+    </section>
+
+
+
+
+
+
+
+
+
+    <div id="fullbrower" style="display:none;">
+        @*<div class="col-lg-8 bglogin" style="height:100%;">
+            </div>*@
+        <div class="col-lg-8 bglogin" style="height: 100%; padding: 0px;">
+            @*<div class="mySlides" style="background: url(/Content/assets/img/login/hinh1.jpg) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh2.png) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh3.jpg) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh4.png) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh5.jpg) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh6.JPG) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh7.png) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh8.jpg) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh9.jpg) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh10.png) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh11.JPG) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh14.JPG) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>*@
+        </div>
+
+        <script>
+            var myIndex = 0;
+            carousel();
+
+            function carousel() {
+                var i;
+                var x = document.getElementsByClassName("mySlides");
+                for (i = 0; i < x.length; i++) {
+                    x[i].style.display = "none";
+                }
+                myIndex++;
+                if (myIndex > x.length) {
+                    myIndex = 1
+                }
+                x[myIndex - 1].style.display = "block";
+                setTimeout(carousel, 4000); // Change image every 2 seconds
+            }
+        </script>
+        <div class="col-lg-4" style="height: 100%;">
+            
+    </div>
+</div>
+    @Scripts.Render("~/bundles/corejs")
+<script>
+
+            $(document).on('click', '#btForgotPassword', function () {
+                window.location.href = "/Account/ForgotPassword";
+            });
+</script>
+
+
+</body>
+
+@RenderSection("Scripts", false)
+
+</html>

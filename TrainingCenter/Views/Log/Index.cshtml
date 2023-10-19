@@ -1,0 +1,215 @@
+﻿@using TMS.Core.App_GlobalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-cogs"></i>   @Resource.lblSystemManagement - Log</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li> @Resource.lblSystemManagement</li>
+                <li class="active">Log</li>
+            </ol>
+        </div>
+    </div>
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title">
+                    <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> @Resource.lblList
+                    <p class="btn-group pull-right">
+                        <a href="javascript:void(0)" onclick="actionClean()" title="Clean with type" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-leaf" aria-hidden="true"></i> @Resource.lblCLEANLOG</a>
+                    </p>
+                </h1>
+            </div>
+            <div class="panel-body">
+
+                <div class=" table-responsive" style="margin-top: 10px;">
+                    <div id="panel-search" class="collapse panel">
+                        @using (Html.BeginForm("AjaxHandler", "Log", FormMethod.Post, new { id = "frmFilter" }))
+                    {
+                        <div class="panel-body">
+                            <div class="row ">
+                                <div class="col-md-2 form-group">
+                                    <select class='form-control selectpicker frmFilter' id="ddl_LogEvent" name="ddl_LogEvent" data-placeholder="--Log Event--">
+                                        <option></option>
+                                        <option value="0">Insert</option>
+                                        <option value="1">Update</option>
+                                        <option value="2">Delete</option>
+                                        <option value="3">Active</option>
+                                        <option value="4">View</option>
+                                        <option value="5">Error</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <input type="text" name="Content" id="Content" class="form-control frmFilter" placeholder="Content" />
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    <input type="number" name="Username" id="Username" class="form-control frmFilter" placeholder="User Name" />
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    <input type="text" name="URL" id="URL" class="form-control frmFilter" placeholder="URL" />
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    <input type="text" name="Ip" id="Ip" class="form-control frmFilter" placeholder="Ip" />
+                                </div>
+
+                                <div class="clearfix"></div>
+                                <div class="col-md-2 form-group">
+                                    <input type="text" name="ServerName" id="ServerName" class="form-control frmFilter" placeholder="Server Name" />
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    <input type="text" name="ClientInfo" id="ClientInfo" class="form-control frmFilter" placeholder="Client Info" />
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <button type="submit" class="btn btn-primary pull-right" id="btFilter">
+                                        <i class="fa fa-search"></i> @Resource.lblSearch
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                }
+                        <br />
+                    </div>
+                    <p class="pull-right" data-toggle="collapse" data-target="#panel-search" style="cursor:pointer;"  id="call-panel-search"><i class="fa fa-search"></i> @Messege.Search</p>
+
+                    <table id="tbl_log" class="table table-bordered table-striped">
+                        <thead>
+                            <tr role="row">
+                                <th style="width: 5%;">@Resource.lblStt</th>
+                                <th style="width: 10%;">Log Event</th>
+                                <th style="width: 10%;">Sourse</th>
+                                <th style="width: 5%;">Content</th>
+                                <th style="width: 10%;">User Name</th>
+                                <th style="width: 15%;">URL</th>
+                                <th style="width: 10%;">Ip</th>
+                                <th style="width: 15%;">Server Name</th>
+                                <th style="width: 10%;">Client Info</th>
+                                <th style="width: 5%;">Create Day</th>
+                                <th style="width: 5%;"></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+        var sTable;
+        $(document).ready(function () {
+
+            var customRow = [{ "targets": 0 }, { "targets": 5  }
+            ];
+            sTable = initDataTable("#tbl_log", "/Log/AjaxHandler", customRow);
+
+            $('#frmFilter').submit(function (e) {
+                e.preventDefault();
+                sTable.draw();
+            });
+            var detailRows = [];
+            $('#tbl_log tbody').on('click', 'tr td span.expand', function () {
+
+                var id = $(this).data('value');
+                var tr = $(this).closest('tr');
+                var row = sTable.row(tr);
+                var idx = $.inArray(tr.attr('id'), detailRows);
+
+                if (row.child.isShown()) {
+                    tr.removeClass('details');
+                    row.child.hide();
+
+                    // Remove from the 'open' array
+                    detailRows.splice(idx, 1);
+                } else {
+                    tr.addClass('details');
+
+                    row.child(format(id)).show();
+
+                    // Add to the 'open' array
+                    if (idx === -1) {
+                        detailRows.push(tr.attr('id'));
+                    }
+                }
+            });
+            sTable.on('draw', function () {
+                $.each(detailRows, function (i, id) {
+                    $('#' + id + ' td.details-control').trigger('click');
+                });
+            });
+        });
+        function actionClean() {
+            var type = $('#ddl_LogEvent').val();
+            notify.confirm('@Messege.WARNING_CLEAN_LOG', "Warning", 2, clearAll, type);
+        }
+        function calldelete(id) {
+            notify.confirm('@Messege.DELETE_LOG', "Warning", 2, deletesubmit, id);
+        }
+
+        function clearAll(type) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/Log/DeleteAll",
+                datatype: 'json',
+                data: { type: type },
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    sTable.draw();
+                    spinner.close();
+
+                }
+            });
+        }
+
+
+
+        function deletesubmit(id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/Log/delete",
+                datatype: 'json',
+                data: { id: id },
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    sTable.draw();
+                    spinner.close();
+
+                }
+            });
+        }
+        function format(id) {
+            var _str = JSON.stringify(id, undefined, 5);
+            return '<pre>' + _str.replace(",", "<br />") + '</pre>';
+        }
+
+    </script>
+}
+
+

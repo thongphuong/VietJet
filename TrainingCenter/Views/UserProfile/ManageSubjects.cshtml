@@ -1,0 +1,226 @@
+﻿@using DAL.Entities
+@model List<Subject>
+@{
+    ViewBag.Title = "AddSubjects";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.ActiveMenu = "System";
+    ViewBag.ActiveSubMenu = "UserProfile";
+}
+@section headContent{
+    <style type="text/css">
+        #tableSubject thead {
+            display: none;
+        }
+
+        #tableSubject {
+            margin-top: 1em;
+        }
+    </style>
+}
+@section pageTitle {
+    <h1><i class="fa fa-tag"></i>
+        Profile
+                        <small>Manage Subjects of Teacher</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+        <li><a href="/UserProfile"><i class="fa fa-user"></i>Profile</a></li>
+        <li><a href="/UserProfile/Details/@ViewBag.UserId"><i class="fa fa-user"></i>Profile Detail</a></li>
+        <li class="active">Manage Subjects of Teacher</li>
+    </ol>
+}
+
+<input type="hidden" value="@ViewBag.UserId" id="UserId" />
+<div class="row">
+    <div class="col-md-8">
+        <div class="box box-danger">
+            <div class="box-header">
+                <h3 class="box-title">Subjects List</h3>
+                
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="defaultTable" class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 20px">No.</th>
+                            <th>Short Name
+                            </th>
+                            <th>Name
+                            </th>
+                            <th>Name In Vietnamese
+                            </th>
+                            <th style="width: 5px"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="SubjectDict">
+                        @for (int i = 0; i < Model.Count(); i++)
+                        {
+                            <tr  data-id="@Model[i].Subject_Id">
+                                <td></td>
+                                <td>
+                                    @Html.DisplayFor(model => model[i].str_Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => model[i].str_Short_Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => model[i].str_Name_In_Vietnamese)
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-success btn-xs btAddMoreSubject" data-toggle="on" data-id="@Model[i].Subject_Id"><i class="fa fa-arrow-right"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="box box-success">
+            <div class="box-header">
+                <h3 class="box-title">He/She can teach</h3>
+                 <div class="box-tools pull-right" data-toggle="tooltip">
+                    <div class="btn-group" data-toggle="btn-toggle">
+                        @*<button type="button" class="btn btn-default btn-sm"><i class="fa fa-plus"></i></button>*@                        
+                        <button class="btn btn-success " id="btDone">
+                            <i class="fa fa-check"></i>
+                            Done
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+                <table class="table table-striped" id="tableSubject">
+                    <thead>
+                        <tr>
+                            <td style="width:15px"></td>
+                            <td></td>
+                            <td style="width:15px"></td>
+                        </tr>
+                    </thead>
+                    <tbody id="subjectListBody">
+                        @{
+                            var SubjectList = (IEnumerable<TrainingCenter.Models.Subject>)ViewBag.TeachableList;
+                            for (int i = 0; i < SubjectList.Count(); i++)
+                            {                                
+                            <tr  data-id="@SubjectList.ElementAt(i).Subject_Id">
+                                <td style="width: 15px" >@(i + 1)</td>
+                                <td>@SubjectList.ElementAt(i).str_Name</td>
+                                <td style="width: 15px" >
+                                    <button type="button" class="btn btn-danger btn-xs btRemoveSubject" data-toggle="on" data-id="@SubjectList.ElementAt(i).Subject_Id"><i class="fa fa-times"></i></button>
+                                </td>
+                            </tr>                            
+                            }
+                            
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var table = $('#defaultTable')
+            .DataTable(
+            {
+                "bLengthChange": false,
+                "fnDrawCallback": function (oSettings) {
+                    /* Need to redo the counters if filtered or sorted */
+                    if (oSettings.bSorted || oSettings.bFiltered) {
+                        for (var i = 0, iLen = oSettings.aiDisplay.length ; i < iLen ; i++) {
+                            $('td:eq(0)', oSettings.aoData[oSettings.aiDisplay[i]].nTr).html(i + 1);
+                        }
+                    }
+                },
+                "aoColumnDefs": [
+                    { "bSortable": false, "aTargets": [0] }
+                ],
+                "aaSorting": [[1, 'asc']]
+            });
+
+        var tableSub = $('#tableSubject').DataTable({
+            "bFilter": false,
+            "bJQueryUI": true,
+            "sPaginationType": "full_numbers",
+            "bPaginate": false,
+            "bInfo": false,
+            "fnDrawCallback": function (oSettings) {
+                /* Need to redo the counters if filtered or sorted */
+                if (oSettings.bSorted || oSettings.bFiltered) {
+                    for (var i = 0, iLen = oSettings.aiDisplay.length ; i < iLen ; i++) {
+                        $('td:eq(0)', oSettings.aoData[oSettings.aiDisplay[i]].nTr).html(i + 1);
+                    }
+                }
+            },
+            "aoColumnDefs": [
+                { "bSortable": false, "aTargets": [0] }
+            ],
+            "aaSorting": [[1, 'asc']]
+        });
+
+        $(document).on("click", '.btAddMoreSubject', function () {
+            var dataId = $(this).data('id');
+            var theRow = $(this).closest('tr');
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "/UserProfile/AddSubject",
+                dataType: "json",
+                data: { UserId: $('#UserId').val(), SubjectId: dataId },
+                success: function (result) {
+                    if (result.code == "Success") {                        
+                        tableSub.row.add([
+                            "",
+                            result.subjectName,
+                            '<button type="button" class="btn btn-danger btn-xs btRemoveSubject" data-toggle="on" data-id="' + dataId + '"><i class="fa fa-times"></i></button>'                            
+                        ]).draw();                       
+                        table.rows(theRow).remove().draw();
+                    }
+                }
+            });
+        });
+
+
+        $(document).on("click", '.btRemoveSubject', function () {
+            var dataId = $(this).data('id');
+            var theRow = $(this).closest('tr');
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "/UserProfile/RemoveSubject",
+                dataType: "json",
+                data: { UserId: $('#UserId').val(), SubjectId: dataId },
+                success: function (result) {
+                    if (result.code == "Success") {
+                        tableSub.rows(theRow).remove().draw();
+                        table.row.add([
+                            result.subjectId,
+                            result.subjectName,
+                            result.shortName,
+                            result.vietnmeseName,
+                            '<button type="button" class="btn btn-success btn-xs btAddMoreSubject" data-toggle="on" data-id="' + result.subjectId + '"><i class="fa fa-arrow-right"></i></button>'
+                        ]).draw();
+
+
+
+                    }
+                }
+            });
+        });
+    });
+
+    $('#btDone').click(function () {
+        window.location.href = '/UserProfile/Details/' + $('#UserId').val();
+    });
+
+</script>

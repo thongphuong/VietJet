@@ -1,0 +1,170 @@
+﻿@using DAL.Entities
+@model IEnumerable<UserProfile>
+@{
+    ViewBag.Title = "Index";
+    ViewBag.ActiveMenu = "System";
+    ViewBag.ActiveSubMenu = "UserProfile";
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-danger">
+            <div class="box-header">
+                <h3 class="box-title">Account List</h3>
+                <div class="box-tools pull-right" data-toggle="tooltip">
+                    <div class="btn-group" data-toggle="btn-toggle" id="functionMenu">
+                        <button class="btn btn-primary" id="btCreate">
+                            <i class="fa fa-plus"></i>
+                            Create
+                        </button>
+                        <button class="btn btn-success" id="btRefreshPage">
+                            <i class="fa fa-refresh"></i>
+                            Refresh Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="box-body table-responsive">
+                <table id="defaultTable" class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Username
+                            </th>
+                            <th>Fullname
+                            </th>
+                            <th>Email
+                            </th>
+                            <th>Group
+                            </th>
+                            <th>Department
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr data-id="@item.UserId">
+                                <td></td>
+                                <td class="colUsername">
+                                    @Html.DisplayFor(modelItem => item.UserName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.str_Fullname)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.str_Email)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Group_Roles.str_Group_Name)
+                                </td>
+                                <td>
+                                    @(item.Department_Id == null ? "" : item.Department.str_Name)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+</div>
+<div class="modal fade" id="dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $("#btCreate").click(function () {
+        window.location.href = "/UserProfile/Create";
+    });
+
+    $(document).ready(function () {
+
+        var table = $('#defaultTable').DataTable({
+            "bLengthChange": false,
+            "fnDrawCallback": function (oSettings) {
+                /* Need to redo the counters if filtered or sorted */
+                if (oSettings.bSorted || oSettings.bFiltered) {
+                    for (var i = 0, iLen = oSettings.aiDisplay.length ; i < iLen ; i++) {
+                        $('td:eq(0)', oSettings.aoData[oSettings.aiDisplay[i]].nTr).html(i + 1);
+                    }
+                }
+            },
+            "aoColumnDefs": [
+                { "bSortable": false, "aTargets": [0] }
+            ],
+            "aaSorting": [[1, 'asc']]
+        });
+        $('#defaultTable tbody').on('click', 'tr', function () {
+            if (!$(this).hasClass('selected')) {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+                $('#functionMenu').find('#btDelete').remove();
+                $('#functionMenu').find('#btEdit').remove();
+                $('#functionMenu').find('#btDetail').remove();
+                if (typeof $('tr.selected').data("id") != "undefined") {
+                    $('#functionMenu').prepend("<button class='btn btn-danger' id='btDelete'><i class='fa fa-times'></i> Delete</button>"
+                        + "<button class='btn btn-warning' id='btEdit'><i class='fa fa fa-pencil'></i> Edit</button>");
+                }
+            }
+        });
+
+        $(document).on("click", '#btEdit', function () {
+            window.location.href = "/UserProfile/Edit/" + $('#defaultTable .selected').data("id");
+        });
+
+
+
+
+
+        $(document).on("click", '#btDelete', function () {
+            //window.location.href("/UserProfile/Delete/" + $('#defaultTable .selected').data("id"));            
+            setPopUpInform('Confirm Delete',
+                '<p>You are about to delete UserProfile, this procedure is irreversible.</p>'
+                + '<p>Do you want to proceed?</p><p>Group name: <strong>' + $('tr.selected').find('.colUsername').text() + '</strong></p>',
+                'Cancel,Delete');
+            $('#dialog').modal('show');
+
+        });
+
+        $(document).on('click', '#deletePop', function () {
+            var selectedRow = $('tr.selected');
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "/UserProfile/ajaxDelete",
+                dataType: "json",
+                data: { Id: selectedRow.data('id') },
+                success: function (result) {
+                    if (result.code == "Success") {
+                        table.rows(selectedRow).remove().draw();
+                        $('#functionMenu').find('#btDelete').remove();
+                        $('#functionMenu').find('#btEdit').remove();
+                        $('#functionMenu').find('#btDetail').remove();
+                    }
+                    else {
+                        setPopUpInform('Delete Fail',
+                '<p>' + result.message + '</p>',
+                'Close');
+                        setTimeout(function () { $('#dialog').modal('show'); }, 200)
+                        //$('#ShowPopUp').click();
+                    }
+                }
+            });
+        });
+    });
+</script>

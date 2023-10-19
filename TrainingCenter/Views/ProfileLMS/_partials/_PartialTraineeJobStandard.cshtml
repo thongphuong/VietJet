@@ -1,0 +1,263 @@
+﻿@using System.Diagnostics
+@using TMS.Core.Utils
+@model TMS.Core.ViewModels.TraineeHistory.TraineeJobModel
+
+
+<div class="panel-group" id="accordion">
+    @{
+        var count = 0;
+
+
+    }
+    @if (Model.TraineeHistories.Count() > 0)
+    {
+        var subjects_new = Model.TraineeHistories.First().TraineeHistory_Item.OrderBy(a => a.SubjectDetail.Code).ToList();
+        var completed_new = subjects_new.Where(a => a.Status == (int)UtilConstants.StatusTraineeHistory.Completed).ToList();
+        <input id="CheckSubject" type="hidden" value="@(subjects_new.Count() == completed_new.Count() ?"true":"false")" />
+
+        foreach (var jobHistory in Model.TraineeHistories)
+        {
+            count++;
+            //var subjects = jobHistory.JobTitle.Title_Standard.Select(a => a.SubjectDetail);
+
+            var subjects = jobHistory.TraineeHistory_Item.OrderBy(a => a.SubjectDetail.Code).ToList();
+            var trainning = subjects.Where(a => a.Status == (int)UtilConstants.StatusTraineeHistory.Trainning).ToList();
+            var missing = subjects.Where(a => a.Status == (int)UtilConstants.StatusTraineeHistory.Missing).ToList();
+            var completed = subjects.Where(a => a.Status == (int)UtilConstants.StatusTraineeHistory.Completed).ToList();
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="panels.html#collapse@(jobHistory.Id)" aria-expanded="false" class="collapsed">@jobHistory.JobTitle.Name</a>
+                    </h4>
+                </div>
+                <div id="collapse@(jobHistory.Id)" class="panel-collapse @(count == 1 ? "in" : "collapse") " aria-expanded="true">
+                    <div class="panel-body">
+                        @if (Model.Type == (int)UtilConstants.Switch.Horizontal)
+                        {
+                            <!-- #region Hiển thị ngang -->
+                            <div class="panel-body ">
+                                <div class="col-md-3">
+                                    <p>
+                                        Subject Jobtitle - <font color="red">@subjects.Count</font>
+                                    </p>
+                                    <select class="form-control default" multiple="multiple" style="height: 225px;">
+                                        @if (subjects.Any())
+                                        {
+                                            foreach (var item in subjects)
+                                            {
+                                                <option>@(item.SubjectDetail.Code + " - " + item.SubjectDetail.Name)</option>
+                                            }
+                                        }
+                                        @*@foreach (var subject in subjects)
+                                            {
+                                                if (subject.Title_Standard.Any(b => b.Job_Title_Id == jobHistory.Job_Title_Id))
+                                                {
+                                                    <option>@(subject.Code + " - " + subject.Name)</option>
+                                                }
+
+                                            }*@
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <p>
+                                        Training - <font color="red">@trainning.Count</font>
+                                    </p>
+                                    <select class="form-control default" multiple="multiple" style="height: 225px;">
+                                        @if (subjects.Any())
+                                        {
+                                            if (trainning.Any())
+                                            {
+                                                foreach (var item in trainning)
+                                                {
+                                                    <option>@(item.SubjectDetail.Code + " - " + item.SubjectDetail.Name)</option>
+                                                }
+                                            }
+                                        }
+                                        @*@foreach (var subject in subjects)
+                                            {
+                                                if (subject.Title_Standard.Any(b =>
+                                                b.Job_Title_Id == jobHistory.Job_Title_Id &&
+                                                Model.ListSubjectAssign.Contains(b.Subject_Id)/* &&
+                                                !Model.SubjectCompleted.Contains(b.Subject_Id)*/))
+                                                {
+                                                    <option>@(subject.Code + " - " + subject.Name)</option>
+                                                }
+                                            }*@
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <p>
+                                        Completed - <font color="red">@completed.Count</font>
+                                    </p>
+                                    <select class="form-control default" multiple="multiple" style="height: 225px;">
+                                        @if (subjects.Any())
+                                        {
+                                            if (completed.Any())
+                                            {
+                                                foreach (var item in completed)
+                                                {
+                                                    <option>@(item.SubjectDetail.Code + " - " + item.SubjectDetail.Name)</option>
+                                                }
+                                            }
+                                        }
+                                        @*@foreach (var subject in subjects)
+                                            {
+                                                if (subject.Title_Standard.Any(b => b.Job_Title_Id == jobHistory.Job_Title_Id && Model.SubjectCompleted.Contains(b.Subject_Id)))
+                                                {
+                                                    <option>@(subject.Code + " - " + subject.Name)</option>
+                                                }
+                                            }*@
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <p>
+                                        Missing Training - <font color="red"> @missing.Count</font>
+                                    </p>
+                                    <select class="form-control default" multiple="multiple" style="height: 225px;">
+                                        @if (subjects.Any())
+                                        {
+                                            if (missing.Any())
+                                            {
+                                                foreach (var item in missing)
+                                                {
+                                                    <option>@(item.SubjectDetail.Code + " - " + item.SubjectDetail.Name)</option>
+                                                }
+                                            }
+
+
+                                        }
+                                        @*@foreach (var subject in subjects)
+                                            {
+                                                if (subject.Title_Standard.Any(b =>
+                                                b.Job_Title_Id == jobHistory.Job_Title_Id
+                                                && !Model.ListSubjectAssign.Contains(b.Subject_Id)
+                                                /*&& !Model.SubjectCompleted.Contains(b.Subject_Id)*/))
+                                                {
+                                                    <option>@(subject.Code + " - " + subject.Name)</option>
+                                                }
+                                            }*@
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- #endregion -->
+                        }
+                        else
+                        {
+                            <!-- #region Hiển thị dọc -->
+                            <div class="panel-body ">
+                                <div class="col-md-12">
+                                    <p>
+                                        Subject Jobtitle - <font color="red">@subjects.Count</font>
+                                    </p>
+                                    <select class="form-control default" multiple="multiple" style="height: 108px;">
+                                        @if (subjects.Any())
+                                        {
+                                            foreach (var item in subjects)
+                                            {
+                                                <option>@(item.SubjectDetail.Code + " - " + item.SubjectDetail.Name)</option>
+                                            }
+                                        }
+                                        @*@foreach (var subject in subjects)
+                                            {
+                                                if (subject.Title_Standard.Any(b => b.Job_Title_Id == jobHistory.Job_Title_Id))
+                                                {
+                                                    <option>@(subject.Code + " - " + subject.Name)</option>
+                                                }
+
+                                            }*@
+                                    </select>
+                                </div>
+                                <div class="col-md-12">
+                                    <p>
+                                        Training - <font color="red">@trainning.Count</font>
+                                    </p>
+                                    <select class="form-control default" multiple="multiple" style="height: 108px;">
+                                        @if (subjects.Any())
+                                        {
+                                            if (trainning.Any())
+                                            {
+                                                foreach (var item in trainning)
+                                                {
+                                                    <option>@(item.SubjectDetail.Code + " - " + item.SubjectDetail.Name)</option>
+                                                }
+                                            }
+                                        }
+                                        @*@foreach (var subject in subjects)
+                                            {
+                                                if (subject.Title_Standard.Any(b =>
+                                                b.Job_Title_Id == jobHistory.Job_Title_Id &&
+                                                Model.ListSubjectAssign.Contains(b.Subject_Id)/* &&
+                                                !Model.SubjectCompleted.Contains(b.Subject_Id)*/))
+                                                {
+                                                    <option>@(subject.Code + " - " + subject.Name)</option>
+                                                }
+                                            }*@
+                                    </select>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <p>
+                                        Completed - <font color="red">@completed.Count</font>
+                                    </p>
+                                    <select class="form-control default" multiple="multiple" style="height: 108px;">
+                                        @if (subjects.Any())
+                                        {
+                                            if (completed.Any())
+                                            {
+                                                foreach (var item in completed)
+                                                {
+                                                    <option>@(item.SubjectDetail.Code + " - " + item.SubjectDetail.Name)</option>
+                                                }
+                                            }
+                                        }
+                                        @*@foreach (var subject in subjects)
+                                            {
+                                                if (subject.Title_Standard.Any(b => b.Job_Title_Id == jobHistory.Job_Title_Id && Model.SubjectCompleted.Contains(b.Subject_Id)))
+                                                {
+                                                    <option>@(subject.Code + " - " + subject.Name)</option>
+                                                }
+                                            }*@
+                                    </select>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <p>
+                                        Missing Training - <font color="red"> @missing.Count</font>
+                                    </p>
+                                    <select class="form-control default" multiple="multiple" style="height: 108px;">
+                                        @if (subjects.Any())
+                                        {
+                                            if (missing.Any())
+                                            {
+                                                foreach (var item in missing)
+                                                {
+                                                    <option>@(item.SubjectDetail.Code + " - " + item.SubjectDetail.Name)</option>
+                                                }
+                                            }
+
+
+                                        }
+                                        @*@foreach (var subject in subjects)
+                                            {
+                                                if (subject.Title_Standard.Any(b =>
+                                                b.Job_Title_Id == jobHistory.Job_Title_Id
+                                                && !Model.ListSubjectAssign.Contains(b.Subject_Id)
+                                                /*&& !Model.SubjectCompleted.Contains(b.Subject_Id)*/))
+                                                {
+                                                    <option>@(subject.Code + " - " + subject.Name)</option>
+                                                }
+                                            }*@
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- #endregion -->
+                        }
+
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

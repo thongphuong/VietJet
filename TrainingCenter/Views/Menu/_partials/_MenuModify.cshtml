@@ -1,0 +1,72 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.ViewModel.RoleMenus.MenuViewModel
+<div class="modal fade" id="department-modify" role="dialog">
+    <div class="modal-dialog modal-lg">
+        @using (Html.BeginForm("Schedule", "Menu", FormMethod.Post))
+        {
+            <input type="hidden" name="Id" value="@Model.Id" />
+            <div class="modal-content">
+                <div class="modal-header panel">
+                    <div class="panel-heading list-panel-heading">
+                        <h5 class="modal-title panel-title list-panel-title" id="modal-header">@(string.IsNullOrEmpty(Model.MenuTitle) ? @Resource.lblCreateDepartment : Model.MenuTitle)</h5>
+                    </div>
+                </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label class="col-md-3">Function</label>
+                        <div class="col-md-9">
+                            @Html.DropDownListFor(a => a.Function, new SelectList(Model.ListFunctions, "Key", "Value", Model.Function), "--- function ---", new { @class = "form-control", @name = "Function" })
+                            @Html.ValidationMessageFor(a => a.Function, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label class="col-md-3">Parent</label>
+                        <div class="col-md-9">
+                            @Html.DropDownListFor(a => a.ParentId, new SelectList(Model.Menu, "Key", "Value", Model.ParentId), "--- " + @Resource.lblParentId + " ---", new {@class = "form-control", @name = "Function"})
+                            @Html.ValidationMessageFor(a => a.ParentId, null, new {@class = "text-danger"})
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 form-group">
+                        <label class="col-md-3">@Resource.lblName</label>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(a => a.MenuTitle, new {@class = "form-control", @name = "MenuTitle", @id = "MenuTitle"})
+                            @Html.ValidationMessageFor(a => a.MenuTitle, null, new {@class = "text-danger"})
+                        </div>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label class="col-md-3"> Icon </label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                @Html.TextBoxFor(a => a.Icon, new {@class = "form-control", @name = "Icon", @onchange = "changeIcon()"})
+                                @Html.ValidationMessageFor(a => a.Icon, null, new {@class = "text-danger"})
+                                <span class="input-group-addon"><i id="icon-preview" class="@(Model.Icon)"></i></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label class="col-md-3">ShowOrder</label>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(a => a.MenuIndex, new {@class = "form-control", @name = "MenuIndex"})
+                            @Html.ValidationMessageFor(a => a.MenuIndex, null, new {@class = "text-danger"})
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="modal-footer" id="Modal_Footer">
+                    <input type="submit" class="btn btn-primary" id="submit" value=" @Resource.lblSave"/>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resource.lblClose</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    function changeIcon() {
+        var icon = $('#menu-icon').val();
+        $('#icon-preview').attr('class', icon);
+    }
+</script>

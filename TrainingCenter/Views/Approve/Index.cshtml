@@ -1,0 +1,444 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@model TMS.Core.ViewModels.Approve.ApproveIndex
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-braille"></i> @Resource.lblApproval </h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblSubjectManagement</li>
+                <li class="active">@Resource.lblApproval</li>
+            </ol>
+        </div>
+    </div>
+}
+@*<style>
+        span.hidden-xs {
+            display: none !important;
+        }
+    </style>*@
+<style>
+    @@media (min-width: 240px) and (max-width: 600px) and (orientation: portrait) {
+        .bs-wizard {
+            display: flex;
+            flex-direction: column;
+        }
+
+            .bs-wizard > .bs-wizard-step {
+                flex: 1 1 !important;
+            }
+
+                .bs-wizard > .bs-wizard-step .bs-wizard-stepnum {
+                    text-align: left;
+                }
+
+                .bs-wizard > .bs-wizard-step:first-child > .progress {
+                    left: 0% !important;
+                    width: calc(100% - 40px) !important;
+                }
+
+                .bs-wizard > .bs-wizard-step:last-child > .progress {
+                    width: calc(100% - 40px) !important;
+                }
+
+                .bs-wizard > .bs-wizard-step > .progress {
+                    left: 0%;
+                    width: calc(100% - 40px);
+                    margin-left: 40px;
+                }
+
+                .bs-wizard > .bs-wizard-step > .bs-wizard-dot {
+                    left: 0% !important;
+                    top: 43px !important;
+                    margin-left: 0px !important;
+                }
+
+            .bs-wizard p {
+                right: 0% !important;
+                top: 22% !important;
+                left: auto !important;
+            }
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel  list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title"><i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> @Resource.lblProcessStepsCourse</h1>
+            </div>
+            <div class="panel-body">
+                <div id="panel-search" class="collapse1 panel">
+                    <form action="javascript:void(0)" id="frmFilter">
+                        <div class="panel-body">
+                            <div class="row col-md-12">
+                                <div class="row" style="margin-top:10px">
+                                    <div class="col-md-12">
+                                        <div class="col-md-4">
+                                            <label>@Resource.lblCourseCode</label>
+                                            <input type="text" name="fCode" id="fCode" class="form-control frmFilter" placeholder="@Resource.lblCode" value="@(string.IsNullOrEmpty(HttpContext.Current.Request["code"]) ? string.Empty: HttpContext.Current.Request["code"])" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label>@Resource.lblCourseName</label>
+                                            <input type="text" name="fName" id="fName" class="form-control frmFilter" placeholder="@Resource.lblCourseName" @(string.IsNullOrEmpty(HttpContext.Current.Request["fName"]) ? string.Empty : HttpContext.Current.Request["fName"]) />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:10px">
+                                    <div class="col-md-12">
+                                        <div class="col-md-4">
+                                            <label>@Resource.lblCourseType</label>
+                                            <select class="form-control frmFilter" data-placeholder="-- @Messege.lblCourseType --" id="CourseType" name="CourseType" multiple="multiple">
+                                                <option></option>
+                                                @if (Model.Types != null)
+                                                {
+                                                    foreach (var item in Model.Types)
+                                                    {
+                                                        <option value="@item.Key" @(!string.IsNullOrEmpty(HttpContext.Current.Request["coursetype"]) && HttpContext.Current.Request["coursetype"].Contains(item.Key.ToString()) ? "selected" : "")>@item.Value</option>
+                                                    }
+                                                }
+                                            </select>
+                                            @*@Html.DropDownList("CourseType", (SelectList)ViewBag.CourseTypeList, "", new { @class = "form-control frmFilter", data_placeholder = "--"+ Messege.lblCourseType +"--", id = "CourseType", multiple = "true" })*@
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>@Resource.lblStatus</label>
+                                            <select class="form-control frmFilter" data-placeholder="-- @Resource.lblStatus --" id="StatusList" name="StatusList">
+                                                @if (!string.IsNullOrEmpty(HttpContext.Current.Request["statuslist"]))
+                                                {
+                                                    if (HttpContext.Current.Request["statuslist"] == "-1")
+                                                    {
+                                                        <option value="" selected></option>
+                                                        if (Model.Status != null)
+                                                        {
+                                                            foreach (var item in Model.Status)
+                                                            {
+                                                                <option value="@item.Key">@item.Value</option>
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if (Model.Status != null)
+                                                        {
+                                                            foreach (var item in Model.Status)
+                                                            {
+                                                                <option value="@item.Key" @(HttpContext.Current.Request["statuslist"] == item.Key.ToString() ? "selected" : "")>@item.Value</option>
+                                                            }
+                                                        }
+                                                    }
+
+                                                }
+                                                else if (string.IsNullOrEmpty(HttpContext.Current.Request["statuslist"]))
+                                                {
+                                                    if (Model.Status != null)
+                                                    {
+                                                        foreach (var item in Model.Status)
+                                                        {
+                                                            <option value="@item.Key" @(item.Key == (int)UtilConstants.EStatus.Pending ? "selected" : "")>@item.Value</option>
+                                                        }
+                                                    }
+                                                }
+
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1 pull-right">
+                                            <label>&nbsp;</label>
+                                            <button type="submit" id="btFilter" class="btn btn-primary pull-right legitRipple" style="width: 100px;"><i class="fa fa-search"></i> @Resource.lblSearch</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <br />
+                </div>
+                @*<div class="col-lg-12" style="z-index:999">
+                    <p class="pull-right" data-toggle="collapse" data-target="#panel-search" style="cursor:pointer;" id="call-panel-search"><i class="fa fa-search"></i> @Messege.Search</p>
+                </div>*@
+
+                <div class="col-lg-12">
+                    <ul class="list-inline text-center">
+                        <li>
+                            <h5><i class="zmdi zmdi-circle" style="color: #8B9999;"></i> @Resource.lblPending</h5>
+                        </li>
+                        <li>
+                            <h5><i class="zmdi zmdi-circle" style="color: blueviolet;"></i> @Resource.lblCancelRequest</h5>
+                        </li>
+                        <li>
+                            <h5><i class="zmdi zmdi-circle" style="color: #ff9800;"></i> @Resource.lblEdit</h5>
+                        </li>
+                        <li>
+                            <h5><i class="zmdi zmdi-circle" style="color: #e51c23;"></i> @Resource.lblReject</h5>
+                        </li>
+                        <li>
+                            <h5><i class="zmdi zmdi-circle" style="color: #2196f3;"></i> @Resource.lblProcessing</h5>
+                        </li>
+                        <li>
+                            <h5><i class="zmdi zmdi-circle" style="color: #4caf50;"></i> @Resource.lblApproval</h5>
+                        </li>
+                    </ul>
+                </div>
+
+                <table class="table table-bordered table-striped" id="ListApproval">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%;">@Resource.lblStt</th>
+                            <th class="text-brown">@Messege.lblProcessSteps</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>@Messege.WARNING_CANCEL_APPROVE</p>
+                <label>Feedback</label>
+                <textarea class="form-control" name="txt_feedback" id="txt_feedback" rows="5"></textarea>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div id="messageout">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="Modal_Footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModalCancel" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>You are sure to cancel request.</p>
+                <label>Feedback</label>
+                <textarea class="form-control" name="txt_feedbackcancel" id="txt_feedbackcancel" rows="5"></textarea>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div id="messageout">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="Modal_FooterCancel">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="hidden">
+    <div style="float: right; width: 50%;">
+        <table class="table table-bordered table-striped" id="MyApproval2ss">
+            <thead>
+                <tr>
+                    <th>@Resource.lblStt</th>
+                    <th class="text-brown">@Resource.lblSubject</th>
+                    <th>@Resource.lblFromDate - @Resource.lblToDate</th>
+                    @*<th>@Resource.lblRequest_Date</th>*@
+                    <th>@Resource.lblRemark</th>
+                    <th>@Resource.lblActions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        var $dataTable;
+        var sSTable;
+        $(document).ready(function () {
+            formatDatetimepicker('.datepicker');
+
+            $("#btFilter").click(function () {
+                $dataTable.draw();
+                //e.preventDefault();
+            });
+            $dataTable = $("#ListApproval").DataTable({
+
+                "responsive:": true,
+                 "searching": false,
+                "columnDefs": [{
+                    "targets": 0,
+                     "className": "text-center",
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {
+                    "targets": [],
+                    "visible": false
+                }],
+                "aaSorting": [],
+                "bServerSide": true,
+                "sAjaxSource": "/Approve/AjaxHandlerList",
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                    aoData.push({ "name": "fCode", "value": $('#fCode').val() },
+                                { "name": "fName", "value": $('#fName').val() },
+                                { "name": "CourseType", "value": $('#CourseType').val() },
+                                { "name": "StatusList", "value": $('#StatusList').val() });
+                    },
+            });
+
+
+
+            var detailRows = [];
+            $('#ListApproval tbody').on('click', 'tr td span.expand', function () {
+                //debugger;
+                var id = $(this).data('value');
+                var tr = $(this).closest('tr');
+                var row = $dataTable.row(tr);
+                var idx = $.inArray(tr.attr('id'), detailRows);
+                if (row.child.isShown()) {
+                    tr.removeClass('details');
+                    row.child.hide();
+                    detailRows.splice(idx, 1);
+                }
+                else {
+                    tr.addClass('details');
+                    row.child(format(id)).show();
+                    var tempRamdom = Math.floor((Math.random() * 1000) + 1);
+
+                    var dsasda = $("#ListApproval td #MyApproval2ss");
+
+                    dsasda.attr("id", "MyApproval2ss" + tempRamdom);
+
+
+                    var sTable = $("#MyApproval2ss"+tempRamdom).dataTable({
+                         //"destroy": true,
+                        "responsive:": true,
+                        "paging": 10,
+                "searching": false,
+                "columnDefs": [{
+                    "targets": 0,
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                }],
+                "aaSorting": [],
+                "bServerSide": true,
+                "sAjaxSource": "/Approve/AjaxHandlerlistsubject",
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                   aoData.push(
+                       { "name": "ddl_subject", "value": id },
+                       { "name": "fCode", "value": $('#fCode').val() },
+                       { "name": "fName", "value": $('#fName').val() },
+                       { "name": "CourseType", "value": $('#CourseType').val() },
+                       { "name": "StatusList", "value": $('#StatusList').val() }
+                    );
+                }
+            });
+                    if (idx === -1) {
+                        detailRows.push(tr.attr('id'));
+                    }
+
+
+
+                }
+            });
+            $(".line_350").addClass("active");
+        });
+        function format(id) {
+            var table = $("#MyApproval2ss").clone();
+            //sSTable = table.DataTable({
+            //    "responsive:": true,
+            //    "searching": false,
+            //    "pageLength": 9000000,
+            //    "columnDefs": [{
+            //        "targets": 0,
+            //        "className": "text-center",
+            //        "data": null,
+            //        render: function (data, type, row, meta) {
+            //            return meta.row + meta.settings._iDisplayStart + 1;
+            //        }
+            //    }],
+            //    "aaSorting": [],
+            //    "bServerSide": true,
+            //    "sAjaxSource": "/Approve/AjaxHandlerlistsubject",
+            //    "bProcessing": true,
+            //    "fnServerParams": function (aoData) {
+            //        aoData.push(
+            //            { "name": "ddl_subject", "value": id }
+            //        );
+            //    }
+            //});
+            return table;
+        }
+
+        //Assign
+        function RemoveApprove(id, type) {
+            $("#myModal").modal("show");
+            $('#txt_feedback').val("");
+            $("#Modal_Footer").empty();
+            $("#Modal_Footer").append(" <a href='javascript:void(0)' onclick='submitRemoveApproval(" + id + "," + type + ")' class='btn btn-primary'>@Resource.lblCANCELAPPROVE</a><button type='button' class='btn btn-primary' data-dismiss='modal'>Close</button>");
+        }
+        function RemoveApproveSubject(courseid, type,courseDetailId) {
+            $("#myModal").modal("show");
+            $('#txt_feedback').val("");
+            $("#Modal_Footer").empty();
+            $("#Modal_Footer").append(" <a href='javascript:void(0)' onclick='submitRemoveApprovalSubject(" + courseid + "," + type + "," + courseDetailId + ")' class='btn btn-primary'>@Resource.lblCANCELAPPROVE</a><button type='button' class='btn btn-primary' data-dismiss='modal'>Close</button>");
+        }
+        function submitRemoveApprovalSubject(courseid, type, courseDetailId) {
+            spinner.open();
+            var feedback = $('#txt_feedback').val();
+            $.ajax({
+                type: 'POST',
+                url: "/Approve/RemoveApprovalSubject",
+                datatype: 'json',
+                data: { courseid: courseid, type: type, courseDetailId: courseDetailId, feedback: feedback },
+                success: function (data) {
+                    if (data.result) {
+                        $dataTable.draw();
+                        format(courseid);
+                        notify.alert(data.message, 'success', TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    $("#myModal").modal("hide");
+                    $("#myModalCancel").modal("hide");
+
+                    spinner.close();
+                }
+            });
+        }
+
+        function submitRemoveApproval(id, type) {
+            spinner.open();
+            var feedback = $('#txt_feedback').val();
+            $.ajax({
+                type: 'POST',
+                url: "/Approve/RemoveApproval",
+                datatype: 'json',
+                data: { id: id, type: type, feedback: feedback },
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, 'success', TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    $("#myModal").modal("hide");
+                    $("#myModalCancel").modal("hide");
+
+                    $dataTable.draw();
+                    spinner.close();
+                }
+            });
+        }
+    </script>
+}

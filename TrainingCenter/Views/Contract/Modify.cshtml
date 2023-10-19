@@ -1,0 +1,233 @@
+﻿@using TMS.Core.Utils
+@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Contracts.ContractModels
+@{
+    ViewBag.Title = "Modify";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fab fa-keycdn"></i> Contract Management - Contract - @(!Model.Id.HasValue ? "Create" : "Edit")</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li> Contract Management</li>
+                <li class="active">@(!Model.Id.HasValue ? "Create" : "Edit")</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="col-md-12">
+    <div class="panel list-panel" id="list-panel">
+        <div class="panel-heading list-panel-heading">
+            <h1 class="panel-title list-panel-title">@(!Model.Id.HasValue ? "Create" : "Edit")</h1>
+        </div>
+        <div class="panel-body">
+            @using (Html.BeginForm("Modify", "Contract", FormMethod.Post, new { @class = "form-horizontal bordered-row", id = "createform" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.Id)
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>Contractor </label>
+                            </div>
+                            <div class="col-md-8">
+                                @*@Html.DropDownList("Contractor", (SelectList)ViewBag.Contractor, "", new { @class = "form-control", data_placeholder = "--Contractor--" })*@
+                                @*@Html.DropDownListFor(m => m.ContractorID, new SelectList(Model.ContractorList, "Key", "Value", Model.ContractorID), new Dictionary<string, object> { { "class", "form-control" }, { "data-placeholder", "--Contractor--" } })*@
+                                <select class="form-control" name="Contractor">
+                                    <option value="-1">-- Contractor --</option>
+                                    @foreach (var item in Model.ContractorList)
+                                    {
+                                        <option value="@item.Key">@item.Value</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>Code <span class="text-danger">(*)</span></label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" id="str_Code" name="str_Code" value="@Model.Code" data-parsley-required-message="Required Fields" required class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>Contract no <span class="text-danger">(*)</span></label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="str_Contractno" value="@Model.ContractNO" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>Description </label><span class="text-danger">(*)</span>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="str_Description" value="@Model.Description" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>Sign Date <span class="text-danger">(*)</span></label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="dtm_Signdate" value="@(Model.SignDate != null ? Model.SignDate.Value.ToString("dd/MM/yyyy"): "")" class="form-control date-picker">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>Expire Date <span class="text-danger">(*)</span></label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="dtm_Expiredate" value="@(Model.Expiredate != null ? Model.Expiredate.Value.ToString("dd/MM/yyyy"): "")" class="form-control date-picker">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>Note<span class="text-danger">(*)</span></label>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea name="str_Note" value="@Model.Note" class="form-control" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>Price<span class="text-danger">(*)</span></label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="mon_Price" value="@Model.Price" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>Status <span class="text-danger">(*)</span></label>
+                            </div>
+                            <div class="col-md-8">
+                                @*@Html.DropDownList("Status", (SelectList)ViewBag.Status, "", new { @class = "form-control", data_placeholder = "--Status--" })*@
+                                @*@Html.DropDownListFor(m => m.StatusID, new SelectList(Model.StatusList, "Key", "Value", Model.StatusID), new Dictionary<string, object> { { "class", "form-control" }, { "data-placeholder", "--Status--" } })*@
+                                <select class="form-control" name="Status">
+                                    <option value="-1">-- Status --</option>
+                                    @foreach (var item in Model.StatusList)
+                                    {
+                                        <option value="@item.Key">@item.Value</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>Type <span class="text-danger">(*)</span></label>
+                            </div>
+                            <div class="col-md-8">
+                                @*@Html.DropDownList("Type", (SelectList)ViewBag.Type, "", new { @class = "form-control", data_placeholder = "--Type--" })*@
+                                @*@Html.DropDownListFor(m => m.TypeID, new SelectList(Model.TypeList, "Key", "Value", Model.TypeID), new Dictionary<string, object> { { "class", "form-control" }, { "data-placeholder", "--Type--" } })*@
+                                <select class="form-control" name="Type">
+                                    <option value="-1">-- Type --</option>
+                                    @foreach (var item in Model.TypeList)
+                                    {
+                                        <option value="@item.Key">@item.Value</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>currency <span class="text-danger">(*)</span></label>
+                            </div>
+                            <div class="col-md-8">
+                                @Html.DropDownList("currency", new SelectList(UtilConstants.CurrencyDictionary, "Key", "Value", Model.Currency), new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="row">
+                <div class="action-form text-right">
+                    @{
+                        if (User.IsInRole("/Contract/Modify"))
+                        {
+                            <a href="javascript:void(0)" class="btn btn-primary  legitRipple" id="submit" onclick="submit()"><i class="fa fa-floppy-o" aria-hidden="true"></i> @Resource.lblSave</a>
+                            <a onclick=" goBack() " class="btn  btn-default legitRipple"><i class="fa fa-sign-out" aria-hidden="true"></i> @Resource.lblBack</a>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.date-picker').datetimepicker({
+                format: 'DD/MM/YYYY'
+            });
+        });
+        function submit() {
+            spinner.open();
+            var form = $("#createform").serialize();
+            $.ajax({
+                type: 'POST',
+                url: "/Contract/Modify",
+                datatype: 'json',
+                data: form,
+                success: function (data) {
+                    if (data.result) {
+                        var sTable = $("#Subject").dataTable();
+                        sTable.fnDraw();
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                    } else {
+                         notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                },
+                complete: function () {
+                spinner.close();
+                }
+            });
+        }
+    </script>
+}
+
+
+
+

@@ -1,0 +1,803 @@
+﻿@using TMS.Core.App_GlobalResources;
+@using TMS.Core.Utils
+@using TMS.Core.ViewModels.Common
+@{
+    var staticData = TempData[UtilConstants.NotifyMessageName];
+    var staticMessage = (AjaxResponseViewModel)staticData;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="-1" />
+    @*<meta name="sso_smsc_apikey" content="bd629ce2de47436e3a9cdd2673e97b17" />*@
+    <title>Training Management System</title>
+    @Styles.Render("~/bundles/corecss")
+
+    <style>
+        body {
+            min-height: 100%;
+            /*background: #e5e5e5 url("/Content/img/pattern01.png");*/
+            background-color: #fafafa;
+            color: #666;
+            position: relative;
+            padding: 0;
+            margin: 0 !important;
+        }
+
+        span .label {
+            margin-left: 5px;
+        }
+
+        .label {
+            border-radius: 0px !important;
+        }
+
+        .btnIcon_blue {
+            font-size: 23px;
+            /*background-color: blue;*/
+            color: #666;
+            padding: 3px;
+            /*margin-right: 1px;
+            margin-left: 1px;*/
+        }
+
+        .btnIcon_green {
+            font-size: 23px;
+            /*background-color: green;*/
+            color: forestgreen;
+            padding: 3px;
+            /*margin-right: 1px;
+            margin-left: 1px;*/
+        }
+
+        .btnIcon_red {
+            font-size: 23px;
+            /*background-color: red;*/
+            color: #e55b5b;
+            padding: 3px;
+            /*margin-right: 1px;
+            margin-left: 1px;*/
+        }
+
+        .btnIcon_gray {
+            font-size: 23px;
+            /*background-color: gray;*/
+            color: #666;
+            padding: 3px;
+            /*margin-right: 1px;
+            margin-left: 1px;*/
+        }
+
+        .btnIcon_orange {
+            font-size: 23px;
+            /*background-color: orange;*/
+            color: orange;
+            padding: 3px;
+            /*margin-right: 1px;
+            margin-left: 1px;*/
+        }
+
+        .btnIcon_darkorchid {
+            font-size: 23px;
+            /*background-color: darkorchid;*/
+            color: darkorchid;
+            padding: 3px;
+            /*margin-right: 1px;
+            margin-left: 1px;*/
+        }
+
+        .btnIcon_coral {
+            font-size: 23px;
+            /*background-color: coral;*/
+            color: coral;
+            padding: 3px;
+            /*margin-right: 1px;
+            margin-left: 1px;*/
+        }
+
+        .btnIcon_darkturquoise {
+            font-size: 23px;
+            /*background-color: darkturquoise;*/
+            color: darkturquoise;
+            padding: 3px;
+            /*margin-right: 1px;
+            margin-left: 1px;*/
+        }
+
+        table.dataTable tbody td {
+            word-break: break-word;
+            vertical-align: top;
+        }
+
+        table.dataTable {
+            border-collapse: collapse !important;
+            border: 1px solid #2196F3;
+        }
+
+        table tr:nth-child(even) {
+            background: #ecf0f1 !important;
+        }
+
+        .classHelp {
+            float: right !important;
+            font-weight: bold;
+            font-size: 15px;
+            color: blue;
+        }
+
+        .page-header {
+            /*font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            margin-top: 40px;*/
+            padding-bottom: 9px;
+            margin: 40px 0 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .breadcrumb {
+            font-size: 14px;
+            margin-bottom: 11PX;
+            margin-top: -15px;
+        }
+
+        #title-header {
+            font-weight: bold;
+        }
+        /*#footer {
+            border-top: 1px solid #0882A5;
+        }
+        .side-nav-white > ul > li.active > a, .li_a_active {
+            font-weight: bold !important;
+            background: #d8d8d8 !important;
+            color: #000 !important;
+        }*/
+        .navbar-top-links .dropdown-search, .navbar-top-links .dropdown-messages, .navbar-top-links .dropdown-tasks, .navbar-top-links .dropdown-alerts {
+            max-width: 365px;
+            width: 365px;
+        }
+
+        .navbar-top-links .dropdown-menu li a {
+            padding: 10px 15px;
+            min-height: 0;
+        }
+    </style>
+
+</head>
+<body @*onbeforeunload="return TurnOff()"*@>
+
+    <div id="wrapper">
+        <header class="navbar navbar-white navbar-fixed-top bg-red-vietjet color-yellow-vietjet">
+
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="zmdi zmdi-view-headline zmdi-hc-2x"></span>
+                </button>
+                <a class="navbar-brand bg-red-vietjet" href="/Home/Index" title="Training Management System" style="background: #df3333;">
+                    <img src="@ViewBag.PrivateLogo" />
+                </a>
+            </div>
+
+            <nav>
+
+                <ul class="nav navbar-top-links navbar-left  hidden-xs">
+
+                    <li>
+                        <h3 class="text-center font-vietjet-black color-yellow-vietjet" id="title-header">@Messege.TRAINING_MANAGEMENT_SYSTEM</h3>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="toggle-sidebar hvr-underline-from-center" title="Show/Hide Sidebar">
+                            <i class="zmdi color-yellow-vietjet fas fa-bars"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="fullscreen hvr-underline-from-center" title="Full Screen">
+                            <i class="zmdi color-yellow-vietjet fas fa-expand"></i>
+                        </a>
+                    </li>
+
+                </ul>
+
+                <ul class="nav navbar-top-links navbar-right">
+                    <div>
+                        <li class="dropdown">
+                            @*@{
+                                    HttpCookie cookie = HttpContext.Current.Request.Cookies["language"];
+                                    if (cookie.Value == "vi")
+                                    {
+                                        <a class="dropdown-toggle hvr-underline-from-center " style="display: none" href="@Url.Action("ChangeLanguage", "ChangeLanguage", new {culture = "vi"})">
+                                            <img src="~/Content/Images/flag_vietnam.png" Width="35" Height="20"/>
+                                        </a>
+                                        <a class="dropdown-toggle hvr-underline-from-center" href="@Url.Action("ChangeLanguage", "ChangeLanguage", new {culture = "en"})">
+                                            <img src="~/Content/Images/flag_usa.png" Width="35" Height="20"/>
+                                        </a>
+                                    }
+                                    if (cookie.Value == "en")
+                                    {
+                                        <a class="dropdown-toggle hvr-underline-from-center" href="@Url.Action("ChangeLanguage", "ChangeLanguage", new {culture = "vi"})">
+                                            <img src="~/Content/Images/flag_vietnam.png" Width="35" Height="20"/>
+                                        </a>
+                                        <a class="dropdown-toggle hvr-underline-from-center" style="display: none" href="@Url.Action("ChangeLanguage", "ChangeLanguage", new {culture = "en"})">
+                                            <img src="~/Content/Images/flag_usa.png" Width="35" Height="20"/>
+                                        </a>
+                                    }
+                                }*@
+                            <style type="text/css">
+                                .navbar-top-links .dropdown-menu li a {
+                                    padding: 25px 15px;
+                                    min-height: 0;
+                                }
+
+                                .active2 {
+                                    background: #eee;
+                                    color: #000 !important;
+                                }
+                            </style>
+                            <a class="dropdown-toggle hvr-underline-from-center" data-toggle="dropdown" href="javascript:void(0);" title="Messages" id="viewmessenge" onclick="viewmessengeclick()">
+                                <i class="him-icon zmdi zmdi-notifications-active color-yellow-vietjet"></i>
+                                <span class="him-counts m-green" id="text_count_mess">@ViewBag.CountNotification</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-messages animated fadeIn">
+                                <li>
+                                    <div onscroll="scrollMessage(this)" class="list-group" style="overflow-x: hidden; overflow-y: scroll; height: 365px; text-align: left;" id="messagesTable">
+                                        <div id="loading-notification1" style=" width: 100%; text-align: center; padding: 30px; "> <img src="/Content/assets/img/loadingAnimation.gif" alt="Loading..."> </div>
+
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                                <a href="javascript:void(0);" onclick=" MarkAllasRead(); Reload(); " style="color: blue">@Resource.lblMarkAllAsRead</a>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <a href="~/Home/Notification" style="color: blue;">View @Resource.lblAll</a>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- #region Task Schedule-->
+                        @*<li class="dropdown">
+                                <a class="dropdown-toggle hvr-underline-from-center " data-toggle="dropdown" href="javascript:void(0);" title="Synchronized" id="cronicon">
+                                </a>
+
+                                <ul class="list-group dropdown-menu dropdown-messages animated fadeIn text-left" style="overflow-x: hidden; overflow-y: scroll; height: 365px; " id="cronstatus">
+
+
+                                </ul>
+
+                            </li>*@
+                        <!-- #endregion-->
+                    </div>
+                </ul>
+            </nav>
+        </header>
+
+        @Html.Partial("_MenuPartial")
+        <main>
+            <div id="page-wrapper">
+                @RenderSection("breadcrumb", false)
+                @if (staticMessage != null)
+                {
+                    <div class="alert @(staticMessage.result ? "alert-info" : "alert-danger")" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        @staticMessage.message
+                    </div>
+                }
+                <div class="row">
+                    <div class="col-md-12 card card-block">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div class="modal fade" id="myModalCancelRequest" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>@Messege.WARNING_CANCEL_APPROVE</p>
+                    <label>Feedback</label>
+                    <textarea class="form-control" name="txt_feedback" id="txt_feedback" rows="5"></textarea>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-12">
+                            <div id="messageout">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="Modal_Footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="footer">Copyright © <a href="#" target="_blank" data-toggle="tooltip" title="Vietjet Air">Vietjet Air</a></footer>
+
+    @Html.Partial("PartialView/_PartialModal")
+
+    @Scripts.Render("~/bundles/corejs")
+
+    <script type="text/javascript">
+        var pageSize = 5;
+        var pageIndex = 0;
+        var processing;
+        var pageSize2 = 5;
+        var pageIndex2 = 0;
+        var processing2;
+
+        Shared.Shared_layout();
+        //document.addEventListener('touchstart', handler, { passive: true });
+
+        $(document).ajaxError(function (e, xhr) {
+            if (xhr.status == 302) {
+                var response = JSON.parse(xhr.responseText);
+                notify.alert('@Messege.TIMEOUT_SESSION',
+                    'ERROR',
+                    TITLE_STATUS_DANGER);
+                setTimeout(function () {
+                    window.location = response.LogOnUrl;
+                },
+                    3000);
+            }
+        });
+        // $.fn.dataTable.ext.errMode = 'throw';
+
+        //$(document).ready(function () {
+        //    setInterval("CheckSession()", 600000)//600000);
+        //     //var count_total = $('#hd_count_mess').val();
+        //     //       if (count_total > 0) {
+        //     //           $('#text_count_mess').empty().append(count_total);
+        //     //       } else {
+        //     //           $('#text_count_mess').hide();
+        //     //       }
+        //   // GetMessagesScrollCount2();
+
+
+        //});
+
+        function viewmessengeclick() {
+            GetMessagesScrollCount();
+        }
+
+        function scrollMessage(e) {
+            if (processing)
+                return false;
+            if (e.scrollTop >= $(e)[0].scrollHeight - 1200 && !processing) {
+                processing = true;
+                GetMessagesScroll();
+            }
+        }
+        function scrollMessage2(e) {
+            if (processing2)
+                return false;
+            if (e.scrollTop >= $(e)[0].scrollHeight - 800 && !processing2) {
+                processing2 = true;
+                GetMessagesScroll2();
+            }
+        }
+
+        function GetMessagesScrollCount() {
+
+            var model = $('#messagesTable');
+            $.ajax({
+                url: '/home/GetMessages',
+                type: 'POST',
+                data: { pageIndex: pageIndex, pageSize: pageSize },
+                success: function (result) {
+                    if (result != null) {
+                        model.append(result);
+                        pageIndex++;
+                        processing = false;
+                    }
+                },
+                complete: function () {
+                    $('#loading-notification1').hide();
+                }
+            });
+        }
+        function GetMessagesScrollCount2() {
+            var model = $('#messagesTable2');
+            $.ajax({
+                url: '/home/GetMessages',
+                type: 'POST',
+                data: { pageIndex: pageIndex2, pageSize: pageSize2 },
+                success: function (result) {
+                    if (result != null) {
+                        model.append(result);
+                        pageIndex2++;
+                        processing2 = false;
+                    }
+                },
+                complete: function () {
+                     $('#loading-notification2').hide();
+                    var count = $('#hd_count_mess2').val();
+                }
+            });
+        }
+        function GetMessagesScroll() {
+            var model = $('#messagesTable');
+            $.ajax({
+                url: '/home/GetMessages',
+                type: 'POST',
+                data: { pageIndex: pageIndex, pageSize: pageSize },
+                success: function (result) {
+
+                    if (result != null) {
+                        model.append(result);
+                        pageIndex++;
+                        processing = false;
+                    }
+                }
+            });
+        }
+        function GetMessagesScroll2() {
+            var model = $('#messagesTable2');
+            $.ajax({
+                url: '/home/GetMessages',
+                type: 'POST',
+                data: { pageIndex: pageIndex2, pageSize: pageSize2 },
+                success: function (result) {
+
+                    if (result != null) {
+                        model.append(result);
+                        pageIndex2++;
+                        processing2 = false;
+                    }
+                }
+            });
+        }
+
+      
+        var newURL = window.location.pathname;
+        $("ul a[href='" + newURL + "']").addClass('li_a_active');
+
+        $(':input[type=number]').on('mousewheel', function (e) { $(this).blur(); });
+        initSelectTags('select:not([name$="_length" ]):not(.default)');
+
+        $('select2-search-field > input.select2-input').on('keyup', function (e) {
+            if (e.keyCode === 13)
+                addToList($(this).val());
+        });
+
+        function goBack() {
+            var x = document.referrer;
+            if (history.length > 1) {
+                window.history.back();
+            }
+            else {
+                window.location.href = x;
+            }
+        }
+        function isNumber(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+        function Reload() {
+            location.reload();
+        }
+        function callHidden(id) {
+            notify.confirm('@Messege.HIDDEN_NOTIFICATION', 'Warning', TITLE_STATUS_WARNING, hideSubmit, id);
+        }
+        function hideSubmit(id) {
+            $.ajax({
+                type: 'POST',
+                url: "/Home/Hidden",
+                datatype: 'json',
+                data: { id: id },
+                success: function (response) {
+                    if (response.result)
+                        location.reload();
+                }
+            });
+        }
+
+
+        $(document).ready(function () {
+
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        function TurnOff() {
+            try {
+                $.ajax({
+                    url: "/Authenticate/CheckUserOnline",
+                    type: "POST",
+                    success: function (data) {
+                    },
+                    error: function (x, y, z) {
+                    }
+                });
+            }
+            catch (e) {
+            }
+        }
+
+          function CheckCookie() {
+            $.ajax({
+                type: "GET",
+                url: "/Authenticate/CheckCookie",
+                error: function () {
+                    alert("Lỗi kết nối đến Server!!!");
+                },
+                success: function (data) {
+                    //  var rs = JSON.parse(data);
+                    if (data.rs_code == "OK") {
+                        // window.location.href = "";
+                    } else {
+                        window.location.href = "/Authenticate/Index";
+                    }
+
+                }
+            });
+        }
+
+        function CheckSession() {
+            $.ajax({
+                url: '/Convert/checksession',
+                type: 'POST',
+                data: null,
+                success: function (result) {
+
+                }
+            });
+        }
+
+
+
+
+    </script>
+   
+    @RenderSection("Scripts", false)
+
+    <script>
+    //#region [Ham xử lý Approve]
+    function clonetable(id) {
+        var detailrow = $('#detail' + id);
+
+        if (detailrow.children().length > 0) {
+            detailrow.empty();
+
+        } else {
+            detailrow.append(formatprocecssbar(id)).show();
+
+                 var sTable =  $("#MyApproval2ss").dataTable({
+                     "responsive:": true,
+                     "searching": false,
+                "columnDefs": [{
+                    "targets": 0,
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                }],
+                "aaSorting": [],
+                "bServerSide": true,
+                "sAjaxSource": "/Approve/AjaxHandlerlistsubject",
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                   aoData.push(
+                        { "name": "ddl_subject", "value": id }
+                    );
+                }
+            });
+        }
+
+    }
+    function formatprocecssbar(id) {
+        var table = $("#MyApproval2ss").clone(true, true);
+
+
+
+        //sSTable = table.dataTable({
+
+        //        //"responsive:": true,
+        //       // "searching": true,
+        //        "pageLength": 10,
+        //        "paging": true,
+        //        "columnDefs": [{
+        //            "targets": 0,
+        //            "className": "text-center",
+        //            "data": null,
+        //            render: function (data, type, row, meta) {
+        //                return meta.row + meta.settings._iDisplayStart + 1;
+        //            }
+        //        }],
+        //       // "aaSorting": [],
+        //        "bServerSide": true,
+        //        "sAjaxSource": "/Approve/AjaxHandlerlistsubject",
+        //        //"Processing": true,
+        //        "fnServerParams": function (aoData) {
+        //            aoData.push(
+        //                { "name": "ddl_subject", "value": id }
+        //            );
+        //        }
+        //    });
+            return table;
+    }
+    function RemoveApproveProcessBar(id, type) {
+        $("#myModalCancelRequest").modal("show");
+        $('#txt_feedback').val("");
+        $("#Modal_Footer").empty();
+        $("#Modal_Footer").append(" <a href='javascript:void(0)' onclick='submitRemoveApprovalProcessBar(" + id + "," + type + ")' class='btn btn-primary'>@Resource.lblCANCELAPPROVE</a><button type='button' class='btn btn-primary' data-dismiss='modal'>Close</button>");
+    }
+    function submitRemoveApprovalProcessBar(id, type) {
+        spinner.open();
+        var feedback = $('#txt_feedback').val();
+        $.ajax({
+            type: 'POST',
+            url: "/Approve/RemoveApproval",
+            datatype: 'json',
+            data: { id: id, type: type, feedback: feedback },
+            success: function (data) {
+                if (data.result) {
+                    notify.alert(data.message, 'success', TITLE_STATUS_SUCCESS);
+                    location.reload();
+                } else {
+                    notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                }
+            }, complete: function () {
+                $("#myModalCancelRequest").modal("hide");
+                $("#myModalCancel").modal("hide");
+
+                spinner.close();
+            }
+        });
+    }
+    function RemoveApproveSubjectProccessBar(courseid, type, courseDetailId) {
+        $("#myModalCancelRequest").modal("show");
+        $('#txt_feedback').val("");
+        $("#Modal_Footer").empty();
+        $("#Modal_Footer").append(" <a href='javascript:void(0)' onclick='submitRemoveApprovalSubjectProccessBar(" + courseid + "," + type + "," + courseDetailId + ")' class='btn btn-primary'>@Resource.lblCANCELAPPROVE</a><button type='button' class='btn btn-primary' data-dismiss='modal'>Close</button>");
+    }
+    function submitRemoveApprovalSubjectProccessBar(courseid, type, courseDetailId) {
+        spinner.open();
+        var feedback = $('#txt_feedback').val();
+        $.ajax({
+            type: 'POST',
+            url: "/Approve/RemoveApprovalSubject",
+            datatype: 'json',
+            data: { courseid: courseid, type: type, courseDetailId: courseDetailId, feedback: feedback },
+            success: function (data) {
+                if (data.result) {
+                    notify.alert(data.message, 'success', TITLE_STATUS_SUCCESS);
+                    location.reload();
+                } else {
+                    notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                }
+            }, complete: function () {
+                $("#myModalCancelRequest").modal("hide");
+                $("#myModalCancel").modal("hide");
+                spinner.close();
+            }
+        });
+    }
+     $(document).ready(function () {
+        $('.collapse').on('shown.bs.collapse', function () {
+            $(this).parent("div").find("#call-panel-search").html("<i class='fa fa-angle-up'></i> @Messege.Search_hide");
+        });
+
+        $('.collapse').on('hidden.bs.collapse', function () {
+            $(this).parent("div").find("#call-panel-search").html("<i class='fa fa-search'></i> @Messege.Search");
+        });
+    });
+    //#endregion
+    @*function CheckToggle() {
+        var panel = $('#panel-search').attr("class");
+        if (panel === 'in') {
+            $('#call-panel-search').html("<i class='fa fa-search'></i> @Messege.Search");
+        } else {
+            $('#call-panel-search').html("<i class='fa fa-angle-up'></i> @Messege.Search_hide");
+        }
+    }*@
+
+    /// // Fired after validating JWT on page onLoad process, or after a successful identification
+    //function onIdentification(operation) {
+    //        //  console.log(JSON.stringify(operation, null, '\t'));
+    //        //do some thing
+    //        $('#btn-logout').show();
+    //        $('#btn-login').hide();
+
+    //        var json = JSON.stringify(operation, null, '\t');
+    //        $.ajax({
+    //            url: '/Authenticate/LoginSSO',
+    //            type: "POST",
+    //            data: json,
+    //            contentType: "application/json; charset=utf-8",
+    //            dataType: "json",
+    //            error: function (data) {
+    //                spinner.close();
+    //            },
+    //            success: function (data) {
+    //                if (data.result) {
+    //                    console.log("check SSO 'success'");
+    //                } else {
+    //                    console.log("check SSO 'fail'");
+    //                    //notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+    //                }
+
+    //            },
+    //            complete: function () {
+    //               // console.log("done complete");
+    //                spinner.close();
+    //            }
+    //        });
+    //}
+
+    //Fired onLogout
+    function onLogout() {
+        $('#btn-logout').hide();
+        $('#btn-login').show();
+        //$.ajax({
+        //    url: '/Authenticate/LogoutSSO',
+        //    type: "POST",
+        //    contentType: "application/json; charset=utf-8",
+        //    dataType: "json",
+        //    error: function (data) {
+        //        spinner.close();
+        //    },
+        //    success: function (data) {
+        //        if (data.result) {
+        //            window.location.href = '/Authenticate';
+        //        }
+        //    },
+        //    complete: function () {
+        //        spinner.close();
+        //    }
+        //});
+    }
+
+
+// Set thời gian người dùng không tương tác thì tự động log out
+//        var timeoutID;
+
+//    function setup() {
+//    this.addEventListener("mousemove", resetTimer, false);
+//    this.addEventListener("mousedown", resetTimer, false);
+//    this.addEventListener("keypress", resetTimer, false);
+//    this.addEventListener("DOMMouseScroll", resetTimer, false);
+//    this.addEventListener("mousewheel", resetTimer, false);
+//    this.addEventListener("touchmove", resetTimer, false);
+//    this.addEventListener("MSPointerMove", resetTimer, false);
+
+//    startTimer();
+//}
+//setup();
+
+//    function startTimer() {
+//    // wait 1 minutes before calling goInactive
+//    timeoutID = window.setTimeout(goInactive, 60000);
+//}
+
+//function resetTimer(e) {
+//    window.clearTimeout(timeoutID);
+//    goActive();
+//}
+
+//        function goInactive() {
+//            debugger
+//            window.location.href = '/Authenticate/Index/';
+//}
+
+//function goActive() {
+//    // do something
+//    startTimer();
+//}
+//End --- Set thời gian người dùng không tương tác thì tự động log out
+    </script>
+</body>
+</html>

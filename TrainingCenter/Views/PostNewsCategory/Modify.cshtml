@@ -1,0 +1,163 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@model TMS.Core.ViewModels.PostNews.PostNewsCategoryModel
+@{
+    ViewBag.Title = "Modify";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .sui-colorpicker-basic-palette {
+        width: 18em !important;
+        height: 10em !important;
+    }
+
+    .sui-palette-tile {
+        width: 25px !important;
+        height: 25px !important;
+    }
+
+    .sui-color-picker-dropdown {
+        width: 18em !important;
+    }
+
+    .color-picker-container h2 {
+        margin-left: 17px;
+    }
+
+    .color-picker-container td {
+        padding: 10px;
+        vertical-align: top;
+    }
+
+    .color-picker-container {
+        max-width: 400px;
+        margin: auto;
+        margin-bottom: 30px;
+    }
+</style>
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-header"><i class="fas fa-database"></i>  @Resource.lblPostNewsCategory - @(Model.Id == -1 ? Resource.lblCreate : Resource.lblEdit) </h1>
+            <ol class="breadcrumb">
+                <li><a href="/Home">@Resource.lblHome</a></li>
+                <li> @Resource.lblPostNewsCategory</li>
+                <li class="active">@(Model.Id == -1 ? Resource.lblCreate : Resource.lblEdit)</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="panel list-panel" id="list-panel">
+    <div class="panel-heading list-panel-heading">
+        <h1 class="panel-title list-panel-title"><i class="fas fa-pencil-alt font-small-byhoa" aria-hidden="true"></i> @(Model.Id == -1 ? Resource.lblCreate : Resource.lblEdit) </h1>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm("Modify", "PostNewsCategory", FormMethod.Post, new { @class = "form-horizontal bordered-row", id = "createform" }))
+            {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.Id)
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="row">
+
+
+                <div class="col-md-12">
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-7">
+                                <label>@Resource.lblName <font color="red">(*)</font></label>
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = Resource.lblName } })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-md-5">
+                                <label>@Resource.lblIcon</label>
+                                @Html.EditorFor(model => model.Icon, new { htmlAttributes = new { @class = "form-control", @placeholder = Resource.lblIcon } })
+                                @*@Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })*@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label>@Resource.lblDescription </label>
+                                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @placeholder = Resource.lblDescription })
+                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-5 color-picker-container">
+                                <label>@Resource.lblBackGroundColor</label> <br />
+                                <input id="BackgroundColor" name="BackgroundColor" type="color" />
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        }
+        <div class="row">
+            <div class="action-form text-right">
+                @{if (User.IsInRole("/PostNewsCategory/Modify")) // neu co
+                    {
+                        <a href="javascript:void(0)" class="btn btn-primary legitRipple" id="submit" onclick="actionSubmit()"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                    }
+                }
+                <a onclick="goBack()" class="btn btn-default legitRipple"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+@section Scripts {
+
+    <script>
+        var values_color = "@(Model.BackgroundColor != null && Model != null ? Model.BackgroundColor: "#3157a5")";
+
+        $("#BackgroundColor").shieldColorPicker({
+            value: values_color,
+        });
+        function actionSubmit() {
+            spinner.open();
+            $('#submit').hide();
+            var form = document.getElementById('createform');
+            var formData = new FormData(form);
+            console.log(form);
+            $.ajax({
+                type: 'POST',
+                url: "/PostNewsCategory/Modify",
+                datatype: 'json',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.result) {
+                        window.location.href = '/PostNewsCategory';
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                    }
+                    else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                }
+                , complete: function () {
+                    spinner.close();
+                    $('#submit').show ();
+                }
+            });
+        }
+    </script>
+
+}
+
+
+
+

@@ -1,0 +1,178 @@
+﻿@model TMS.Core.ViewModels.Subjects.SubjectDetailModifyModel
+<div class="modal fade" id="modal-modify" role="dialog">
+    <div class="modal-dialog modal-lg">
+        @using (Html.BeginForm("SubjectDetail", "Subject", FormMethod.Post, new { id = "editor-subject-detail"}))
+        {
+            <div class="modal-content">
+                <div class="modal-header panel">
+                    <div class="panel-heading list-panel-heading">
+                        <h5 class="modal-title panel-title list-panel-title" id="modal-header">@(string.IsNullOrEmpty(Model.Name) ? "Create Subject Setail" : Model.Name)</h5>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(m => m.Name)<span class="text-danger">(*)</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="hidden" value="-1" id="editor-index"/>
+                                    <input type="hidden" name="Id" value="@Model.Id" id="editor-Id"/>
+                                    @Html.TextBoxFor(m => m.Name, new {@class = "form-control", id = "editor-Name", placeholder = "Name", @Required = "Required"})
+                                    @Html.ValidationMessageFor(m => m.Name, null, new {@class = "text-danger"})
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(m => m.Code)<span class="text-danger">(*)</span>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.Code, new { @class = "form-control", id = "editor-Code", placeholder = "Code", @Required = "Required" })
+                                    @Html.ValidationMessageFor(m => m.Code, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label>Recurrent</label><span class="text-danger">(*)</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" required="required" value="@Model.Recurrent" id="editor-Recurrent" class="form-control" placeholder="Recurrent"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label>Average Caculate</label><span class="text-danger">(*)</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <select id="editor-IsAverageCaculate" required="required" name="IsAverageCaculate" class="form-control" data-placeholder="-- Select an option --">
+                                        @foreach (var m in Model.AverageStatus)
+                                        {
+                                            <option value="@m.Key" @(Model.IsAverageCaculate == m.Key ? "selected" : "")>@m.Value</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(m => m.Duration)<span class="text-danger">(*)</span>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.Duration,new {@class="form-control", placeholder = "Recurrent", @required = "required", id = "editor-Duration" })
+                                    @Html.ValidationMessageFor(m => m.Duration, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(m => m.InstructorAbility)<span class="text-danger">(*)</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <select id="editor-Instructor" required="required" name="InstructorAbility" class="form-control" data-placeholder="-- Select option --" multiple="multiple">
+                                        @foreach (var m in Model.Instructors)
+                                        {
+                                            <option value="@m.Key" @(Model.InstructorAbility.Any(x => x == m.Key) ? "selected" : "")>@m.Value</option>
+                                        }
+                                    </select>
+                                    @Html.ValidationMessageFor(m => m.InstructorAbility, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 score-group">
+                            @if (Model.SubjectScoreModels != null && Model.SubjectScoreModels.Any())
+                            {
+                                foreach (var score in Model.SubjectScoreModels)
+                                {
+                                    <div class="form-group row score" data-index="0">
+                                        <div class="col-md-4">
+                                            <div class="input-group">
+                                                <span class="text-danger input-group-addon warning">(*)</span>
+                                                <input type="text" value="@score.Grade" id="editor-score-grade" required="required" class="form-control" placeholder="Grade" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="input-group">
+                                                <span class="text-danger input-group-addon warning">(*)</span>
+                                                <input type="text" value="@score.PointFrom" id="editor-score-from" required="required" class="form-control" placeholder="From" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="input-group">
+                                                <span class="text-danger input-group-addon warning">(*)</span>
+                                                <input type="text" value="@score.PointTo" id="editor-score-to" required="required" class="form-control" placeholder="To" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="form-group row score" data-index="0">
+                                    <div class="col-md-4">
+                                        <div class="input-group">
+                                            <span class="text-danger input-group-addon warning">(*)</span>
+                                            <input type="text" id="editor-score-grade" required="required" class="form-control" placeholder="Grade" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group">
+                                            <span class="text-danger input-group-addon warning">(*)</span>
+                                            <input type="text" id="editor-score-from" required="required" class="form-control" placeholder="From" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group">
+                                            <span class="text-danger input-group-addon warning">(*)</span>
+                                            <input type="text" id="editor-score-to" required="required" class="form-control" placeholder="To" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row score" data-index="1">
+                                    <div class="col-md-4">
+                                        <div class="input-group">
+                                            <span class="text-danger input-group-addon warning">(*)</span>
+                                            <input type="text" id="editor-score-grade" required="required" class="form-control" placeholder="Grade" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group">
+                                            <span class="text-danger input-group-addon warning">(*)</span>
+                                            <input type="text" id="editor-score-from" required="required" class="form-control" placeholder="From" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group">
+                                            <span class="text-danger input-group-addon warning">(*)</span>
+                                            <input type="text" id="editor-score-to" required="required" class="form-control" placeholder="To" />
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            
+                        </div>
+                        <div class="form-group clearfix ">
+                            <div class="col-md-12 text-right">
+                                <button class="btn btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+</div>
+</div>

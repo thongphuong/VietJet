@@ -1,0 +1,198 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.ViewModel.CourseDetailNoteViewModel
+@{
+    ViewBag.Title = "PluginModifyNote";
+    Layout = "~/Views/Shared/_Layout_LMS.cshtml";
+    ViewBag.Title = (Model.Id != null ? Resource.lblEdit : Resource.lblCreate);
+
+}
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-graduation-cap"></i> @Resource.lblCourseManagement - @Resource.lblInputNote</h1>
+            @*<ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblCourseManagement</li>
+                <li>@Resource.lblInputNote</li>
+                <li class="active">@ViewBag.Title</li>
+            </ol>*@
+        </div>
+    </div>
+}
+<div class="panel " id="list-panel">
+    <div class="panel-heading ">
+        <h1 class="panel-title list-panel-title"><i class="fas fa-pencil-alt font-small-byhoa" aria-hidden="true"></i> @Resource.lblEdit</h1>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm("Note", "Course", FormMethod.Post, new { id = "createform" }))
+        {
+            <div class="row">
+                <input type="hidden" value="@(Model.Id)" name="Id" />
+                <div class=" col-md-12">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-2">
+                            <b>@Resource.lblRelevantTrainingDepartment</b>
+                        </div>
+                        <div class="col-md-10">
+                            <select class='form-control' id="traning" name="TrainingId" onchange=" OnChangeTraningList() ">
+                                <option value=''>--@Resource.lblRelevantTrainingDepartment--</option>
+                                @foreach (var item in Model.TrainingCenters)
+                                {
+                                    if (Model.TrainingId == Convert.ToInt32(item.Value))
+                                    {
+                                        <option value='@item.Value' selected="selected">@item.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value='@item.Value'>@item.Text</option>
+                                    }
+                                }
+                            </select>
+                            @Html.ValidationMessageFor(a => a.TrainingId)
+                        </div>
+                    </div>
+                    <div class="row " style="margin-top: 10px;">
+                        <div class="col-md-2">
+                            <b>@Resource.lblCourseName </b>
+                        </div>
+                        <div class="col-md-10">
+                            <select class='form-control' id="CourseList" name="CourseId" onchange=" OnChangeCourseList(this.value) ">
+                                <option value='-1'>--@Resource.lblCourseList--</option>
+                            </select>
+                            @Html.ValidationMessageFor(a => a.CourseId)
+                        </div>
+                    </div>
+                    <div class="row " style="margin-top: 10px;">
+                        <div class="col-md-2">
+                            <b>@Resource.lblSubjectName</b>
+                        </div>
+                        <div class="col-md-10">
+
+                            <select class='form-control' id="ddl_subject" name="subject">
+                                <option value='-1'>--@Resource.lblSubjectList--</option>
+                            </select>
+                            @Html.ValidationMessageFor(a => a.Subject)
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-2">
+                            <b>@Resource.lblNote</b>
+                        </div>
+                        <div class="col-md-10">
+                            @Html.TextArea("Note", new { @class = "form-control", @rows = "3", value = Model.Note })
+                            @Html.ValidationMessageFor(a => a.Note)
+                        </div>
+                    </div>
+                    <div class="row  col-md-12" style="margin-top: 10px;">
+                        <div class="col-md-10">
+                            <div id="messageout">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="action-form text-right">
+                    <a href="javascript:void(0);" class="btn btn-primary legitRipple" id="submit" onclick="create()"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                    @*<a onclick="goBack()" class="btn  btn-default legitRipple"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>*@
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts{
+
+    <!-- timepicker -->
+    @*<script src="//cdn.rawgit.com/ashl1/datatables-rowsgroup/v1.0.0/dataTables.rowsGroup.js"></script>*@
+
+    <script type="text/javascript">
+        $(function () {
+            @if (Model != null)
+        {
+            <text>
+            OnChangeTraningList('@(Model.CourseId)');
+            OnChangeCourseList('@(Model.CourseId)', '@(Model.Subject)');
+            </text>
+        }
+        else
+        {
+            <text>
+            OnChangeTraningList();
+            </text>
+        }
+
+        });
+        function OnChangeTraningList(selected) {
+            var code = $('#CourseCode').val();
+            var trainning = $('#traning').val();
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "/Course/ChangeTraningReturnCourse",
+                dataType: "json",
+                data: { id: trainning, course: code, selected: selected },
+                success: function (result) {
+                    $('#CourseList').empty();
+                    $('#CourseList').prop('selectedIndex', 0);
+                    if (result.result) {
+                        $('#CourseList').append(result.value);
+                    }
+                    else {
+                        $('#CourseList').append("<option value='-1'>--@Resource.lblCourseList--</option>");
+                    }
+                }
+            });
+        }
+        function OnChangeCourseList(val, subject) {
+
+            if (val == "") val = 0;
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "/Course/ChangeCourseReturnSubject",
+                dataType: "json",
+                data: { courseId: val, subject: subject },
+                success: function (result) {
+
+                    $('#ddl_subject').empty();
+                    $('#ddl_subject').prop('selectedIndex', 0);
+                    if (result.value_null == "0") {
+                        $('#ddl_subject').append(result.value_option);
+                    }
+                    else {
+                        $('#ddl_subject').append("<option value='-1'>--@Resource.lblSubjectList--</option>");
+                    }
+                }
+            });
+        }
+
+        function create() {
+            spinner.open();
+            var form = $("#createform").serialize();
+            var $forms = $('#createform');
+            //if ($forms.valid()) {
+            $.ajax({
+                type: 'POST',
+                url: "/Course/Note",
+                datatype: 'json',
+                data: form,
+                success: function (data) {
+                    if (data.result) {
+                        window.location.href = '/Course/Note';
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                    }
+                    else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+
+                }, complete: function () {
+                    spinner.close();
+                }
+            });
+        }
+
+        $(".line_6").addClass("active");
+    </script>
+}

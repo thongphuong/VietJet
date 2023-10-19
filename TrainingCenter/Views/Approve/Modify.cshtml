@@ -1,0 +1,83 @@
+﻿@using DAL.Entities
+@model CAT_CONTRACTOR
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int id = ViewBag.id;
+    var mModel = Model;
+    ViewBag.Title = id == 0 ? Resources.Resource.SYS_USER_MODIFY_CREATE : Resources.Resource.SYS_USER_MODIFY_MODIFY;
+    string type = ViewBag.Type;
+}
+<h3> @*@Resources.Resource <i class="fa fa-angle-right"></i> <a href="@Url.Action("Index","User")"> @Resources.Resource.SYS_USER </a><i class="fa fa-angle-right"></i> @ViewBag.Title*@</h3>
+<div class="panel">
+    <div class="panel-body">
+        <div class="example-box-wrapper">
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert alert-success">
+                    @ViewBag.Message
+                </div>
+            }
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Error
+                </div>
+            }
+            <form class="form-horizontal bordered-row" autocomplete="on" action="@Url.Action("Modify", "Contractor")" method="post" id="UserModify" data-parsley-validate>
+                <input type="hidden" name="id" value="@id" />
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Code <font color="red">(*)</font></label>
+                            <div class="col-sm-4">
+                                <input type="text" name="str_Code" value="@mModel.str_Code" data-parsley-required-message="Required Fields" required class="form-control">
+                            </div>
+                            <label class="col-sm-2 control-label">Sort Name <font color="red">(*)</font></label>
+                            <div class="col-sm-4">
+                                <input type="text" name="str_Sortname" value="@mModel.str_Sortname" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Sort Name <font color="red">(*)</font></label>
+                            <div class="col-sm-4">
+                                <input type="text" name="str_Fullname" value="@mModel.str_Fullname" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            
+                            <label class="col-sm-2 control-label">Description <font color="red">(*)</font></label>
+                            <div class="col-sm-10">
+                                <textarea name="str_Description">@mModel.str_Description</textarea>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="divider"></div>
+                <div class="pull-right pad10R">
+                    <input type="submit" class="btn btn-md btn-warning min-width-100" value="Submit" />
+                    <a href="@Url.Action("Index")" class="btn btn-md btn-warning min-width-100">Back</a>
+                </div>
+            </form>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+
+
+        // active menu
+        //line_#id of parent node
+        $(".line_350").addClass("active");
+        //custom select box
+
+
+
+    </script>
+}
+
+

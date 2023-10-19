@@ -1,0 +1,197 @@
+﻿@model TrainingCenter.Models.Group_Roles
+
+
+@{
+    ViewBag.Title = "Create";
+    ViewBag.ActiveMenu = "System";
+    ViewBag.ActiveSubMenu = "Group";
+}
+@*@section pageTitle {
+    <h1><i class="fa fa-user"></i>
+        Group
+                        <small>Edit Group</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+        <li><a href="/UserProfile"><i class="fa fa-users"></i>Groups management</a></li>
+        <li class="active">Edit Group</li>
+    </ol>
+}*@
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-warning">
+
+            @using (Html.BeginForm("Edit", "Group", FormMethod.Post, new { @id = "MainForm", role = "form" }))
+            {
+                @Html.AntiForgeryToken()               
+                @Html.HiddenFor(m => m.Id)
+                <div class="box-header">
+                    <h3 class="box-title">Group Detail</h3>
+                </div> 
+       
+                <div class="box-body">
+                    @if (ViewBag.Message != null)
+                    {
+                        <div class="callout callout-danger">
+                            @ViewBag.Message
+                        </div>
+                    }
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.str_Group_Name, "Group Name")
+                            @Html.TextBoxFor(model => model.str_Group_Name, new { @class = "form-control", placeholder = "Group Name" })
+                        </div>
+                    </div>
+
+
+                    <div class="box box-solid">
+                        <div class="box-header">
+                            <h3 class="box-title">Permission on Function</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="form-group col-md-3">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.bit_UserProfile, new { @class = "minimal-red" })
+                                        <div style="display: inline-block; margin-left: 5px; padding-top: 5px;">User Profile</div>
+                                    </label>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.bit_Group, new { @class = "minimal-red" })
+                                        <div style="display: inline-block; margin-left: 5px; padding-top: 5px;">Group</div>
+                                    </label>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.bit_Department, new { @class = "minimal-red" })
+                                        <div style="display: inline-block; margin-left: 5px; padding-top: 5px;">Department</div>
+                                    </label>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.bit_Subject, new { @class = "minimal-red" })
+                                        <div style="display: inline-block; margin-left: 5px; padding-top: 5px;">Subject</div>
+                                    </label>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.bit_JobTitle, new { @class = "minimal-red" })
+                                        <div style="display: inline-block; margin-left: 5px; padding-top: 5px;">Job Title</div>
+                                    </label>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.bit_Room, new { @class = "minimal-red" })
+                                        <div style="display: inline-block; margin-left: 5px; padding-top: 5px;">Room</div>
+                                    </label>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.bit_Course, new { @class = "minimal-red" })
+                                        <div style="display: inline-block; margin-left: 5px; padding-top: 5px;">Course</div>
+                                    </label>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.bit_Class, new { @class = "minimal-red" })
+                                        <div style="display: inline-block; margin-left: 5px; padding-top: 5px;">Class</div>
+                                    </label>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.bit_Question, new { @class = "minimal-red" })
+                                        <div style="display: inline-block; margin-left: 5px; padding-top: 5px;">Question</div>
+                                    </label>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.bit_Configuration, new { @class = "minimal-red" })
+                                        <div style="display: inline-block; margin-left: 5px; padding-top: 5px;">Configuration</div>
+                                    </label>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.bit_RegisterTrainee, new { @class = "minimal-red" })
+                                        <div style="display: inline-block; margin-left: 5px; padding-top: 5px;">Register Trainee</div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-warning">Save</button>
+                        <button type="button" class="btn btn-default" id="btCancel">Cancel</button>
+                    </div>
+
+                </div>
+               
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script>
+    $("#btCancel").click(function () {
+        window.location.href = "/Group";
+    });
+
+    $(document).ready(function () {
+
+        $('#MainForm')
+           // IMPORTANT: You must declare .on('init.field.bv')
+        // before calling .bootstrapValidator(options)
+            .on('init.field.bv', function (e, data) {
+                // data.bv      --> The BootstrapValidator instance
+                // data.field   --> The field name
+                // data.element --> The field element
+
+                var $parent = data.element.parents('.form-group'),
+                    $icon = $parent.find('.form-control-feedback[data-bv-icon-for="' + data.field + '"]'),
+                    options = data.bv.getOptions(),                      // Entire options
+                    validators = data.bv.getOptions(data.field).validators; // The field validators
+
+                if (validators.notEmpty && options.feedbackIcons && options.feedbackIcons.required) {
+                    // The field uses notEmpty validator
+                    // Add required icon
+                    $icon.addClass(options.feedbackIcons.required).show();
+                }
+            }).bootstrapValidator({
+                // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+                feedbackIcons: {
+                    required: 'glyphicon glyphicon-asterisk',
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                live: 'enabled',
+                message: 'This value is not valid',
+                submitButtons: 'button[type="submit"]',
+                fields: {
+                    "str_Group_Name": {
+                        validators: {
+                            notEmpty: {
+                                message: 'The Group Name is required and cannot be empty'
+                            }
+                        }
+                    }
+                }
+
+            });
+    });
+</script>

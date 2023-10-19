@@ -1,0 +1,388 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@using Utilities;
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="sso_smsc_apikey" content="bd629ce2de47436e3a9cdd2673e97b17" />
+    <link rel="shortcut icon" href="/favicon.ico">
+
+    <title>Training Management System</title>
+    @Styles.Render("~/bundles/corecss")
+    @*<link href="~/Content/assets/css/material-design-iconic-font.min.css" rel="stylesheet">*@
+    @*<link href="@System.Configuration.ConfigurationManager.AppSettings["PrivateStyle"]" rel="stylesheet" />*@
+    <style>
+        .profile > a {
+            display: block;
+            height: 129px;
+            width: 100%;
+            background: url(../../Content/assets/img/bg-profile.jpg) left top no-repeat;
+            background-size: 100% 129px;
+        }
+
+        .fa-class-ins {
+            background: url(../../Content/assets/img/home/class-ins.png);
+            background-repeat: no-repeat;
+            background-position: 50% 25%;
+            background-size: 145%;
+            height: 20px;
+            width: 20px;
+        }
+
+        .fa-class-desktop {
+            background: url('../../Content/assets/img/home/e-learning.png');
+            background-repeat: no-repeat;
+            background-position: 50% 25%;
+            background-size: 125%;
+            height: 15px;
+            width: 14px;
+        }
+    </style>
+    <style>
+        [touch-action="none"] {
+            -ms-touch-action: none;
+            touch-action: none;
+        }
+
+        [touch-action="pan-x"] {
+            -ms-touch-action: pan-x;
+            touch-action: pan-x;
+        }
+
+        [touch-action="pan-y"] {
+            -ms-touch-action: pan-y;
+            touch-action: pan-y;
+        }
+
+        [touch-action="scroll"], [touch-action="pan-x pan-y"], [touch-action="pan-y pan-x"] {
+            -ms-touch-action: pan-x pan-y;
+            touch-action: pan-x pan-y;
+        }
+
+
+        h2 {
+            font-family: "Open Sans","Helvetica Neue",Arial,sans-serif;
+        }
+    </style>
+    <style id="style-1-cropbar-clipper">
+        .en-markup-crop-options {
+            top: 18px !important;
+            left: 50% !important;
+            margin-left: -90px !important;
+            width: 180px !important;
+            border: 2px rgba(255,255,255,.38) solid !important;
+            border-radius: 4px !important;
+        }
+
+            .en-markup-crop-options div div:first-of-type {
+                margin-left: 0px !important;
+            }
+    </style>
+    <style type="text/css">
+        body {
+            zoom: 100%;
+            background: #fff;
+        }
+
+        #fullbrower {
+            height: 100vh;
+        }
+
+        .bglogin {
+            background: url('/Content/assets/img/home/DSJ_3732.jpg') 0% 0% / cover no-repeat scroll transparent;
+        }
+
+        .footer-fixed {
+            background-size: 100%;
+            position: fixed;
+            bottom: 0px;
+            width: 100%;
+            height: 29px;
+            text-align: right;
+            background-color: rgba(0,0,0,0.6);
+        }
+
+            .footer-fixed .copyright {
+                color: #fff;
+                display: inline-block;
+                font-size: 11px;
+                margin-right: 10px;
+                margin-top: 10px;
+            }
+
+        .form-control {
+            border: none;
+            border-bottom: 1px solid #666;
+            outline: none;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .form-title {
+            font-size: 25px;
+            padding-bottom: 15px;
+            text-transform: uppercase;
+            color: #d33333;
+            font-weight: bold;
+            font-family: Jambono-Light;
+            text-align: center;
+        }
+
+        /*NEW*/
+        .login-form {
+            background: url('@(AppUtils.getAppSetting("UseAws") == "1" ? AppUtils.getAppSetting("AWSLinkS3") + "Uploads/Background/background_login.png" : "/Uploads/Background/background_login.png")') no-repeat !important;
+            background-size: cover !important;
+            position: relative !important;
+            height: 100vh !important;
+        }
+
+            .login-form .form-login {
+                position: absolute !important;
+                box-shadow: 6px 6px 15px -5px #000 !important;
+                background-color: rgba(255, 255, 255, 0.9) !important;
+            }
+
+                .login-form .form-login form {
+                    width: 100% !important;
+                }
+
+                .login-form .form-login button[type="submit"] {
+                    width: 100% !important;
+                }
+
+        /* LANDSCAPE */
+        @@media only screen and (min-device-width: 280px) and (max-device-width: 812px) and (orientation: landscape) {
+            .login-form .form-login {
+                width: calc(100% - 60px);
+                height: auto !important;
+                padding: 0 15px;
+                left: 30px;
+                top: 30px;
+                overflow-y: scroll !important;
+            }
+        }
+
+        @@media only screen and (max-width: 812px) and (orientation: landscape) {
+            .login-form .form-login {
+                width: calc(100% - 60px);
+                height: auto !important;
+                padding: 0 15px;
+                left: 30px;
+                top: 30px;
+                overflow-y: scroll !important;
+            }
+        }
+
+        @@media only screen and (min-width: 813px) and (orientation: landscape) {
+            .login-form {
+                background-size: 60vw 100vh !important;
+                height: 100vh !important;
+            }
+
+                .login-form .form-login {
+                    width: 40vw;
+                    padding: 20px;
+                    right: 0% !important;
+                    left: auto !important;
+                    height: 100% !important;
+                }
+        }
+
+        @@media only screen and (min-width: 992px) and (orientation: landscape) {
+            .login-form {
+                background-size: 65vw 100vh !important;
+            }
+
+                .login-form .form-login {
+                    width: 35vw;
+                    padding: 30px;
+                    right: 0% !important;
+                    height: 100% !important;
+                }
+        }
+
+        @@media only screen and (min-width: 1200px) and (orientation: landscape) {
+            .login-form {
+                background-size: 70vw 100vh !important;
+            }
+
+                .login-form .form-login {
+                    width: 30vw;
+                    padding: 30px;
+                    right: 0% !important;
+                    height: 100% !important;
+                }
+        }
+        /* PORTRAIT */
+        @@media only screen and (min-device-width: 280px) and (max-device-width: 812px) and (orientation: portrait) {
+
+            .login-form .form-login {
+                height: auto !important;
+                padding: 15px;
+                top: 20%;
+                left: 15px !important;
+                width: calc(100% - 30px) !important;
+            }
+        }
+
+        @@media only screen and (max-width: 767px) and (orientation: portrait) {
+            .login-form .form-login {
+                height: auto !important;
+                padding: 15px;
+                top: 20%;
+                left: 20px !important;
+                width: calc(100% - 40px) !important;
+            }
+        }
+
+        @@media only screen and (min-width: 768px) and (orientation: portrait) {
+            .login-form .form-login {
+                height: 50vh;
+                padding: 30px;
+                top: 25vh;
+                left: 25px !important;
+                width: calc(100% - 50px) !important;
+            }
+        }
+
+        @@media only screen and (min-width: 992px) and (orientation: portrait) {
+            .login-form .form-login {
+                height: 50vh;
+                padding: 45px;
+                top: 25vh;
+                left: 30px !important;
+                width: calc(100% - 60px) !important;
+            }
+        }
+
+        @@media only screen and (min-width: 1200px) and (orientation: portrait) {
+            .login-form .form-login {
+                height: 50vh;
+                padding: 45px;
+                top: 25vh;
+                left: 35px !important;
+                width: calc(100% - 70px) !important;
+            }
+        }
+        /*NEW*/
+    </style>
+</head>
+
+<body>
+    <section class="login-form" >
+        @RenderBody()
+
+    </section>
+
+
+
+
+
+
+
+
+
+    <div id="fullbrower" style="display:none;">
+        @*<div class="col-lg-8 bglogin" style="height:100%;">
+            </div>*@
+        <div class="col-lg-8 bglogin" style="height: 100%; padding: 0px;">
+            @*<div class="mySlides" style="background: url(/Content/assets/img/login/hinh1.jpg) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh2.png) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh3.jpg) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh4.png) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh5.jpg) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh6.JPG) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh7.png) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh8.jpg) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh9.jpg) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh10.png) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh11.JPG) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>
+                <div class="mySlides" style="background: url(/Content/assets/img/login/hinh14.JPG) 0% 0%/cover no-repeat scroll transparent; height: 100%;"></div>*@
+        </div>
+
+        <script>
+            var myIndex = 0;
+            //carousel();
+
+            function carousel() {
+                var i;
+                var x = document.getElementsByClassName("mySlides");
+                for (i = 0; i < x.length; i++) {
+                    x[i].style.display = "none";
+                }
+                myIndex++;
+                if (myIndex > x.length) {
+                    myIndex = 1
+                }
+                x[myIndex - 1].style.display = "block";
+                setTimeout(carousel, 4000); // Change image every 2 seconds
+            }
+        </script>
+        <div class="col-lg-4" style="height: 100%;">
+
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/corejs")
+    @*<script src="@System.Configuration.ConfigurationManager.AppSettings["SSO_JSFILE"]@System.Configuration.ConfigurationManager.AppSettings["PrivateVersion"]"></script>*@<!--SSO-->
+    @*<script src="http://sso.dhdn.tinhvan.com/sso/sslssso.min.js"></script>*@<!--SSO-->
+    <script>
+    $(document).on('click', '#btForgotPassword', function () {
+        window.location.href = "/Account/ForgotPassword";
+    });
+
+
+    // Fired after validating JWT on page onLoad process, or after a successful identification
+    function onIdentification(operation) {
+        //console.log(JSON.stringify(operation, null, '\t'));
+        //do some thing
+        $('#title-login').text('Login SUCCESS');
+        $('#div-username').hide();
+        $('#div-password').hide();
+        $('#div-submit').hide();
+        var json = JSON.stringify(operation, null, '\t');
+        $.ajax({
+            url: '/Authenticate/LoginSSO',
+            type: "POST",
+            data: json,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            error: function (data) {
+                spinner.close();
+            },
+            success: function (data) {
+                if (data.result) {
+                    window.location.href = '/Home';
+                } else {
+                    notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    $('#title-login').text('@Resource.lblLoginToYourAccount');
+                    $('#div-username').show();
+                    $('#div-password').show();
+                    $('#div-submit').show();
+                }
+            },
+            complete: function () {
+                spinner.close();
+            }
+        });
+    }
+
+    //Fired onLogout
+    function onLogout() {
+        $('#btn-logout').hide();
+        $('#btn-login').show();
+
+    }
+    </script>
+
+</body>
+
+@RenderSection("Scripts", false)
+
+</html>

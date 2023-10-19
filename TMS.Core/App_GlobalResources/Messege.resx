@@ -1,0 +1,1190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="COMPLETED" xml:space="preserve">
+    <value>COMPLETED</value>
+  </data>
+  <data name="CONTRACT" xml:space="preserve">
+    <value>CONTRACT</value>
+  </data>
+  <data name="CONTRACT_NO" xml:space="preserve">
+    <value>CONTRACT NO</value>
+  </data>
+  <data name="Course_Name" xml:space="preserve">
+    <value>Course Name</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="DATEOFBIRTH" xml:space="preserve">
+    <value>Date Of Birth</value>
+  </data>
+  <data name="DATEOFJOIN" xml:space="preserve">
+    <value>Date Of Join</value>
+  </data>
+  <data name="DELETE_CONTRACT" xml:space="preserve">
+    <value>Are you sure to delete contract?</value>
+  </data>
+  <data name="DELETE_CONTRACTOR" xml:space="preserve">
+    <value>Are you sure to delete contractor?</value>
+  </data>
+  <data name="DELETE_COST" xml:space="preserve">
+    <value>Are you sure to delete cost?</value>
+  </data>
+  <data name="DELETE_COURSE" xml:space="preserve">
+    <value>Are you sure to delete course?</value>
+  </data>
+  <data name="DELETE_DEPARTMENT" xml:space="preserve">
+    <value>Are you sure to delete department?</value>
+  </data>
+  <data name="DELETE_GROUPSUBJECT" xml:space="preserve">
+    <value>Are you sure to delete groupcourse?</value>
+  </data>
+  <data name="DELETE_INSTRUCTOR" xml:space="preserve">
+    <value>Are you sure to delete instructor?</value>
+  </data>
+  <data name="DELETE_JOBTITLE" xml:space="preserve">
+    <value>Are you sure to delete job title?</value>
+  </data>
+  <data name="DELETE_NATIONALITY" xml:space="preserve">
+    <value>Are you sure to delete nationnality?</value>
+  </data>
+  <data name="DELETE_PARTNER" xml:space="preserve">
+    <value>Are you sure to delete partner?</value>
+  </data>
+  <data name="DELETE_ROOM" xml:space="preserve">
+    <value>Are you sure to delete room?</value>
+  </data>
+  <data name="DELETE_SUBJECT" xml:space="preserve">
+    <value>Are you sure to delete subject?</value>
+  </data>
+  <data name="DELETE_TRAINEE" xml:space="preserve">
+    <value>Are you sure to delete trainee?</value>
+  </data>
+  <data name="DEPARTMENT" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="DEPARTMENTCODE_REQUIRED" xml:space="preserve">
+    <value>The Code field is required</value>
+  </data>
+  <data name="DEPARTMENTNAME_REQUIRED" xml:space="preserve">
+    <value>The Name field is required</value>
+  </data>
+  <data name="DESCRIPTION" xml:space="preserve">
+    <value>DESCRIPTION</value>
+  </data>
+  <data name="DUPLICATE" xml:space="preserve">
+    <value>Code Or Name duplicate</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="EDUCATION" xml:space="preserve">
+    <value>Education</value>
+  </data>
+  <data name="EID" xml:space="preserve">
+    <value>EID</value>
+  </data>
+  <data name="End" xml:space="preserve">
+    <value>End</value>
+  </data>
+  <data name="EXISTING_CODE" xml:space="preserve">
+    <value>Code {0} is existing !</value>
+  </data>
+  <data name="EXISTING_EID" xml:space="preserve">
+    <value>EID {0} is existing !</value>
+  </data>
+  <data name="EXPIREDATE" xml:space="preserve">
+    <value>EXPIRE DATE</value>
+  </data>
+  <data name="FAIL" xml:space="preserve">
+    <value>FAIL</value>
+  </data>
+  <data name="FULLNAME" xml:space="preserve">
+    <value>FULL NAME</value>
+  </data>
+  <data name="GENDER" xml:space="preserve">
+    <value>Gender</value>
+  </data>
+  <data name="HOME" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Instructor" xml:space="preserve">
+    <value>Instructor</value>
+  </data>
+  <data name="InstructorManagement" xml:space="preserve">
+    <value>Instructor Management</value>
+  </data>
+  <data name="ISVALID_DATA" xml:space="preserve">
+    <value>Data is not valid</value>
+  </data>
+  <data name="JOBTITLE" xml:space="preserve">
+    <value>Job Title</value>
+  </data>
+  <data name="NAME_EXIST" xml:space="preserve">
+    <value>The name already had in system  </value>
+  </data>
+  <data name="NATIONALITY" xml:space="preserve">
+    <value>Nationality</value>
+  </data>
+  <data name="NATIONALITYCODE_REQUIRED" xml:space="preserve">
+    <value>The Code field is required</value>
+  </data>
+  <data name="NATIONALITYNAME_REQUIRED" xml:space="preserve">
+    <value>The Name field is required</value>
+  </data>
+  <data name="NOTE" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="NO_DATA" xml:space="preserve">
+    <value>No data</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="ORGANIZATION" xml:space="preserve">
+    <value>Organization</value>
+  </data>
+  <data name="PARTNER" xml:space="preserve">
+    <value>PARTNER</value>
+  </data>
+  <data name="PHONE" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="PLACEOFBIRTH" xml:space="preserve">
+    <value>Place Of Birth</value>
+  </data>
+  <data name="Room" xml:space="preserve">
+    <value>Room</value>
+  </data>
+  <data name="SCHEDULES" xml:space="preserve">
+    <value>SCHEDULES</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Subject_Name" xml:space="preserve">
+    <value>Course Name</value>
+  </data>
+  <data name="SUCCESS" xml:space="preserve">
+    <value>Successfully!</value>
+  </data>
+  <data name="SUCCESS_APPROVAL_ASSIGN_TRAINEE" xml:space="preserve">
+    <value>Approval assign trainee successfully!</value>
+  </data>
+  <data name="SUCCESS_APPROVAL_COURSE" xml:space="preserve">
+    <value>Approval course successfully!</value>
+  </data>
+  <data name="SUCCESS_APPROVAL_REMOVE" xml:space="preserve">
+    <value>Successfully remove approval !</value>
+  </data>
+  <data name="SUCCESS_ASSIGNTRAINEE" xml:space="preserve">
+    <value>Assign trainee successfully!</value>
+  </data>
+  <data name="SUCCESS_CONTRACT" xml:space="preserve">
+    <value>Add contract successfully!</value>
+  </data>
+  <data name="SUCCESS_CONTRACTOR" xml:space="preserve">
+    <value>Add contractor successfully!</value>
+  </data>
+  <data name="SUCCESS_COST" xml:space="preserve">
+    <value>Add cost successfully!</value>
+  </data>
+  <data name="SUCCESS_COURSE" xml:space="preserve">
+    <value>Add course successfully!</value>
+  </data>
+  <data name="SUCCESS_COURSE_EDIT" xml:space="preserve">
+    <value>Edit course successfully!</value>
+  </data>
+  <data name="SUCCESS_DEPARTMENT" xml:space="preserve">
+    <value>Add department successfully!</value>
+  </data>
+  <data name="SUCCESS_GROUPSUBJECT" xml:space="preserve">
+    <value>Add group course successfully!</value>
+  </data>
+  <data name="SUCCESS_INSTRUCTOR" xml:space="preserve">
+    <value>Add instructor successfully!</value>
+  </data>
+  <data name="SUCCESS_INSTRUCTOR_EDIT" xml:space="preserve">
+    <value>Edit instructor successfully!</value>
+  </data>
+  <data name="SUCCESS_REMOVEASSIGNTRAINEE" xml:space="preserve">
+    <value>Remove assign trainee successfully!</value>
+  </data>
+  <data name="SUCCESS_REMOVE_CONTRACT" xml:space="preserve">
+    <value>Remove contract successfully!</value>
+  </data>
+  <data name="SUCCESS_REMOVE_EDU" xml:space="preserve">
+    <value>Remove education successfully!</value>
+  </data>
+  <data name="SUCCESS_REMOVE_RESULT" xml:space="preserve">
+    <value>Remove result successfully!</value>
+  </data>
+  <data name="SUCCESS_TRAINEE" xml:space="preserve">
+    <value>Add trainee successfully!</value>
+  </data>
+  <data name="SUCCESS_TRAINEE_EDIT" xml:space="preserve">
+    <value>Edit trainee successfully!</value>
+  </data>
+  <data name="TIME" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="TRAINING" xml:space="preserve">
+    <value>TRAINING</value>
+  </data>
+  <data name="TRAININGALLOWANCE" xml:space="preserve">
+    <value>Tranining Allowance</value>
+  </data>
+  <data name="TrainingCenter" xml:space="preserve">
+    <value>Training Center</value>
+  </data>
+  <data name="TRAINING_MANAGEMENT_SYSTEM" xml:space="preserve">
+    <value>TRAINING MANAGEMENT SYSTEM</value>
+  </data>
+  <data name="TYPE" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="UNABLE_TO_SEND_MAIL" xml:space="preserve">
+    <value>Send Email Error!</value>
+  </data>
+  <data name="UNSUCCESS" xml:space="preserve">
+    <value>Unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_ADD_CONTRACT" xml:space="preserve">
+    <value>Add contract unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_ADD_EDU" xml:space="preserve">
+    <value>Add education unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_APPROVAL_ASSIGN_TRAINEE" xml:space="preserve">
+    <value>Approval assign trainee unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_APPROVAL_COURSE" xml:space="preserve">
+    <value>Approval course unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_APPROVAL_REMOVE" xml:space="preserve">
+    <value>Unsuccessfully remove approval !</value>
+  </data>
+  <data name="UNSUCCESS_ASSIGNTRAINEE" xml:space="preserve">
+    <value>Assign trainee unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_CALL_LMS" xml:space="preserve">
+    <value>Call LMS unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_CONTRACT" xml:space="preserve">
+    <value>Add contract unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_CONTRACTOR" xml:space="preserve">
+    <value>Add contractor unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_COURSE" xml:space="preserve">
+    <value>Add course unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_COURSE_EDIT" xml:space="preserve">
+    <value>Edit course unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_INSTRUCTOR" xml:space="preserve">
+    <value>Add instructor unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_INSTRUCTOR_EDIT" xml:space="preserve">
+    <value>Edit instructor unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_REMOVE_CONTRACT" xml:space="preserve">
+    <value>Remove contract unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_REMOVE_EDU" xml:space="preserve">
+    <value>Remove education unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_REMOVE_RESULT" xml:space="preserve">
+    <value>Remove result unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_TRAINEE" xml:space="preserve">
+    <value>Add trainee unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_TRAINEE_EDIT" xml:space="preserve">
+    <value>Edit trainee unsuccessfully!</value>
+  </data>
+  <data name="UPCOMING" xml:space="preserve">
+    <value>UPCOMING</value>
+  </data>
+  <data name="VALIDATION_CODE" xml:space="preserve">
+    <value>Please enter a valid code!</value>
+  </data>
+  <data name="VALIDATION_CONTRACTCODE" xml:space="preserve">
+    <value>Please enter a valid contract code !</value>
+  </data>
+  <data name="VALIDATION_CONTRACTNO" xml:space="preserve">
+    <value>Please enter a valid contract no !</value>
+  </data>
+  <data name="VALIDATION_CONTRACTNO_IN_CONTRACT" xml:space="preserve">
+    <value>Please enter a valid contract no in contract !</value>
+  </data>
+  <data name="VALIDATION_COURSE_IN_EDUCATION" xml:space="preserve">
+    <value>Please enter a valid course in education !</value>
+  </data>
+  <data name="VALIDATION_DATE_FROM_IN_EDUCATION" xml:space="preserve">
+    <value>Please enter a valid date from in education !</value>
+  </data>
+  <data name="VALIDATION_DATE_TO_IN_EDUCATION" xml:space="preserve">
+    <value>Please enter a valid date to in education !</value>
+  </data>
+  <data name="VALIDATION_DEPARTMENT" xml:space="preserve">
+    <value>Please enter a valid department!</value>
+  </data>
+  <data name="VALIDATION_DESCRIPTION_IN_CONTRACT" xml:space="preserve">
+    <value>Please enter a valid description in contract !</value>
+  </data>
+  <data name="VALIDATION_DURATION" xml:space="preserve">
+    <value>Please enter a valid duration!</value>
+  </data>
+  <data name="VALIDATION_EID" xml:space="preserve">
+    <value>Please enter a valid EID !</value>
+  </data>
+  <data name="VALIDATION_EXPIREDATE_IN_CONTRACT" xml:space="preserve">
+    <value>Please enter a valid expire date in contract !</value>
+  </data>
+  <data name="VALIDATION_FROMDATE_TODATE" xml:space="preserve">
+    <value>Please enter a valid from date - to date !</value>
+  </data>
+  <data name="VALIDATION_FROMDATE_TODATE_INSUBJECT" xml:space="preserve">
+    <value>Please enter a valid from date - to date in course !</value>
+  </data>
+  <data name="VALIDATION_FROMTIME_TOTIME_INSUBJECT" xml:space="preserve">
+    <value>Please enter a valid from time - to time in course !</value>
+  </data>
+  <data name="VALIDATION_FULLNAME" xml:space="preserve">
+    <value>Please enter a valid full name !</value>
+  </data>
+  <data name="VALIDATION_FULLVALUE" xml:space="preserve">
+    <value>Please enter a all valid !</value>
+  </data>
+  <data name="VALIDATION_INSTRUCTOR" xml:space="preserve">
+    <value>Please enter a valid instructor !</value>
+  </data>
+  <data name="VALIDATION_JOBTITLE" xml:space="preserve">
+    <value>Please enter a valid job title !</value>
+  </data>
+  <data name="VALIDATION_MAIL" xml:space="preserve">
+    <value>Please enter a valid mail !</value>
+  </data>
+  <data name="VALIDATION_NAME" xml:space="preserve">
+    <value>Please enter a valid name !</value>
+  </data>
+  <data name="VALIDATION_PASSPORT" xml:space="preserve">
+    <value>Please enter a valid passport!</value>
+  </data>
+  <data name="VALIDATION_REFRESH_CYCLE" xml:space="preserve">
+    <value>Please enter a valid refresh cycle!</value>
+  </data>
+  <data name="VALIDATION_ROOM" xml:space="preserve">
+    <value>Please enter a valid room !</value>
+  </data>
+  <data name="VALIDATION_SORTNAME" xml:space="preserve">
+    <value>Please enter a valid sort name !</value>
+  </data>
+  <data name="VALIDATION_SUBJECT" xml:space="preserve">
+    <value>Please enter a valid course !</value>
+  </data>
+  <data name="VALIDATION_TRAININGCENTER" xml:space="preserve">
+    <value>Please enter a valid training center !</value>
+  </data>
+  <data name="VALIDATION_TYPE" xml:space="preserve">
+    <value>Please enter a valid type !</value>
+  </data>
+  <data name="VALIDATION_TYPELEANING" xml:space="preserve">
+    <value>Please enter a valid type leaning !</value>
+  </data>
+  <data name="Course_Management" xml:space="preserve">
+    <value>Course Management</value>
+  </data>
+  <data name="PARENT_COURSE_NAME" xml:space="preserve">
+    <value>PARENT COURSE NAME</value>
+  </data>
+  <data name="Trainee_Management" xml:space="preserve">
+    <value>Trainee Management</value>
+  </data>
+  <data name="TRAINING_CENTER" xml:space="preserve">
+    <value>TRAINING CENTER</value>
+  </data>
+  <data name="CREATE_SUCCESSFULLY" xml:space="preserve">
+    <value>Add {0} successfully!</value>
+  </data>
+  <data name="CREATE_UNSUCCESSFULLY" xml:space="preserve">
+    <value>Add {0} unsuccessfully!</value>
+  </data>
+  <data name="DELETE_MESSAGE" xml:space="preserve">
+    <value>Are you sure to delete {0}?</value>
+  </data>
+  <data name="DELETE_SUCCESSFULLY" xml:space="preserve">
+    <value>Remove {0} successfully!</value>
+  </data>
+  <data name="DELETE_UNSUCCESSFULLY" xml:space="preserve">
+    <value>Remove {0} unsuccessfully!</value>
+  </data>
+  <data name="MODIFY_SUCCESSFULLY" xml:space="preserve">
+    <value>Edit {0} successfully!</value>
+  </data>
+  <data name="MODIFY_UNSUCCESSFULLY" xml:space="preserve">
+    <value>Edit {0} unsuccessfully!</value>
+  </data>
+  <data name="DELETE_GROUPUSER" xml:space="preserve">
+    <value>Are you sure to delete Group User ?</value>
+  </data>
+  <data name="FORGOT_EMAIL" xml:space="preserve">
+    <value>Enter email address !</value>
+  </data>
+  <data name="SEND_SUCCESS_EMAIL" xml:space="preserve">
+    <value>Send mail success !</value>
+  </data>
+  <data name="CHANGEPASSWORD" xml:space="preserve">
+    <value>Change Password Successfully !</value>
+  </data>
+  <data name="VALIDATION_PASSWORD" xml:space="preserve">
+    <value>Please enter a valid password !</value>
+  </data>
+  <data name="CODE_DUPLICATE" xml:space="preserve">
+    <value>Code duplicate !</value>
+  </data>
+  <data name="HIDDEN_NOTIFICATION" xml:space="preserve">
+    <value>Are you sure to hidden this notification?</value>
+  </data>
+  <data name="DELETED_UNSUCCESS_AVAILABLE" xml:space="preserve">
+    <value>{0} cannot remove because being in used !</value>
+  </data>
+  <data name="CANNOTDELETE_RESULT" xml:space="preserve">
+    <value>Can not delete Result from course.</value>
+  </data>
+  <data name="EMAIL_EXIST" xml:space="preserve">
+    <value>The email you input is exist in the system</value>
+  </data>
+  <data name="FORM_NOTVALID" xml:space="preserve">
+    <value>Form is not valid! Please correct it and try again.</value>
+  </data>
+  <data name="REGISTERED_COURSE" xml:space="preserve">
+    <value>You have already registered for this course.</value>
+  </data>
+  <data name="TRAINEE_EXIST" xml:space="preserve">
+    <value>Trainee is not exist.</value>
+  </data>
+  <data name="lblFromTime" xml:space="preserve">
+    <value>From Time</value>
+  </data>
+  <data name="lblToDate" xml:space="preserve">
+    <value>To Date</value>
+  </data>
+  <data name="lblToTime" xml:space="preserve">
+    <value>To Time</value>
+  </data>
+  <data name="lblDistinction" xml:space="preserve">
+    <value>Distinction</value>
+  </data>
+  <data name="lblDURATION" xml:space="preserve">
+    <value>DURATION</value>
+  </data>
+  <data name="lblFINALRESULTS" xml:space="preserve">
+    <value>Final Results</value>
+  </data>
+  <data name="lblGRADE" xml:space="preserve">
+    <value>GRADE</value>
+  </data>
+  <data name="lblPass" xml:space="preserve">
+    <value>Pass</value>
+  </data>
+  <data name="lblPOINT" xml:space="preserve">
+    <value>POINT</value>
+  </data>
+  <data name="lblRESULTS" xml:space="preserve">
+    <value>RESULTS</value>
+  </data>
+  <data name="lblResults1" xml:space="preserve">
+    <value>Results</value>
+  </data>
+  <data name="lblSTATUS" xml:space="preserve">
+    <value>STATUS</value>
+  </data>
+  <data name="lblSUBJECCODE" xml:space="preserve">
+    <value>Course Code</value>
+  </data>
+  <data name="lblSUBJECTNAME" xml:space="preserve">
+    <value>Course Name</value>
+  </data>
+  <data name="EIDGV" xml:space="preserve">
+    <value>EID</value>
+  </data>
+  <data name="lblApproveCourse" xml:space="preserve">
+    <value>Approve Course</value>
+  </data>
+  <data name="lblCourseType" xml:space="preserve">
+    <value>Course Type</value>
+  </data>
+  <data name="lblEnd" xml:space="preserve">
+    <value>End</value>
+  </data>
+  <data name="lblNote" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="lblProcessSteps" xml:space="preserve">
+    <value>Process steps</value>
+  </data>
+  <data name="lblProcessStepsCourse" xml:space="preserve">
+    <value>Process steps course</value>
+  </data>
+  <data name="lblStart" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="lblVenue" xml:space="preserve">
+    <value>Venue</value>
+  </data>
+  <data name="llblApprove" xml:space="preserve">
+    <value>Approve</value>
+  </data>
+  <data name="DELETE_COMPANY" xml:space="preserve">
+    <value>Are you sure to delete company?</value>
+  </data>
+  <data name="VALIDATION_SUBJECT_EXPORT" xml:space="preserve">
+    <value>Please choose a course !</value>
+  </data>
+  <data name="SET_STATUS_SUCCESS" xml:space="preserve">
+    <value> Set {0} Successfully ! </value>
+  </data>
+  <data name="PASSWORD_REQUIRED" xml:space="preserve">
+    <value>Password is required !</value>
+  </data>
+  <data name="USERNAME_DUPLICATE" xml:space="preserve">
+    <value>Username is duplicate !</value>
+  </data>
+  <data name="VALIDATION_COURSEDETAIL" xml:space="preserve">
+    <value>Please choose Group Cousres !</value>
+  </data>
+  <data name="VALIDATION_COURSEDETAIL_FROMDATE" xml:space="preserve">
+    <value>Please choose from date course !</value>
+  </data>
+  <data name="VALIDATION_COURSEDETAIL_FROMTIME" xml:space="preserve">
+    <value>Please choose from time course !</value>
+  </data>
+  <data name="VALIDATION_COURSEDETAIL_INSTRUCTOR" xml:space="preserve">
+    <value>Please choose a instructor !</value>
+  </data>
+  <data name="VALIDATION_COURSEDETAIL_TODATE" xml:space="preserve">
+    <value>Please choose to date course !</value>
+  </data>
+  <data name="VALIDATION_COURSEDETAIL_TOTIME" xml:space="preserve">
+    <value>Please choose to time course !</value>
+  </data>
+  <data name="VALIDATION_COURSE_CODE" xml:space="preserve">
+    <value>Please input a course code !</value>
+  </data>
+  <data name="VALIDATION_COURSE_DEPARTMENT" xml:space="preserve">
+    <value>Please choose department !</value>
+  </data>
+  <data name="VALIDATION_COURSE_FROMDATE" xml:space="preserve">
+    <value>Please choose from date course !</value>
+  </data>
+  <data name="VALIDATION_COURSE_GROUPCOURSE" xml:space="preserve">
+    <value>Please choose group cousre  or group course have subject !</value>
+  </data>
+  <data name="VALIDATION_COURSE_INSTRUCTOR" xml:space="preserve">
+    <value>Please choose instructor !</value>
+  </data>
+  <data name="VALIDATION_COURSE_NAME" xml:space="preserve">
+    <value>Please input a course name !</value>
+  </data>
+  <data name="VALIDATION_COURSE_TODATE" xml:space="preserve">
+    <value>Please choose from-to date course !</value>
+  </data>
+  <data name="VALIDATION_PATHFILE" xml:space="preserve">
+    <value>Cant find path in server !</value>
+  </data>
+  <data name="CERTIFICATE_TRAINEE_NOT_ADDNEW" xml:space="preserve">
+    <value>Not new trainee just get certificate !</value>
+  </data>
+  <data name="VALIDATION_EMAIL_REQUIED" xml:space="preserve">
+    <value>Please input a Email !</value>
+  </data>
+  <data name="VALIDATION_FULLNAME_REQUIED" xml:space="preserve">
+    <value>Please input a Full Name !</value>
+  </data>
+  <data name="VALIDATION_USERNAME_REQUIED" xml:space="preserve">
+    <value>Please input a User Name !</value>
+  </data>
+  <data name="SUCCESS_DELETE_TRAINEE" xml:space="preserve">
+    <value>Delete {0} successfully !</value>
+  </data>
+  <data name="UNSUCCESS_DELETE_TRAINEE" xml:space="preserve">
+    <value>Delete {0} unsuccessfully ! Please , try again .</value>
+  </data>
+  <data name="VALIDATION_USER_EID" xml:space="preserve">
+    <value>Please input  EID !</value>
+  </data>
+  <data name="VALIDATION_USER_FULLNAME" xml:space="preserve">
+    <value>Please input Full Name !</value>
+  </data>
+  <data name="VALIDATION_USER_GENDER" xml:space="preserve">
+    <value>Please choose gender !</value>
+  </data>
+  <data name="VALIDATION_USER_DEPARTMENT" xml:space="preserve">
+    <value>Please choose department !</value>
+  </data>
+  <data name="VALIDATION_USER_EMAIL" xml:space="preserve">
+    <value>Please input Email !</value>
+  </data>
+  <data name="VALIDATION_USER_EMAIL_EXPRESSION" xml:space="preserve">
+    <value>Please enter a valid Email !</value>
+  </data>
+  <data name="VALIDATION_MCOURSE_CODE" xml:space="preserve">
+    <value>Please input Code !</value>
+  </data>
+  <data name="VALIDATION_MCOURSE_NAME" xml:space="preserve">
+    <value>Please input Name !</value>
+  </data>
+  <data name="VALIDATION_EXISTS_INSTRUCTOR" xml:space="preserve">
+    <value>{0}instructor, have  {1} the course uncompleted ! {2}</value>
+  </data>
+  <data name="VALIDATION_APPROVE_ASSIGN_TRAINEE" xml:space="preserve">
+    <value>Course is approved!</value>
+  </data>
+  <data name="VALIDATION_CANCEL_APPROVE" xml:space="preserve">
+    <value>Course is completed !</value>
+  </data>
+  <data name="SETSTATUS_UNSUCCESS_AVAILABLE" xml:space="preserve">
+    <value>{0} cannot set status because being in used !</value>
+  </data>
+  <data name="VALIDATION_USER_CONFIRMPASSWORD_EXPRESSION" xml:space="preserve">
+    <value>Confirm password doesnt match, Type again !</value>
+  </data>
+  <data name="VALIDATION_USER_USERNAME_EXPRESSION" xml:space="preserve">
+    <value>Please input 6 characters minimum !</value>
+  </data>
+  <data name="RESULT_CONFIRM" xml:space="preserve">
+    <value>List Trainees Have Result : {0} !</value>
+  </data>
+  <data name="VALIDATION_SORT_NAME_REQUIED" xml:space="preserve">
+    <value>Please input a Sort Name !</value>
+  </data>
+  <data name="ALERT_MAXTRAINEE" xml:space="preserve">
+    <value>{0}, {1}  Assign trainee successfully !</value>
+  </data>
+  <data name="CONFIRM_USER" xml:space="preserve">
+    <value>Are you sure to delete User ?</value>
+  </data>
+  <data name="Advanced_Search" xml:space="preserve">
+    <value>Advanced Search</value>
+  </data>
+  <data name="MCOURSE_ASSIGNEDSUBJECT" xml:space="preserve">
+    <value>Please enter a valid Assigned Course!</value>
+  </data>
+  <data name="VALIDATION_GROUPCODE" xml:space="preserve">
+    <value>Please enter a valid Group Code!</value>
+  </data>
+  <data name="VALIDATION_GROUPUSER_NAME" xml:space="preserve">
+    <value>Please enter a valid GroupUser Name!</value>
+  </data>
+  <data name="VALIDATION_GROUPUSER_TITLE" xml:space="preserve">
+    <value>Please enter a valid GroupUser Title!</value>
+  </data>
+  <data name="VALIDATION_JOBTITLE_HEADER" xml:space="preserve">
+    <value>Please enter a valid JobHeader!</value>
+  </data>
+  <data name="VALIDATION_JOBTITLE_NAME" xml:space="preserve">
+    <value>Please enter a valid Job Name!</value>
+  </data>
+  <data name="VALIDATION_JOBTITLE_POSITION" xml:space="preserve">
+    <value>Please enter a valid Job Position!</value>
+  </data>
+  <data name="VALIDATION_SUBJECT_RECURENT" xml:space="preserve">
+    <value>Please enter a valid course recurent !</value>
+  </data>
+  <data name="VALIDATION_SUBJECT_AVERAGE_CALCULTE" xml:space="preserve">
+    <value>Please enter a valid Average Calculate!</value>
+  </data>
+  <data name="VALIDATION_SUBJECT_DURATION" xml:space="preserve">
+    <value>Please enter a valid course duration !</value>
+  </data>
+  <data name="VALIDATION_SUBJECT_GRADE" xml:space="preserve">
+    <value>Please enter a valid course grade !</value>
+  </data>
+  <data name="VALIDATION_SUBJECT_PASSSCORE" xml:space="preserve">
+    <value>Please enter a valid course score !</value>
+  </data>
+  <data name="VALIDATION_SUBJECT_POINT" xml:space="preserve">
+    <value>Please enter a valid course point !</value>
+  </data>
+  <data name="VALIDATION_DATE_FROM_TO" xml:space="preserve">
+    <value>Finished date cannot less than started date !</value>
+  </data>
+  <data name="UPDATE_SUCCESSFULLY" xml:space="preserve">
+    <value>Update {0} Successfully !</value>
+  </data>
+  <data name="UPDATE_UNSUCCESSFULLY" xml:space="preserve">
+    <value>Update {0} Unsuccessfully !</value>
+  </data>
+  <data name="VALIDATION_ROLE_DATA" xml:space="preserve">
+    <value>Invalid role data !</value>
+  </data>
+  <data name="VALIDATION_ROLE_MENU_DATA" xml:space="preserve">
+    <value>Invalid menu data !</value>
+  </data>
+  <data name="DELETE_ROLE" xml:space="preserve">
+    <value>Are you sure to delete role ?</value>
+  </data>
+  <data name="VALIDATION_COURSE_COMMITMENTEXPIREDATE" xml:space="preserve">
+    <value>Please input a valid expiry date !</value>
+  </data>
+  <data name="VALIDATION_COURSE_LIMIT_COMMITMENTEXPIREDATE" xml:space="preserve">
+    <value>Please input a value  more than 0 !</value>
+  </data>
+  <data name="VALIDATION_IMPORT_ASSIGN" xml:space="preserve">
+    <value>not exist in system</value>
+  </data>
+  <data name="VALIDATION_FILE" xml:space="preserve">
+    <value>File is not correct or empty !!!</value>
+  </data>
+  <data name="VALIDATION_CONTRACT_EXPRIEDATE" xml:space="preserve">
+    <value>Please input a Expire Date !</value>
+  </data>
+  <data name="VALIDATION_CONTRACT_SIGNDATE" xml:space="preserve">
+    <value>Please input a Sign Date !</value>
+  </data>
+  <data name="VALIDATION_COURSE_FROM_THAN_TO" xml:space="preserve">
+    <value>Started Date is greater than Finished Date !</value>
+  </data>
+  <data name="UNSUCCESS_CANCEL_REQUEST" xml:space="preserve">
+    <value>Unsuccessfully cancel request !</value>
+  </data>
+  <data name="REMARKCOMMENT_SUCCESSS" xml:space="preserve">
+    <value>Set {0} failed, successfully !</value>
+  </data>
+  <data name="VALIDATION_REMARKCOMMENT_REMARK" xml:space="preserve">
+    <value>Please input a remark !</value>
+  </data>
+  <data name="WARNING_MAX_ASSIGNTRAINEE" xml:space="preserve">
+    <value>{0} {1} It takes a maximum of {2} trainee. {3}  Are you sure to want to assign trainee ?</value>
+  </data>
+  <data name="REMOVE_TRAINEE" xml:space="preserve">
+    <value>{0}, {1}  Remove trainee successfully !</value>
+  </data>
+  <data name="VALIDATION_SUBJECT_RANGEPOINT" xml:space="preserve">
+    <value>Please enter course point from 0  to 100 !</value>
+  </data>
+  <data name="VALIDATION_SIGNDATE_EXPIREDATE" xml:space="preserve">
+    <value>Expire date cannot less than Sign date !</value>
+  </data>
+  <data name="VALIDATION_GROUPTRAINEE_CODE" xml:space="preserve">
+    <value>Please input a group code !</value>
+  </data>
+  <data name="VALIDATION_GROUPTRAINEE_NAME" xml:space="preserve">
+    <value>Please input a group name !</value>
+  </data>
+  <data name="CHECK_ASSIGNTRAINEE" xml:space="preserve">
+    <value>{0} have date {1} and hours {2} is exist ! {3}- Are you sure to want to assign trainee ?</value>
+  </data>
+  <data name="WARNING_MIN_ASSIGNTRAINEE" xml:space="preserve">
+    <value>{0} {1} It takes a minimum of {2} trainee. {3}  Are you sure to want to assign trainee ?</value>
+  </data>
+  <data name="WARNING_DELETE_COURSE" xml:space="preserve">
+    <value>You cannot remove " {0} " because course has resulted !</value>
+  </data>
+  <data name="WARNING_REMOVE_TRAINEE" xml:space="preserve">
+    <value>You cannot remove because "{0}" has resulted !</value>
+  </data>
+  <data name="DELETE_CERTIFICATE" xml:space="preserve">
+    <value>Are you sure want to delete certificate template ?</value>
+  </data>
+  <data name="VALIDATION_COURSE_FILTER" xml:space="preserve">
+    <value>Please choose a {0} !</value>
+  </data>
+  <data name="WARNING_CHECK_TRAINEE_ASSIGN" xml:space="preserve">
+    <value>Please choose trainee !</value>
+  </data>
+  <data name="WARNING_REQUEST" xml:space="preserve">
+    <value>Are you sure to send request ?</value>
+  </data>
+  <data name="WARNING_SENT_REQUEST_SUCCESS" xml:space="preserve">
+    <value>Send request success !</value>
+  </data>
+  <data name="ERROR_NOTFOUND" xml:space="preserve">
+    <value>{0} is not found !</value>
+  </data>
+  <data name="REQUEST_SUCCESSFULLY" xml:space="preserve">
+    <value>Requested Successfully !</value>
+  </data>
+  <data name="APPROVE_SUCCESS" xml:space="preserve">
+    <value>Approve Success !</value>
+  </data>
+  <data name="ERROR_APPROVE" xml:space="preserve">
+    <value>Approve Unsuccess !</value>
+  </data>
+  <data name="WARNING_DELETE_PROGRAM" xml:space="preserve">
+    <value>You cannot remove " {0} " because course is  processing !</value>
+  </data>
+  <data name="Message_CancelRequest" xml:space="preserve">
+    <value>Are you sure to cancel request ?</value>
+  </data>
+  <data name="WARNING_NOT_FOUND_APPROVER" xml:space="preserve">
+    <value>Approver is not found to send notification !</value>
+  </data>
+  <data name="WARNING_SENT_REQUEST_ERROR" xml:space="preserve">
+    <value>Send request unsuccess !</value>
+  </data>
+  <data name="VALIDATION_COURSE_HAS_TRAINEE" xml:space="preserve">
+    <value>The {0} {1} does not have trainee !</value>
+  </data>
+  <data name="VALIDATION_SUBJECT_HAS_RESULT" xml:space="preserve">
+    <value>The {0} {1} does not have to result !</value>
+  </data>
+  <data name="ERROR_UPDATE_STATUS_UNSUCCESS" xml:space="preserve">
+    <value>Update status sent to LMS not successfully !</value>
+  </data>
+  <data name="SUBMIT_SUCCESS" xml:space="preserve">
+    <value>{0} success !</value>
+  </data>
+  <data name="WARNING_SUBJECT_COMPLETED" xml:space="preserve">
+    <value>{0} have {1} uncompleted !</value>
+  </data>
+  <data name="WARNING_CANCEL_APPROVE" xml:space="preserve">
+    <value>Are you sure to cancel approve ?</value>
+  </data>
+  <data name="VALIDATE_SELECT_COURSE" xml:space="preserve">
+    <value>{0} is not found because of {1} was inactived or deleted !</value>
+  </data>
+  <data name="COURSE_IS_NOT_FOUND" xml:space="preserve">
+    <value>The {0} {1} is not found !</value>
+  </data>
+  <data name="DataIsExists" xml:space="preserve">
+    <value>{0} {1} is already exists !</value>
+  </data>
+  <data name="DATA_ISNOTFOUND" xml:space="preserve">
+    <value>{0} {1} is not found !</value>
+  </data>
+  <data name="EMPLOYEE_ISNOT_INTRUCTOR" xml:space="preserve">
+    <value>Employee is not the Instructor !</value>
+  </data>
+  <data name="ERROR_CALLLMS" xml:space="preserve">
+    <value>Error , call lms updating in process !</value>
+  </data>
+  <data name="DELETE_SUCCESSFULLY_BUT_ERROR_LMS" xml:space="preserve">
+    <value>Remove {0} successfully but an error occurred while call LMS updating in process !</value>
+  </data>
+  <data name="SUCCESSFULLY_BUT_ERROR_LMS" xml:space="preserve">
+    <value>{0} {1} successfully but an error occurred while call LMS updating in process !</value>
+  </data>
+  <data name="VALIDATION_FOLDER" xml:space="preserve">
+    <value>You have not permission to create folder !</value>
+  </data>
+  <data name="VALIDATION_STEP_ASSIGNTRAINEE_APPROVE" xml:space="preserve">
+    <value>Step "Assign Trainee" approved !</value>
+  </data>
+  <data name="LOGIN_BLOCK" xml:space="preserve">
+    <value>Your account is blocked. please contact manager support !</value>
+  </data>
+  <data name="LOGIN_BROWSER" xml:space="preserve">
+    <value>your account is logging from other browsers . Try login after 30 second</value>
+  </data>
+  <data name="LOGIN_FAIL" xml:space="preserve">
+    <value>Login fail !</value>
+  </data>
+  <data name="LOGIN_INCORRECT" xml:space="preserve">
+    <value>Username or password incorrect !</value>
+  </data>
+  <data name="DELETED_UNSUCCESS_SENDLMS" xml:space="preserve">
+    <value>{0} cannot remove because not sync to LMS !</value>
+  </data>
+  <data name="SAVE_UNSUCCESS" xml:space="preserve">
+    <value>{0} cannot save because being in used !</value>
+  </data>
+  <data name="WARNING_SEND_NEW_PASS" xml:space="preserve">
+    <value>Are you sure want to send new password to "{0}" ?</value>
+  </data>
+  <data name="VALIDATION_CONTENT_MAIL" xml:space="preserve">
+    <value>Please input content !</value>
+  </data>
+  <data name="VALIDATION_CONTACT_SUBJECT" xml:space="preserve">
+    <value>Please input Subject !</value>
+  </data>
+  <data name="VALIDATION_SCHEDULE_METHOD" xml:space="preserve">
+    <value>Please choose a Method !</value>
+  </data>
+  <data name="VALIDATION_SCHEDULE_NAME" xml:space="preserve">
+    <value>Please input Name !</value>
+  </data>
+  <data name="VALIDATION_SCHEDULE_TYPE" xml:space="preserve">
+    <value>Please choose a Type !</value>
+  </data>
+  <data name="VALIDATION_TEXT" xml:space="preserve">
+    <value>Please input {0} !</value>
+  </data>
+  <data name="VALIDATION_SCHEDULE_SENDTO" xml:space="preserve">
+    <value>Please choose type send !</value>
+  </data>
+  <data name="DELETE_LOG" xml:space="preserve">
+    <value>Are you sure to delete log?</value>
+  </data>
+  <data name="DELETE_POSTCATEGORY" xml:space="preserve">
+    <value>Are you sure to delete postnews category?</value>
+  </data>
+  <data name="DELETE_POSTNEWS" xml:space="preserve">
+    <value>Are you sure to delete news?</value>
+  </data>
+  <data name="DELETE_SCHEDULE" xml:space="preserve">
+    <value>Are you sure to delete schedule ?</value>
+  </data>
+  <data name="ERROR_CALL_LMS" xml:space="preserve">
+    <value>but an error occurred while call LMS updating in process !</value>
+  </data>
+  <data name="WARNING_DATECALENDAR" xml:space="preserve">
+    <value>Please choose Calendar !</value>
+  </data>
+  <data name="WARNING_DAY" xml:space="preserve">
+    <value>Please choose Date !</value>
+  </data>
+  <data name="WARNING_EMPLOYEE" xml:space="preserve">
+    <value>Please choose Employee !</value>
+  </data>
+  <data name="WARNING_TIMEMARK" xml:space="preserve">
+    <value>Please choose Time Mark !</value>
+  </data>
+  <data name="WARNING_TIMEPERIODIC" xml:space="preserve">
+    <value>Please choose Time ! </value>
+  </data>
+  <data name="WARNING_TIMEREPEAT" xml:space="preserve">
+    <value>Please input time &gt; 0 !</value>
+  </data>
+  <data name="WARNING_USERSYSTEM" xml:space="preserve">
+    <value>Please choose User !</value>
+  </data>
+  <data name="WARNING_CODE_HAS_SPACE" xml:space="preserve">
+    <value>{0} Has space , please input again !</value>
+  </data>
+  <data name="WARNING_MIN_MAX_TRAINEE" xml:space="preserve">
+    <value>Min Trainee {0} must be less than Max Trainee {1} !</value>
+  </data>
+  <data name="CHECK_INSTRUCTOR_EXIST" xml:space="preserve">
+    <value>{0} have date {1} and hours {2} is exists ! </value>
+  </data>
+  <data name="WARNING_DELETE_COURSE_NOTSYNC" xml:space="preserve">
+    <value>You cannot remove " {0} " because await sync LMS , please sync first  !</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="WARNING_DECISION" xml:space="preserve">
+    <value>Please input Decision No !</value>
+  </data>
+  <data name="WARNING_GROUPCERTIFICATE" xml:space="preserve">
+    <value>Please choose Group Certificate !</value>
+  </data>
+  <data name="WARNING_NOTRAINEE" xml:space="preserve">
+    <value>No Trainee has completed the certificate !</value>
+  </data>
+  <data name="APPROVE_TRAINEE_COURSE" xml:space="preserve">
+    <value>Approve trainee to course successfully!!!!</value>
+  </data>
+  <data name="APPROVE_TRAINEE_COURSE_ERROR" xml:space="preserve">
+    <value>Error enroll user to course</value>
+  </data>
+  <data name="Search_hide" xml:space="preserve">
+    <value>Hide Search</value>
+  </data>
+  <data name="WARNING_EXTENSION_FILE" xml:space="preserve">
+    <value>not an accepted file extension !</value>
+  </data>
+  <data name="WARNING_CLEAN_LOG" xml:space="preserve">
+    <value>Are you sure to clean ?</value>
+  </data>
+  <data name="RegEx_PASSWORD" xml:space="preserve">
+    <value>Password condition: 
+&lt;br /&gt;- Must be 8 characters minimum !
+&lt;br /&gt;- Must be have an UPPERCASE !
+&lt;br /&gt;- Must be have a lowercase !
+&lt;br /&gt;- Must be have a Digits !
+&lt;br /&gt;- Must be have a Special Character !</value>
+  </data>
+  <data name="DELETE_OBJECT" xml:space="preserve">
+    <value>Are you sure to delete {0} ?</value>
+  </data>
+  <data name="WARNING_CREATEMEETING_ROOM" xml:space="preserve">
+    <value>Meeting rooms were used during the selected time. Please select again !!!</value>
+  </data>
+  <data name="VALIDATION_COURSE_MAXGRADE" xml:space="preserve">
+    <value>Please enter Max grade from 0  to 100 !</value>
+  </data>
+  <data name="WARNING_MAXGRADE" xml:space="preserve">
+    <value>{0} Total grade must be 100 !</value>
+  </data>
+  <data name="VALIDATION_REGISTER_FROM_TO" xml:space="preserve">
+    <value>{0}{1} can not less than {2} .</value>
+  </data>
+  <data name="VALIDATION_ENDDATE" xml:space="preserve">
+    <value>Please choose end date !</value>
+  </data>
+  <data name="VALIDATION_STARTDATE" xml:space="preserve">
+    <value>Please choose start date !</value>
+  </data>
+  <data name="DELETE_SURVEY" xml:space="preserve">
+    <value>Are you sure to delete survey?</value>
+  </data>
+  <data name="VALIDATION_ISNUMBER" xml:space="preserve">
+    <value>{0} Reslt must be a number !</value>
+  </data>
+  <data name="VALIDATION_MAXGRADE" xml:space="preserve">
+    <value>{0} {1} can not less than {2} . ({3})</value>
+  </data>
+  <data name="WARNING_RANDOM_PASS" xml:space="preserve">
+    <value>Please Login with SSO !</value>
+  </data>
+  <data name="WARNING_401" xml:space="preserve">
+    <value>You do not have sufficient privileges for this operation. Please contact admin.</value>
+  </data>
+  <data name="WARNING_302" xml:space="preserve">
+    <value>You do not have sufficient privileges for this operation. Please contact admin.</value>
+  </data>
+  <data name="LOGIN_FAIL_1MINUTE" xml:space="preserve">
+    <value>Please try again in 1 minute.</value>
+  </data>
+  <data name="LOGIN_FAIL_30MINUTES" xml:space="preserve">
+    <value>Please try again in 30 minutes.</value>
+  </data>
+  <data name="TIMEOUT_SESSION" xml:space="preserve">
+    <value>Your session has expired, please refresh the page and try again.</value>
+  </data>
+  <data name="Examiner" xml:space="preserve">
+    <value>Examiner</value>
+  </data>
+  <data name="ADD_SUCCESSFULLY_BUT_ERROR_LMS" xml:space="preserve">
+    <value>Add {0} successfully but an error occurred while call LMS updating in process !</value>
+  </data>
+  <data name="DELETE_MAILTEMPLATE" xml:space="preserve">
+    <value>Are you sure to delete mail template?</value>
+  </data>
+  <data name="EXISTING_ReminderTitle" xml:space="preserve">
+    <value>Reminder title is existing !</value>
+  </data>
+  <data name="CHECK_INSTRUCTOR_EXIST_CUSTOM" xml:space="preserve">
+    <value>{0} have date {1} and hours {2} is exists in course {3} !</value>
+  </data>
+</root>

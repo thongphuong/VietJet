@@ -1,0 +1,169 @@
+﻿@using TMS.Core.App_GlobalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fas fa-database"></i> @Resource.lblMasterData - @Resource.lblCertificateManagement</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblMasterData</li>
+                <li class="active">@Resource.lblCertificateManagement</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12" style="margin-top: 10px;">
+        <div class="panel list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title">
+                    <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> @Resource.lblList
+                    <p class="btn-group pull-right">
+                        @if (User.IsInRole("/Certificate/Modify"))
+                        {
+                            <a href="~/Certificate/Modify" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-plus" aria-hidden="true"></i> @Resource.lblADDNEW</a>
+                        }
+                    </p>
+                </h1>
+            </div>
+            <div class="panel-body table-responsive">
+                <div id="panel-search" class="collapse panel">
+                    <form action="@Url.Action("AjaxHandler", "Certificate")" method="POST" id="frmFilter">
+                        <div class="panel-body">
+                            <div class="col-md-8">
+                                <label class="col-md-1">@Resource.lblName</label>
+                                <div class="col-md-11">
+                                    <input type="text" name="Name" id="Name" class="form-control frmFilter" placeholder="@Resource.lblName" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary pull-right" id="btFilter">
+                                    <i class="fa fa-search"></i> @Resource.lblSearch
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <br />
+                </div>
+                <p class="pull-right" data-toggle="collapse" data-target="#panel-search" style="cursor:pointer;" id="call-panel-search"><i class="fa fa-search"></i> @Messege.Search</p>
+                <table class="table table-bordered table-striped" id="datatable">
+                    <thead>
+                        <tr>
+                            <th>@Resource.lblStt</th>
+                            <th>@Resource.lblName</th>
+                            <th>@Resource.lblStatus</th>
+                            <th>@Resource.lblOptions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var sTable;
+        $(function () {
+            $('#frmFilter').submit(function (e) {
+                sTable.draw();
+                e.preventDefault();
+            });
+            var customRow = [
+                {
+
+                    "targets": 0,
+                    "className": "text-center"
+                },
+                {
+
+                    "targets": 2,
+                    "className": "text-center"
+                },
+                {
+
+                    "targets": 3,
+                    "className": "text-center"
+                }
+
+            ];
+            $(".line_50").addClass("active");
+            sTable = initDataTable('#datatable', '/Certificate/AjaxHandler', customRow);
+
+        });
+        function Set_Participate_Certificate(isParticipate, id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/Certificate/SubmitSetParticipateCertificate",
+                datatype: 'json',
+                data: { isParticipate: isParticipate, id: id },
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, "ERROR", TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    sTable.draw();
+                    spinner.close();
+                }
+            });
+        }
+
+        function calldelete(id) {
+            notify.confirm("@Messege.DELETE_CERTIFICATE", "Confirm", TITLE_STATUS_DANGER, deletesubmit, id);
+
+        }
+        function deletesubmit(id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/Certificate/Delete",
+                datatype: 'json',
+                data: { id: id },
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, 'SUCCESS', TITLE_STATUS_SUCCESS);
+                    }
+                    else {
+                        notify.alert(data.message, 'ERROR', TITLE_STATUS_DANGER);
+                    }
+
+                }, complete: function () {
+                    sTable.draw();
+                    spinner.close();
+                }
+            });
+        }
+
+        function Blank_Review(id) {
+
+            var cerId = "cer_body" + id;
+            var headContent = document.getElementsByTagName('head')[0].innerHTML;
+            $('#cer_body a').addClass('hidden');
+            var bd = $('#' + cerId).html();
+
+
+            var winPrint = window.open('', '', 'left=0,top=0,width=1366px,height=768px,toolbar=0,scrollbars=0,status=0');
+            winPrint.document.write(headContent + bd);
+            winPrint.document.close();
+            winPrint.focus();
+            $('#cer_body a').removeClass('hidden');
+        }
+    </script>
+
+
+}
+
+
+
+

@@ -1,0 +1,45 @@
+﻿@using DAL.Entities
+@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.GroupUserModels.GroupUserModel
+<div class="panel-body">
+    <div class="tab-content">
+        <div class="tab-pane fade  active in" id="home">
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <div class="col-md-4 control-label">
+                        @Html.LabelFor(m => m.Name) <label><font color="red">(*)</font></label>
+                    </div>
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = Resource.GROUPUSER_NAME })
+                        @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <div class="col-md-4 control-label">
+                        @Html.LabelFor(m => m.Title) <label><font color="red">(*)</font></label>
+                    </div>
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.Title, new { @class = "form-control", placeholder = Resource.GROUPUSER_TITLE })
+                        @Html.ValidationMessageFor(m => m.Title, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            @*<div class="row">
+               @{
+                    if (User.IsInRole("/GroupUser/Modify"))
+                    {
+                        <div class="col-md-1">
+                            <a href="javascript:void(0)" class="btn btn-primary center-block legitRipple" id="submit" onclick=" document.getElementById('PermissionForm').submit(); "><i class="fa fa-floppy-o" aria-hidden="true"></i> @Resource.lblSave</a>
+
+                        </div>
+                    }
+                }
+                <div class="col-md-1">
+                    <a onclick=" goBack() " class="btn  center-block legitRipple"><i class="fa fa-sign-out" aria-hidden="true"></i> @Resource.lblBack</a>
+                </div>
+            </div>*@         
+        </div>
+    </div>
+</div>

@@ -1,0 +1,426 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="zmdi zmdi-view-dashboard"></i> @Messege.HOME  </h1>
+            @*<ol class="breadcrumb">
+                    <li class="active">@Messege.HOME</li>
+                </ol>*@
+        </div>
+    </div>
+}
+@{
+    string URL = "/Home/Index";
+}
+
+<style type="text/css">
+    .huge > a {
+        color: inherit;
+    }
+
+    .icon-e-learning:before {
+        content: "\e901";
+        color: #00039c;
+    }
+
+    li.active > .setTRAINING,
+    #table_course_1 thead,
+    #course_tab_1 .pagination > .active > a,
+    #course_tab_1 .pagination > .active > span,
+    #course_tab_1 .pagination > .active > a:hover,
+    #course_tab_1 .pagination > .active > span:hover,
+    #course_tab_1 .pagination > .active > a:focus,
+    #course_tab_1 .pagination > .active > span:focus {
+        background-color: #2196f3 !important;
+    }
+
+    li.active > .setUPCOMING,
+    #table_course_2 thead,
+    #course_tab_2 .pagination > .active > a,
+    #course_tab_2 .pagination > .active > span,
+    #course_tab_2 .pagination > .active > a:hover,
+    #course_tab_2 .pagination > .active > span:hover,
+    #course_tab_2 .pagination > .active > a:focus,
+    #course_tab_2 .pagination > .active > span:focus {
+        background-color: #ff9800 !important;
+    }
+
+    li.active > .setCOMPLETED,
+    #table_course_3 thead,
+    #course_tab_3 .pagination > .active > a,
+    #course_tab_3 .pagination > .active > span,
+    #course_tab_3 .pagination > .active > a:hover,
+    #course_tab_3 .pagination > .active > span:hover,
+    #course_tab_3 .pagination > .active > a:focus,
+    #course_tab_3 .pagination > .active > span:focus {
+        background-color: #5cb85c !important;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel list-panel">
+            <div class="panel-body">
+                <div class="col-md-6">
+
+                    <div id="container22" style="zoom: 125%;"></div>
+                </div>
+                <div class="col-md-6">
+                    <div id="tab_course">
+                        <ul class="nav nav-pills" hidden>
+                            <li class="active">
+                                <a href="#course_tab_1" class="setTRAINING" data-toggle="tab">@Messege.TRAINING</a>
+                            </li>
+                            <li>
+                                <a href="#course_tab_2" class="setUPCOMING" data-toggle="tab">@Messege.UPCOMING</a>
+                            </li>
+                            <li>
+                                <a href="#course_tab_3" class="setCOMPLETED" data-toggle="tab">@Messege.COMPLETED</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade in active" id="course_tab_1">
+                                <div class="panel-body table-responsive" style="margin-top: 10px;">
+                                    <p class="text-capitalize"><b>@Messege.TRAINING:</b> @ViewBag.count_danghoc/@ViewBag.count_tong Course</p>
+                                    <table id="table_course_1" class="table table-striped table-bordered " cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr role="row">
+                                                <th style="width:3%">@Resource.lblStt</th>
+                                                <th>@Resource.lblCourseCode</th>
+                                                <th>@Resource.lblSubjectName</th>
+                                                <th>@Resource.lblFrom</th>
+                                                <th>@Resource.lblTo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="course_tab_2">
+                                <div class="panel-body table-responsive" style="margin-top: 10px;">
+                                    <p class="text-capitalize"><b>@Messege.UPCOMING:</b> @ViewBag.count_saphoc/@ViewBag.count_tong Course</p>
+                                    <table id="table_course_2" class="table table-striped table-bordered " cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr role="row">
+                                                <th style="width:3%">@Resource.lblStt</th>
+                                                <th>@Resource.lblCourseCode</th>
+                                                <th>@Resource.lblSubjectName</th>
+                                                <th>@Resource.lblFrom</th>
+                                                <th>@Resource.lblTo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="course_tab_3">
+                                <div class="panel-body table-responsive" style="margin-top: 10px;">
+                                    <p class="text-capitalize"><b>@Messege.COMPLETED:</b> @ViewBag.count_dahoc/@ViewBag.count_tong Course</p>
+                                    <table id="table_course_3" class="table table-striped table-bordered " cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr role="row">
+                                                <th style="width:3%">@Resource.lblStt</th>
+                                                <th>@Resource.lblCourseCode</th>
+                                                <th>@Resource.lblSubjectName</th>
+                                                <th>@Resource.lblFrom</th>
+                                                <th>@Resource.lblTo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="panel list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title">
+                    <i class="fas fa-stopwatch font-small-byhoa"></i> @Messege.SCHEDULES
+                    <p class="pull-right" data-toggle="collapse" data-target="#demo" style="cursor:pointer;"><i class="fas fa-search font-small-byhoa"></i> @Messege.Advanced_Search</p>
+                </h1>
+            </div>
+            <div class="panel-body">
+                <div class="col-md-12">
+                    @using (Html.BeginForm("Export", "Home", FormMethod.Post, new { id = "frmFilter" }))
+                    {
+                        <div class="row" style="margin-top: 10px;">
+                            <div id="demo" class="collapse">
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-3 col-xs-6">
+                                        <label>@Resource.lblCourseCode</label>
+                                        <input type="text" id="str_code" name="str_code" class="form-control frmFilter" placeholder="@Resource.lblCourseCode" />
+                                    </div>
+                                    <div class="col-md-3 col-xs-6">
+                                        <label>@Resource.lblSubjectName</label>
+                                        <input type="text" id="ddl_subject" name="ddl_subject" class="form-control frmFilter" placeholder="@Resource.lblSubject" />
+                                    </div>
+                                    <div class="col-md-3 col-xs-6">
+                                        <label>@Resource.lblRoom</label>
+                                        @Html.DropDownList("RoomList", (SelectList)ViewBag.RoomList, "", new { @class = "form-control combobox frmFilter", data_placeholder = "-- " + @Resource.lblRoom + " --" })
+                                    </div>
+                                    <div class="col-md-3 col-xs-6">
+                                        <label>@Resource.lblInstructor</label>
+                                        @Html.DropDownList("InstructorList", (SelectList)ViewBag.InstructorList, "-- Instructor --", new { @class = "form-control combobox frmFilter", data_placeholder = "-- " + @Resource.lblInstructor + " --" })
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-3 col-xs-6">
+                                        <label>@Resource.lblTime</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <input type="text" class="form-control pull-right frmFilter" name="fSearchDate_from" id="fSearchDate_from" placeholder="-- @Resource.lblTime --">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-xs-6">
+                                        <label>@Resource.lblMethod</label>
+                                        <select data-placeholder="-- @Resource.lblType --" id="str_Type" name="str_Type" class="form-control frmFilter" data-width="100%">
+                                            <option></option>
+                                            <option value="@((int)UtilConstants.LearningTypes.Online)">E-Learning</option>
+                                            <option value="@((int)UtilConstants.LearningTypes.Offline)">Class</option>
+                                            <option value="@((int)UtilConstants.LearningTypes.OfflineOnline)">Blended</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 col-xs-6">
+                                        <label>@Resource.lblStatus</label>
+                                        <select data-placeholder="-- @Resource.lblStatus --" id="str_Status" name="str_Status" class="form-control frmFilter" data-width="100%">
+                                            <option></option>
+                                            <option value="@((int)UtilConstants.ScheduleStatus.InProcess)">In process</option>
+                                            <option value="@((int)UtilConstants.ScheduleStatus.Upcoming)">Upcoming</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-10">
+                                    </div>
+                                    <div class="col-md-1">
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="submit" class="btn btn-danger pull-right" id="btFilter" value="@Resource.lblSearch" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class=" table-responsive" style="margin-top: 10px;">
+                            <table id="Trainee" class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                    <tr role="row">
+                                        <th style="width:3%">@Resource.lblStt</th>
+                                        <th>@Resource.lblCourseCode</th>
+                                        <th>@Resource.lblSubjectName</th>
+                                        <th>@Resource.lblFrom</th>
+                                        <th>@Resource.lblTo</th>
+                                        <th>@Resource.lblRoom</th>
+                                        <th>@Resource.lblInstructor</th>
+                                        <th>@Resource.lblMethod</th>
+                                        <th>@Resource.lblStatus</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                            </table>
+                            <div class="col-lg-12">
+                                <ul class="list-inline text-left">
+                                    <li>
+                                        <h5><i class='fa fa-desktop' style='color:red;'></i> E-Learning</h5>
+                                    </li>
+                                    <li>
+                                        <h5><i class='fas fa-chalkboard-teacher' style='color: green;'></i> Class</h5>
+                                    </li>
+                                    <li>
+                                        <h5><i class='fas fa-book-reader' style='color:royalblue;'></i> cRo</h5>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4" id="mydiv">
+        @*<div class="panel m-green">
+                <div class="box-home">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="zmdi zmdi-check zmdi-hc-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div class="huge"><a href="javascript:void(0);" title="View Details" target="_blank" id="count_complete">@ViewBag.countOnline</a></div>
+                            <div style="font-weight:bold;font-family: " Open Sans","Helvetica Neue",Arial,sans-serif;">Online in LMS</div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+        <div class="panel list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title"><i class="zmdi zmdi-notifications-active"></i> @Messege.Notifications</h1>
+            </div>
+            <div class="panel-body">
+                <div onscroll="scrollMessage2(this)" class="list-group" style="overflow-x: hidden; overflow-y: scroll; height: 500px; text-align: left;" id="messagesTable2">
+                    <div id="loading-notification2" style=" width: 100%; text-align: center; padding: 30px; "> <img src="/Content/assets/img/loadingAnimation.gif" alt="Loading..."> </div>
+                </div>
+                <div class="col-md-12">
+                    <a class="text-center" onclick="MarkAllasRead();Reload();" style="color: blue; margin: auto;">@Resource.lblMarkAllAsRead</a>
+                    <a href="~/Home/Notification" class="pull-right" style="color: blue;">View @Resource.lblAll</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" hidden>
+    <div class="col-md-3">
+        <div class="box-shadow">
+            <div class="panel m-green">
+                <div class="box-home">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="zmdi zmdi-check zmdi-hc-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div class="huge"><a href="javascript:void(0);" title="View Details" target="_blank" id="count_complete">23</a></div>
+                            <div style="font-weight:bold;font-family:" Open Sans","Helvetica Neue",Arial,sans-serif;">Monday July 2017</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="list-group">
+                <a href="javascript:void(0);" class="list-group-item">
+                    <i class="zmdi zmdi-comment-more"></i> New Comment
+                    <span class="pull-right text-muted small">
+                        <em>6:30 pm</em>
+                    </span>
+                </a>
+                <a href="javascript:void(0);" class="list-group-item">
+                    <i class="zmdi zmdi-twitter"></i> 3 New Followers
+                    <span class="pull-right text-muted small">
+                        <em>6:30 pm</em>
+                    </span>
+                </a>
+                <a href="javascript:void(0);" class="list-group-item">
+                    <i class="zmdi zmdi-email"></i> Message Sent
+                    <span class="pull-right text-muted small">
+                        <em>6:30 pm</em>
+                    </span>
+                </a>
+                <a href="javascript:void(0);" class="list-group-item">
+                    <i class="zmdi zmdi-storage"></i> New Task
+                    <span class="pull-right text-muted small">
+                        <em>6:30 pm</em>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<input hidden id="valueCompleted" value="@(Messege.COMPLETED)" />
+@section Scripts{
+    @*<script src="~/Content/Highcharts/code/highcharts.js" type="text/javascript"></script>*@
+    @*<script src="~/Content/Highcharts/code/modules/exporting.js" type="text/javascript"></script>*@
+    <script type="text/javascript">
+        var completed = $('#valueCompleted').val();
+        
+        function Reload() {
+            location.reload();
+        }
+
+        $(document).ready(function () {
+            Home.Home_Index();
+            Highcharts.chart('container22', {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: '@Resource.lblHOME_CHART @DateTime.Now.Year'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                exporting: {
+                    enabled: false
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    },
+                    series: {
+                        cursor: 'pointer',
+                        point: {
+                            events: {
+                                click: function () {
+                                    $('.nav-pills li:eq(' + this.x + ') a').tab('show')
+                                        var customRow = [];
+                                    if (this.name == "COMPLETED") {
+                                          var sTable3 = initDataTableNotLengthChange("#table_course_3", '/Home/AjaxHandlerCourseComplete', customRow);
+
+                                    }
+                                    if (this.name == "UPCOMING") {
+                                            var sTable2 = initDataTableNotLengthChange("#table_course_2", '/Home/AjaxHandlerCourseUpcoming', customRow);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Brands',
+                    colorByPoint: true,
+
+                    data: [{
+                        name: '@Messege.TRAINING',
+                        color: '#2196f3',
+                        y:  @ViewBag.percent_danghoc,
+                        sliced: true,
+                        selected: true,
+                        x: 0,
+                    }, {
+                        name: '@Messege.UPCOMING',
+                        color: '#ff9800',
+                        y: @ViewBag.percent_saphoc,
+                        x: 1,
+                    }, {
+                        name: completed,
+                        color:'#5cb85c',
+                        y:@ViewBag.percent_dahoc,
+                        x: 2,
+                    }]
+                }]
+            });
+            GetMessagesScrollCount2();
+        });
+        var customRow = [];
+        var sTable = initDataTableNotLengthChange("#table_course_1", '/Home/AjaxHandlerCourseTraining', customRow);
+
+
+    </script>
+}

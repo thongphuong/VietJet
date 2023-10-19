@@ -1,0 +1,35 @@
+﻿@model TrainingCenter.Models.LocalPasswordModel
+@{
+    ViewBag.Title = "Manage Account";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-danger">
+            <div class="box-header">
+                <h2 class="box-title">Change Password</h2>
+            </div>
+            <div class="box-body">
+
+                <p class="message-success">@ViewBag.StatusMessage</p>
+
+                <p>You're logged in as <strong>@User.Identity.Name</strong>.</p>
+
+                @if (ViewBag.HasLocalPassword)
+                {
+                    @Html.Partial("_ChangePasswordPartial")
+                }
+                else
+                { 
+                    @Html.Partial("_SetPasswordPartial")
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

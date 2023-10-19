@@ -1,0 +1,70 @@
+﻿
+@using TMS.Core.Utils
+@model TMS.Core.ViewModels.ViewModel.LogViewModel
+
+@if (Model.source == "Course" && Model.obj_Content != null)
+{
+    <div class="col-md-12">
+        <div class="panel ">
+            <div class="panel-body">
+                <div class="col-md-12">
+                    <h4><label>Infomation Course</label></h4>
+                </div>
+                @foreach (var item in Model.obj_Content)
+                {
+                <div class="col-md-6">
+                    <b>@item.Key : </b>
+                    @if (item.Key == "Department")
+                    {
+                        <br />
+                        foreach (var item1 in @Model._department)
+                        {
+                            @("- " + item1);
+                            <br />
+                        }
+
+                    }
+                    else if (item.Key == "Subject")
+                    {
+                        <br />
+                        foreach (var item1 in @Model.subject)
+                        {
+                            @(item1 );
+                            <br />
+                        }
+
+                       @item.Value
+                    }
+                    else
+                    {
+                        @item.Value
+                    }
+                </div>
+                }
+             
+            </div>
+        </div>
+    </div>
+}
+else if (Model.dic_Content != null)
+{
+    <div class="col-md-6">
+        <div class="panel ">
+            <div class="panel-body">
+                <div class="col-md-12">
+                    <h4><label>Infomation Data</label></h4>
+                </div>
+                @foreach (var item in Model.dic_Content)
+                {
+                <div class="col-md-6">
+                    <b>@item.Key : </b>
+                    @item.Value
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+
+

@@ -1,0 +1,382 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Courses.CourseViewAttendance
+@{
+    ViewBag.Title = "Attendance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    label {
+        width: 200px;
+        border-radius: 3px;
+        /*border: 1px solid #D1D3D4;*/
+    }
+
+    /* hide input */
+    input.radio:empty {
+        margin-left: -9999px;
+    }
+
+        /* style label */
+        input.radio:empty ~ label {
+            position: relative;
+            float: left;
+            line-height: 2.5em;
+            text-indent: 3.25em;
+            margin-top: 2em;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+            input.radio:empty ~ label:before {
+                position: absolute;
+                display: block;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                content: '';
+                width: 2.5em;
+                background: #D1D3D4;
+                border-radius: 3px 0 0 3px;
+            }
+
+    /* toggle hover */
+    input.radio:hover:not(:checked) ~ label:before {
+        content: '\2714';
+        text-indent: .9em;
+        color: #C2C2C2;
+    }
+
+    input.radio:hover:not(:checked) ~ label {
+        color: #888;
+    }
+
+    /* toggle on */
+    input.radio:checked ~ label:before {
+        content: '\2714';
+        text-indent: .9em;
+        color: #9CE2AE;
+        background-color: #4DCB6D;
+    }
+
+    input.radio:checked ~ label {
+        color: #777;
+    }
+
+    /* radio focus */
+    input.radio:focus ~ label:before {
+        box-shadow: 0 0 0 3px #999;
+    }
+
+
+
+
+
+    .giua {
+        vertical-align: middle !important;
+       
+        border-left: 2px solid #2196F3;
+    }
+</style>
+
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-graduation-cap"></i>  @Resource.lblCourseManagement - @Messege.lblResults1</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblCourseManagement</li>
+                <li class="active">@Messege.lblResults1</li>
+            </ol>
+        </div>
+    </div>
+}
+
+@*@{Html.RenderAction("FormFilter1", "Home");}*@
+
+@using (Html.BeginForm("AjaxHandlerListToS", "Course", FormMethod.Get, new { id = "frmFilter" }))
+{
+    <div class="col-md-12" style="margin-top: 10px;">
+        <div class="panel  list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title">@Resource.lblFilter</h1>
+            </div>
+            <div class="panel-body">
+                <div class="row col-md-12">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-2">
+                            <label>@Resource.lblCourseCode</label>
+                        </div>
+                        <div class="col-md-2">
+                            @Html.TextBox("coursecode", null, new
+                            {
+                                @class = "form-control",
+                                @placeholder = Resource.lblCourseCode
+                            })
+                        </div>
+
+                        <div class="col-md-1">
+                            <label>@Resource.lblTime</label>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right frmFilter" name="fSearchDate_from" id="fSearchDate_from" placeholder="@Resource.lblStartDate">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right frmFilter" name="fSearchDate_to" id="fSearchDate_to" placeholder="@Resource.lblEndDate">
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="submit" id="btFiltercourse" class="btn btn-primary">@Resource.lblFilter</button>
+                        </div>
+                    </div>
+
+
+                    <hr>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-2">
+                            <b>@Resource.lblCourseName</b>
+                        </div>
+                        <div class="col-md-10">
+                            <select class="form-control selectpicker frmFilter" id="CourseList" name="CourseList" data-placeholder="-- @Resource.lblCourseList @*(@Resource.lblCode - @Resource.lblName)*@ --" onchange=" OnChangeCourseList(this.value) ">
+                                <option></option>
+                                @if (Model.Courseses != null)
+                                {
+                                    foreach (var variable in Model.Courseses)
+                                    {
+                                        <option value="@variable.Key">@variable.Value</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-2">
+                            <b>@Resource.lblSubject</b>
+                        </div>
+                        <div class="col-md-10">
+                            <select class="form-control selectpicker frmFilter" id="ddl_subject" name="ddl_subject" data-placeholder="-- @Resource.lblSubject @*(@Resource.lblCode - @Resource.lblName)*@ --" onchange=" OnChangeSubjectList(this.value) "></select>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-2">
+                            <b>@Resource.lblDate</b>
+                        </div>
+                        <div class="col-md-10">
+                            <select class="form-control selectpicker frmFilter" id="selectdate" name="selectdate" onchange=" OnChangeDate() " data-placeholder="-- @Resource.lblDate @*(@Resource.lblCode - @Resource.lblName)*@ --"></select>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-11">
+                        </div>
+                        @*<div class="col-md-1">
+                                <input type="submit" class="btn btn-primary pull-right" id="btFilter" value="@Resource.lblSearch"/>
+
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="totalDay" id="totalDay" class="frmFilter" />
+    </div>
+       
+        <div class="col-md-12">
+            <div class="panel  list-panel" id="list-panel">
+                <div class="panel-body">
+
+                    <table id="Trainee" class="table table-striped table-bordered">
+                        <thead>
+                        <tr role="row">
+                        <th style="width: 5%">@Resource.lblStt</th>
+                        <th style="width: 10%">@Resource.lblCode</th>
+                        <th style="width: 20%">@Resource.lblFullName</th>
+                        <th style="width: 5%">@Resource.lblPERCENTAGEOFTOTAL</th>
+                        <th style="width: 10%">@Resource.lblDate</th>
+                        <th style="width: 35%">@Resource.lblActions</th>
+                        <th style="width: 15%">@Resource.lblNote</th>
+                        </thead>
+                        <tbody></tbody>
+                        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                    </table>
+                    <div class="row">
+                        <div class="action-form text-right">
+                            <a href="javascript:void(0)" class="btn btn-primary" id="btnSave" onclick="actionsubmit()"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                            <a onclick="goBack()" class="btn btn-default"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+                        </div> 
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+}
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+        var sTable;
+        $(document).ready(function() {
+            $('#btnSave').hide();
+            var customRow = [
+                {
+                    "targets": 0,
+
+                    "data": null,
+                    render: function(data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+
+                }, {
+                    "targets": '_all',
+                    "className": "giua"
+                }
+            ];
+            sTable = initDataTableMaxPageLength("#Trainee", "/Course/AjaxHandlerListTraineeOfSubject", customRow);
+
+            $('.datepicker').datetimepicker({
+                format: "L"
+            });
+
+            formatDatetimepicker('#fSearchDate_from', '@Resource.lblLanguage');
+            formatDatetimepicker('#fSearchDate_to', '@Resource.lblLanguage');
+
+            $("#frmFilter").submit(function (e) {
+                sTable.draw();
+                e.preventDefault();
+            });
+          
+        });
+
+        $('#btFiltercourse').click(function(e) {
+            e.preventDefault();
+            spinner.open();
+            var form = $("#frmFilter").serialize();
+            $.ajax({
+                type: 'POST',
+                url: "/Course/filtercourse",
+                datatype: 'json',
+                data: form,
+                success: function (result) {
+                   
+                    $('#CourseList').empty();
+                    $('#selectdate').empty();
+                    $('#ddl_subject').empty();
+                    $('#ddl_subject').prop('selectedIndex', 0);
+                    $('#selectdate').prop('selectedIndex', 0);
+                    $('#CourseList').prop('selectedIndex', 0);
+                    sTable.draw();
+                    $('#CourseList').append(result.value_option);
+                    $('#CourseList').select2();
+
+                },
+                complete: function() {
+                    spinner.close();
+                }
+
+            });
+        });
+
+        function OnChangeCourseList(val) {
+            spinner.open();
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "/Course/ChangeCourseReturnSubject",
+                dataType: "json",
+                data: { courseId: val, reportsubjectresult: 1 },
+                success: function (result) {
+                    $('#btnSave').hide();
+                    $('#ddl_subject').empty();
+                    $('#ddl_subject').prop('selectedIndex', 0);
+                    $('#selectdate').empty();
+                    $('#selectdate').prop('selectedIndex', 0);
+                    if (result.value_null == "0") {
+                        $('#ddl_subject').append(result.value_option);
+                        $('#ddl_subject').select2();
+                       
+                    } else {
+                        $('#ddl_subject').append("<option></option>");
+                    }
+                },
+                complete: function() {
+                    sTable.draw();
+                    spinner.close();
+                }
+
+            });
+        }
+
+        function OnChangeSubjectList(val) {
+            spinner.open();
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "/Course/ChangeCourseDetailReturnDate",
+                dataType: "json",
+                data: { courseDetailId: val },
+                success: function (result) {
+                    $('#btnSave').hide();
+                    $('#selectdate').empty();
+                    $('#selectdate').prop('selectedIndex', 0);
+                    if (result.value_null == "0") {
+                        $('#selectdate').append(result.value_option);
+                        $('#selectdate').select2();
+                        $('#totalDay').val(result.totalDay);
+                    } else {
+                        $('#selectdate').append("<option></option>");
+                    }
+                },
+                complete: function() {
+                    sTable.draw();
+                    spinner.close();
+                }
+
+            });
+        }
+
+        function OnChangeDate() {
+            $('#btnSave').show();
+            sTable.draw();
+        }
+
+        function actionsubmit() {
+            spinner.open();
+
+            var form = $("#frmFilter").serialize();
+            $.ajax({
+                type: 'POST',
+                url: "/Course/InsertAttendance",
+                datatype: 'json',
+                data: form,
+                success: function(data) {
+                    if (data.result) {
+                        $('#btnSave').hide();
+                        sTable.draw();
+                        notify.alert(data.message, 'SUCCESS', TITLE_STATUS_SUCCESS);
+                        //window.location.href = '/Course/ListResultHasInsert';
+                    } else {
+                        notify.alert(data.message, 'ERROR', TITLE_STATUS_DANGER);
+                    }
+                },
+                complete: function() {
+                    spinner.close();
+                }
+            });
+        }
+        $(".line_310").addClass("active");
+    </script>
+}

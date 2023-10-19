@@ -1,0 +1,205 @@
+﻿@using Newtonsoft.Json
+@using TMS.Core.Utils
+@model TMS.Core.ViewModels.Subjects.SubjectModifyViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-book"></i>  Subject Management - Create</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li>Subject Management</li>
+                <li class="active">Create</li>
+            </ol>
+        </div>
+    </div>
+}
+
+
+<div class="panel">
+    <div class="panel-heading">
+        <i class="fa fa-book"></i> CREATE
+    </div>
+    <div class="panel-body center-block">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#home" data-toggle="tab" aria-expanded="false">Subject</a>
+            </li>
+                
+                <li class="">
+                    <a href="#profile" data-toggle="tab" aria-expanded="false">Detail</a>
+                </li>
+        </ul>
+@using (Html.BeginForm("Create", "Subject", FormMethod.Post, new { id = "createform" }))
+{
+    <div class="tab-content">
+        <div class="tab-pane fade  active in" id="home">
+            <div class="panel-body panel-primary panel">
+                <div class="form-group row">
+                    @Html.LabelFor(m => m.ParentId, new {@class = "col-md-2 control-label"})
+                    <div class="col-sm-10">
+                        @Html.DropDownListFor(m => m.ParentId, new SelectList(Model.Subjects, "Key", "Value", Model.ParentId), "-- Parent Subject --", new Dictionary<string, object>() {{"data-placeholder", "-- Parent Subject --"}, {"class", "form-control"}})
+                        @Html.ValidationMessageFor(m => m.ParentId, null, new {@class = "text-danger"})
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-2">
+                        @Html.LabelFor(m => m.Name, new {@class = " control-label"})<b class="text-danger">(*)</b>
+                    </div>
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.Name, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.Name, null, new {@class = "text-danger"})
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-2">
+                        @Html.LabelFor(m => m.Code, new {@class = " control-label"})<b class="text-danger">(*)</b>
+                    </div>
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.Code, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.Code, null, new {@class = "text-danger"})
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="tab-pane fade" id="profile">
+                    @Html.Partial("_Partials/_SubjectDetail", Model)
+        </div>
+    </div>
+    <div class="form-group col-lg-12">
+        <div id="messageout">
+        </div>
+        <div class="text-right">
+            @if (ViewContext.RouteData.Values["id"] == null)
+            {
+                if (User.IsInRole("/Subject/Create")) // neu co
+                {
+                    <button type="submit" class="btn btn-primary" id="save">Save</button>
+                }
+            }
+            <a href="@Url.Action("Index")" class="btn">Back</a>
+        </div>
+    </div>
+}
+    </div>
+</div>
+
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/js/app.js"></script>
+    <script type="text/javascript">
+        var $subjectdetail;
+        $(document).ready(function() {
+            @if (Model.SubjectDetailModel != null)
+            {
+                <text>
+                    subject.subjectDetail.items = @(Html.Raw(JsonConvert.SerializeObject(Model.SubjectDetailModel)));
+                    subject.subjectDetail.id= subject.subjectDetail.items.length;
+                </text>
+            }
+            $("#boxresult").hide();
+            $subjectdetail = $('#subject-details').DataTable({
+                "data": subject.subjectDetail,
+                "processing": true,
+                "columns": [
+                    {
+                        'data': 'name',
+                        'render': function(data, type, row, meta) {
+                            var index = meta.row;
+                            var html = row.Name;
+                            html += row.id != null ? '<input name="SubjectDetailModel[' + index + '].Id" type="hidden" value="' + row.Id + '"/>' : '';
+                            html += '<input name="SubjectDetailModel[' + index + '].Name" type="hidden" value="' + row.Name + '"/>';
+                            return html;
+                        }
+                    },
+                    {
+                        'data': 'code',
+                        'render': function(data, type, row, meta) {
+                            var index = meta.row;
+                            var html = row.Code;
+                            html += '<input name="SubjectDetailModel[' + index + '].Code" type="hidden" value="' + row.Code + '"/>';
+                            return html;
+                        }
+                    },
+                    {
+                        'data': 'instructor',
+                        'render': function(data, type, row, meta) {
+                            var index = meta.row;
+                            var instructors = row.instructor;
+                            var html = instructors.value.join(" <br/> ");
+                            html += '<input name="SubjectDetailModel[' + index + '].Teacher" type="hidden" value="' + instructors.value.join("|") + '"/>';
+                            $.each(instructors.key, function(i, o) {
+                                html += '<input name="SubjectDetailModel[' + index + '].InstructorAbility" type="hidden" value="' + o + '"/>';
+                            });
+                            return html;
+                        }
+                    },
+                    {
+                        'data': 'recurrent',
+                        'render': function(data, type, row, meta) {
+                            var index = meta.row;
+                            var html = row.Recurrent;
+                            html += '<input name="SubjectDetailModel[' + index + '].Recurrent" type="hidden" value="' + row.Recurrent + '"/>';
+                            return html;
+                        }
+                    },
+                    {
+                        'data': 'isAverageCaculate',
+                        'render': function(data, type, row, meta) {
+                            var index = meta.row;
+                            var html = row.IsAverageCaculate == 0 ? 'No' : 'Yes';
+                            html += '<input name="SubjectDetailModel[' + index + '].IsAverageCaculate" type="hidden" value="' + row.IsAverageCaculate + '"/>';
+                            return html;
+                        }
+                    },
+                    {
+                        'data': 'score',
+                        'render': function(data, type, row, meta) {
+                            var index = meta.row;
+                            var scores = row.SubjectScoreModels;
+                            var html = '';
+                            $.each(scores, function(i, o) {
+                                html += '<p>Grade ' + o.Grade + ':  ' + o.PointFrom + ' -  ' + o.PointTo + '</p>';
+                                html += '<input name="SubjectDetailModel[' + index + '].SubjectScoreModels[' + i + '].PointFrom" type="hidden" value="' + o.PointFrom + '"/>';
+                                html += '<input name="SubjectDetailModel[' + index + '].SubjectScoreModels[' + i + '].PointTo" type="hidden" value="' + o.PointTo + '"/>';
+                                html += '<input name="SubjectDetailModel[' + index + '].SubjectScoreModels[' + i + '].Grade" type="hidden" value="' + o.Grade + '"/>';
+                            });
+                            return html;
+                        }
+                    },
+                    {
+                        'data': 'id',
+                        'render': function(data, type, row, meta) {
+                            return '<span onclick="subject.showDetail(' + row.Id + ',' + (meta.row -1) + ')" class="action btn-edit"><i class="fa fa-pencil-square-o "></i></span>' +
+                                '<span data-index="' + (meta.row -1)+ '" class="action btn-remove"><i class="fa fa-trash"></i></span>';
+                        }
+                    }
+                ]
+            });
+
+            $('#subject-details tbody').on('click', 'span.btn-remove', function() {
+                var $row = $(this).parents('tr');
+                var index =$row.data('index');
+                var tblRow = $subjectdetail.row($row);
+                notify.confirm("Are you sure?", "Warning", TITLE_STATUS_WARNING, removeTableRow, { row:tblRow, i:index});
+            });
+        });
+
+        $(".line_220").addClass("active");
+
+        function removeTableRow(o) {
+            o.row.remove().draw();
+        }
+        //custom select box
+
+
+    </script>
+}
+
+

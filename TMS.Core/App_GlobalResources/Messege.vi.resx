@@ -1,0 +1,1142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Advanced_Search" xml:space="preserve">
+    <value>Tìm Kiếm Nâng Cao</value>
+  </data>
+  <data name="COMPLETED" xml:space="preserve">
+    <value>Hoàn Thành</value>
+  </data>
+  <data name="CONTRACT" xml:space="preserve">
+    <value>Hợp Đồng</value>
+  </data>
+  <data name="CONTRACT_NO" xml:space="preserve">
+    <value>Số Hợp Đồng</value>
+  </data>
+  <data name="Course_Name" xml:space="preserve">
+    <value>Khóa Học</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Thêm mới</value>
+  </data>
+  <data name="DATEOFBIRTH" xml:space="preserve">
+    <value>Ngày Sinh</value>
+  </data>
+  <data name="DATEOFJOIN" xml:space="preserve">
+    <value>Ngày Vào Làm</value>
+  </data>
+  <data name="DELETE_CONTRACT" xml:space="preserve">
+    <value>Bạn có chắc muốn xóa hợp đồng này?</value>
+  </data>
+  <data name="DELETE_CONTRACTOR" xml:space="preserve">
+    <value>Bạn có chắc muốn xóa đối tác này?</value>
+  </data>
+  <data name="DELETE_COST" xml:space="preserve">
+    <value>Bạn có chắc muốn xóa học phí này?</value>
+  </data>
+  <data name="DELETE_COURSE" xml:space="preserve">
+    <value>Bạn có chắc muốn xóa chương trình đào tạo này ?</value>
+  </data>
+  <data name="DELETE_DEPARTMENT" xml:space="preserve">
+    <value>Bạn có chắc muốn xóa phòng ban này?</value>
+  </data>
+  <data name="DELETE_GROUPSUBJECT" xml:space="preserve">
+    <value>Bạn có chắc muốn xóa nhóm khóa học này?</value>
+  </data>
+  <data name="DELETE_INSTRUCTOR" xml:space="preserve">
+    <value>Bạn có chắc muốn xóa giảng viên này?</value>
+  </data>
+  <data name="DELETE_JOBTITLE" xml:space="preserve">
+    <value>Bạn có chắc muốn xóa chức danh này?</value>
+  </data>
+  <data name="DELETE_NATIONALITY" xml:space="preserve">
+    <value>Bạn có chắc muốn xóa quốc tịch này?</value>
+  </data>
+  <data name="DELETE_PARTNER" xml:space="preserve">
+    <value>Bạn có chắc muốn xóa công ty này?</value>
+  </data>
+  <data name="DELETE_ROOM" xml:space="preserve">
+    <value>Bạn có chắc muốn xóa phòng học này?</value>
+  </data>
+  <data name="DELETE_SUBJECT" xml:space="preserve">
+    <value>Bạn có chắc muốn xóa khóa học này?</value>
+  </data>
+  <data name="DELETE_TRAINEE" xml:space="preserve">
+    <value>Bạn có chắc muốn xóa học viên này?</value>
+  </data>
+  <data name="DEPARTMENT" xml:space="preserve">
+    <value>Phòng Ban</value>
+  </data>
+  <data name="DEPARTMENTCODE_REQUIRED" xml:space="preserve">
+    <value>Mã phòng ban không thể trống!</value>
+  </data>
+  <data name="DEPARTMENTNAME_REQUIRED" xml:space="preserve">
+    <value>Tên phòng ban không thể trống</value>
+  </data>
+  <data name="DESCRIPTION" xml:space="preserve">
+    <value>Mô Tả</value>
+  </data>
+  <data name="DUPLICATE" xml:space="preserve">
+    <value>Mã hoặc tên đã bị trùng !</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Chỉnh Sửa</value>
+  </data>
+  <data name="EDUCATION" xml:space="preserve">
+    <value>Học Vấn</value>
+  </data>
+  <data name="EID" xml:space="preserve">
+    <value>Mã Học Viên</value>
+  </data>
+  <data name="End" xml:space="preserve">
+    <value>Kết Thúc</value>
+  </data>
+  <data name="EXISTING_CODE" xml:space="preserve">
+    <value> Mã {0} đã tồn tại!</value>
+  </data>
+  <data name="EXISTING_EID" xml:space="preserve">
+    <value> EID {0} đã tồn tại!</value>
+  </data>
+  <data name="EXPIREDATE" xml:space="preserve">
+    <value>Hạn Sử Dụng</value>
+  </data>
+  <data name="FAIL" xml:space="preserve">
+    <value>FAIL</value>
+  </data>
+  <data name="FULLNAME" xml:space="preserve">
+    <value>Tên Đầy Đủ</value>
+  </data>
+  <data name="GENDER" xml:space="preserve">
+    <value>Giới Tính</value>
+  </data>
+  <data name="HOME" xml:space="preserve">
+    <value>Trang Chủ</value>
+  </data>
+  <data name="Instructor" xml:space="preserve">
+    <value>Giảng Viên</value>
+  </data>
+  <data name="InstructorManagement" xml:space="preserve">
+    <value>Quản Lý Giảng Viên</value>
+  </data>
+  <data name="ISVALID_DATA" xml:space="preserve">
+    <value>Dữ liệu không đúng!</value>
+  </data>
+  <data name="JOBTITLE" xml:space="preserve">
+    <value>Chức Danh</value>
+  </data>
+  <data name="NAME_EXIST" xml:space="preserve">
+    <value>Tên đã tồn tại trong hệ thống</value>
+  </data>
+  <data name="NATIONALITY" xml:space="preserve">
+    <value>Quốc Tịch</value>
+  </data>
+  <data name="NATIONALITYCODE_REQUIRED" xml:space="preserve">
+    <value>Mã quốc gia là bắt buộc</value>
+  </data>
+  <data name="NATIONALITYNAME_REQUIRED" xml:space="preserve">
+    <value>Tên quốc gia là bắt buộc</value>
+  </data>
+  <data name="NOTE" xml:space="preserve">
+    <value>Chú Thích</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Thông Báo</value>
+  </data>
+  <data name="NO_DATA" xml:space="preserve">
+    <value>Không có dữ liệu</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="ORGANIZATION" xml:space="preserve">
+    <value>Cơ Quan</value>
+  </data>
+  <data name="PARTNER" xml:space="preserve">
+    <value>Đối Tác</value>
+  </data>
+  <data name="PHONE" xml:space="preserve">
+    <value>Điện Thoại</value>
+  </data>
+  <data name="PLACEOFBIRTH" xml:space="preserve">
+    <value>Nơi Sinh</value>
+  </data>
+  <data name="Room" xml:space="preserve">
+    <value>Phòng Học</value>
+  </data>
+  <data name="SCHEDULES" xml:space="preserve">
+    <value>Lịch Học</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Tìm Kiếm</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Bắt đầu</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Trạng thái</value>
+  </data>
+  <data name="Subject_Name" xml:space="preserve">
+    <value>Tên Khóa Học</value>
+  </data>
+  <data name="SUCCESS" xml:space="preserve">
+    <value>Thành công !</value>
+  </data>
+  <data name="SUCCESS_APPROVAL_ASSIGN_TRAINEE" xml:space="preserve">
+    <value>Approval assign trainee successfully!</value>
+  </data>
+  <data name="SUCCESS_APPROVAL_COURSE" xml:space="preserve">
+    <value>Duyệt chương trình đào tạo thành công!</value>
+  </data>
+  <data name="SUCCESS_APPROVAL_REMOVE" xml:space="preserve">
+    <value>Xóa phê duyệt thành công!</value>
+  </data>
+  <data name="SUCCESS_ASSIGNTRAINEE" xml:space="preserve">
+    <value>Gán học viên thành công!</value>
+  </data>
+  <data name="SUCCESS_CONTRACT" xml:space="preserve">
+    <value>Thêm hợp đồng thành công!</value>
+  </data>
+  <data name="SUCCESS_CONTRACTOR" xml:space="preserve">
+    <value>Thêm đối tác thành công!</value>
+  </data>
+  <data name="SUCCESS_COST" xml:space="preserve">
+    <value>Thêm học phí thành công!</value>
+  </data>
+  <data name="SUCCESS_COURSE" xml:space="preserve">
+    <value>Thêm chương trình đào tạo thành công!</value>
+  </data>
+  <data name="SUCCESS_COURSE_EDIT" xml:space="preserve">
+    <value>Cập nhật chương trình thành công!</value>
+  </data>
+  <data name="SUCCESS_DEPARTMENT" xml:space="preserve">
+    <value>Thêm phòng ban thành công!</value>
+  </data>
+  <data name="SUCCESS_GROUPSUBJECT" xml:space="preserve">
+    <value>thêm nhóm khóa học thành công!</value>
+  </data>
+  <data name="SUCCESS_INSTRUCTOR" xml:space="preserve">
+    <value>Thêm giảng viên thành công!</value>
+  </data>
+  <data name="SUCCESS_INSTRUCTOR_EDIT" xml:space="preserve">
+    <value>Cập nhật giảng viên thành công!</value>
+  </data>
+  <data name="SUCCESS_REMOVEASSIGNTRAINEE" xml:space="preserve">
+    <value>Remove assign trainee successfully!</value>
+  </data>
+  <data name="SUCCESS_REMOVE_CONTRACT" xml:space="preserve">
+    <value>Xóa hợp đồng thành công!</value>
+  </data>
+  <data name="SUCCESS_REMOVE_EDU" xml:space="preserve">
+    <value>Remove education successfully!</value>
+  </data>
+  <data name="SUCCESS_REMOVE_RESULT" xml:space="preserve">
+    <value>Xóa kết quả thành công!</value>
+  </data>
+  <data name="SUCCESS_TRAINEE" xml:space="preserve">
+    <value>Thêm học viên thành công!</value>
+  </data>
+  <data name="SUCCESS_TRAINEE_EDIT" xml:space="preserve">
+    <value>Cập nhật học viên thành công!</value>
+  </data>
+  <data name="TIME" xml:space="preserve">
+    <value>Thời gian</value>
+  </data>
+  <data name="TRAINING" xml:space="preserve">
+    <value>Đang diễn ra</value>
+  </data>
+  <data name="TRAININGALLOWANCE" xml:space="preserve">
+    <value>Trợ Cấp Đào Tạo</value>
+  </data>
+  <data name="TrainingCenter" xml:space="preserve">
+    <value>Khối Đào Tạo</value>
+  </data>
+  <data name="TRAINING_MANAGEMENT_SYSTEM" xml:space="preserve">
+    <value>PHẦN MỀM QUẢN LÝ ĐÀO TẠO</value>
+  </data>
+  <data name="TYPE" xml:space="preserve">
+    <value>Thể Loại</value>
+  </data>
+  <data name="UNABLE_TO_SEND_MAIL" xml:space="preserve">
+    <value>Lỗi khi gửi mail !</value>
+  </data>
+  <data name="UNSUCCESS" xml:space="preserve">
+    <value>Không thành công !</value>
+  </data>
+  <data name="UNSUCCESS_ADD_CONTRACT" xml:space="preserve">
+    <value>Thêm hợp đồng thành công!</value>
+  </data>
+  <data name="UNSUCCESS_ADD_EDU" xml:space="preserve">
+    <value>Add education unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_APPROVAL_ASSIGN_TRAINEE" xml:space="preserve">
+    <value>Approval assign trainee unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_APPROVAL_COURSE" xml:space="preserve">
+    <value>Duyệt khóa học thành công!</value>
+  </data>
+  <data name="UNSUCCESS_APPROVAL_REMOVE" xml:space="preserve">
+    <value>Xóa phê duyệt không thành công !</value>
+  </data>
+  <data name="UNSUCCESS_ASSIGNTRAINEE" xml:space="preserve">
+    <value>Assign trainee unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_CALL_LMS" xml:space="preserve">
+    <value>Call LMS unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_CONTRACT" xml:space="preserve">
+    <value>Thêm hợp đồng không thành công!</value>
+  </data>
+  <data name="UNSUCCESS_CONTRACTOR" xml:space="preserve">
+    <value>Thêm đối tác không thành công!</value>
+  </data>
+  <data name="UNSUCCESS_COURSE" xml:space="preserve">
+    <value>Thêm chương trình đào tạo không thành công !</value>
+  </data>
+  <data name="UNSUCCESS_COURSE_EDIT" xml:space="preserve">
+    <value>Chỉnh sửa chương trình đào tạo không thành công !</value>
+  </data>
+  <data name="UNSUCCESS_INSTRUCTOR" xml:space="preserve">
+    <value>Thêm giáo viên không thành công !</value>
+  </data>
+  <data name="UNSUCCESS_INSTRUCTOR_EDIT" xml:space="preserve">
+    <value>Chỉnh sửa giáo viên không thành công !</value>
+  </data>
+  <data name="UNSUCCESS_REMOVE_CONTRACT" xml:space="preserve">
+    <value>Xóa hợp đồng không thành công!</value>
+  </data>
+  <data name="UNSUCCESS_REMOVE_EDU" xml:space="preserve">
+    <value>Remove education unsuccessfully!</value>
+  </data>
+  <data name="UNSUCCESS_REMOVE_RESULT" xml:space="preserve">
+    <value>Xóa kết quả không thành công !</value>
+  </data>
+  <data name="UNSUCCESS_TRAINEE" xml:space="preserve">
+    <value>Thêm học viên không thành công !</value>
+  </data>
+  <data name="UNSUCCESS_TRAINEE_EDIT" xml:space="preserve">
+    <value>Chỉnh sửa học viên không thành công !</value>
+  </data>
+  <data name="UPCOMING" xml:space="preserve">
+    <value>Sắp Diễn Ra</value>
+  </data>
+  <data name="VALIDATION_CODE" xml:space="preserve">
+    <value>Vui lòng nhập mã !</value>
+  </data>
+  <data name="VALIDATION_CONTRACTCODE" xml:space="preserve">
+    <value>Vui lòng nhập mã hợp đồng !</value>
+  </data>
+  <data name="VALIDATION_CONTRACTNO" xml:space="preserve">
+    <value>Vui lòng nhập số hợp đồng !</value>
+  </data>
+  <data name="VALIDATION_CONTRACTNO_IN_CONTRACT" xml:space="preserve">
+    <value>Vui lòng nhập số hợp đồng trong hợp đồng !</value>
+  </data>
+  <data name="VALIDATION_COURSE_IN_EDUCATION" xml:space="preserve">
+    <value>Please enter a valid program in education !</value>
+  </data>
+  <data name="VALIDATION_DATE_FROM_IN_EDUCATION" xml:space="preserve">
+    <value>Please enter a valid date from in education !</value>
+  </data>
+  <data name="VALIDATION_DATE_TO_IN_EDUCATION" xml:space="preserve">
+    <value>Please enter a valid date to in education !</value>
+  </data>
+  <data name="VALIDATION_DEPARTMENT" xml:space="preserve">
+    <value>Vui lòng chọn phòng ban!</value>
+  </data>
+  <data name="VALIDATION_DESCRIPTION_IN_CONTRACT" xml:space="preserve">
+    <value>Vui lòng nhập mô tả cho hợp đồng !</value>
+  </data>
+  <data name="VALIDATION_DURATION" xml:space="preserve">
+    <value>Vui lòng nhập thời lượng !</value>
+  </data>
+  <data name="VALIDATION_EID" xml:space="preserve">
+    <value>Vui lòng nhập mã !</value>
+  </data>
+  <data name="VALIDATION_EXPIREDATE_IN_CONTRACT" xml:space="preserve">
+    <value>Vui lòng chọn ngày kết thúc hợp đồng !</value>
+  </data>
+  <data name="VALIDATION_FROMDATE_TODATE" xml:space="preserve">
+    <value>Vui lòng chọn ngày !</value>
+  </data>
+  <data name="VALIDATION_FROMDATE_TODATE_INSUBJECT" xml:space="preserve">
+    <value>Vui lòng chọn ngày cho khóa học !</value>
+  </data>
+  <data name="VALIDATION_FROMTIME_TOTIME_INSUBJECT" xml:space="preserve">
+    <value>Vui lòng chọn thời gian cho khóa học !</value>
+  </data>
+  <data name="VALIDATION_FULLNAME" xml:space="preserve">
+    <value>Vui lòng nhập họ và tên !</value>
+  </data>
+  <data name="VALIDATION_FULLVALUE" xml:space="preserve">
+    <value>Vui lòng nhập tất cả giá trị!</value>
+  </data>
+  <data name="VALIDATION_INSTRUCTOR" xml:space="preserve">
+    <value>Vui lòng chọn giáo viên !</value>
+  </data>
+  <data name="VALIDATION_JOBTITLE" xml:space="preserve">
+    <value>Vui lòng chọn chức danh !</value>
+  </data>
+  <data name="VALIDATION_MAIL" xml:space="preserve">
+    <value>Vui lòng chọn mail !</value>
+  </data>
+  <data name="VALIDATION_NAME" xml:space="preserve">
+    <value>Vui lòng nhập tên !</value>
+  </data>
+  <data name="VALIDATION_PASSPORT" xml:space="preserve">
+    <value>Vui lòng nhập passport!</value>
+  </data>
+  <data name="VALIDATION_REFRESH_CYCLE" xml:space="preserve">
+    <value>Vui lòng chọn thời lượng!</value>
+  </data>
+  <data name="VALIDATION_ROOM" xml:space="preserve">
+    <value>Vui lòng chọn phòng !</value>
+  </data>
+  <data name="VALIDATION_SORTNAME" xml:space="preserve">
+    <value>Vui lòng nhập tên viết tắt !</value>
+  </data>
+  <data name="VALIDATION_SUBJECT" xml:space="preserve">
+    <value>Vui lòng chọn khóa học!</value>
+  </data>
+  <data name="VALIDATION_TRAININGCENTER" xml:space="preserve">
+    <value>Vui lòng nhập trung tâm đào tạo !</value>
+  </data>
+  <data name="VALIDATION_TYPE" xml:space="preserve">
+    <value>Vui lòng chọn loại !</value>
+  </data>
+  <data name="VALIDATION_TYPELEANING" xml:space="preserve">
+    <value>Vui lòng chọn hình thức học !</value>
+  </data>
+  <data name="Course_Management" xml:space="preserve">
+    <value>Quản Lý Khóa Học</value>
+  </data>
+  <data name="PARENT_COURSE_NAME" xml:space="preserve">
+    <value>Khóa cha</value>
+  </data>
+  <data name="Trainee_Management" xml:space="preserve">
+    <value>Quản lý học viên</value>
+  </data>
+  <data name="TRAINING_CENTER" xml:space="preserve">
+    <value>Khối Đào Tạo</value>
+  </data>
+  <data name="FORGOT_EMAIL" xml:space="preserve">
+    <value> Nhập địa chỉ email !</value>
+  </data>
+  <data name="SEND_SUCCESS_EMAIL" xml:space="preserve">
+    <value>Gửi mail thành công !</value>
+  </data>
+  <data name="CHANGEPASSWORD" xml:space="preserve">
+    <value> Đổi mật khẩu thành công !</value>
+  </data>
+  <data name="VALIDATION_PASSWORD" xml:space="preserve">
+    <value>Vui lòng nhập mật khẩu!</value>
+  </data>
+  <data name="CODE_DUPLICATE" xml:space="preserve">
+    <value>Mã đã bị trùng !</value>
+  </data>
+  <data name="HIDDEN_NOTIFICATION" xml:space="preserve">
+    <value>bạn có chắc muốn ẩn thông báo này?</value>
+  </data>
+  <data name="DELETED_UNSUCCESS_AVAILABLE" xml:space="preserve">
+    <value> {0} không thể xóa vì đang được sử dụng !</value>
+  </data>
+  <data name="CANNOTDELETE_RESULT" xml:space="preserve">
+    <value>Không thể xóa kết quả từ Chương Trình.</value>
+  </data>
+  <data name="EMAIL_EXIST" xml:space="preserve">
+    <value>Email bạn nhập đã tồn tại trong hệ thống</value>
+  </data>
+  <data name="FORM_NOTVALID" xml:space="preserve">
+    <value>Biểu mẫu không đúng ! Vui lòng chỉnh sửa và thử lại.</value>
+  </data>
+  <data name="REGISTERED_COURSE" xml:space="preserve">
+    <value>Bạn đã đăng ký chương  trình đào tạo này rồi.</value>
+  </data>
+  <data name="TRAINEE_EXIST" xml:space="preserve">
+    <value>Học viên không tồn tại.</value>
+  </data>
+  <data name="lblFromTime" xml:space="preserve">
+    <value>Từ Lúc</value>
+  </data>
+  <data name="lblToDate" xml:space="preserve">
+    <value>Đến Ngày</value>
+  </data>
+  <data name="lblToTime" xml:space="preserve">
+    <value>Đến Lúc</value>
+  </data>
+  <data name="lblDistinction" xml:space="preserve">
+    <value>Ưu Tú</value>
+  </data>
+  <data name="lblDURATION" xml:space="preserve">
+    <value>THỜI LƯỢNG</value>
+  </data>
+  <data name="lblFINALRESULTS" xml:space="preserve">
+    <value>Kết Quả Cuối Cùng</value>
+  </data>
+  <data name="lblGRADE" xml:space="preserve">
+    <value>Xếp Loại</value>
+  </data>
+  <data name="lblPass" xml:space="preserve">
+    <value>Đạt</value>
+  </data>
+  <data name="lblPOINT" xml:space="preserve">
+    <value>Điểm</value>
+  </data>
+  <data name="lblRESULTS" xml:space="preserve">
+    <value>Kết Quả</value>
+  </data>
+  <data name="lblResults1" xml:space="preserve">
+    <value>Kết Quả</value>
+  </data>
+  <data name="lblSTATUS" xml:space="preserve">
+    <value>TRẠNG THÁI</value>
+  </data>
+  <data name="lblSUBJECCODE" xml:space="preserve">
+    <value>MÃ MÔN HỌC</value>
+  </data>
+  <data name="lblSUBJECTNAME" xml:space="preserve">
+    <value>TÊN MÔN HỌC</value>
+  </data>
+  <data name="EIDGV" xml:space="preserve">
+    <value>Mã Giảng Viên</value>
+  </data>
+  <data name="lblApproveCourse" xml:space="preserve">
+    <value>Phê Duyệt Chương Trình Đào Tạo</value>
+  </data>
+  <data name="lblCourseType" xml:space="preserve">
+    <value>Loại Chương Trình Đào Tạo</value>
+  </data>
+  <data name="lblEnd" xml:space="preserve">
+    <value>Kết Thúc</value>
+  </data>
+  <data name="lblNote" xml:space="preserve">
+    <value>Ghi Chú</value>
+  </data>
+  <data name="lblProcessSteps" xml:space="preserve">
+    <value>Bước Tiến Trình</value>
+  </data>
+  <data name="lblProcessStepsCourse" xml:space="preserve">
+    <value>Bước Tiến Trình Đào Tạo</value>
+  </data>
+  <data name="lblStart" xml:space="preserve">
+    <value>Bắt Đầu</value>
+  </data>
+  <data name="lblVenue" xml:space="preserve">
+    <value>Venue</value>
+  </data>
+  <data name="llblApprove" xml:space="preserve">
+    <value>Phê Duyệt</value>
+  </data>
+  <data name="DELETE_COMPANY" xml:space="preserve">
+    <value>Bạn có chắc muốn xóa công ty này?</value>
+  </data>
+  <data name="VALIDATION_SUBJECT_EXPORT" xml:space="preserve">
+    <value>Vui lòng chọn khóa học !</value>
+  </data>
+  <data name="SET_STATUS_SUCCESS" xml:space="preserve">
+    <value> Thiết lập {0} thành công!</value>
+  </data>
+  <data name="PASSWORD_REQUIRED" xml:space="preserve">
+    <value>Mật khẩu là bắt buộc !</value>
+  </data>
+  <data name="USERNAME_DUPLICATE" xml:space="preserve">
+    <value>Tên đăng nhập bị trùng !</value>
+  </data>
+  <data name="VALIDATION_COURSEDETAIL_FROMDATE" xml:space="preserve">
+    <value>Vui lòng chọn ngày bắt đầu khóa học !</value>
+  </data>
+  <data name="VALIDATION_COURSEDETAIL_FROMTIME" xml:space="preserve">
+    <value>Vui lòng chọn giờ bắt đầu khóa học !</value>
+  </data>
+  <data name="VALIDATION_COURSEDETAIL_INSTRUCTOR" xml:space="preserve">
+    <value>Vui lòng chọn giáo viên khóa học !</value>
+  </data>
+  <data name="VALIDATION_COURSEDETAIL_TODATE" xml:space="preserve">
+    <value>Vui lòng chọn ngày kết thúc khóa học !</value>
+  </data>
+  <data name="VALIDATION_COURSEDETAIL_TOTIME" xml:space="preserve">
+    <value>Vui lòng chọn giờ kết thúc khóa học !</value>
+  </data>
+  <data name="VALIDATION_COURSE_CODE" xml:space="preserve">
+    <value>Vui lòng nhập mã chương trình đào tạo !</value>
+  </data>
+  <data name="VALIDATION_COURSE_DEPARTMENT" xml:space="preserve">
+    <value>Vui lòng chọn phòng ban !</value>
+  </data>
+  <data name="VALIDATION_COURSE_FROMDATE" xml:space="preserve">
+    <value>Vui lòng chọn ngày bắt đầu chương trình đào tạo !</value>
+  </data>
+  <data name="VALIDATION_COURSE_GROUPCOURSE" xml:space="preserve">
+    <value>Vui lòng chọn nhóm khóa học hoặc chọn chương trình đào tạo có khóa học !</value>
+  </data>
+  <data name="VALIDATION_COURSE_INSTRUCTOR" xml:space="preserve">
+    <value>Vui lòng chọn giáo viên !</value>
+  </data>
+  <data name="VALIDATION_COURSE_NAME" xml:space="preserve">
+    <value>Vui lòng nhập tên chương trình đào tạo !</value>
+  </data>
+  <data name="VALIDATION_COURSE_TODATE" xml:space="preserve">
+    <value>Vui lòng chọn ngày kết thúc chương trình đào tạo !</value>
+  </data>
+  <data name="VALIDATION_PATHFILE" xml:space="preserve">
+    <value>Không tìm thấy đường dẫn trên server !</value>
+  </data>
+  <data name="CERTIFICATE_TRAINEE_NOT_ADDNEW" xml:space="preserve">
+    <value> Không có học viên mới, nhận chứng chỉ !</value>
+  </data>
+  <data name="VALIDATION_EMAIL_REQUIED" xml:space="preserve">
+    <value>Vui lòng nhập Địa chỉ Email !</value>
+  </data>
+  <data name="VALIDATION_FULLNAME_REQUIED" xml:space="preserve">
+    <value>Vui lòng nhập họ và tên !</value>
+  </data>
+  <data name="VALIDATION_USERNAME_REQUIED" xml:space="preserve">
+    <value>Vui lòng nhập tên đăng nhập !</value>
+  </data>
+  <data name="SUCCESS_DELETE_TRAINEE" xml:space="preserve">
+    <value> Xóa {0} thành công !</value>
+  </data>
+  <data name="UNSUCCESS_DELETE_TRAINEE" xml:space="preserve">
+    <value>Xóa {0} không thành công ! Xin thử lại.</value>
+  </data>
+  <data name="VALIDATION_USER_EID" xml:space="preserve">
+    <value>Vui lòng nhập Mã EID !</value>
+  </data>
+  <data name="VALIDATION_USER_FULLNAME" xml:space="preserve">
+    <value>Vui lòng nhập họ và tên !</value>
+  </data>
+  <data name="VALIDATION_USER_GENDER" xml:space="preserve">
+    <value>Vui lòng chọn giới tính !</value>
+  </data>
+  <data name="VALIDATION_USER_DEPARTMENT" xml:space="preserve">
+    <value>Vui lòng chọn Phòng Ban !</value>
+  </data>
+  <data name="VALIDATION_USER_EMAIL" xml:space="preserve">
+    <value>Vui lòng nhập địa chỉ Email !</value>
+  </data>
+  <data name="VALIDATION_USER_EMAIL_EXPRESSION" xml:space="preserve">
+    <value>Email không hợp lệ !</value>
+  </data>
+  <data name="VALIDATION_MCOURSE_CODE" xml:space="preserve">
+    <value>Vui lòng nhập Mã !</value>
+  </data>
+  <data name="VALIDATION_MCOURSE_NAME" xml:space="preserve">
+    <value>Vui lòng nhập Tên !</value>
+  </data>
+  <data name="VALIDATION_EXISTS_INSTRUCTOR" xml:space="preserve">
+    <value>Giáo viên {0}, đang có  {1} khóa  chưa hoàn thành ! {2}</value>
+  </data>
+  <data name="VALIDATION_APPROVE_ASSIGN_TRAINEE" xml:space="preserve">
+    <value>Khóa học đã được duyệt !</value>
+  </data>
+  <data name="COURSE_COMPLETED" xml:space="preserve">
+    <value> Chương trình đã hoàn thành !</value>
+  </data>
+  <data name="SETSTATUS_UNSUCCESS_AVAILABLE" xml:space="preserve">
+    <value> {0} không thể thay đổi trạng thái  vì đang được sử dụng !</value>
+  </data>
+  <data name="VALIDATION_USER_CONFIRMPASSWORD_EXPRESSION" xml:space="preserve">
+    <value>Xác nhận mật khẩu không chính xác !</value>
+  </data>
+  <data name="VALIDATION_USER_USERNAME_EXPRESSION" xml:space="preserve">
+    <value>Tối đa 4 ký tự !</value>
+  </data>
+  <data name="RESULT_CONFIRM" xml:space="preserve">
+    <value>Danh sách học viên có kết quả : {0}</value>
+  </data>
+  <data name="VALIDATION_SORT_NAME_REQUIED" xml:space="preserve">
+    <value>Vui lòng nhập tên viết tắt !</value>
+  </data>
+  <data name="ALERT_MAXTRAINEE" xml:space="preserve">
+    <value> {0}, {1} Thêm học viên thành công !</value>
+  </data>
+  <data name="CONFIRM_USER" xml:space="preserve">
+    <value> Bạn có chắc muốn xóa User ?</value>
+  </data>
+  <data name="MCOURSE_ASSIGNEDSUBJECT" xml:space="preserve">
+    <value>Vui lòng chọn khóa học chỉ định!</value>
+  </data>
+  <data name="VALIDATION_GROUPCODE" xml:space="preserve">
+    <value>Vui lòng chọn nhóm học phí!</value>
+  </data>
+  <data name="VALIDATION_GROUPUSER_NAME" xml:space="preserve">
+    <value>Vui lòng nhập tên !</value>
+  </data>
+  <data name="VALIDATION_GROUPUSER_TITLE" xml:space="preserve">
+    <value>Vui lòng nhập tiêu đề !</value>
+  </data>
+  <data name="VALIDATION_JOBTITLE_HEADER" xml:space="preserve">
+    <value>Vui lòng chọn tiền tố !</value>
+  </data>
+  <data name="VALIDATION_JOBTITLE_NAME" xml:space="preserve">
+    <value>Vui lòng nhập tên chức danh!</value>
+  </data>
+  <data name="VALIDATION_JOBTITLE_POSITION" xml:space="preserve">
+    <value>Vui lòng chọn vị trí!</value>
+  </data>
+  <data name="VALIDATION_SUBJECT_AVERAGE_CALCULTE" xml:space="preserve">
+    <value>Vui lòng chọn điểm trung bình !</value>
+  </data>
+  <data name="VALIDATION_SUBJECT_DURATION" xml:space="preserve">
+    <value>Vui lòng chọn thời lượng khóa học !</value>
+  </data>
+  <data name="VALIDATION_SUBJECT_GRADE" xml:space="preserve">
+    <value>Vui lòng nhập xếp loại ! </value>
+  </data>
+  <data name="VALIDATION_SUBJECT_PASSSCORE" xml:space="preserve">
+    <value>Vui lòng chọn điểm đạt !</value>
+  </data>
+  <data name="VALIDATION_SUBJECT_POINT" xml:space="preserve">
+    <value>Vui lòng nhập điểm !</value>
+  </data>
+  <data name="VALIDATION_SUBJECT_RECURENT" xml:space="preserve">
+    <value>Vui lòng chọn kỳ hạn khóa học !</value>
+  </data>
+  <data name="VALIDATION_DATE_FROM_TO" xml:space="preserve">
+    <value>Ngày kết thúc không thể nhỏ hơn ngày bắt đầu !</value>
+  </data>
+  <data name="UPDATE_SUCCESSFULLY" xml:space="preserve">
+    <value>Cập nhật {0} thành công !</value>
+  </data>
+  <data name="UPDATE_UNSUCCESSFULLY" xml:space="preserve">
+    <value>Cập nhật {0} không thành công !</value>
+  </data>
+  <data name="VALIDATION_ROLE_DATA" xml:space="preserve">
+    <value>Không tìm thấy dữ liệu !</value>
+  </data>
+  <data name="VALIDATION_ROLE_MENU_DATA" xml:space="preserve">
+    <value>Không tìm thấy dữ liệu Menu !</value>
+  </data>
+  <data name="DELETE_ROLE" xml:space="preserve">
+    <value> Bạn có chắc muốn xóa quyền này !</value>
+  </data>
+  <data name="VALIDATION_COURSE_COMMITMENTEXPIREDATE" xml:space="preserve">
+    <value>Vui lòng nhập thời hạn cam kết !</value>
+  </data>
+  <data name="VALIDATION_COURSE_LIMIT_COMMITMENTEXPIREDATE" xml:space="preserve">
+    <value>Vui lòng nhập một giá trị lớn hơn 0 !</value>
+  </data>
+  <data name="VALIDATION_IMPORT_ASSIGN" xml:space="preserve">
+    <value>Không tồn tại trong hệ thống !!!</value>
+  </data>
+  <data name="VALIDATION_FILE" xml:space="preserve">
+    <value>File không đúng hoặc không được tìm thấy !!!</value>
+  </data>
+  <data name="VALIDATION_CONTRACT_EXPRIEDATE" xml:space="preserve">
+    <value>Vui lòng nhập hạn sử dụng !</value>
+  </data>
+  <data name="VALIDATION_CONTRACT_SIGNDATE" xml:space="preserve">
+    <value>Vui lòng nhập ngày ký !</value>
+  </data>
+  <data name="VALIDATION_COURSE_FROM_THAN_TO" xml:space="preserve">
+    <value>Ngày bắt đầu lớn hơn ngày kết thúc !</value>
+  </data>
+  <data name="UNSUCCESS_CANCEL_REQUEST" xml:space="preserve">
+    <value>Gửi yêu cầu không thành công !</value>
+  </data>
+  <data name="REMARKCOMMENT_SUCCESSS" xml:space="preserve">
+    <value> Set {0} failed, successfully !</value>
+  </data>
+  <data name="VALIDATION_REMARKCOMMENT_REMARK" xml:space="preserve">
+    <value>Vui lòng nhập phê bình ( nhận xét ) !</value>
+  </data>
+  <data name="WARNING_MAX_ASSIGNTRAINEE" xml:space="preserve">
+    <value>{0} {1} Khóa tối đa {2} học viên. {3}   Bạn có chắc muốn thêm học viên ?</value>
+  </data>
+  <data name="REMOVE_TRAINEE" xml:space="preserve">
+    <value> {0}, {1} Xóa học viên thành công !</value>
+  </data>
+  <data name="VALIDATION_SIGNDATE_EXPIREDATE" xml:space="preserve">
+    <value>Hạn sử dụng không thể nhỏ hơn ngày ký !</value>
+  </data>
+  <data name="VALIDATION_GROUPTRAINEE_CODE" xml:space="preserve">
+    <value>Vui lòng nhập mã nhóm !</value>
+  </data>
+  <data name="VALIDATION_GROUPTRAINEE_NAME" xml:space="preserve">
+    <value>Vui lòng nhập tên nhóm !</value>
+  </data>
+  <data name="CHECK_ASSIGNTRAINEE" xml:space="preserve">
+    <value> {0} có ngày {1} và giờ {2} đã tồn tại ! {3}- Bạn có chắc muốn thêm học viên ?</value>
+  </data>
+  <data name="WARNING_MIN_ASSIGNTRAINEE" xml:space="preserve">
+    <value>{0} {1} Khóa tối thiểu {2} học viên. {3}   Bạn có chắc muốn thêm học viên ?</value>
+  </data>
+  <data name="WARNING_DELETE_COURSE" xml:space="preserve">
+    <value>Bạn không thể xóa " {0} " vì khóa đã có kết quả !</value>
+  </data>
+  <data name="WARNING_REMOVE_TRAINEE" xml:space="preserve">
+    <value>Bạn không thể xóa vì khóa "{0}" đã có kết quả !</value>
+  </data>
+  <data name="DELETE_CERTIFICATE" xml:space="preserve">
+    <value>Bạn có chắc muốn xóa certificate template ?</value>
+  </data>
+  <data name="VALIDATION_COURSE_FILTER" xml:space="preserve">
+    <value>Vui lòng chọn {0} !</value>
+  </data>
+  <data name="WARNING_CHECK_TRAINEE_ASSIGN" xml:space="preserve">
+    <value>Vui lòng chọn học viên !</value>
+  </data>
+  <data name="WARNING_SENT_REQUEST_SUCCESS" xml:space="preserve">
+    <value>Gửi yêu cầu thành công !</value>
+  </data>
+  <data name="WARNING_REQUEST" xml:space="preserve">
+    <value>Bạn có chắc muốn gửi yêu cầu phê duyệt ?</value>
+  </data>
+  <data name="ERROR_NOTFOUND" xml:space="preserve">
+    <value> {0} không tìm thấy !</value>
+  </data>
+  <data name="REQUEST_SUCCESSFULLY" xml:space="preserve">
+    <value> Gửi yêu cầu thành công !</value>
+  </data>
+  <data name="APPROVE_SUCCESS" xml:space="preserve">
+    <value> Phê duyệt thành công !</value>
+  </data>
+  <data name="ERROR_APPROVE" xml:space="preserve">
+    <value> Phê duyệt không thành công !</value>
+  </data>
+  <data name="WARNING_DELETE_PROGRAM" xml:space="preserve">
+    <value>Bạn không thể xóa " {0} " vì khóa đang trong tiến trình !</value>
+  </data>
+  <data name="Message_CancelRequest" xml:space="preserve">
+    <value> Bạn có chắc muốn gửi ?</value>
+  </data>
+  <data name="WARNING_NOT_FOUND_APPROVER" xml:space="preserve">
+    <value>Không tìm thấy người phê duyệt  để gửi thông báo !</value>
+  </data>
+  <data name="WARNING_SENT_REQUEST_ERROR" xml:space="preserve">
+    <value>Gửi yêu cầu không thành công !</value>
+  </data>
+  <data name="VALIDATION_COURSE_HAS_TRAINEE" xml:space="preserve">
+    <value>{0} {1} không tồn tại học viên !</value>
+  </data>
+  <data name="VALIDATION_SUBJECT_HAS_RESULT" xml:space="preserve">
+    <value>{0} {1} chưa học viên nào có kết quả !</value>
+  </data>
+  <data name="ERROR_UPDATE_STATUS_UNSUCCESS" xml:space="preserve">
+    <value> Cập nhật trạng thái để gửi tới LMS không thành công !</value>
+  </data>
+  <data name="SUBMIT_SUCCESS" xml:space="preserve">
+    <value> {0} thành công !</value>
+  </data>
+  <data name="WARNING_SUBJECT_COMPLETED" xml:space="preserve">
+    <value>{0} có {1}  chưa hoàn thành !</value>
+  </data>
+  <data name="WARNING_CANCEL_APPROVE" xml:space="preserve">
+    <value>Bạn có chắc muốn hủy phê duyệt ?</value>
+  </data>
+  <data name="VALIDATE_SELECT_COURSE" xml:space="preserve">
+    <value>{0} không tìm thấy vì {1} đã ngưng hoạt động hoặc đã xóa !</value>
+  </data>
+  <data name="COURSE_IS_NOT_FOUND" xml:space="preserve">
+    <value> {0} {1} không tìm thấy !</value>
+  </data>
+  <data name="DataIsExists" xml:space="preserve">
+    <value> {0} is already exists !</value>
+  </data>
+  <data name="DATA_ISNOTFOUND" xml:space="preserve">
+    <value> {0} is not found !</value>
+  </data>
+  <data name="EMPLOYEE_ISNOT_INTRUCTOR" xml:space="preserve">
+    <value>Người dùng không phải là giáo viên !</value>
+  </data>
+  <data name="ERROR_CALLLMS" xml:space="preserve">
+    <value> Có lỗi trong quá trình cập nhật LMS !</value>
+  </data>
+  <data name="DELETE_SUCCESSFULLY_BUT_ERROR_LMS" xml:space="preserve">
+    <value> Xóa {0} thành công nhưng đã xảy ra lỗi khi gọi LMS đang cập nhật!</value>
+  </data>
+  <data name="SUCCESSFULLY_BUT_ERROR_LMS" xml:space="preserve">
+    <value>{0} {1} thành công nhưng đã xảy ra lỗi khi gọi LMS đang cập nhật!</value>
+  </data>
+  <data name="VALIDATION_FOLDER" xml:space="preserve">
+    <value>Bạn không có quyền tạo thư mục !</value>
+  </data>
+  <data name="VALIDATION_STEP_ASSIGNTRAINEE_APPROVE" xml:space="preserve">
+    <value>Bước "Gán học viên" đã duyệt !</value>
+  </data>
+  <data name="LOGIN_BLOCK" xml:space="preserve">
+    <value>Tài khoản của bạn tạm thời bị khóa !</value>
+  </data>
+  <data name="LOGIN_BROWSER" xml:space="preserve">
+    <value>Tài khoản của bạn đang đăng nhập từ trình duyệt khác. Hãy thử lại sau 30 giây !</value>
+  </data>
+  <data name="LOGIN_FAIL" xml:space="preserve">
+    <value>Đăng nhập thất bại !</value>
+  </data>
+  <data name="LOGIN_INCORRECT" xml:space="preserve">
+    <value>Tên đăng nhập hoặc mật khẩu không chính xác!</value>
+  </data>
+  <data name="DELETED_UNSUCCESS_SENDLMS" xml:space="preserve">
+    <value>{0} không thể xóa vì không đồng bộ với LMS !</value>
+  </data>
+  <data name="SAVE_UNSUCCESS" xml:space="preserve">
+    <value>{0} không thể sửa vì đang được sử dụng !</value>
+  </data>
+  <data name="WARNING_SEND_NEW_PASS" xml:space="preserve">
+    <value>Bạn có chắc muốn gửi mật khẩu mới tới "{0}" ?</value>
+  </data>
+  <data name="VALIDATION_CONTENT_MAIL" xml:space="preserve">
+    <value>Vui lòng nhập nội dung !</value>
+  </data>
+  <data name="VALIDATION_CONTACT_SUBJECT" xml:space="preserve">
+    <value>Vui lòng nhập Tiêu đề !</value>
+  </data>
+  <data name="VALIDATION_SCHEDULE_METHOD" xml:space="preserve">
+    <value>Vui lòng chọn Phương thức gửi !</value>
+  </data>
+  <data name="VALIDATION_SCHEDULE_NAME" xml:space="preserve">
+    <value>Vui lòng nhập Tên !</value>
+  </data>
+  <data name="VALIDATION_SCHEDULE_TYPE" xml:space="preserve">
+    <value>Vui lòng chọn Loại !</value>
+  </data>
+  <data name="VALIDATION_TEXT" xml:space="preserve">
+    <value>Vui lòng nhập {0} !</value>
+  </data>
+  <data name="VALIDATION_SCHEDULE_SENDTO" xml:space="preserve">
+    <value>Vui lòng chọn loại gửi !</value>
+  </data>
+  <data name="DELETE_LOG" xml:space="preserve">
+    <value>Bạn có muốn xóa log này?</value>
+  </data>
+  <data name="DELETE_POSTCATEGORY" xml:space="preserve">
+    <value>Bạn có muốn xóa loại bản tin này?</value>
+  </data>
+  <data name="DELETE_POSTNEWS" xml:space="preserve">
+    <value>Bạn có muốn xóa bản tin này?</value>
+  </data>
+  <data name="DELETE_SCHEDULE" xml:space="preserve">
+    <value>Bạn có chắc muốn xóa lịch biểu ?</value>
+  </data>
+  <data name="ERROR_CALL_LMS" xml:space="preserve">
+    <value>nhưng đã xảy ra lỗi khi gọi LMS đang được cập nhật!</value>
+  </data>
+  <data name="WARNING_DATECALENDAR" xml:space="preserve">
+    <value>Vui lòng chọn mốc thời gian !</value>
+  </data>
+  <data name="WARNING_DAY" xml:space="preserve">
+    <value>Vui lòng chọn ngày để lập !</value>
+  </data>
+  <data name="WARNING_EMPLOYEE" xml:space="preserve">
+    <value>Vui lòng chọn người dùng !</value>
+  </data>
+  <data name="WARNING_TIMEMARK" xml:space="preserve">
+    <value>Vui lòng chọn mốc thời gian !</value>
+  </data>
+  <data name="WARNING_TIMEPERIODIC" xml:space="preserve">
+    <value>Vui lòng chọn mốc thời gian !</value>
+  </data>
+  <data name="WARNING_TIMEREPEAT" xml:space="preserve">
+    <value>Vui lòng chọn thời gian &gt; 0 !</value>
+  </data>
+  <data name="WARNING_USERSYSTEM" xml:space="preserve">
+    <value>Vui lòng chọn người dùng hệ thống !</value>
+  </data>
+  <data name="WARNING_CODE_HAS_SPACE" xml:space="preserve">
+    <value>{0} không chứa khoảng trống , vui lòng nhập lại !</value>
+  </data>
+  <data name="WARNING_MIN_MAX_TRAINEE" xml:space="preserve">
+    <value>Số học viên tối thiểu {0} phải nhỏ hơn số học viên tối đa {1} !</value>
+  </data>
+  <data name="CHECK_INSTRUCTOR_EXIST" xml:space="preserve">
+    <value>{0} có ngày {1} và giờ {2} đã tồn tại !</value>
+  </data>
+  <data name="WARNING_DELETE_COURSE_NOTSYNC" xml:space="preserve">
+    <value>Bạn không thể xóa " {0} " vì chưa đồng bộ LMS , vui lòng chạy đồng bộ  !</value>
+  </data>
+  <data name="WARNING_DECISION" xml:space="preserve">
+    <value>Vui lòng nhập mã bằng !</value>
+  </data>
+  <data name="WARNING_GROUPCERTIFICATE" xml:space="preserve">
+    <value>Vui lòng chọn nhóm bằng !</value>
+  </data>
+  <data name="WARNING_NOTRAINEE" xml:space="preserve">
+    <value>Không có học hoàn thành chứng chỉ !</value>
+  </data>
+  <data name="APPROVE_TRAINEE_COURSE" xml:space="preserve">
+    <value>- Đăng ký học viên vào khóa học thành công</value>
+  </data>
+  <data name="APPROVE_TRAINEE_COURSE_ERROR" xml:space="preserve">
+    <value>- Đăng ký học viên vào khóa học không thành công</value>
+  </data>
+  <data name="Search_hide" xml:space="preserve">
+    <value>Ẩn tìm kiếm</value>
+  </data>
+  <data name="WARNING_EXTENSION_FILE" xml:space="preserve">
+    <value>Tập tin không được chấp nhận !</value>
+  </data>
+  <data name="WARNING_CLEAN_LOG" xml:space="preserve">
+    <value>Bạn có chắc muốn dọn sạch lịch sử ?</value>
+  </data>
+  <data name="RegEx_PASSWORD" xml:space="preserve">
+    <value>Điều kiện mật khẩu:
+&lt;br /&gt;- Phải có tối thiểu 8 ký tự !
+&lt;br /&gt;- Phải có chữ hoa !
+&lt;br /&gt;- Phải có chữ thường !
+&lt;br /&gt;- Phải có chữ số !
+&lt;br /&gt;- Phải có một ký tự đặc biệt !</value>
+  </data>
+  <data name="DELETE_OBJECT" xml:space="preserve">
+    <value>Bạn có chắc muốn xóa {0} ?</value>
+  </data>
+  <data name="WARNING_CREATEMEETING_ROOM" xml:space="preserve">
+    <value>Phòng họp đã được sử dụng trong thời gian đã chọn. Vui lòng thao tác lại  !!!</value>
+  </data>
+  <data name="VALIDATION_COURSE_MAXGRADE" xml:space="preserve">
+    <value>Vui lòng nhập tổng điểm từ 0 đến 100 !</value>
+  </data>
+  <data name="WARNING_MAXGRADE" xml:space="preserve">
+    <value>{0} Tổng điểm nên là 100 !</value>
+  </data>
+  <data name="VALIDATION_REGISTER_FROM_TO" xml:space="preserve">
+    <value>{0}{1} không thấp hơn {2} .</value>
+  </data>
+  <data name="VALIDATION_ENDDATE" xml:space="preserve">
+    <value>Vui lòng chọn thời gian kết thúc !</value>
+  </data>
+  <data name="VALIDATION_STARTDATE" xml:space="preserve">
+    <value>Vui lòng chọn thời gian bắt đầu !</value>
+  </data>
+  <data name="DELETE_SURVEY" xml:space="preserve">
+    <value>Bạn có chắc muốn xóa khảo sát này?</value>
+  </data>
+  <data name="VALIDATION_ISNUMBER" xml:space="preserve">
+    <value>{0}Điểm kết quả phải là số !</value>
+  </data>
+  <data name="VALIDATION_MAXGRADE" xml:space="preserve">
+    <value>{0} {1} không thấp hơn {2} . ({3})</value>
+  </data>
+  <data name="WARNING_RANDOM_PASS" xml:space="preserve">
+    <value>Vui lòng đăng nhập bằng SSO !</value>
+  </data>
+  <data name="WARNING_401" xml:space="preserve">
+    <value>Bạn không có đủ đặc quyền cho thao tác này. Vui lòng liên hệ Admin.</value>
+  </data>
+  <data name="LOGIN_FAIL_1MINUTE" xml:space="preserve">
+    <value>Hãy thử lại sau 1 phút.</value>
+  </data>
+  <data name="LOGIN_FAIL_30MINUTES" xml:space="preserve">
+    <value>Hãy thử lại sau 30 phút.</value>
+  </data>
+  <data name="TIMEOUT_SESSION" xml:space="preserve">
+    <value>Phiên của bạn đã hết hạn, vui lòng làm mới trang và thử lại.</value>
+  </data>
+  <data name="WARNING_302" xml:space="preserve">
+    <value>Bạn không có đủ đặc quyền cho thao tác này. Vui lòng liên hệ Admin.</value>
+  </data>
+</root>

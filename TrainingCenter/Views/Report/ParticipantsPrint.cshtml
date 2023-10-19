@@ -1,0 +1,132 @@
+﻿@model TMS.Core.ViewModels.ReportModels.ParticipantsModel
+@{
+    ViewBag.Title = "ParticipantsPrint";
+}
+<style>
+    #reportpage table > thead > tr > th,
+    #reportpage .table > thead > tr > th,
+    #reportpage table > tbody > tr > th,
+    #reportpage .table > tbody > tr > th,
+    #reportpage table > tfoot > tr > th,
+    #reportpage .table > tfoot > tr > th,
+    #reportpage table > thead > tr > td,
+    #reportpage .table > thead > tr > td,
+    #reportpage table > tbody > tr > td,
+    #reportpage .table > tbody > tr > td,
+    #reportpage table > tfoot > tr > td,
+    #reportpage .table > tfoot > tr > td {
+        border: 1px solid #000;
+        color: black;
+    }
+
+    .text-left {
+        text-align: left;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-right {
+        text-align: right;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-center {
+        text-align: center;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .header-title {
+        color: black;
+        font-weight: bold;
+    }
+
+    .td_course {
+        padding-left: 10px;
+        background: #ccc;
+    }
+
+    .footer_date {
+        color: black;
+        padding-top: 20px;
+        font-style: italic;
+    }
+</style>
+<div class="col-sm-12 text-center">
+    <table width="100%" border="1">
+        <tr>
+            <td width="20%">
+                <div class="col-sm-12 text-center">
+                    <img src="~/Content/assets/img/report/logoreport.png" style="width: 80%;margin-top: 12px;" />
+                </div>
+            </td>
+            <td>
+                <div class="col-sm-12 text-center">
+                    <h4 class="header-title">
+                        LIST OF PARTICIPANTS - REV...<br /> Attached with Trainning Plan @(Model.CourseCode)
+
+                    </h4>
+                </div>
+            </td>
+            <td width="20%">
+                <div class="col-sm-12 text-right pull-right">
+                    @if (Model.header.Length == 3)
+                    {
+                        @Model.header[0]<br />
+                        @Model.header[1]<br />
+                        @Model.header[2]
+                    }
+
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="col-sm-12 text-center">
+    <table width="100%" border="1">
+        <tr>
+            <th class="text-center">No.</th>
+            <th class="text-center">FullName</th>
+            <th class="text-center">Staff ID</th>
+            <th class="text-center">Department</th>
+            <th class="text-center">Remark</th>
+        </tr>
+        @if (Model.courses.Any())
+        {
+            foreach (var item in Model.courses)
+            {
+                int count = 0;
+                <tr>
+                    <td colspan="10" class="text-left td_course"> <h4 class="header-title" style="text-transform: uppercase;">@item.Code &nbsp; &nbsp; @item.Name </h4></td>
+                </tr>
+                if (item.trainees.Count() > 0)
+                {
+                    foreach (var trainee in item.trainees)
+                    {
+
+                        count++;
+                        <tr>
+                            <td style="width: 5%;">@(count)</td>
+                            <td style="width: 30%;" class="text-left">@(trainee.FullName)</td>
+                            <td style="width: 15%;" class="text-center">@(trainee.str_Staff_Id)</td>
+                            <td style="width: 30%;" class="text-center">@(trainee.DepartmentName)</td>
+                            <td style="width: 20%;"></td>
+                        </tr>
+                    }
+                }
+            }
+        }
+    </table>
+</div>
+<div class="col-sm-8 text-right"></div>
+<div class="col-sm-4 text-center">
+    <p>
+        <h4 class="header-title">
+            Date:.................................................
+        </h4>
+    </p>
+    <p>
+        <h4 class="header-title">
+            Verified by
+        </h4>
+    </p>
+</div>
+

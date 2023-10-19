@@ -1,0 +1,141 @@
+﻿@using DAL.Entities
+@using TMS.Core.App_GlobalResources
+@model CAT_GROUPSUBJECT
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Group Subject";
+    int id = ViewBag.id;
+    var mModel = Model;
+}
+
+
+@section breadcrumb{
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            <i class="fa fa-group"></i> Master data - Group Subject
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li> Master data</li>
+            <li class="active">Group Subject</li>
+        </ol>
+    </div>
+</div>
+}
+@using (Html.BeginForm("AjaxHandler", "GroupSubject", FormMethod.Post, new Dictionary<string, object>
+    () { { "id", "frmFilter" } }))
+    {
+    <div class="col-md-12">
+        <div class="panel panel-danger list-panel" id="list-panel">
+            <div class="panel-body">
+                <div class="row col-md-12">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <input type="text" name="code" id="Code" class="form-control frmFilter" placeholder="Code" />
+                        </div>
+                        <div class="col-md-7">
+                            <input type="text" name="fullname" id="Name" class="form-control frmFilter" placeholder="FullName" />
+                        </div>
+                        <div class="col-md-2">
+                            <input type="submit" class="btn btn-danger form-control" id="btFilter" value="Search" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    }
+    <div class="col-md-12">
+        <div class="panel panel-danger list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title">Master</h1>
+            </div>
+            <div class="panel-body table-responsive">
+                <table id="GroupSubject" class="table table-striped table-bordered" style="width:100%">
+                    <thead >
+                        <tr role="row">
+                            <th style="width:10%;">No</th>
+                            <th>Code</th>
+                            <th>Group Name</th>
+                            <th style="width:15%;">Created Date</th>
+                            <th style="width:15%;">Last Updated Date</th>
+                            <th style="width:10%;"></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+    @section Scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // load page create
+            active(0, "create");
+            ;
+            // dataTable
+            var sTable = initDataTable('#GroupSubject', '/GroupSubject/AjaxHandler');
+            $('#btFilter').click(function (e) {
+                sTable.draw();
+            });
+
+        });
+
+        function active(id, type) {
+            $.ajax({
+                type: "GET",
+                url: "/GroupSubject/Modify/",
+                data: { id: id, type: type },
+                datatype: 'json',
+                success: function (data) {
+                    $('#showdetail').html(data);
+                }
+            });
+        }
+        function submit() {
+            var form = $("#createform").serialize();
+
+            $.ajax({
+                type: 'POST',
+                url: "/GroupSubject/Modify",
+                datatype: 'json',
+                data: form,
+                success: function (data) {
+                    $("#messageout").html('');
+                    $("#messageout").append(data);
+                    var sTable = $("#GroupSubject").dataTable();
+                    sTable.draw();
+                }
+            });
+        }
+        @if (User.IsInRole("/GroupSubject/delete")) {
+            <text>
+                function calldelete(id) {
+                    notify.confirm(@Messege.DELETE_GROUPSUBJECT,'Warning',TITLE_STATUS_Warning);
+            }
+            function deletesubmit(id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: "/GroupSubject/delete",
+                        datatype: 'json',
+                        data: { id: id },
+                        success: function (data) {
+                            $("#messageout2").html('');
+                            $("#messageout2").append(data);
+                            sTable.draw();
+                        }
+                    });
+                }
+            </text>
+        }
+    </script>
+    }

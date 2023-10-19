@@ -1,0 +1,413 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@using Utilities;
+@model TMS.Core.ViewModels.Employee.EmployeeModelPrint
+@{
+    ViewBag.Title = "PrintProfile";
+
+
+}
+<style>
+    #reportpage table > thead > tr > th,
+    #reportpage .table > thead > tr > th,
+    #reportpage table > tbody > tr > th,
+    #reportpage .table > tbody > tr > th,
+    #reportpage table > tfoot > tr > th,
+    #reportpage .table > tfoot > tr > th,
+    #reportpage table > thead > tr > td,
+    #reportpage .table > thead > tr > td,
+    #reportpage table > tbody > tr > td,
+    #reportpage .table > tbody > tr > td,
+    #reportpage table > tfoot > tr > td,
+    #reportpage .table > tfoot > tr > td {
+        border: 1px solid #000;
+        color: black;
+    }
+
+    .text-left {
+        text-align: left;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-right {
+        text-align: right;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-center {
+        text-align: center;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .header-title {
+        color: black;
+        font-weight: bold;
+    }
+
+    .td_course {
+        padding-left: 10px;
+        background: #ccc;
+    }
+
+    .footer_date {
+        color: black;
+        padding-top: 20px;
+        font-style: italic;
+    }
+
+    h4 {
+        color: black;
+    }
+
+    .images {
+        width: 25%;
+    }
+
+    .content {
+        width: 75%;
+    }
+
+    .col-lg-6 {
+        width: 50%;
+    }
+
+    .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11 {
+        float: left;
+    }
+
+    .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+        float: right;
+    }
+</style>
+
+<link href="~/Content/assets/css/vietjet-print.css" rel="stylesheet" media="print" />
+<div class="col-md-12 text-center">
+    <table width="100%" border="1">
+        <tr>
+            <td width="20%">
+                <div class="col-sm-12 text-center">
+                    <img src="~/Content/assets/img/report/logoreport.png" style="width: 80%;margin-top: 12px;" />
+                </div>
+            </td>
+            <td colspan="1">
+                <div class="col-sm-12 text-center">
+                    <h2 class="header-title">Instructor Profile</h2>
+                </div>
+            </td>
+            <td width="20%">
+                <div class="col-sm-12 text-right pull-right">
+                    FORM: VJC-VTC-F-010 <br />
+                    ISS 01/REV 02<br />
+                    1/1/2017
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="panel " style="margin-top: 10px;">
+    <div class="panel-body">
+
+        <div class="tab-content">
+
+            <div class="row" style="margin-top:10px;">
+
+                <div class="col-md-4 images">
+                    <div class="profile-sidebar box-shadow">
+                        @if (string.IsNullOrEmpty(Model.Avatar) || Model.Avatar.StartsWith("NoAvata"))
+                        {
+                            <img src="@(UtilConstants.PathImage+"NoAvata.png")" class="img-responsive center-block" @*style="width:200px; height:200px;"*@ />
+                        }
+                        else
+                        {
+                            <img src="@(AppUtils.getAppSetting("AWSLinkS3") + AppUtils.getAppSetting("PathImage").Substring(1) +Model.Avatar)" class="img-responsive center-block" @*style="width:200px; height:200px;"*@ />
+                        }
+                        <div class="profile-username text-center">
+                            <p>@(Model.FullName)</p>
+                        </div>
+                        <div class="profile-job text-center">
+                            <p>@(Model.JobTitle)</p>
+                        </div>
+                        @if (Model.CheckHannahMentor)
+                        {
+                            <div class="profile-job text-center">
+                                <p>@(Model.HannahMentor)</p>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+                <div class="col-md-8 content">
+                    <div class="panel box-shadow">
+                        <div class="panel-body center-block">
+                            <div class="form-group col-lg-6">
+                                <label>ID : @(!string.IsNullOrEmpty(Model.PersonalId) ? Model.PersonalId : "______")</label><br />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Messege.EID : @(!string.IsNullOrEmpty(Model.Eid) ? Model.Eid : "_____")</label><br />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblDateOfBirth : @(!string.IsNullOrEmpty(Model.Birthdate) ? Model.Birthdate : "_____")</label><br />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblPassportNo : @(!string.IsNullOrEmpty(Model.Passport) ? Model.Passport : "______")</label><br />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblGender : @(!string.IsNullOrEmpty(Model.Passport) ? Model.Passport : "_____")</label><br />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblPlaceOfBirth : @(!string.IsNullOrEmpty(Model.PlaceOfBirth) ? Model.PlaceOfBirth : "______")</label><br />
+
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblEmail : @(!string.IsNullOrEmpty(Model.Email) ? Model.Email : "______")</label><br />
+
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblNationality : @(!string.IsNullOrEmpty(Model.Nation) ? Model.Nation : "______")</label><br />
+
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblPhone :@(!string.IsNullOrEmpty(Model.Phone) ? Model.Phone : "______")</label><br />
+
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblDateOfJoin :@(!string.IsNullOrEmpty(Model.DateOfJoin) ? Model.DateOfJoin : "______")</label><br />
+
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblJobTitle :@(!string.IsNullOrEmpty(Model.JobTitle) ? Model.JobTitle : "______")</label><br />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblDepartment :@(!string.IsNullOrEmpty(Model.Department) ? Model.Department : "______")</label><br />
+                            </div>
+                            <div class="form-group col-lg-6">
+
+                                <label>@Messege.TYPE : @(!string.IsNullOrEmpty(Model.Type) ? Model.Type : "______")</label><br />
+
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblCompany : @(!string.IsNullOrEmpty(Model.Company) ? Model.Company : "______")</label><br />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (Model.Educations.Any())
+            {
+                <!------EDUCATION------>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div class="panel  list-panel" id="list-panel">
+                            <div class="panel-heading list-panel-heading">
+                                <h1 class="panel-title list-panel-title">@Resource.lblEducation</h1>
+                            </div>
+                            <div class="panel-body">
+                                <table id="Table_Education" class="table table-striped table-bordered">
+                                    <thead class="cf m-gray">
+                                        <tr role="row">
+                                            <th class="text-center">No</th>
+                                            <th class="text-center">@Resource.lblTime</th>
+                                            <th class="text-center">@Resource.lblCourse</th>
+                                            <th class="text-center">@Resource.lblOrganization</th>
+                                            <th class="text-center">@Resource.lblNote</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            var count = 0;
+                                            foreach (var item in Model.Educations)
+                                            {
+                                                count++;
+                                                <tr>
+                                                    <td class="text-left">@(count)</td>
+                                                    <td class="text-center">@item.Time</td>
+                                                    <td class="text-left">@(item.Course)</td>
+                                                    <td class="text-left">@(item.Organization)</td>
+                                                    <td class="text-left">@(item.Note)</td>
+                                                </tr>
+                                            }
+                                        }
+
+                                    </tbody>
+                                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (Model.Contracts.Any())
+            {
+                <!-----------CONTRACT---------------->
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div class="panel  list-panel" id="list-panel">
+                            <div class="panel-heading list-panel-heading">
+                                <h1 class="panel-title list-panel-title">@Resource.lblContract</h1>
+                            </div>
+                            <div class="panel-body">
+                                <table id="Table_Contract" class="table table-striped table-bordered">
+                                    <thead class="cf  m-gray">
+                                        <tr role="row">
+                                            <th class="text-center">No</th>
+                                            <th class="text-center">@Resource.lblContractNo </th>
+                                            <th class="text-center">@Resource.lblExprieDate</th>
+                                            <th class="text-center">@Resource.lblDescription</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            var count = 0;
+                                            foreach (var item in Model.Contracts)
+                                            {
+                                                count++;
+                                                <tr>
+                                                    <td class="text-left">@(count)</td>
+                                                    <td class="text-left">@(item.ContractNo)</td>
+                                                    <td class="text-left">@(item.ExpiryDate)</td>
+                                                    <td class="text-left">@(item.Description)</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <!----------TRAINING COURSES--------->
+
+            @if (Model.TrainningCourses.Any())
+            {
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div class="panel  list-panel" id="list-panel">
+                            <div class="panel-heading list-panel-heading">
+                                <h1 class="panel-title list-panel-title">@Resource.lblTrainingCourses</h1>
+                            </div>
+                            <div class="panel-body">
+                                <table id="Table_Trainee_Courses" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                    <thead class="cf m-gray">
+                                        <tr role="row">
+                                            <th class="text-center">No</th>
+                                            <th class="text-center">@Resource.lblCourseCode</th>
+                                            <th class="text-center">@Resource.lblCourseName</th>
+                                            <th class="text-center">@Resource.lblTime</th>
+                                            <th class="text-center">@Resource.lblCertificate</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            var count = 0;
+                                            foreach (var item in Model.TrainningCourses)
+                                            {
+                                                count++;
+                                                <tr>
+                                                    <td class="text-left">@(count)</td>
+                                                    <td class="text-left">@(item.Code)</td>
+                                                    <td class="text-left">@(item.Name)</td>
+                                                    <td class="text-center">@(item.Time)</td>
+                                                    <td class="text-left">@(item.Certificate)</td>
+                                                </tr>
+                                            }
+
+                                        }
+                                    </tbody>
+                                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+            @if (Model.TrainingCompetencies.Any())
+            {
+                <!--TRAINING COMPETENCY-->
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div class="panel  list-panel" id="list-panel">
+                            <div class="panel-heading list-panel-heading">
+                                <h1 class="panel-title list-panel-title">@Resource.lblTRAININGCOMPETENCY</h1>
+                            </div>
+                            <div class="panel-body">
+                                <table id="TBL_TRAINING_COMPETENCY" class="table table-striped table-bordered dt-responsive" style="width:100%">
+                                    <thead>
+                                        <tr role="row">
+                                            <th class="text-center">No</th>
+                                            <th class="text-center">@Resource.lblCode</th>
+                                            <th class="text-center">@Resource.lblSubjectName</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+
+                                            var count = 0;
+                                            foreach (var item in Model.TrainingCompetencies)
+                                            {
+                                                count++;
+                                                <tr>
+                                                    <td class="text-left">@(count++)</td>
+                                                    <td class="text-left">@(item.Code)</td>
+                                                    <td class="text-left">@(item.Name)</td>
+                                                </tr>
+                                            }
+
+
+                                        }
+
+                                    </tbody>
+                                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (Model.ConductedCourses.Any())
+            {
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div class="panel  list-panel" id="list-panel">
+                            <div class="panel-heading list-panel-heading">
+                                <h1 class="panel-title list-panel-title">@Resource.lblCONDUCTEDCOURSES</h1>
+                            </div>
+                            <div class="panel-body">
+                                <table id="TableConductedCourses" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                    <thead class="cf">
+                                        <tr role="row">
+                                            <th class="text-center">@Resource.lblStt</th>
+                                            <th>@Resource.lblCode</th>
+                                            <th>@Resource.lblSubjectName</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            var count = 0;
+                                            foreach (var item in Model.ConductedCourses)
+                                            {
+                                                count++;
+                                                <tr>
+                                                    <td class="text-left">@(count++)</td>
+                                                    <td class="text-left">@(item.Code)</td>
+                                                    <td class="text-left">@(item.Name)</td>
+                                                </tr>
+                                            }
+
+                                        }
+                                    </tbody>
+                                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

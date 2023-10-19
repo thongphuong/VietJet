@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var user = System.Configuration.ConfigurationManager.AppSettings["CRON_USER"];
+    var subject = System.Configuration.ConfigurationManager.AppSettings["CRON_SUBJECT"];
+    var jobtile = System.Configuration.ConfigurationManager.AppSettings["CRON_JOBTITLE"];
+    var trainee_history = System.Configuration.ConfigurationManager.AppSettings["CRON_TRAINEE_HISTORY"];
+    var program = System.Configuration.ConfigurationManager.AppSettings["CRON_PROGRAM"];
+    var course = System.Configuration.ConfigurationManager.AppSettings["CRON_COURSE"];
+    var assign_trainee = System.Configuration.ConfigurationManager.AppSettings["CRON_ASSIGN_TRAINEE"];
+    var get_list_category = System.Configuration.ConfigurationManager.AppSettings["CRON_GET_LIST_CATEGORY"];
+    var get_course_result_summary = System.Configuration.ConfigurationManager.AppSettings["CRON_GET_COURSE_RESULT_SUMMARY"];
+    var get_certificate = System.Configuration.ConfigurationManager.AppSettings["CRON_GET_CERTIFICAT"];
+
+}
+<h2>Index</h2>
+
+<div class="row">
+        <input type="text" value="@(ViewBag.ListTemp)" id="value_test"/>
+        <div class="col-md-12" style="margin-bottom:25px">
+            <div class="col-md-3">
+                <button class=" btn btn-primary" onclick="submit('@user')"><p>CRON_USER</p></button>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-primary"  onclick="submit('@subject')"><p>CRON_SUBJECT</p></button>
+            </div>
+            <div class="col-md-3">
+                <button class=" btn btn-primary"  onclick="submit('@jobtile')"><p>CRON_JOBTITLE</p></button>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-primary" onclick="submit('@course')"><p>CRON_COURSE</p></button>
+            </div>
+        </div>
+        <div class="col-md-12" style="margin-bottom:25px">
+            <div class="col-md-4">
+                <button class="btn btn-primary" onclick="submit('@program')"><p>CRON_PROGRAM</p></button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary" onclick="submit('@trainee_history')"><p>CRON_TRAINEE_HISTORY</p></button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary" onclick="submit('@assign_trainee')"><p>CRON_ASSIGN_TRAINEE</p></button>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <button class="btn btn-primary" onclick="submit('@get_list_category')"><p>CRON_GET_LIST_CATEGORY</p></button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary" onclick="submit('@get_course_result_summary')"><p>CRON_GET_COURSE_RESULT_SUMMARY</p></button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary" onclick="submit('@get_certificate')"><p>CRON_GET_CERTIFICAT</p></button>
+            </div>
+        </div>
+
+    </div>
+
+
+@section Scripts{
+    <script>
+        function submit(data) {
+            $.ajax({
+                url: "/TestServices/CallServices",
+                type: 'POST',
+                data: { type: data },
+                success: function (data) {
+                    alert(data);
+                }
+            });
+
+        }
+    </script>
+}

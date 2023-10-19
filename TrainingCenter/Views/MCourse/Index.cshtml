@@ -1,0 +1,246 @@
+﻿@using TMS.Core.App_GlobalResources;
+@model DAL.Entities.CAT_GROUPSUBJECT
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Group Course";
+}
+
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-book"></i> @Resource.lblSubjectManagement - @Resource.lblGroupCourse</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblSubjectManagement</li>
+                <li class="active">@Resource.lblGroupCourse</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title">
+                    <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> @Resource.lblList
+                    <p class="btn-group pull-right">
+                        @if (User.IsInRole("/MCourse/Create"))
+                        {
+                            <a href="/MCourse/Create" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-plus" aria-hidden="true"></i> @Resource.lblADDNEW</a>
+                        }
+                    </p>
+                </h1>
+            </div>
+            <div class="panel-body table-responsive">
+                <div id="panel-search1" class="collapse1 panel">
+                    @using (Html.BeginForm("AjaxHandler", "MCourse", FormMethod.Post, new { id = "frmFilter" }))
+                    {
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <div class="col-md-5">
+                                    <label class="col-md-4 control-label">@Resource.lblCode</label>
+                                    @*<label class="col-md-4 control-label">@Resource.lblCourseCode</label>*@
+                                    <div class="col-md-8">
+                                        <input type="text" name="code" id="Code" class="form-control frmFilter" placeholder="@Resource.lblCode" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="col-md-4 control-label">@Resource.lblGroupCourse</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="fullname" id="Name" class="form-control frmFilter" placeholder="@Resource.lblGroupCourse" />
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <button type="submit" class="btn btn-primary pull-right" id="btFilter">
+                                        <i class="fa fa-search"></i> @Resource.lblSearch
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+                    <br />
+                </div>
+                @*<p class="pull-right" data-toggle="collapse" data-target="#panel-search" style="cursor:pointer;" id="call-panel-search"><i class="fa fa-search"></i> @Messege.Search</p>*@
+                <table id="GroupSubject" class="table table-striped table-bordered" style="width: 100%">
+                    <thead>
+                        <tr role="row">
+                            <th style="width: 5%;">@Resource.lblStt</th>
+                            <th>Code</th>
+                            @*<th>@Resource.lblCourseCode</th>*@
+                            <th>@Resource.lblGroupCourse</th>
+                            <th>@Resource.lblDescription</th>
+                            <th>@Resource.lblStatus</th>
+                            <th style="width: 10%;"></th>
+                            @*<th style="width: 10%;">@Resource.lblOptions</th>*@
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="hidden">
+    <table id="subject" class="table table-striped table-bordered">
+        <thead>
+            <tr role="row">
+                <th>@Resource.lblStt</th>
+                <th class="dt-left">@Resource.lblCode</th>
+                <th>@Resource.lblName</th>
+                <th>@Resource.lblDuration</th>
+                <th>@Resource.lblRecurrent (@Resource.lblMonth)</th>
+                @*<th>Pass Score</th>*@
+                <th>@Resource.lblAverageCalculate</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+    </table>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+    var sTable;
+    $(document).ready(function () {
+        var customRow = [{ "targets": 0 }, {
+            "targets": 4,
+            "className": "text-center",
+        }];
+        sTable = initDataTable("#GroupSubject", '/MCourse/AjaxHandler', customRow);
+        $('#frmFilter').submit(function (e) {
+            sTable.draw();
+            e.preventDefault();
+        });
+        var detailRows = [];
+        $('#GroupSubject tbody').on('click', 'tr td span.expand', function () {
+            var id = $(this).data('value');
+            var tr = $(this).closest('tr');
+            var row = sTable.row(tr);
+            var idx = $.inArray(tr.attr('id'), detailRows);
+
+            if (row.child.isShown()) {
+                tr.removeClass('details');
+                row.child.hide();
+
+                // Remove from the 'open' array
+                detailRows.splice(idx, 1);
+            }
+            else {
+                tr.addClass('details');
+                row.child(format(id)).show();
+                // Add to the 'open' array
+                if (idx === -1) {
+                    detailRows.push(tr.attr('id'));
+                }
+            }
+        });
+    });
+    function Set_Participate_GroupSubject(isParticipate, id) {
+        spinner.open();
+        $.ajax({
+            type: 'POST',
+            url: "/MCourse/SubmitSetParticipateGroupSubject",
+            datatype: 'json',
+            data: { isParticipate: isParticipate, id: id },
+            success: function (data) {
+                if (data.result) {
+
+                    notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                } else {
+
+                    notify.alert(data.message, "DANGER", TITLE_STATUS_DANGER);
+                }
+
+            }, complete: function () {
+                sTable.draw();
+                spinner.close();
+            }
+
+        });
+    }
+    function format(id) {
+        var table = $("#subject").clone();
+        table.DataTable({
+            "responsive:": true,
+            "pageLength": 900000,
+            "searching": false,
+            "columnDefs": [{
+                "targets": 0,
+                "data": null,
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+                {
+                    "targets": 3,
+                    "className": "text-center",
+                },
+                {
+                    "targets": 4,
+                    "className": "text-center",
+                },
+                {
+                    "targets": 5,
+                    "className": "text-center",
+                }],
+            "aaSorting": [],
+            "bServerSide": true,
+            "sAjaxSource": "/MCourse/AjaxListSubjectInGroup/" + id,
+            "bProcessing": true
+        });
+
+        return table;
+    }
+
+    function submit() {
+        var form = $("#createform").serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: "/MCourse/Modify",
+            datatype: 'json',
+            data: form,
+            success: function (data) {
+                $("#messageout").html('');
+                $("#messageout").append(data);
+                var sTable = $("#GroupSubject").dataTable();
+                sTable.draw();
+            }
+        });
+    }
+    @if (User.IsInRole("/MCourse/delete")) {
+        <text>
+            function calldelete(id) {
+                notify.confirm('@Messege.DELETE_COURSE', 'Warning', TITLE_STATUS_WARNING, deletesubmit, id);
+            }
+        function deletesubmit(id) {
+            $.ajax({
+                type: 'POST',
+                url: "/MCourse/delete",
+                datatype: 'json',
+                data: { id: id },
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                        sTable.draw();
+                    }
+                    else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+
+                }, complete: function () {
+                    spinner.close();
+                }
+            });
+            }
+
+        </text>
+    }
+
+    </script>
+}

@@ -1,0 +1,135 @@
+﻿@using Utilities
+@using TMS.Core.Utils
+@model TMS.Core.ViewModels.ViewModel.ApproveLogViewModel
+@{
+    ViewBag.Title = "Log";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-graduation-cap"></i> Log</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li>Approve</li>
+                <li class="active">Log</li>
+            </ol>
+
+        </div>
+    </div>
+    <ul class="list-inline text-center">
+        <li><label style="font-size: 18px;">Note:</label></li>
+
+        <li>
+            <h5><i class="zmdi zmdi-circle" style="color: #4caf50;"></i> New data</h5>
+        </li>
+        <li>
+            <h5><i class="zmdi zmdi-circle" style="color: #e51c23;"></i> Data has been deleted or replaced.</h5>
+        </li>
+    </ul>
+    @*<div style="text-align:right">
+            <label style="font-size: 18px;">Note:</label>
+            <a class="note-log" style="font-size:18px"><font color="green">Green</font> is new data.<font color="red">Red</font> is data that has been deleted or replaced.</a></div>
+        <br />*@
+}
+<style>
+    table {
+        border: 1px solid #d9d9d9;
+    }
+
+    td {
+        border: 1px solid #d9d9d9;
+        padding: 3px;
+    }
+
+    .note-log {
+        color: #000;
+        text-decoration: none;
+    }
+    /* ***************************************
+    ** Diff related styles
+    *****************************************/
+
+    ins {
+        background-color: #4CAF50;
+        text-decoration: inherit;
+        color: #fff;
+    }
+
+    del {
+        color: #fff;
+        background-color: #F44336;
+    }
+
+    ins.mod {
+        background-color: #FFE1AC;
+    }
+</style>
+
+
+<div class="panel">
+    <div class="panel-body">
+        <div class="row col-md-12">
+            @{
+                if (Model != null)
+                {
+                    int start = 0;
+
+                    foreach (var item in Model.data)
+                    {
+                        <div class="panel-group" id="accordion">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="panels.html#@(DateUtil.DateToString(item.dtm_create, "hhmmss"))">
+                                            Request by @(Model.approveuser.FirstOrDefault(a => a.ID == Model.approveHis[start].int_Requested_by).FIRSTNAME)  @(Model.approveuser.FirstOrDefault(a => a.ID == Model.approveHis[start].int_Requested_by).LASTNAME)
+                                            at @(DateUtil.DateToString(item.dtm_create, "dd/MM/yyyy hh:mm:ss"))  -
+                                            @(Model.approveStatus.FirstOrDefault(a => a.Key == item.int_status).Value)
+                                            by @(Model.approveuser.FirstOrDefault(a => a.ID == Model.approveHis[start].int_Approve_by).FIRSTNAME)  @(Model.approveuser.FirstOrDefault(a => a.ID == Model.approveHis[start].int_Approve_by).LASTNAME)
+                                            at @(DateUtil.DateToString(item.dtm_approved_request, "dd/MM/yyyy hh:mm:ss"))
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="@(DateUtil.DateToString(item.dtm_create, "hhmmss"))" class="panel-collapse collapse @(start==1?"in":"")">
+                                    <div class="panel-body">
+                                        <div class="col-md-6">
+                                            <h4>After : Current data</h4>
+                                            <hr />
+                                            @{
+                                                string After = item.str_content;
+                                                string Before = "";
+                                                if (start + 1 < Model.data.Count())
+                                                {
+                                                    Before = Model.data[start + 1].str_content;
+                                                }
+                                            }
+                                            @Html.Raw(@DataUtils.Compare_Two_string(After, Before))
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h4>Before: Old data</h4>
+                                            <hr />
+
+                                            @if (start + 1 < Model.data.Count())
+                                            {
+                                                @Html.Raw(Model.data[start + 1].str_content)
+                                            }
+                                            else
+                                            {
+                                                <p style="font-size:22px;"> No information </p>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        start++;
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>

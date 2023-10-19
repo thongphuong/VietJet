@@ -1,0 +1,474 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@using TMS.Core.ViewModels.UserModels
+@model TMS.Core.ViewModels.Courses.CourseModifyModel
+@{
+    ViewBag.Title = "CreateRoom";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var data = (UserModel)HttpContext.Current.Session["UserA"];
+    var i = 0;
+    var b = 0;
+    var e = 0;
+}
+<style>
+    .form-control-custom {
+        width: 100% !important;
+    }
+</style>
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-graduation-cap"></i>  Course Rooms - Change Room </h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>Course Rooms</li>
+                <li class="active">Change Room</li>
+            </ol>
+        </div>
+    </div>
+}
+@using (Html.BeginForm("CreateRoom", "Meeting", FormMethod.Post, new { id = "createform" }))
+{
+    
+    <div class="panel list-panel">
+        <div class="panel-heading list-panel-heading">
+            <h1 class="panel-title list-panel-title">
+                <i class="fas fa-pencil-alt font-small-byhoa" aria-hidden="true"></i> Course: @(Model.Code) &nbsp;(@(Model.BeginDate.Value.ToString("dd/MM/yyyy")) - @(Model.EndDate.Value.ToString("dd/MM/yyyy")))
+            </h1>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                @if(Model.CourseDetailitems != null){
+                <input type="hidden" name="IdGlobal" id="IdGlobal" value="@Model.CourseDetailitems.IdGlobal" />
+                <input type="hidden" name="txt_STARTDATE" id="txt_STARTDATE" value="@Model.CourseDetailitems.DateFrom" />
+                <input type="hidden" name="txt_ENDDATE" id="txt_ENDDATE" value="@Model.CourseDetailitems.DateTo" />
+                }
+
+                <input type="hidden" name="stringvalue" id="stringvalue" value="@Model.strCourseDetailRoom" />
+                <input type="hidden" name="CourseId" id="CourseId" value="@Model.CourseId" />
+                <input type="hidden" name="hdfDetailRoom" id="hdfDetailRoom" />
+                @if (Model.CourseDetailitems != null)
+                {
+                    <div class="panel box-shadow">
+                        <div class="col-lg-12">
+                            <div class="row" style="margin-top: 10px;">
+                                <div class="form-group col-md-2 col-xs-4">
+                                    <b>@Resource.lblCourseName:</b>
+                                </div>
+                                <div class="form-group col-md-4 col-xs-8">
+                                    @Model.Name &nbsp;
+                                </div>
+                                <div class="form-group col-md-2 col-xs-4">
+                                    <b>@Resource.lblCode:</b>
+                                </div>
+                                <div class="form-group col-md-4 col-xs-8">
+                                    @Model.Code &nbsp;
+                                </div>
+                                @if (Model.CourseDetailitems != null)
+                                {
+                                    <div class="form-group col-md-2 col-xs-4">
+                                        <b>@Resource.lblSubjectName:</b>
+                                    </div>
+                                    <div class="form-group col-md-4 col-xs-8">
+                                        @Model.CourseDetailitems.SubjectName
+                                    </div>
+                                    <div class="form-group col-md-2 col-xs-4">
+                                        <b>@Resource.lblSubjectCode:</b>
+                                    </div>
+                                    <div class="form-group col-md-4 col-xs-8">
+                                        @Model.CourseDetailitems.SubjectCode
+                                    </div>
+                                    <div class="form-group col-md-2 col-xs-4">
+                                        <b>@Resource.lblLearningTime:</b>
+                                    </div>
+                                    <div class="form-group col-md-4 col-xs-8">
+                                        @(Model.CourseDetailitems.DateFrom.Value.ToString("dd/MM/yyyy")) - @(Model.CourseDetailitems.DateTo.Value.ToString("dd/MM/yyyy"))
+                                        <br />
+                                        (From: @(Model.CourseDetailitems.TimeFrom)  - To: @(Model.CourseDetailitems.TimeTo))
+                                    </div>
+                                    <div class="form-group col-md-2 col-xs-4">
+                                        <b>@Resource.lblSubjectType:</b>
+                                    </div>
+                                    <div class="form-group col-md-4 col-xs-8">
+                                        @Model.CourseDetailitems.SubjectType
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="panel list-panel">
+        <div class="panel-heading list-panel-heading">
+            <h1 class="panel-title list-panel-title">
+                <i class="fas fa-pencil-alt font-small-byhoa" aria-hidden="true"></i> Details
+            </h1>
+        </div>
+        <div class="panel-body table-responsive">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="col-lg-6 form-group">
+                        <label>@Resource.lblRoom</label>
+                        <select class="form-control input-sm default reselect roomCheck" data-placeholder="-- @Resource.lblRoom --" title="Class Room" onchange=" checkRoom() " id="course-detail-room" name="course-detail-room">
+                            @foreach (var room in Model.DictionaryRooms)
+                            {
+                                <option value="@room.Key" @(Model.CourseDetailitems != null && Model.CourseDetailitems.RoomIdGlobal == room.Key ? "selected" : "")>@room.Value</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-lg-6 form-group">
+                        <label>@Resource.lblRemark</label>
+                        <textarea class="form-control" cols="20" id="Note" name="Note" rows="1">@(Model.CourseDetailitems != null ? Model.CourseDetailitems.Remark : "")</textarea>
+                        @Html.ValidationMessageFor(m => m.Note, null, new { @class = "text-danger" })
+                    </div>
+
+                </div>
+            </div>
+            @if (Model.CourseDetailitems != null)
+            {
+                <input type="hidden" name="CourseDetailId" id="CourseDetailId"  value="@Model.CourseDetailitems.Id"/>
+                <div>
+                    <div class="table-responsive" id="tableTGNP" style="max-height:1000px;margin-top:10px"></div>
+                </div>
+                <div class="row">
+                    <div class="action-form text-right">
+                        <a class="btn btn-primary" id="saveA" onclick="actionSubmit()"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                        <a onclick="goBack()" class="btn btn-default"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+}
+
+<!-- Modal addtrainee-->
+<div class="modal fade" id="myModal2" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header panel-oran">
+                <button type="button" class="close btnClose" data-dismiss="modal">&times;</button>
+                <div class="panel-heading list-panel-heading">
+                    <h5 class="modal-title panel-title list-panel-title" id="modal-header">@Resource.lblWARNING</h5>
+                </div>
+            </div>
+            <div class="modal-body">
+                <label id="lblmyModal"></label>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Continue" class="btn btn-primary" id="btnContinue" />
+
+                <button type="button" class="btn btn-secondary btnClose" data-dismiss="modal">@Resource.lblClose</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal fade" id="Modal-Blended" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="messageoutBlended">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="Modal-Footer-Blended">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--END Modal addtrainee -->
+
+<script src="~/Scripts/js/app.js"></script>
+<style>
+    .item-ngay {
+        text-align: center;
+    }
+
+    hr {
+        border-top: 1px solid #c4c4c4 !important;
+    }
+</style>
+@section Scripts{
+    <script type="text/javascript">
+        "use strict";
+        class DatPhongItem {
+            constructor(ngay, num, roomm, roomID, roomOther) {
+                this._no = parseInt(num);
+                this._ngay = moment(ngay).format('YYYY-MM-DD');
+                this._room = parseInt(roomID);
+                this._dataroom = roomm;
+                this._roomOther = roomOther;
+                this.render();
+            }
+            render() {
+                this.tr = this.tr || document.createElement('tr');
+                this.tr.classList.add('tgnp-item');
+                this.td_no = this.td_no || document.createElement('td');
+                this.td_no.innerHTML = this._no;
+                //------------------------------------------
+                this.td_ngay = this.td_ngay || document.createElement('td');
+                this.td_ngay.classList.add('item-ngay');
+                this.td_ngay.setAttribute("data-date", moment(this._ngay).format('DD/MM/YYYY'));
+                this.td_ngay.innerHTML = moment(this._ngay).format('dddd, DD/MM/YYYY');
+                //------------------------------------------
+                this.td_room = this.td_room || document.createElement('td');
+                this.td_room.classList.add('item-room');
+                var room = "<div class='col-md-12'><div class='col-md-6 divroom' id='divroom_" + this._no + "'>";
+                    room += "<select class='form-control-custom form-control input-sm default reselect roomCheck RoomID' data-index='" + this._no + "' data-placeholder='-- @Resource.lblRoom --' title='Class Room' id='RoomID_" + this._no + "' name='RoomID_" + this._no + "' onchange='changeRoomOther(this)'>" + this._dataroom + "</select ></div>";
+                room += "<div class='col-md-6' id='divother_" + this._no + "' style='display:none'><input class='form-control roomother' type='text' id='roomother_" + this._no + "' name='roomother_" + this._no + "' value='"+this._roomOther +"' /></div>";
+                room += "</div>";
+                this.td_room.innerHTML = room;
+                this.myFunction(this.td_room, this._no, this._room);
+                //------------------------------------------
+                this.tr.append(this.td_no);
+                this.tr.append(this.td_ngay);
+                this.tr.append(this.td_room);
+            }
+            getHTML() {
+                return this.tr;
+            }
+            getData() {
+                return { No: this._no, Ngay: this._ngay};
+            }
+            myFunction(target, index, valueRoom) {
+                if (String(valueRoom) != "NaN") {
+                    $(target).find("#RoomID_" + index).val(valueRoom);
+                    changeRoomOtherSpecial(target, $(target).find("#RoomID_" + index));
+                }
+            }
+        }
+        class DatPhongTable {
+            constructor(countload,container, room, data = [], start = null, end = null, ) {
+                this.container = $(container)[0];
+                this.tbody = document.createElement('tbody');
+                this.setData(countload,room,data, start, end);
+                this.render();
+                this.allowload = parseInt(countload);
+            }
+            setData(countload,room, data, start = null, end = null) {
+                this.data = [];
+                this.items = [];
+                this.tbody.innerHTML = "";
+                if (!!data && data.length > 0) {
+                    var count = 0;
+                    data.forEach((value, index) => {
+                        count++;
+                        if (countload > 0) {
+                            value.RoomID = "NaN";
+                        }
+                        let item = typeof value == DatPhongItem
+                            ? value
+                            : new DatPhongItem(value.DateTime, count, room, value.RoomID, value.RoomOther);
+                        this.data.push(item.getData());
+                        this.items.push(item);
+                        this.tbody.append(item.getHTML());
+                    });
+                    return true;
+                }
+                if (!!start && !!end)
+                    this.setDateRange(countload,room,start, end, data);
+            }
+            setDateRange(countload,room,start, end, data) {
+                this.data = [];
+                this.items = [];
+                this._start = moment(start).format('YYYY-MM-DD');
+                this._end = moment(end).format('YYYY-MM-DD');
+                this.tbody.innerHTML = "";
+                let dates = enumerateDaysBetweenDates(start, end);
+                if (!!dates && dates.length > 0) {
+                    var count = 0;
+                    if (!!data && data.length > 0) {
+                        dates.forEach((value, index) => {
+                            count++;
+                            var valueindex = value
+                            var roomId = "NaN";
+                            var roomOther = "";
+                            data.forEach((valuedata, indexdata) => {
+                                if (valuedata.DateTime == value) {
+                                    valueindex = valuedata.DateTime;
+                                    if (countload == 0) {
+                                         roomId = valuedata.RoomID;
+                                    }
+                                   
+                                    roomOther = valuedata.RoomOther;
+                                }
+                            });
+                            let item = new DatPhongItem(valueindex, count, room, roomId, roomOther);
+                            this.data.push(item.getData());
+                            this.items.push(item);
+                            this.tbody.append(item.getHTML());
+                        });
+                    }
+                    else {
+                        dates.forEach((value, index) => {
+                            count++;
+                            let item = new DatPhongItem(value, count,room);
+                            this.data.push(item.getData());
+                            this.items.push(item);
+                            this.tbody.append(item.getHTML());
+                        });
+                    }
+                }
+            }
+            getData() {
+                this.data = [];
+                if (!!this.items && this.items.length > 0) {
+                    this.items.forEach((value, index) => {
+                        this.data.push(value.getData());
+                    });
+                }
+                return this.data;
+            }
+            render() {
+                let table = $(`<table id="dtBasicExample" class="table table-striped table-bordered table-sm dtBasicExample" cellspacing="0" width="100%">
+                                    <thead>
+                                        <th>No.</th>
+                                        <th>Date</th>
+                                        <th>Room</th>
+                                    </thead>
+                                </table>`);
+                table.find('thead').after($(this.tbody));
+                $(this.container).html(table);
+            }
+            hide() {
+                $(this.container).hide();
+            }
+            show() {
+                $(this.container).show();
+            }
+        }
+        function enumerateDaysBetweenDates(startDate, endDate) {
+            startDate = moment(startDate);
+            endDate = moment(endDate);
+            var now = startDate, dates = [];
+            while (now.isBefore(endDate) || now.isSame(endDate)) {
+                dates.push(now.format('YYYY-MM-DD'));
+                now.add(1, 'days');
+            }
+            return dates;
+        };
+        function changeRoomOtherSpecial(target,element) {
+            var value = $(element).val();
+            var index = $(element).data('index');
+            if (value == -1 || value == "-1") {
+                $(target).find("#divother_" + index).removeAttr("style");
+            }
+            else {
+                $(target).find("#divother_" + index).css("display", "none");
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        var div = document.getElementById("stringvalue");
+        var tableTGNP;
+        var countload = 0;
+        $(document).ready(function () {
+            var List = "";
+           
+            checkRoom();
+            $(".expandcourse").css("display", "none");
+            formatDatetimepicker('#txt_STARTDATE', '@Resource.lblLanguage');
+            formatDatetimepicker('#txt_ENDDATE', '@Resource.lblLanguage');
+        });
+        function showMessage(status, msg) {
+            var $modal = $('#myModal');
+            $modal.find('#modal-title').attr('class', status).text(msg);
+            $modal.modal("show");
+        }
+        function actionSubmit() {
+            var data = getDataValue();
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/Meeting/CreateRoom",
+                datatype: 'json',
+                data: { model: data},
+                success: function(data) {
+                    if (data.result) {
+                        notify.alert(data.message, 'SUCCESS', TITLE_STATUS_SUCCESS);
+                        window.location.href = '/Meeting/ListRoom';
+                    }
+                    else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                },
+                complete: function() {
+                    spinner.close();
+                }
+            });
+        }
+        function getDataValue() {
+            var trangthai = "";
+            $("#tableTGNP .tgnp-item").each(function () {
+                var ngay = $(this).find('.item-ngay').data("date");
+                var roomid = $(this).find('.item-room').find('.RoomID').val();
+                var roomOther = $(this).find('.item-room').find(".roomother").val() == 'undefined' ? "" : $(this).find('.item-room').find(".roomother").val();
+                trangthai = trangthai + ",{DateTime:'" + ngay + "',RoomID:'" + roomid + "',RoomOther:'"+roomOther+"'}";
+            });
+            $("#hdfDetailRoom").val(trangthai);
+            var $root = $('#createform');
+            var rs = {
+                CourseId: $root.find('#CourseId').val(),
+                ListDetailRoom: $root.find('#hdfDetailRoom').val(),
+                CourseDetailId: $root.find('#CourseDetailId').val(),
+                RoomIDGlobal: $root.find('#course-detail-room').val(),
+                Remark: $root.find('#Note').val(),
+                IdGlobal: $root.find('#IdGlobal').val(),
+            }
+            return rs;
+        }
+        function GetRoom() {
+            var dataID = $("#course-detail-room").val();
+            return $.ajax({
+                type: 'GET',
+                url: "/Meeting/GetValueRoom",
+                datatype: 'json',
+                data: { roomId: dataID },
+            });
+        }
+        function checkRoom() {
+            
+            $('#tableTGNP').empty();
+            List = "";
+            GetRoom().done(function (result) {
+                List += result;
+            }).complete(function () {
+                tableTGNP = new DatPhongTable(countload,'#tableTGNP', List, JSON.parse(div.value));
+                let start = $("#txt_STARTDATE").val();
+                let end = $("#txt_ENDDATE").val();
+                if (start && end) {
+                    start = moment(start, "DD/MM/YYYY").format("YYYY-MM-DD");
+                    end = moment(end, "DD/MM/YYYY").format("YYYY-MM-DD");
+                    tableTGNP.setDateRange(countload,List,start, end, JSON.parse(div.value));
+                    //$('#dtBasicExample').DataTable({"pageLength":1000});
+                    $('.dataTables_length').addClass('bs-select');
+                }
+                $(".reselect").each(function (i, v) {
+                    $(v).select2();
+                });
+                countload++;
+            });
+        }
+        function changeRoomOther(target) {
+            var value = $(target).val();
+            var index = $(target).data('index');
+            if (value == -1 || value == "-1") {
+                $("#divother_" + index).removeAttr("style");
+            }
+            else {
+                $("#divother_" + index).css("display","none");
+            }
+        }
+        $(".line_6").addClass("active");
+    </script>
+}
+

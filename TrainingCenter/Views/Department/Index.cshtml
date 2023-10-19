@@ -1,0 +1,143 @@
+﻿@using DAL.Entities
+@using TMS.Core.App_GlobalResources
+@model bool
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Department";
+
+}
+@*<link href="~/Content/Js/tree/jquery.treegrid.css" rel="stylesheet" />*@
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fas fa-database"></i>   @Resource.lblMasterData - @Resource.lblDepartment</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblMasterData</li>
+                <li class="active">@Resource.lblDepartment</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<style>
+    .tree, .tree ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+</style>
+
+@using (Html.BeginForm("ImportDepartments", "Import", FormMethod.Post, new Dictionary<string, object> { { "enctype", "multipart/form-data" }, { "class", "col-md-12" }, { "id", "frmImport" } }))
+{
+    <div class="row">
+        <div class="form-group">
+            <div class="panel list-panel" id="list-panel">
+                <div class="panel-heading list-panel-heading">
+                    <h1 class="panel-title list-panel-title"><i class="fas fa-exclamation-triangle font-small-byhoa" aria-hidden="true"></i> @Resource.lblImportDepartment</h1>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-8">
+                        <input type="file" name="postedFile" class="form-control" id="files" />
+                    </div>
+                    <div class="col-md-4">
+                        <input type="button" onclick="importdepartment()" class="btn btn-primary" value="@Resource.lblImport" />
+                        <a href="/Template/ExcelFile/DepartmentTemplate.xlsx" class="btn btn-primary">@Resource.lblDownloadTemplate</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="row">
+    <div class="col-md-8" style="margin-top: 10px;">
+        <div class="panel list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title"><i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> @Resource.lblList</h1>
+            </div>
+            <div class="panel-body">
+                <div id="mydiv">
+                    <b>@ViewBag.Namesite &nbsp;</b>@*@if (Model)
+                    {
+                        @:<span class="text-success action" onclick="permission.create()"><i class="fa fa-plus-square" title="Create Department"></i></span>
+                    }*@
+                    <ul class="tree" id="tree">
+                        @{Html.RenderAction("DepartmentListView", "Department");}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4" style="margin-top: 10px;">
+        <div id="showdetail">
+
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <label>@Messege.DELETE_DEPARTMENT</label>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div id="messageout2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="Modal_Footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Content/Js/tree/jquery.treegrid.min.js"></script>
+    <script src="~/Scripts/js/common.js"></script>
+    <script src="~/Scripts/js/app.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#tree').treegrid();
+            $('#tree').on('click', 'span.updatestatus', permission.confirmActive);
+            $('#tree').on('click', 'span.deletePermission', permission.confirmDelete);
+            active(0);
+        });
+
+        function active(id) {
+            $.ajax({
+                type: "GET",
+                url: "/Department/Modify/",
+                data: { id: id },
+                datatype: 'json',
+                success: function (data) {
+                    $('#showdetail').html(data);
+                }
+            });
+        }
+        function checkFile() {
+            var fileInput = document.getElementById('files');
+            var filePath = fileInput.value;
+            var allowedExtensions = /(\.xlsx|\.xls)$/i;
+            if (!allowedExtensions.exec(filePath)) {
+                fileInput.value = '';
+                return false;
+            }
+            return true;
+        }
+        function importdepartment() {
+            var checkfile = checkFile();
+            if (!checkfile) {
+                notify.alert("File is not correct(must .xlsx | .xls) or empty !!!", "WARNING", TITLE_STATUS_DANGER);
+            } else {
+                document.getElementById('frmImport').submit();
+            }
+        }
+    </script>
+}
+

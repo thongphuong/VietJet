@@ -1,0 +1,292 @@
+﻿@model Job_Tiltle
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int id = ViewBag.id;
+    var mModel = Model;
+    UnitOfWork _uow = new UnitOfWork();
+    IRepository<CAT_GROUPSUBJECT> _repoGroupSubject = _uow.Repository<CAT_GROUPSUBJECT>();
+    IEnumerable<CAT_GROUPSUBJECT> groupSubject = _repoGroupSubject.Get(a => a.bit_Isactive == true);
+
+    IRepository<Title_Standard> _repoInstructorAbility = _uow.Repository<Title_Standard>();
+    IRepository<Subject> _repoSubject = _uow.Repository<Subject>();
+
+
+    int instructorId = id;
+
+    var listInstructorSubject =
+    _repoInstructorAbility.Get(a => a.Job_Title_Id == instructorId).Select(a => a.Subject_Id);
+
+
+    IEnumerable<Subject> availableSubject = _repoSubject.Get(a => !listInstructorSubject.Contains(a.Subject_Id) && !a.bit_Deleted && a.int_Course_Type != (int)Constants.CourseType.General , a => a.OrderBy(p => p.str_Name));
+    IEnumerable<Subject> assignedSubject = _repoSubject.Get(a => listInstructorSubject.Contains(a.Subject_Id) && !a.bit_Deleted && a.int_Course_Type != (int)Constants.CourseType.General , a => a.OrderBy(p => p.str_Name));
+
+    IRepository<Department> _repoDepartment = _uow.Repository<Department>();
+    IEnumerable<Department> deps = _repoDepartment.Get(a => !a.bit_Deleted, x => x.OrderBy(a => a.Department_Id));
+}
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-group"></i>   Master data - Job Tiltle - Deatails</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li> Master data</li>
+                <li class="active">Job Tiltle - Details</li>
+            </ol>
+        </div>
+    </div>
+}
+@functions{
+    public string loaddepartment(int? parentid, int level, int? department_id)
+    {
+        UnitOfWork _uow = new UnitOfWork();
+        IRepository<Department> _repoDepartment = _uow.Repository<Department>();
+        string result = string.Empty;
+        bool parent = false;
+        var data = _repoDepartment.Get(a => !a.bit_Deleted);
+        if (parentid == null)
+        {
+            data = data.Where(a => !a.bit_Deleted && a.int_Parent_Id == null);
+            parent = true;
+        }
+        else
+        {
+            data = data.Where(a => !a.bit_Deleted && a.int_Parent_Id == parentid);
+        }
+
+        if (data.Count() == 0)
+            return result;
+        else
+        {
+            foreach (var item in data)
+            {
+                string selected = "";
+                if (item.Department_Id == department_id)
+                {
+                    selected = "selected";
+                }
+                string khoangtrang = "";
+                for (int i = 0; i < level; i++)
+                {
+                    khoangtrang += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                }
+
+                result += "<option value='" + item.Department_Id + "' style='font-size:" + (18 - (level + 2)) + "px;' " + selected + " >" + khoangtrang + "+ " + item.str_Name;
+                result += "</option>";
+                result += loaddepartment(item.Department_Id, level + 1, department_id);
+            }
+        }
+        return result;
+    }
+}
+<div class="panel panel-danger list-panel" id="list-panel">
+    <div class="panel-heading list-panel-heading">
+        <h1 class="panel-title list-panel-title"> Edit </h1>
+    </div>
+    <div class="panel-body center-block">
+        @using (Html.BeginForm("Modify", "JobTitle", FormMethod.Post, new { id = "createform" }))
+        {
+            <input type="hidden" id="hd_id" name="id" value="@id" />
+            <div class="form-group col-lg-12">
+                <label>Code <font color="red">(*)</font></label>
+                <input type="text" name="str_Code" value="@mModel.str_Code" data-parsley-required-message="Required Fields" required class="form-control">
+            </div>
+            <div class="form-group col-lg-12">
+                <label>Job Title Name <font color="red">(*)</font></label>
+                <input type="text" name="str_Name" value="@mModel.str_Name" class="form-control">
+            </div>
+            <div class="form-group col-lg-12">
+                <label>Department</label>
+                <select class="form-control" name="int_parentID" id="int_parentID" data-placeholder="-- Department --">
+                    <option></option>
+                    @* @foreach (var item in deps)
+                        {
+                            if (item.Department_Id == mModel.int_Department_Id)
+                            {
+                                <option value="@item.Department_Id" selected>@item.str_Name</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Department_Id">@item.str_Name</option>
+                            }
+
+                        }*@
+                    @Html.Raw(loaddepartment(null, 1, mModel.int_Department_Id))
+                </select>
+            </div>
+            <div class="form-group col-lg-12">
+                <label>Description </label>
+                <textarea rows="7" class="form-control" value="@mModel.str_Description" name="str_Description"></textarea>
+            </div>
+
+            <div class="form-group col-lg-5">
+                <h4>Available Subject</h4>
+                <div class="authorization-edit-wrapper-lsBox" style="overflow-y: scroll; overflow-x: hidden;">
+                    <div id="availableFunc" class="authorization-edit-lstBox1" style="border: none">
+                        <ul id="available">
+                            @foreach (var item in availableSubject.Where(item =>item.int_Parent_Id == null && item.bit_Deleted == false ))
+                            {
+                                <li>
+                                    <input data-id="@item.Subject_Id" class="availableParentFunc@(item.Subject_Id)" multiple type="checkbox" /><span>@(item.str_Name)</span>
+                                    <ul id="available@(item.Subject_Id)">
+                                        @foreach (var itemChild in availableSubject.Where(a => a.int_Parent_Id == item.Subject_Id))
+                                        {
+                                            <li>
+                                                <input data-id="@itemChild.int_Parent_Id" data-parentname="@item.str_Name" name="availableFunc" multiple value="@itemChild.Subject_Id" class="availableFunc" type="checkbox" /><span>@itemChild.str_Name - @itemChild.Course_Type.str_Name</span>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group center col-lg-1">
+                <a class="btn btn-default col-lg-12" name="bu_ab_alarm_btnRight" id="role-edit-btnRight"><i class="fa fa-arrow-right"></i></a> <br />
+                <a class="btn btn-default col-lg-12" name="bu_ab_alarm_btnLeft" id="role-edit-btnLeft"><i class="fa fa-arrow-left"></i></a>
+            </div>
+            <div class="form-group col-lg-6">
+                <h4>Assigned Subject</h4>
+                <div class="authorization-edit-wrapper-lsBox" style="overflow-y: scroll; overflow-x: hidden;">
+                    <div id="assignedFunc" class="authorization-edit-lstBox2" style="border: none">
+                        <ul id="assign">
+                            @foreach (var item in assignedSubject.Where(item => item.int_Parent_Id == null && item.bit_Deleted == false))
+                            {
+                                <li>
+                                    <input type="hidden" value="@item.Subject_Id" />
+                                    <input class="assignedParentFunc@(item.Subject_Id)" value="@item.Subject_Id" name="assignFunc" multiple type="checkbox" /><span>@item.str_Name</span>
+                                    <ul id="assigned@(item.Subject_Id)">
+                                        @foreach (var itemChild in assignedSubject.Where(a => a.int_Parent_Id == item.Subject_Id))
+                                        {
+                                            <li>
+                                                <input data-id="@itemChild.int_Parent_Id" data-parentname="@item.str_Name" multiple value="@itemChild.Subject_Id" class="assignedFunc" type="checkbox" /><input type="hidden" value="@itemChild.Subject_Id" name="assignFunc" /><span>@itemChild.str_Name - @itemChild.Course_Type.str_Name</span>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+            <div class="divider"></div>
+            <div class="divider"></div>
+            <div class="form-group col-lg-12">
+                <div id="messageout">
+                </div>
+            </div>
+            <div class="pull-right pad10R">
+                @{if (CMSUtils.Is_Edit("/JobTitle/Index")) // neu co
+                    {
+                        <a class="btn btn-md btn-danger min-width-100" onclick="submit()">Update</a>
+                        <a href="javascript:void(0)" onclick="active(0,'create')" class="btn btn-md btn-danger min-width-100">Cancel</a>
+                    }
+                }
+                
+            </div>
+            
+        }
+    </div>
+</div>
+
+
+@section Scripts{
+
+
+
+<script type="text/javascript">
+            $(".line_50").addClass("active");
+
+            $('#availableFunc').tree({
+            });
+            $('#assignedFunc').tree({
+            });
+            //scrollable - content
+            $(".scrollable-content").niceScroll({ styler: "fb", cursorcolor: "#4ECDC4", cursorwidth: '6', cursorborderradius: '10px', background: '#404040', spacebarenabled: false, cursorborder: '', zindex: '1000' });
+
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        // khoavd
+       // $.unblockUI();
+        $('select:not([name$="_length" ])').select2({
+            width: '100%',
+            allowClear: true
+        }).addClass('form-control searchText1');
+
+                $('#role-edit-btnRight').click(function () {
+                    var listchecked = $('input.availableFunc:checked');
+                    var availableParentFunc;
+                    for (var i = 0; i < listchecked.length; i++) {
+                        var parentid = $(listchecked[i]).data("id");
+                        var parentnameto = $(listchecked[i]).data("parentname");
+                        var name = $(listchecked[i]).next().text();
+                        var value = $(listchecked[i]).val();
+                        var assignparentFunc = $('.assignedParentFunc' + parentid);
+                        availableParentFunc = $('#available' + parentid).children();
+                        $('.availableParentFunc' + parentid).attr('checked', false);
+                        if (assignparentFunc.length !== 0) {
+                            $("#assigned" + parentid).append("<li><input data-id='" + parentid + "' data-parentname='" + parentnameto + "'  class='assignedFunc' name='assignFunc' type='checkbox'/><input   value='" + value + "' name='assignFunc'  type='hidden'/><span>" + name + "</span></li>");
+                        } else {
+                            $("#assign").append("<li><input type='hidden' value='" + parentid + "' /><input name='assignFunc' class='assignedParentFunc" + parentid + "' value='" + parentid + "' type='checkbox'><span>" + parentnameto + "</span> <ul id='assigned" + parentid + "'></u>");
+                            $("#assigned" + parentid).append("<li><input data-id='" + parentid + "' data-parentname='" + parentnameto + "' class='assignedFunc' type='checkbox'/><input   value='" + value + "' name='assignFunc' checked type='hidden'/><span>" + name + "</span></li>");
+                        }
+                        $(listchecked[i]).parent().remove();
+                        if (availableParentFunc.length <= 2) {
+                            $('.availableParentFunc' + parentid).parent().remove();
+                        }
+                    }
+                    $('.availableParentFunc' + parentid).attr('checked', false);
+                });
+                $('#role-edit-btnLeft').click(function () {
+                    var listchecked = $('input.assignedFunc:checked');
+                    var assignparentFunc;
+                    for (var i = 0; i < listchecked.length; i++) {
+                        var parentid = $(listchecked[i]).data("id");
+                        var parentname = $(listchecked[i]).data("parentname");
+                        var name = $(listchecked[i]).next().next().text();
+                        var assignparentFunc = $('#assigned' + parentid).children();
+                        availableParentFunc = $('.availableParentFunc' + parentid);
+                        if (availableParentFunc.length !== 0) {
+                            $("#available" + parentid).append("<li><input data-id='" + parentid + "' data-parentname='" + parentname + "' class='availableFunc' type='checkbox'><span>" + name + "</span></li>");
+                        } else {
+                            $("#available").append("<li><input class='availableParentFunc" + parentid + "' type='checkbox'><span>" + parentname + "</span> <ul id='available" + parentid + "'></u>");
+                            $("#available" + parentid).append("<li><input data-id='" + parentid + "' data-parentname='" + parentname + "' class='availableFunc' type='checkbox'><span>" + name + "</span></li>");
+                        }
+                        $(listchecked[i]).parent().remove();
+                        if (assignparentFunc.length === 1) {
+                            $('.assignedParentFunc' + parentid).parent().remove();
+                        }
+                    }
+                });
+            })
+
+
+    function submit() {
+        var form = $("#createform").serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: "/JobTitle/Modify",
+            datatype: 'json',
+            data: form,
+            success: function (data) {
+                $("#messageout").html('');
+                $("#messageout").append(data);
+                var sTable = $("#Subject").dataTable();
+                sTable.fnDraw();
+            }
+        });
+    }
+</script>
+
+
+
+
+    }

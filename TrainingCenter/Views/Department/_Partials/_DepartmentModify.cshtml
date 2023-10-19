@@ -1,0 +1,110 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Departments.DepartmentModifyViewModel
+<div class="modal fade" id="department-modify" role="dialog">
+    <div class="modal-dialog modal-lg">
+        @using (Html.BeginForm("Modify", "Department", FormMethod.Post))
+        {
+            <input type="hidden" value="@Model.Id" />
+            <div class="modal-content">
+                <div class="modal-header panel-heading ">
+                    <div class="panel-title">
+                        <h5 class="modal-title list-panel-title" id="modal-header" style="padding-bottom: 0.5em">@(string.IsNullOrEmpty(Model.Name) ? @Resource.lblCreateDepartment : Model.Name)</h5>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label class="col-md-3">@Resource.lblName</label>
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(a => a.Name, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(a => a.Name, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <label class="col-md-3">@Resource.lblCode</label>
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(a => a.Code, new { @class = "form-control disabled" })
+                                @Html.ValidationMessageFor(a => a.Name, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <label class="col-md-3"> @Resource.lblParentId </label>
+                            <div class="col-md-9">
+                                @Html.DropDownListFor(a => a.ParentId, new SelectList(Model.Departments, "Key", "Value", Model.ParentId), "--- " + @Resource.lblParentId + " ---", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(a => a.ParentId, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <label class="col-md-3">@Resource.lblDescription</label>
+                            <div class="col-md-9">
+                                @Html.TextAreaFor(a => a.Description, new { @class = "form-control", @rows = "10" })
+                                @Html.ValidationMessageFor(a => a.Description, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="col-md-3"> @Resource.lblRelevantTrainingDepartment </label>
+                            <div class="col-md-9">
+                                @if (Model.is_training.HasValue && Model.is_training == true)
+                                {
+                                    <input type="checkbox" id="is_trainingg_@(Model.Id.HasValue  ? Model.Id : 0)" name="is_trainingg" checked data-index="@Model.Id">
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="is_trainingg_@Model.Id" name="is_trainingg" data-index="@Model.Id">
+                                }
+
+                            </div>
+
+
+                        </div>
+                        @if(Model.is_training.HasValue && Model.is_training == true)
+                        {
+                            <div id="divtraining">
+                                <div class="form-group col-md-12">
+                                    <label class="col-md-3">Head Name</label>
+                                    <div class="col-md-9">
+                                        <select class="form-control searchText1 select2-hidden-accessible" name="HeadName" id="HeadName" tabindex="-1" aria-hidden="true">
+                                            @foreach (var item in Model.DictionaryInstructor)
+                                            {
+                                                <option value="@item.Key" @(item.Key == Model.HeadName ? "selected" : "")>@item.Value</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+                <div class="modal-footer" id="Modal_Footer">
+                    <input type="submit" class="btn btn-primary" id="submit" value=" @Resource.lblSave " />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">@Resource.lblClose</button>
+                </div>
+            </div>
+        }
+        <script>
+            $(document).ready(function () {
+                $("#ParentId").select2();
+                $('#divtraining').hide();
+                if ($('#is_trainingg').is(":checked")) {
+                    $('#divtraining').show();
+                    $("#HeadName").select2();
+                } else {
+                    $('#divtraining').hide();
+                }
+                $('#is_trainingg').change(function () {
+                    if ($(this).is(":checked")) {
+                        $('#divtraining').show();
+                        $("#HeadName").select2();
+                    } else {
+                        $('#divtraining').hide();
+                    }
+                });
+
+            });
+        </script>
+    </div>
+</div>
+
+

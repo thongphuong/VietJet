@@ -1,0 +1,17 @@
+﻿@font-face {
+    font-family: Jambono;
+    src: url("/fonts/Jambono-Black.ttf");
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: Jambono;
+    src: url("/fonts/Jambono-Light.ttf");
+    font-weight: lighter;
+}
+
+@font-face {
+    font-family: Jambono;
+    src: url("/fonts/Jambono-Medium.ttf");
+    font-weight: normal;
+}

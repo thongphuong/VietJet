@@ -1,0 +1,62 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Cost.PartialGroupCostViewModify
+<div class="modal fade" id="department-modify" role="dialog">
+    <div class="modal-dialog modal-lg">
+        @using (Html.BeginForm("ModifyGroupCost", "Cost", FormMethod.Post, new { @class = "form-horizontal bordered-row", onsubmit = "return false;" }))
+        {
+            @Html.HiddenFor(m => m.Id)
+            <div class="modal-content">
+                <div class="modal-header panel-heading ">
+                    <div class="panel-title">
+                        <h5 class="modal-title list-panel-title" id="modal-header" style="padding-bottom: 0.5em">@(string.IsNullOrEmpty(Model.Name) ? @Resource.lblModify : Model.Name)</h5>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+
+                        <div class="col-md-12 form-group">
+                            <label class="control-label col-md-3">@Resource.lblName</label>
+                            <div class="col-md-9">
+
+                                @Html.TextBoxFor(m => m.Name, new {@class = "form-control"})
+                                @Html.ValidationMessageFor(m => m.Name, null, new {@class = "text-danger"})
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <label class="control-label col-md-3">@Resource.lblCode</label>
+                            <div class="col-md-9">
+                                @Html.TextBoxFor(m => m.Code, new { @class = "form-control disabled" })
+                                @Html.ValidationMessageFor(m => m.Code, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @*<div class="col-md-12 form-group">
+                                <label class="col-md-3"> @Resource.lblParentId </label>
+                                <div class="col-md-9">
+                                    @Html.DropDownListFor(a => a.ParentId, new SelectList(Model.Departments, "Key", "Value", Model.ParentId), "--- " + @Resource.lblParentId + " ---", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(a => a.ParentId, null, new { @class = "text-danger" })
+                                </div>
+                            </div>*@
+                        <div class="col-md-12 form-group">
+                            <label class="control-label col-md-3">@Resource.lblDescription</label>
+                            <div class="col-md-9">
+                                @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @rows = "10" })
+                                @Html.ValidationMessageFor(m => m.Description, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @if (Model.Id != -1)
+                        {
+                            <div class="col-md-12 form-group">
+                                <label class="control-label col-md-3"></label>
+                                <a href="javascript:void(0)" onclick="calldelete(@Model.Id)" class="control-label col-md-9"><i class="fas fa-trash"></i>&nbsp;@Resource.lblDelete</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer" id="Modal_Footer">
+                    <input type="submit" class="btn btn-primary" id="submit" value=" @Resource.lblSave " />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">@Resource.lblClose</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>

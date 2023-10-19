@@ -1,0 +1,15 @@
+﻿namespace TMS.Core.ViewModels.Jobtitles
+{
+    using System.ComponentModel.DataAnnotations;
+
+    public class JobtitlePositionViewModel
+    {
+        public int? Id { get; set; }
+        [Display(Name = @"lblName", ResourceType = typeof(App_GlobalResources.Resource))]
+        [Required(ErrorMessageResourceType = typeof(App_GlobalResources.Messege),
+                ErrorMessageResourceName = "VALIDATION_NAME")]
+        public string Name { get; set; }
+        [Display(Name = @"lblDescription", ResourceType = typeof(App_GlobalResources.Resource))]
+        public string Description { get; set; }
+    }
+}

@@ -1,0 +1,312 @@
+﻿@using Resources
+@using DAL.Entities
+@using TMS.Core.App_GlobalResources
+@model IEnumerable<USER>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "User";
+}
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-cogs"></i>  @Resource.lblSystemManagement - @Resource.lblUser</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblSystemManagement</li>
+                <li class="active">@Resource.lblUser</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title">
+                    <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> @Resource.lblUserList
+                    <p class="btn-group pull-right">
+
+                        <a href="@Url.Action("Modify")" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-plus" aria-hidden="true"></i> @Resource.lblADDNEW</a>
+                    </p>
+                </h1>
+            </div>
+            <div class="panel-body">
+                <div class=" table-responsive" style="margin-top: 10px;">
+                    <div id="panel-search" class="collapse panel">
+                        <div class="panel-body">
+                            <div class="row col-md-12">
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-3">
+                                        <label>@Resource.lblUserName</label>
+                                        <input type="text" name="fUsername" id="fUsername" class="form-control searchText1" placeholder="@Resource.lblUserName" />
+                                    </div>
+                                    @*<div class="col-md-4">
+                                        <label>@Resource.lblFullName</label>
+                                        <input type="text" name="fFullname" id="fFullname" class="form-control searchText1" placeholder="@Resource.lblName" />
+                                    </div>*@
+                                    <div class="col-md-3">
+                                        <label>@Resource.lblFirstName</label>
+                                        <input type="text" name="fFirstname" id="fFirstname" class="form-control searchText1" placeholder="@Resource.lblFirstName" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>@Resource.lblLastName</label>
+                                        <input type="text" name="fLastname" id="fLastname" class="form-control searchText1" placeholder="@Resource.lblLastName" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>@Resource.lblRole</label>
+                                        @Html.DropDownList("RoleList", (SelectList)ViewBag.RoleList, "-- " + @Resource.lblRole + " --", new { @class = "form-control", @name = "fRole", @id = "fRole" })
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-3">
+                                        <label>@Resource.lblEmail</label>
+                                        <input type="text" name="fEmail" id="fEmail" class="form-control searchText1" placeholder="@Resource.lblEmail" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>@Resource.lblPhone</label>
+                                        <input type="text" name="fPhone" id="fPhone" class="form-control searchText1" placeholder="@Resource.lblPhone" />
+                                    </div>
+                                    <div class="col-md-1 pull-right">
+                                        <label>&nbsp;</label>
+                                        <button type="submit" class="btn btn-primary pull-right legitRipple" id="btFilter">
+                                            <i class="fa fa-search"></i> @Resource.lblSearch
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                    <p class="pull-right" data-toggle="collapse" data-target="#panel-search" style="cursor:pointer;" id="call-panel-search"><i class="fa fa-search"></i> @Messege.Search</p>
+                    <table id="users" class="table table-striped table-bordered" style="width: 100%">
+                        <thead>
+                            <tr role="row">
+                                <th style="width: 5%;">@Resource.lblStt</th>
+                                <th>@Resource.USER_USERMAIL</th>
+                                @*<th>@Resource.lblFullName</th>*@
+                                <th>@Resource.lblFirstName</th>
+                                <th>@Resource.lblLastName</th>
+                                <th>@Resource.lblRole</th>
+                                <th>@Resource.lblLastOnlineAt</th>
+                                <th>@Resource.lblStatus</th>
+                                <th>@Resource.lblOptions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            @*<div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>*@
+            <div class="modal-body">
+                <label>@Resource.lblYouAreSureToDeleteUser?</label>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div id="messageout2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="Modal_Footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        var STable;
+        $(document).ready(function () {
+            //datatable serverside
+            STable = $("#users").dataTable({
+                "responsive:": true,
+                "searching": false,
+                "columnDefs": [{
+                    "targets": 0,
+                    "className": "text-center",
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },  {
+                        "targets": 5,
+                        "className": "text-center",
+                    },
+                    {
+                        "targets": 6,
+                        "className": "text-center",
+                    },
+                    {
+                        "targets": 7,
+                        "className": "text-center",
+                    }],
+                "aaSorting": [],
+                @*"oLanguage": {
+                    "sLengthMenu": '@Html.Raw(Resource.LISTING_LINES_PER_PAGE)',
+                    "sZeroRecords": '@Html.Raw(Resource.LISTING_DATA_NOT_FOUND)',
+                    "sInfo": '@Html.Raw(Resource.LISTING_INFO)',
+                    "sInfoEmpty": '@Html.Raw(Resource.LISTING_INFO_EMPTY)',
+                    "sInfoFiltered": '@Html.Raw(Resource.LISTING_INFO_FILTER)',
+                    "sSearch": '@Html.Raw(Resource.LISTING_SEARCH)',
+                    "oPaginate": {
+                        "sFirst": '@Html.Raw(Resource.LISTING_FIRST)',
+                        "sLast": '@Html.Raw(Resource.LISTING_LAST)',
+                        "sNext": '@Html.Raw(Resource.LISTING_NEXT)',
+                        "sPrevious": '@Html.Raw(Resource.LISTING_PREVIOUS)',
+                    }
+                },
+                "columnDefs": [
+                    {
+                        targets: 0,
+                        orderable: false
+                    }
+                ],*@
+
+                "bServerSide": true,
+                "sAjaxSource": "/User/AjaxHandler",
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                    aoData.push({ "name": "fUsername", "value": $('#fUsername').val() },
+                    //{ "name": "fFullname", "value": $('#fFullname').val() },
+                    { "name": "fFirstname", "value": $('#fFirstname').val() },
+                    { "name": "fLastname", "value": $('#fLastname').val() },
+                    { "name": "fRole", "value": $('#fRole').val() },
+                    { "name": "fEmail", "value": $('#fEmail').val() },
+                    { "name": "url", "value": "@Request.RawUrl" },
+                    { "name": "fPhone", "value": $('#fPhone').val() });
+                },
+                "fnDrawCallback": function (oSettings) {
+                    $('[data-toggle="tooltip"]').tooltip();
+                    $(".status").click(function () {
+                        var checkbox = $(this);
+                        var id = $(this).val();
+                        $.ajax({
+                            type: "POST",
+                            url: "/User/UserStatus",
+                            data: { id: id },
+                            dataType: "json",
+                            success: function (data) {
+                                if (data === 1) {
+                                    checkbox.attr("checked");
+                                } else {
+                                    checkbox.removeAttr("checked");
+                                }
+                                STable.fnDraw();
+                            },
+                            error: function (jqXhr, exception) {
+                                if (jqXhr.status === 0) {
+                                    alert('Not connect.\n Verify Network.');
+                                } else if (jqXhr.status == 404) {
+                                    alert('Requested page not found. [404]');
+                                } else if (jqXhr.status == 500) {
+                                    alert('Internal Server Error [500].');
+                                } else if (exception === 'parsererror') {
+                                    alert('Requested JSON parse failed.');
+                                } else if (exception === "timeout") {
+                                    alert('Time out error.');
+                                } else if (exception === "abort") {
+                                    alert("Ajax request aborted.");
+                                } else {
+                                    alert("Uncaught Error.\n" + jqXhr.responseText);
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+
+            $('#btFilter').click(function (e) {
+                STable.fnDraw();
+            });
+
+            $('#myModal').on('hidden.bs.modal', function () {
+                STable.fnDraw();
+            })
+        });
+        //Chang status user Active/Inactive
+        //active menu
+        //line_#id of parent node
+        $(".line_1").addClass("active");
+        //custom select box
+
+        $('.searchText1').keypress(function (e) {
+            if (e.which == 13) {
+                e.preventDefault();
+                $('#btFilter').click();
+            }
+        });
+
+        function blockuser(id) {
+            $.ajax({
+                type: 'POST',
+                url: "/User/UserStatus",
+                datatype: 'json',
+                data: { id: id },
+                success: function (data) {
+                    //$("#messageout").html('');
+                    //$("#messageout").append(data);
+                    $("#users").dataTable().fnDraw();
+                }
+            });
+        }
+        function SetStatusUser(isStatus, id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/User/SubmitSetParticipateUSER",
+                datatype: 'json',
+                data: { isStatus: isStatus, id: id },
+                success: function (data) {
+                    if (data.result) {
+                        STable.fnDraw();
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                },
+                complete: function () {
+                    spinner.close();
+                }
+            });
+        }
+
+        function calldelete(id) {
+            notify.confirm("@Messege.CONFIRM_USER", "Confirm", TITLE_STATUS_DANGER, deletesubmit, id);
+
+        }
+
+        function deletesubmit(id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/User/delete",
+                datatype: 'json',
+                data: { id: id },
+                success: function (data) {
+                    if (data.result) {
+                        STable.fnDraw();
+                        notify.alert(data.message, 'SUCCESS', TITLE_STATUS_SUCCESS);
+                    }
+                    else {
+                        notify.alert(data.message, 'ERROR', TITLE_STATUS_DANGER);
+                    }
+
+                }, complete: function () {
+                    spinner.close();
+                }
+            });
+        }
+    </script>
+}

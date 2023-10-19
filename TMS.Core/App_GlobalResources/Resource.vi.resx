@@ -1,0 +1,1911 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ADD_ROLE" xml:space="preserve">
+    <value>Thêm Quyền</value>
+  </data>
+  <data name="ALERT_APPROVAL_REMOVE" xml:space="preserve">
+    <value>Remove approval successfully!</value>
+  </data>
+  <data name="BACK" xml:space="preserve">
+    <value>Quay lại</value>
+  </data>
+  <data name="BRANCH" xml:space="preserve">
+    <value>Branch</value>
+  </data>
+  <data name="BUTTON_SEARCH" xml:space="preserve">
+    <value>Tìm Kiếm</value>
+  </data>
+  <data name="DATA_ISNOTFOUND" xml:space="preserve">
+    <value>{0} is not found</value>
+  </data>
+  <data name="DELETE_COURSE_COST" xml:space="preserve">
+    <value>Xóa Chi Phí Chương Trình Đào Tạo</value>
+  </data>
+  <data name="DEPARTMENT" xml:space="preserve">
+    <value>Master Data - Department</value>
+  </data>
+  <data name="DEPARTMENT_ACTIOR" xml:space="preserve">
+    <value>Actior</value>
+  </data>
+  <data name="DEPARTMENT_ADD" xml:space="preserve">
+    <value>Thêm</value>
+  </data>
+  <data name="DEPARTMENT_CODE" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="DEPARTMENT_CREATE" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="DEPARTMENT_CREATEDBY" xml:space="preserve">
+    <value>Created By</value>
+  </data>
+  <data name="DEPARTMENT_CREATEDDATETIME" xml:space="preserve">
+    <value>Created Date Time</value>
+  </data>
+  <data name="DEPARTMENT_DELETE" xml:space="preserve">
+    <value>InActive</value>
+  </data>
+  <data name="DEPARTMENT_DETAIL" xml:space="preserve">
+    <value>Chi tiết</value>
+  </data>
+  <data name="DEPARTMENT_EDIT" xml:space="preserve">
+    <value>Chỉnh sửa</value>
+  </data>
+  <data name="DEPARTMENT_EMAIL" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="DEPARTMENT_HEADNAME" xml:space="preserve">
+    <value>Head Name</value>
+  </data>
+  <data name="DEPARTMENT_LASTUPDATEDBY" xml:space="preserve">
+    <value>Last Updated By</value>
+  </data>
+  <data name="DEPARTMENT_LASTUPDATEDDATETIME" xml:space="preserve">
+    <value>Last Updated Date Time</value>
+  </data>
+  <data name="DEPARTMENT_LIST" xml:space="preserve">
+    <value>Danh sách</value>
+  </data>
+  <data name="DEPARTMENT_MODYFY" xml:space="preserve">
+    <value>Modify</value>
+  </data>
+  <data name="DEPARTMENT_NAME" xml:space="preserve">
+    <value>Department Name</value>
+  </data>
+  <data name="DEPARTMENT_PARENT" xml:space="preserve">
+    <value>Parent Department</value>
+  </data>
+  <data name="DISTRIBUTOR" xml:space="preserve">
+    <value>Distributor</value>
+  </data>
+  <data name="GROUPUSER_NAME" xml:space="preserve">
+    <value>Tên Nhóm</value>
+  </data>
+  <data name="GROUPUSER_TITLE" xml:space="preserve">
+    <value>Tiêu đề</value>
+  </data>
+  <data name="HOME" xml:space="preserve">
+    <value>Trang chủ</value>
+  </data>
+  <data name="INVALIDDATA" xml:space="preserve">
+    <value>Invalid data</value>
+  </data>
+  <data name="INVALIDURL" xml:space="preserve">
+    <value>Url is not found</value>
+  </data>
+  <data name="lblActive" xml:space="preserve">
+    <value>Hoạt  động</value>
+  </data>
+  <data name="lblCompletedExpectationDate" xml:space="preserve">
+    <value>Ngày Dự Kiến Hoàn Thành</value>
+  </data>
+  <data name="lblCreateDate" xml:space="preserve">
+    <value>Ngày Tạo</value>
+  </data>
+  <data name="lblCurrentPosition" xml:space="preserve">
+    <value>Vị Trí Hiện Tại</value>
+  </data>
+  <data name="lblEmployeeName" xml:space="preserve">
+    <value>Tên Nhân Viên</value>
+  </data>
+  <data name="lblFuturePosition" xml:space="preserve">
+    <value>Vị Trí Tương Lai</value>
+  </data>
+  <data name="lblHome" xml:space="preserve">
+    <value>Trang Chủ</value>
+  </data>
+  <data name="lblKindOfSuccessor" xml:space="preserve">
+    <value>Nhóm Người Kế Nhiệm</value>
+  </data>
+  <data name="lblList" xml:space="preserve">
+    <value>Danh Sách</value>
+  </data>
+  <data name="lblListOfSubjectNeedCoaching" xml:space="preserve">
+    <value>Danh Sách Khóa Học Cần Đào Tạo</value>
+  </data>
+  <data name="lblPotentialSuccessors" xml:space="preserve">
+    <value>Học Viên Tiềm Năng</value>
+  </data>
+  <data name="lblRemark" xml:space="preserve">
+    <value>Ghi Chú</value>
+  </data>
+  <data name="lblSave" xml:space="preserve">
+    <value>Lưu</value>
+  </data>
+  <data name="lblSuccessorsTrainingPlan" xml:space="preserve">
+    <value>Kế Hoạch Đào Tạo Học Viên Tiềm Năng</value>
+  </data>
+  <data name="LISTING_DATA_NOT_FOUND" xml:space="preserve">
+    <value>"Không tìm thấy kết quả nào"</value>
+  </data>
+  <data name="LISTING_FIRST" xml:space="preserve">
+    <value>"Đầu"</value>
+  </data>
+  <data name="LISTING_INFO" xml:space="preserve">
+    <value>Showing _START_ to _END_ of _TOTAL_ entries</value>
+  </data>
+  <data name="LISTING_INFO_EMPTY" xml:space="preserve">
+    <value>"Hiển thị 0 đến 0 của 0 dòng"</value>
+  </data>
+  <data name="LISTING_INFO_FILTER" xml:space="preserve">
+    <value>"(Lọc ra từ _MAX_ dòng)"</value>
+  </data>
+  <data name="LISTING_LAST" xml:space="preserve">
+    <value>"Cuối"</value>
+  </data>
+  <data name="LISTING_LINES_PER_PAGE" xml:space="preserve">
+    <value>_MENU_ Dòng trên trang</value>
+  </data>
+  <data name="LISTING_NEXT" xml:space="preserve">
+    <value>"Sau"</value>
+  </data>
+  <data name="LISTING_PREVIOUS" xml:space="preserve">
+    <value>"Trước"</value>
+  </data>
+  <data name="LISTING_SEARCH" xml:space="preserve">
+    <value>Tìm kiếm:</value>
+  </data>
+  <data name="LIST_ROLE" xml:space="preserve">
+    <value>List Role</value>
+  </data>
+  <data name="MASTER_DATA" xml:space="preserve">
+    <value>Master Data</value>
+  </data>
+  <data name="NATIONALITY" xml:space="preserve">
+    <value>Master Data - Nationality</value>
+  </data>
+  <data name="NATIONALITY_ACTION" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="NATIONALITY_CODE" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="NATIONALITY_CREATE" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="NATIONALITY_CREATEDBY" xml:space="preserve">
+    <value>Created By</value>
+  </data>
+  <data name="NATIONALITY_CREATEDDATETIME" xml:space="preserve">
+    <value>Created Date Time</value>
+  </data>
+  <data name="NATIONALITY_DESCRIPTION" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="NATIONALITY_DETAIL" xml:space="preserve">
+    <value>Chi tiết</value>
+  </data>
+  <data name="NATIONALITY_EDIT" xml:space="preserve">
+    <value>Chỉnh sửa</value>
+  </data>
+  <data name="NATIONALITY_FULLNAME" xml:space="preserve">
+    <value>Full Name</value>
+  </data>
+  <data name="NATIONALITY_ISACTIVE" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="NATIONALITY_LIST" xml:space="preserve">
+    <value>Danh sách</value>
+  </data>
+  <data name="ROLE_NAME" xml:space="preserve">
+    <value>Role Name</value>
+  </data>
+  <data name="SAVE" xml:space="preserve">
+    <value>Lưu</value>
+  </data>
+  <data name="SYS_DEPARTMENT_MODIFY_CREATE" xml:space="preserve">
+    <value>Creat Deparment</value>
+  </data>
+  <data name="SYS_DEPARTMENT_MODIFY_MODIFY" xml:space="preserve">
+    <value>Modify Department</value>
+  </data>
+  <data name="SYS_FIRSTNAME" xml:space="preserve">
+    <value>Frist Name</value>
+  </data>
+  <data name="SYS_LASTNAME" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="SYS_LASTONLINEAT" xml:space="preserve">
+    <value>Last Online At</value>
+  </data>
+  <data name="SYS_OFFLINE" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="SYS_ONLINE" xml:space="preserve">
+    <value>Online</value>
+  </data>
+  <data name="SYS_ROLE" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="SYS_STATUS" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="SYS_USER" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="SYS_USERNAME" xml:space="preserve">
+    <value>User Name</value>
+  </data>
+  <data name="SYS_USERSTATE" xml:space="preserve">
+    <value>User state</value>
+  </data>
+  <data name="SYS_USER_MODIFY_CREATE" xml:space="preserve">
+    <value>Create User</value>
+  </data>
+  <data name="SYS_USER_MODIFY_MODIFY" xml:space="preserve">
+    <value>Modify User</value>
+  </data>
+  <data name="TEST" xml:space="preserve">
+    <value>test tieng viet</value>
+  </data>
+  <data name="USER_ADDRESS" xml:space="preserve">
+    <value>Địa Chỉ</value>
+  </data>
+  <data name="USER_COMFRIMPASS" xml:space="preserve">
+    <value>Xác Nhận Mật Khẩu</value>
+  </data>
+  <data name="USER_EMAIL" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="USER_FIRSTNAME" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="USER_GROUPUSER" xml:space="preserve">
+    <value>Nhóm Người Dùng</value>
+  </data>
+  <data name="USER_LASTNAME" xml:space="preserve">
+    <value>Họ</value>
+  </data>
+  <data name="USER_PASSWORD" xml:space="preserve">
+    <value>Mật Khẩu</value>
+  </data>
+  <data name="USER_PHONENO" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="USER_ROLE" xml:space="preserve">
+    <value>Quyền</value>
+  </data>
+  <data name="USER_TYPE" xml:space="preserve">
+    <value>Loại Người Dùng</value>
+  </data>
+  <data name="USER_UNACTIVE" xml:space="preserve">
+    <value>Hoạt Động</value>
+  </data>
+  <data name="USER_USERMAIL" xml:space="preserve">
+    <value>Tên Đăng Nhập</value>
+  </data>
+  <data name="blSave" xml:space="preserve">
+    <value>Lưu</value>
+  </data>
+  <data name="btnBack" xml:space="preserve">
+    <value>Trở về</value>
+  </data>
+  <data name="btnSave" xml:space="preserve">
+    <value>Lưu</value>
+  </data>
+  <data name="lblACTION" xml:space="preserve">
+    <value>THAO TÁC</value>
+  </data>
+  <data name="lblActions" xml:space="preserve">
+    <value>Thao Tác</value>
+  </data>
+  <data name="lblADDNEW" xml:space="preserve">
+    <value>Thêm mới</value>
+  </data>
+  <data name="lblAll" xml:space="preserve">
+    <value>Tất Cả</value>
+  </data>
+  <data name="lblApproval" xml:space="preserve">
+    <value>Phê Duyệt</value>
+  </data>
+  <data name="lblAssignTrainee" xml:space="preserve">
+    <value>Đăng Ký Học Viên</value>
+  </data>
+  <data name="lblAvailableTrainee" xml:space="preserve">
+    <value>Học Viên Sẵn Có</value>
+  </data>
+  <data name="lblAverageCalculate" xml:space="preserve">
+    <value>Tính Trung Bình</value>
+  </data>
+  <data name="lblBack" xml:space="preserve">
+    <value>Thoát</value>
+  </data>
+  <data name="lblBy" xml:space="preserve">
+    <value>Bởi</value>
+  </data>
+  <data name="lblCancel" xml:space="preserve">
+    <value>Hủy Bỏ</value>
+  </data>
+  <data name="lblCertificate" xml:space="preserve">
+    <value>Chứng Chỉ</value>
+  </data>
+  <data name="lblCode" xml:space="preserve">
+    <value>Mã</value>
+  </data>
+  <data name="lblCompany" xml:space="preserve">
+    <value>Cơ Quan</value>
+  </data>
+  <data name="lblComplete" xml:space="preserve">
+    <value>Hoàn Thành</value>
+  </data>
+  <data name="lblCONDUCTEDCOURSES" xml:space="preserve">
+    <value>Conducted Courses</value>
+  </data>
+  <data name="lblContract" xml:space="preserve">
+    <value>Hợp Đồng</value>
+  </data>
+  <data name="lblContractNo" xml:space="preserve">
+    <value>Số Hợp Đồng</value>
+  </data>
+  <data name="lblCost" xml:space="preserve">
+    <value>Học Phí</value>
+  </data>
+  <data name="lblCostCode" xml:space="preserve">
+    <value>Mã Học Phí</value>
+  </data>
+  <data name="lblCostName" xml:space="preserve">
+    <value>Tên Học Phí</value>
+  </data>
+  <data name="lblCourse" xml:space="preserve">
+    <value>Khóa Học</value>
+  </data>
+  <data name="lblCourseCode" xml:space="preserve">
+    <value>Mã Chương Khóa Học</value>
+  </data>
+  <data name="lblCourseDetails" xml:space="preserve">
+    <value>Chi Tiết Khóa Học</value>
+  </data>
+  <data name="lblCourseList" xml:space="preserve">
+    <value>Danh Sách Khóa Học</value>
+  </data>
+  <data name="lblCourseManagement" xml:space="preserve">
+    <value>Quản Lý Khóa Học</value>
+  </data>
+  <data name="lblCourseName" xml:space="preserve">
+    <value>Tên Khóa Học</value>
+  </data>
+  <data name="lblCoursesCost" xml:space="preserve">
+    <value>Học Phí Khóa Học</value>
+  </data>
+  <data name="lblCourseType" xml:space="preserve">
+    <value>Loại Khóa Học</value>
+  </data>
+  <data name="lblCreate" xml:space="preserve">
+    <value>Thêm Mới</value>
+  </data>
+  <data name="lblCustomer" xml:space="preserve">
+    <value>Khách Hàng</value>
+  </data>
+  <data name="lblDate" xml:space="preserve">
+    <value>Ngày</value>
+  </data>
+  <data name="lblDateOfBirth" xml:space="preserve">
+    <value>Ngày Sinh</value>
+  </data>
+  <data name="lblDateOfJoin" xml:space="preserve">
+    <value>Ngày Vào Làm</value>
+  </data>
+  <data name="lblDepartment" xml:space="preserve">
+    <value>Phòng Ban</value>
+  </data>
+  <data name="lblDescription" xml:space="preserve">
+    <value>Mô Tả</value>
+  </data>
+  <data name="lblDetails" xml:space="preserve">
+    <value>Chi Tiết</value>
+  </data>
+  <data name="lblDownloadTemplate" xml:space="preserve">
+    <value>Tải Biểu Mẫu</value>
+  </data>
+  <data name="lblDuration" xml:space="preserve">
+    <value>Thời Lượng (Giờ)</value>
+  </data>
+  <data name="lblEdit" xml:space="preserve">
+    <value>Chỉnh Sửa</value>
+  </data>
+  <data name="lblEducation" xml:space="preserve">
+    <value>Học Vấn</value>
+  </data>
+  <data name="lblEmployee" xml:space="preserve">
+    <value>Học Viên</value>
+  </data>
+  <data name="lblEndDate" xml:space="preserve">
+    <value>Ngày Kết Thúc</value>
+  </data>
+  <data name="lblEXPORT" xml:space="preserve">
+    <value>Xuất File</value>
+  </data>
+  <data name="lblExprieDate" xml:space="preserve">
+    <value>Hạn Sử Dụng</value>
+  </data>
+  <data name="lblEXTENTTRAINEE" xml:space="preserve">
+    <value>Mở Rộng Học Viên</value>
+  </data>
+  <data name="lblFile" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="lblFileImport" xml:space="preserve">
+    <value>File Import</value>
+  </data>
+  <data name="lblFilterCourse" xml:space="preserve">
+    <value>Lọc Chương Trình Đào Tạo</value>
+  </data>
+  <data name="lblFinal" xml:space="preserve">
+    <value>Kết Thúc</value>
+  </data>
+  <data name="lblFirstCheck" xml:space="preserve">
+    <value>First Check</value>
+  </data>
+  <data name="lblFIRSTRESULT" xml:space="preserve">
+    <value>FIRST RESULT</value>
+  </data>
+  <data name="lblFrom" xml:space="preserve">
+    <value>Từ</value>
+  </data>
+  <data name="lblFromDate" xml:space="preserve">
+    <value>Từ Ngày</value>
+  </data>
+  <data name="lblFromTime" xml:space="preserve">
+    <value>Từ </value>
+  </data>
+  <data name="lblFromTo" xml:space="preserve">
+    <value>Từ - Đến</value>
+  </data>
+  <data name="lblFullName" xml:space="preserve">
+    <value>Họ Và Tên</value>
+  </data>
+  <data name="lblGender" xml:space="preserve">
+    <value>Giới Tính</value>
+  </data>
+  <data name="lblGENERAL" xml:space="preserve">
+    <value>Tổng Quan</value>
+  </data>
+  <data name="lblGrade" xml:space="preserve">
+    <value>Xếp Loại</value>
+  </data>
+  <data name="lblGroupCourse" xml:space="preserve">
+    <value>Nhóm Khóa Học</value>
+  </data>
+  <data name="lblHighLeader" xml:space="preserve">
+    <value>Lãnh Đạo Cấp Cao</value>
+  </data>
+  <data name="lblHighPotential" xml:space="preserve">
+    <value>Tiềm Năng Cao</value>
+  </data>
+  <data name="lblImport" xml:space="preserve">
+    <value>Nhập</value>
+  </data>
+  <data name="lblImportList" xml:space="preserve">
+    <value>Danh Sách Nhập</value>
+  </data>
+  <data name="lblInformationPotentialSuccessor" xml:space="preserve">
+    <value>Thông Tin Đào Tạo Học Viên Tiềm Năng </value>
+  </data>
+  <data name="lblInProcess" xml:space="preserve">
+    <value>In Process</value>
+  </data>
+  <data name="lblInputCertificate" xml:space="preserve">
+    <value>Nhập Chứng Chỉ</value>
+  </data>
+  <data name="lblInputCost" xml:space="preserve">
+    <value>Nhập Chi Phí</value>
+  </data>
+  <data name="lblInputNote" xml:space="preserve">
+    <value>Nhập Ghi Chú</value>
+  </data>
+  <data name="lblInputResult" xml:space="preserve">
+    <value>Nhập Kết Quả</value>
+  </data>
+  <data name="lblInstructor" xml:space="preserve">
+    <value>Giảng Viên</value>
+  </data>
+  <data name="lblInstructorDetails" xml:space="preserve">
+    <value>Chi Tiết Giảng Viên</value>
+  </data>
+  <data name="lblInstructorList" xml:space="preserve">
+    <value>Danh Sách Giảng Viên</value>
+  </data>
+  <data name="lblInstructorManagement" xml:space="preserve">
+    <value>Quản Lý Giảng Viên</value>
+  </data>
+  <data name="lblInstructorName" xml:space="preserve">
+    <value>Tên Giảng Viên</value>
+  </data>
+  <data name="lblISINSTRUCTOR" xml:space="preserve">
+    <value>Giảng Viên</value>
+  </data>
+  <data name="lblJob" xml:space="preserve">
+    <value>Chức Danh</value>
+  </data>
+  <data name="lblJobTitle" xml:space="preserve">
+    <value>Chức Danh</value>
+  </data>
+  <data name="lblJobtitleStandard" xml:space="preserve">
+    <value>Jobtitle Standard</value>
+  </data>
+  <data name="lblLearningTime" xml:space="preserve">
+    <value>Thời Gian Học</value>
+  </data>
+  <data name="lblListSubjectScores" xml:space="preserve">
+    <value>Danh Sách Điểm Khóa Học</value>
+  </data>
+  <data name="lblManual" xml:space="preserve">
+    <value>Thủ Công</value>
+  </data>
+  <data name="lblMaxTranineeMembers" xml:space="preserve">
+    <value>Số Học Viên Tối Đa</value>
+  </data>
+  <data name="lblMethod" xml:space="preserve">
+    <value>Phương Thức</value>
+  </data>
+  <data name="lblName" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="lblNationality" xml:space="preserve">
+    <value>Quốc Tịch</value>
+  </data>
+  <data name="lblNeedCoaching" xml:space="preserve">
+    <value>Cần Huấn Luyện</value>
+  </data>
+  <data name="lblNo" xml:space="preserve">
+    <value>Không</value>
+  </data>
+  <data name="lblNoAssign" xml:space="preserve">
+    <value>Không Được Chỉ Định</value>
+  </data>
+  <data name="lblNote" xml:space="preserve">
+    <value>Ghi Chú</value>
+  </data>
+  <data name="lblNoteList" xml:space="preserve">
+    <value>Danh Sách Ghi Chú</value>
+  </data>
+  <data name="lblOptions" xml:space="preserve">
+    <value>Công Cụ</value>
+  </data>
+  <data name="lblOrganization" xml:space="preserve">
+    <value>Tổ Chức</value>
+  </data>
+  <data name="lblParticipate" xml:space="preserve">
+    <value>Tham Gia</value>
+  </data>
+  <data name="lblPassportNo" xml:space="preserve">
+    <value>Passport No</value>
+  </data>
+  <data name="lblPassScore" xml:space="preserve">
+    <value>Điểm Đạt</value>
+  </data>
+  <data name="lblPending" xml:space="preserve">
+    <value>Đang Chờ Xử Lý</value>
+  </data>
+  <data name="lblPhone" xml:space="preserve">
+    <value>Điện Thoại</value>
+  </data>
+  <data name="lblPlaceOfBirth" xml:space="preserve">
+    <value>Nơi Sinh</value>
+  </data>
+  <data name="lblPoint" xml:space="preserve">
+    <value>Điểm Số</value>
+  </data>
+  <data name="lblPosition" xml:space="preserve">
+    <value>Đơn vị</value>
+  </data>
+  <data name="lblProcessing" xml:space="preserve">
+    <value>Đang Xử Lý</value>
+  </data>
+  <data name="lblReCheck" xml:space="preserve">
+    <value>Re Check</value>
+  </data>
+  <data name="lblRecurrent" xml:space="preserve">
+    <value>Kỳ Hạn</value>
+  </data>
+  <data name="lblRefreshCycle" xml:space="preserve">
+    <value>Làm Mới Chu Kỳ</value>
+  </data>
+  <data name="lblRegisable" xml:space="preserve">
+    <value>Tự Đăng Ký</value>
+  </data>
+  <data name="lblReject" xml:space="preserve">
+    <value>Từ Chối</value>
+  </data>
+  <data name="lblRelevantTrainingDepartment" xml:space="preserve">
+    <value>Phòng Đào Tạo Liên Quan</value>
+  </data>
+  <data name="lblResulList" xml:space="preserve">
+    <value>Danh Sách Kết Quả</value>
+  </data>
+  <data name="lblRESULT" xml:space="preserve">
+    <value>Kết Quả</value>
+  </data>
+  <data name="lblRoom" xml:space="preserve">
+    <value>Phòng Học</value>
+  </data>
+  <data name="lblSCHEDULE" xml:space="preserve">
+    <value>Lịch Trình</value>
+  </data>
+  <data name="lblSearch" xml:space="preserve">
+    <value>Tìm Kiếm</value>
+  </data>
+  <data name="lblSelectAnOption" xml:space="preserve">
+    <value>Select an option</value>
+  </data>
+  <data name="lblStartDate" xml:space="preserve">
+    <value>Ngày Bắt Đầu</value>
+  </data>
+  <data name="lblStatus" xml:space="preserve">
+    <value>Trạng Thái</value>
+  </data>
+  <data name="lblSUBCOURSENAME" xml:space="preserve">
+    <value>SUB COURSE NAME</value>
+  </data>
+  <data name="lblSubject" xml:space="preserve">
+    <value>Môn Học</value>
+  </data>
+  <data name="lblSubjectCode" xml:space="preserve">
+    <value>Mã MônHọc</value>
+  </data>
+  <data name="lblSubjectList" xml:space="preserve">
+    <value>Danh Sách MônHọc</value>
+  </data>
+  <data name="lblSubjectManagement" xml:space="preserve">
+    <value>Quản Lý MônHọc</value>
+  </data>
+  <data name="lblSubjectName" xml:space="preserve">
+    <value>Tên MônHọc</value>
+  </data>
+  <data name="lblSubjectType" xml:space="preserve">
+    <value>Loại MônHọc</value>
+  </data>
+  <data name="lblSuccessionPositions" xml:space="preserve">
+    <value>Vị Trí Kế Nhiệm</value>
+  </data>
+  <data name="lblSurvey" xml:space="preserve">
+    <value>Khảo Sát</value>
+  </data>
+  <data name="lblTime" xml:space="preserve">
+    <value>Thời Gian</value>
+  </data>
+  <data name="lblTo" xml:space="preserve">
+    <value>Đến</value>
+  </data>
+  <data name="lblToDate" xml:space="preserve">
+    <value>Đến Ngày</value>
+  </data>
+  <data name="lblToTime" xml:space="preserve">
+    <value>Đến</value>
+  </data>
+  <data name="lblTRAINEE" xml:space="preserve">
+    <value>Học Viên</value>
+  </data>
+  <data name="lblTraineeList" xml:space="preserve">
+    <value>Danh Sách Học Viên</value>
+  </data>
+  <data name="lblTraineeManagement" xml:space="preserve">
+    <value>Quản Lý Học Viên</value>
+  </data>
+  <data name="lblTraineeParticipateSubject" xml:space="preserve">
+    <value>Học Viên Tham Gia Khóa Học</value>
+  </data>
+  <data name="lblTrainingAllowance" xml:space="preserve">
+    <value>Trợ Cấp Đào Tạo</value>
+  </data>
+  <data name="lblTRAININGCENTER" xml:space="preserve">
+    <value>Khối Đào Tạo</value>
+  </data>
+  <data name="lblTRAININGCOMPETENCY" xml:space="preserve">
+    <value>Năng Lực Đào Tạo</value>
+  </data>
+  <data name="lblTrainingCourses" xml:space="preserve">
+    <value>Khóa Đào Tạo</value>
+  </data>
+  <data name="lblType" xml:space="preserve">
+    <value>Thể Loại</value>
+  </data>
+  <data name="lblVenue" xml:space="preserve">
+    <value>Địa Điểm</value>
+  </data>
+  <data name="lblYes" xml:space="preserve">
+    <value>Có</value>
+  </data>
+  <data name="lblAreYouSure" xml:space="preserve">
+    <value>Bạn có chắc chắn không</value>
+  </data>
+  <data name="lblAttendanceSheet" xml:space="preserve">
+    <value>Phiếu Điểm Danh</value>
+  </data>
+  <data name="lblATTENDENTSHEET" xml:space="preserve">
+    <value>PHIẾU ĐIỂM DANH</value>
+  </data>
+  <data name="lblClose" xml:space="preserve">
+    <value>Đóng</value>
+  </data>
+  <data name="lblCostList" xml:space="preserve">
+    <value>Danh Sách Học Phí</value>
+  </data>
+  <data name="lblCostReport" xml:space="preserve">
+    <value>Báo Cáo Học Phí</value>
+  </data>
+  <data name="lblCOURSERESULT" xml:space="preserve">
+    <value>Kết Quả Khóa Học</value>
+  </data>
+  <data name="lblDays" xml:space="preserve">
+    <value>Ngày</value>
+  </data>
+  <data name="lblEmployeeRecord" xml:space="preserve">
+    <value>Hồ Sơ Học Viên</value>
+  </data>
+  <data name="lblFinalCourseResult" xml:space="preserve">
+    <value>Kết Quả Tổng Kết Chương Trình Đào Tạo</value>
+  </data>
+  <data name="lblFinalCourseResultList" xml:space="preserve">
+    <value>Danh Sách Kết Quả Tổng Kết Chương Trình Đào Tạo</value>
+  </data>
+  <data name="lblHours" xml:space="preserve">
+    <value>Giờ</value>
+  </data>
+  <data name="lblInstructorSubjectList" xml:space="preserve">
+    <value>Danh Sách Khóa Học Giảng Dạy</value>
+  </data>
+  <data name="lblInstructorSubjectReport" xml:space="preserve">
+    <value>Báo Cáo Khóa Học</value>
+  </data>
+  <data name="lblModify" xml:space="preserve">
+    <value>Chỉnh Sửa</value>
+  </data>
+  <data name="lblNbrOfCertiIssued" xml:space="preserve">
+    <value>Số Lượng Chứng Chỉ Được Cấp</value>
+  </data>
+  <data name="lblNumberOfCertificatesIssued" xml:space="preserve">
+    <value>Số Chứng Chỉ Đã Cấp</value>
+  </data>
+  <data name="lblNumberOfParticipants" xml:space="preserve">
+    <value>Số Người Tham Gia</value>
+  </data>
+  <data name="lblPaticipants" xml:space="preserve">
+    <value>Tham Gia</value>
+  </data>
+  <data name="lblPrint" xml:space="preserve">
+    <value>In</value>
+  </data>
+  <data name="lblRecords" xml:space="preserve">
+    <value>Hồ Sơ</value>
+  </data>
+  <data name="lblReport" xml:space="preserve">
+    <value>Báo Cáo</value>
+  </data>
+  <data name="lblReportResult" xml:space="preserve">
+    <value>Kết Quả Báo Cáo</value>
+  </data>
+  <data name="lblSelectEmployee" xml:space="preserve">
+    <value>Chọn Học Viên</value>
+  </data>
+  <data name="lblSubjectResult" xml:space="preserve">
+    <value>Kết Quả MônHọc</value>
+  </data>
+  <data name="lblSubjectResultList" xml:space="preserve">
+    <value>Danh Sách Kết Quả MônHọc</value>
+  </data>
+  <data name="lblTeachers" xml:space="preserve">
+    <value>Giáo Viên</value>
+  </data>
+  <data name="lblTOTAL" xml:space="preserve">
+    <value>Tổng Cộng</value>
+  </data>
+  <data name="lblTrainingActivityReport" xml:space="preserve">
+    <value>Báo Cáo Hoạt Động Đào Tạo</value>
+  </data>
+  <data name="lblTrainingActivityReportList" xml:space="preserve">
+    <value>Danh Sách Báo Cáo Hoạt Động Đào Tạo</value>
+  </data>
+  <data name="lblTrainingDate" xml:space="preserve">
+    <value>Ngày Đào Tạo</value>
+  </data>
+  <data name="lblTrainingPlan" xml:space="preserve">
+    <value>Kế Hoạch Đào Tạo</value>
+  </data>
+  <data name="lblTRAININGPLANFOR" xml:space="preserve">
+    <value>KẾ HOẠCH ĐÀO TẠO CHO</value>
+  </data>
+  <data name="lblTypeLearning" xml:space="preserve">
+    <value>Hình Thức Đào Tạo</value>
+  </data>
+  <data name="lblViewReport" xml:space="preserve">
+    <value>Xem Báo Cáo</value>
+  </data>
+  <data name="lblDistinction" xml:space="preserve">
+    <value>Ưu Tú</value>
+  </data>
+  <data name="lblInstructorCode" xml:space="preserve">
+    <value>Mã Giáo Viên</value>
+  </data>
+  <data name="lblPass" xml:space="preserve">
+    <value>Đạt</value>
+  </data>
+  <data name="lblEmailAddress" xml:space="preserve">
+    <value>Địa Chỉ Email</value>
+  </data>
+  <data name="lblForgotYourPassword" xml:space="preserve">
+    <value>Quên Mật Khẩu</value>
+  </data>
+  <data name="lblLogin" xml:space="preserve">
+    <value>Đăng Nhập</value>
+  </data>
+  <data name="lblLoginToYourAccount" xml:space="preserve">
+    <value>Đăng Nhập Tài Khoản</value>
+  </data>
+  <data name="lblLostYourPassword" xml:space="preserve">
+    <value>Bạn Quên Mật Khẩu</value>
+  </data>
+  <data name="lblNewPass" xml:space="preserve">
+    <value>Mật Khẩu Mới</value>
+  </data>
+  <data name="lblNewPassComfirm" xml:space="preserve">
+    <value>Xác Nhận Mật Khẩu Mới</value>
+  </data>
+  <data name="lblOldPass" xml:space="preserve">
+    <value>Mật Khẩu Cũ</value>
+  </data>
+  <data name="lblPassword" xml:space="preserve">
+    <value>Mật Khẩu</value>
+  </data>
+  <data name="lblSubmit" xml:space="preserve">
+    <value>Xác Nhận</value>
+  </data>
+  <data name="lblUserName" xml:space="preserve">
+    <value>Tên Đăng Nhập</value>
+  </data>
+  <data name="lblContractList" xml:space="preserve">
+    <value>Danh Sách Hợp Đồng</value>
+  </data>
+  <data name="lblContractManagement" xml:space="preserve">
+    <value>Quản Lí Hợp Đồng</value>
+  </data>
+  <data name="lblContractor" xml:space="preserve">
+    <value>Đối Tác</value>
+  </data>
+  <data name="lblCreatedDate" xml:space="preserve">
+    <value>Ngày Tạo</value>
+  </data>
+  <data name="lblCurrency" xml:space="preserve">
+    <value>TIền Tệ</value>
+  </data>
+  <data name="lblExpireDate" xml:space="preserve">
+    <value>Hạn Sử Dụng</value>
+  </data>
+  <data name="lblImportDepartment" xml:space="preserve">
+    <value>Nhập Phòng Ban</value>
+  </data>
+  <data name="lblLastUpdatedDate" xml:space="preserve">
+    <value>Ngày Cập Nhật Cuối </value>
+  </data>
+  <data name="lblMaster" xml:space="preserve">
+    <value>Master</value>
+  </data>
+  <data name="lblMasterData" xml:space="preserve">
+    <value>Dữ Liệu Hệ Thống</value>
+  </data>
+  <data name="lblPeriodDay" xml:space="preserve">
+    <value>Thời Hạn (Ngày)</value>
+  </data>
+  <data name="lblPrice" xml:space="preserve">
+    <value>Giá Cả</value>
+  </data>
+  <data name="lblSignDate" xml:space="preserve">
+    <value>Ngày Ký</value>
+  </data>
+  <data name="lblArea" xml:space="preserve">
+    <value>Khu Vực</value>
+  </data>
+  <data name="lblAssignedSubject" xml:space="preserve">
+    <value>Khóa Học Chỉ Định</value>
+  </data>
+  <data name="lblAvailableSubject" xml:space="preserve">
+    <value>Khóa Học Sẵn Có</value>
+  </data>
+  <data name="lblCapacity" xml:space="preserve">
+    <value>Sức Chứa</value>
+  </data>
+  <data name="lblCreatedAt" xml:space="preserve">
+    <value>Ngày Tạo</value>
+  </data>
+  <data name="lblCreatedBy" xml:space="preserve">
+    <value>Người Tạo</value>
+  </data>
+  <data name="lblCreatedDay" xml:space="preserve">
+    <value>Ngày Tạo</value>
+  </data>
+  <data name="lblCreateDepartment" xml:space="preserve">
+    <value>Tạo Phòng Ban</value>
+  </data>
+  <data name="lblCreatedUser" xml:space="preserve">
+    <value>Người Tạo</value>
+  </data>
+  <data name="lblDelete" xml:space="preserve">
+    <value>Xóa</value>
+  </data>
+  <data name="lblEquipment" xml:space="preserve">
+    <value>Thiết Bị</value>
+  </data>
+  <data name="lblFullOption" xml:space="preserve">
+    <value>Tất Cả</value>
+  </data>
+  <data name="lblFunction" xml:space="preserve">
+    <value>Chức Năng</value>
+  </data>
+  <data name="lblGroupUser" xml:space="preserve">
+    <value>Nhóm Người Dùng</value>
+  </data>
+  <data name="lblJobTitleName" xml:space="preserve">
+    <value>Tên Chức Danh</value>
+  </data>
+  <data name="lblLocation" xml:space="preserve">
+    <value>Địa điểm</value>
+  </data>
+  <data name="lblModifiedAt" xml:space="preserve">
+    <value>Ngày Cập Nhật</value>
+  </data>
+  <data name="lblNone" xml:space="preserve">
+    <value>trống</value>
+  </data>
+  <data name="lblNoSeats" xml:space="preserve">
+    <value>Số Chỗ Ngồi</value>
+  </data>
+  <data name="lblParentId" xml:space="preserve">
+    <value>Phòng Ban Chính</value>
+  </data>
+  <data name="lblPermission" xml:space="preserve">
+    <value>Quyền Hạn</value>
+  </data>
+  <data name="lblRoles" xml:space="preserve">
+    <value>Quyền</value>
+  </data>
+  <data name="lblSerialNumberTax" xml:space="preserve">
+    <value>Mã Số Thuế</value>
+  </data>
+  <data name="lblSortName" xml:space="preserve">
+    <value>Tên Viết Tắt</value>
+  </data>
+  <data name="lblTitle" xml:space="preserve">
+    <value>Tiêu Đề</value>
+  </data>
+  <data name="lblView" xml:space="preserve">
+    <value>Hiển Thị</value>
+  </data>
+  <data name="lblYouAreSureToDeleteUser" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa người dùng</value>
+  </data>
+  <data name="lblChangePassword" xml:space="preserve">
+    <value>Đổi Mật Khẩu</value>
+  </data>
+  <data name="lblChangeProfile" xml:space="preserve">
+    <value>Thông Tin Cá Nhân</value>
+  </data>
+  <data name="lblCheckPass" xml:space="preserve">
+    <value>Mật khẩu phải chứa ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, ký tự đặc biệt và số</value>
+  </data>
+  <data name="lblFirstName" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="lblImportJobtitle" xml:space="preserve">
+    <value>Nhập Chức Danh</value>
+  </data>
+  <data name="lblLastName" xml:space="preserve">
+    <value>Họ</value>
+  </data>
+  <data name="lblLastOnlineAt" xml:space="preserve">
+    <value>Truy Cập Lần Cuối </value>
+  </data>
+  <data name="lblMarkAllAsRead" xml:space="preserve">
+    <value>Đánh Dấu Tất Cả Là Đã Đọc</value>
+  </data>
+  <data name="lblMonth" xml:space="preserve">
+    <value>Tháng</value>
+  </data>
+  <data name="lblProfile" xml:space="preserve">
+    <value>Thông Tin Cá Nhân</value>
+  </data>
+  <data name="lblRole" xml:space="preserve">
+    <value>Quyền</value>
+  </data>
+  <data name="lblRoleList" xml:space="preserve">
+    <value>Danh Sách Quyền</value>
+  </data>
+  <data name="lblRoleName" xml:space="preserve">
+    <value>Tên Quyền</value>
+  </data>
+  <data name="lblSendMessage" xml:space="preserve">
+    <value>Gửi Tin Nhắn</value>
+  </data>
+  <data name="lblSubjectScore" xml:space="preserve">
+    <value>Điểm MônHọc</value>
+  </data>
+  <data name="lblSystemManagement" xml:space="preserve">
+    <value>Quản Lý Hệ Thống</value>
+  </data>
+  <data name="lblUser" xml:space="preserve">
+    <value>Người Dùng</value>
+  </data>
+  <data name="lblUserList" xml:space="preserve">
+    <value>Danh Sách Người Dùng</value>
+  </data>
+  <data name="lblLogout" xml:space="preserve">
+    <value>Đăng Xuất</value>
+  </data>
+  <data name="ASSIGN_BY" xml:space="preserve">
+    <value>Người Gửi</value>
+  </data>
+  <data name="SELECT_GROUPCOURSE" xml:space="preserve">
+    <value>-- Chọn khóa học --</value>
+  </data>
+  <data name="COST_GROUPCOST" xml:space="preserve">
+    <value>Nhóm Học Phí</value>
+  </data>
+  <data name="REPORT_COST_GROUPCOST" xml:space="preserve">
+    <value>Nhóm Học Phí</value>
+  </data>
+  <data name="APPROVE_ASSIGN_DETAIL" xml:space="preserve">
+    <value>Chi tiết </value>
+  </data>
+  <data name="lblEmail" xml:space="preserve">
+    <value>Địa chỉ Email</value>
+  </data>
+  <data name="TRAINEE_BIRTHDAY" xml:space="preserve">
+    <value>Ngày sinh</value>
+  </data>
+  <data name="TRAINEE_EID" xml:space="preserve">
+    <value>EID</value>
+  </data>
+  <data name="TRAINEE_FULLNAME" xml:space="preserve">
+    <value>Họ và Tên</value>
+  </data>
+  <data name="TRAINEE_GENDER" xml:space="preserve">
+    <value>Giới tính</value>
+  </data>
+  <data name="TRAINEE_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="TRAINEE_PASSPORT" xml:space="preserve">
+    <value>Passport</value>
+  </data>
+  <data name="TRAINEE_COMPANY" xml:space="preserve">
+    <value>Cơ quan</value>
+  </data>
+  <data name="TRAINEE_DEPARTMENT" xml:space="preserve">
+    <value>Phòng Ban</value>
+  </data>
+  <data name="TRAINEE_EMAIL" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="TRAINEE_JOB" xml:space="preserve">
+    <value>Chức Danh</value>
+  </data>
+  <data name="TRAINEE_JOINDATE" xml:space="preserve">
+    <value>Ngày vào làm</value>
+  </data>
+  <data name="TRAINEE_NATION" xml:space="preserve">
+    <value>Quốc tịch</value>
+  </data>
+  <data name="TRAINEE_PHONE" xml:space="preserve">
+    <value>Số điện thoại</value>
+  </data>
+  <data name="TRAINEE_PLACEOFBIRTH" xml:space="preserve">
+    <value>Nơi sinh</value>
+  </data>
+  <data name="TRAINEE_TYPE" xml:space="preserve">
+    <value>Loại</value>
+  </data>
+  <data name="MCOURSE_ASSIGNEDSUBJECT" xml:space="preserve">
+    <value>Khóa Học Chỉ Định</value>
+  </data>
+  <data name="MCOURSE_CODE" xml:space="preserve">
+    <value>Mã</value>
+  </data>
+  <data name="MCOURSE_DESCRIPTION" xml:space="preserve">
+    <value>Mô Tả</value>
+  </data>
+  <data name="MCOURSE_NAME" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="MCOURSE_SUBJECT_TYPE" xml:space="preserve">
+    <value>Loại Khóa Học</value>
+  </data>
+  <data name="lblBondAgreement" xml:space="preserve">
+    <value>Hợp Đồng Đào Tạo</value>
+  </data>
+  <data name="lblCommitment" xml:space="preserve">
+    <value>Cam Kết</value>
+  </data>
+  <data name="lblCompensationCost" xml:space="preserve">
+    <value>Chi Phí Bồi Hoàn</value>
+  </data>
+  <data name="lblCostManagement" xml:space="preserve">
+    <value>Quản Lý Chi Phí</value>
+  </data>
+  <data name="lblNonWorking" xml:space="preserve">
+    <value>Trạng Thái Học Viên</value>
+  </data>
+  <data name="lblNonWorkingDay" xml:space="preserve">
+    <value>Ngày Nghỉ Việc</value>
+  </data>
+  <data name="lblReTrainingCost" xml:space="preserve">
+    <value>Chi Phí Học Lại</value>
+  </data>
+  <data name="lblTotalCost" xml:space="preserve">
+    <value>Tổng Chi Phí</value>
+  </data>
+  <data name="lblAllowance" xml:space="preserve">
+    <value>Trợ Cấp</value>
+  </data>
+  <data name="lblChart" xml:space="preserve">
+    <value>Biểu Đồ</value>
+  </data>
+  <data name="lblDaysAgo" xml:space="preserve">
+    <value>Ngày Trước</value>
+  </data>
+  <data name="lblGridview" xml:space="preserve">
+    <value>Danh Sách</value>
+  </data>
+  <data name="lblMonthsAgo" xml:space="preserve">
+    <value>Tháng Trước</value>
+  </data>
+  <data name="lblRecurrentTrainingList" xml:space="preserve">
+    <value>Danh Sách Đào Tạo Thường Xuyên</value>
+  </data>
+  <data name="lblRecurrentTrainingReport" xml:space="preserve">
+    <value>Báo Cáo Đào Tạo Thường Xuyên</value>
+  </data>
+  <data name="lblSearchinglimitation" xml:space="preserve">
+    <value>Thời Hạn</value>
+  </data>
+  <data name="lblSearchingPoint" xml:space="preserve">
+    <value>Thời Điểm Tìm Kiếm</value>
+  </data>
+  <data name="lblValidity" xml:space="preserve">
+    <value>Hợp Lệ</value>
+  </data>
+  <data name="lblYearsAgo" xml:space="preserve">
+    <value>Năm Trước</value>
+  </data>
+  <data name="lblContent" xml:space="preserve">
+    <value>Nội Dung</value>
+  </data>
+  <data name="lblDeparmentMaster" xml:space="preserve">
+    <value>Phòng Ban Đại Diện</value>
+  </data>
+  <data name="lblListTrainee" xml:space="preserve">
+    <value>Danh Sách Học Viên</value>
+  </data>
+  <data name="lblMessenger" xml:space="preserve">
+    <value>Tin Nhắn</value>
+  </data>
+  <data name="lblSearchByJobtitle" xml:space="preserve">
+    <value>Tìm Theo Chức Danh</value>
+  </data>
+  <data name="lblSelectedItems" xml:space="preserve">
+    <value>Danh Sách Được Chọn</value>
+  </data>
+  <data name="lblChartDepartment" xml:space="preserve">
+    <value>Biểu Đồ Phòng Ban</value>
+  </data>
+  <data name="lblChartGroupCost" xml:space="preserve">
+    <value>Biểu Đồ Nhóm Học Phí</value>
+  </data>
+  <data name="lblFilter" xml:space="preserve">
+    <value>Lọc</value>
+  </data>
+  <data name="lblMonths" xml:space="preserve">
+    <value>Tháng</value>
+  </data>
+  <data name="lblYears" xml:space="preserve">
+    <value>Năm</value>
+  </data>
+  <data name="DELETE_TRAINEE" xml:space="preserve">
+    <value>Bạn có chắc muốn xóa học viên ?</value>
+  </data>
+  <data name="lblHeader" xml:space="preserve">
+    <value>Tiền Tố</value>
+  </data>
+  <data name="lblError" xml:space="preserve">
+    <value>Lỗi</value>
+  </data>
+  <data name="lblErrorNote" xml:space="preserve">
+    <value>Ghi Chú</value>
+  </data>
+  <data name="lblCompanyCode" xml:space="preserve">
+    <value>Mã Công Ty</value>
+  </data>
+  <data name="lblContractCode" xml:space="preserve">
+    <value>Mã Hợp Đồng</value>
+  </data>
+  <data name="lblContractorCode" xml:space="preserve">
+    <value>Mã Đối Tác</value>
+  </data>
+  <data name="lblNationalyCode" xml:space="preserve">
+    <value>Mã Quốc Gia</value>
+  </data>
+  <data name="lblRoomCode" xml:space="preserve">
+    <value>Mã Phòng Học</value>
+  </data>
+  <data name="lblHasCommitment" xml:space="preserve">
+    <value>Có Cam Kết</value>
+  </data>
+  <data name="lblRemainDaysOfRefund" xml:space="preserve">
+    <value>Tổng Số Ngày Còn Lại Phải Bồi Hoàn</value>
+  </data>
+  <data name="lblAttemptsAllowed" xml:space="preserve">
+    <value>Số Lần Cho Phép</value>
+  </data>
+  <data name="lblAverageGrade" xml:space="preserve">
+    <value>Điểm Trung Bình</value>
+  </data>
+  <data name="lblCostPerPerson" xml:space="preserve">
+    <value>Chi Phí Cá Nhân</value>
+  </data>
+  <data name="lblFirstAttempt" xml:space="preserve">
+    <value>Điểm Đầu Tiên</value>
+  </data>
+  <data name="lblGradingMethod" xml:space="preserve">
+    <value>Chấm Điểm</value>
+  </data>
+  <data name="lblHighestGrade" xml:space="preserve">
+    <value>Điểm Cao Nhất</value>
+  </data>
+  <data name="lblLastAttempt" xml:space="preserve">
+    <value>Điểm Cuối Cùng</value>
+  </data>
+  <data name="lblJobLevel" xml:space="preserve">
+    <value>Vai trò</value>
+  </data>
+  <data name="lblEffectiveDate" xml:space="preserve">
+    <value>Ngày Có Hiệu Lực</value>
+  </data>
+  <data name="lblCommitmentPeriod" xml:space="preserve">
+    <value>Thời Hạn (Tháng)</value>
+  </data>
+  <data name="lblLanguage" xml:space="preserve">
+    <value>vi</value>
+  </data>
+  <data name="lblRequestApprove" xml:space="preserve">
+    <value>Yêu Cầu Phê Duyệt</value>
+  </data>
+  <data name="lblApproveFinalCourseResult" xml:space="preserve">
+    <value>Phê Duyệt Kết Quả Tổng Kết Chương Trình Đào Tạo</value>
+  </data>
+  <data name="lblRejectReason" xml:space="preserve">
+    <value>Lý Do Hủy Bỏ</value>
+  </data>
+  <data name="lblRemarkComment" xml:space="preserve">
+    <value>Nhận xét ghi chú</value>
+  </data>
+  <data name="lblWARNING" xml:space="preserve">
+    <value>Cảnh báo</value>
+  </data>
+  <data name="lblApprovalStatus" xml:space="preserve">
+    <value>Trạng Thái Khóa Học</value>
+  </data>
+  <data name="lblListGroupTrainee" xml:space="preserve">
+    <value>Danh sách các nhóm học viên</value>
+  </data>
+  <data name="lblMentor" xml:space="preserve">
+    <value>Trợ giảng</value>
+  </data>
+  <data name="lblAbsent" xml:space="preserve">
+    <value>Vắng mặt</value>
+  </data>
+  <data name="lblPresent" xml:space="preserve">
+    <value>Có mặt</value>
+  </data>
+  <data name="lblLate" xml:space="preserve">
+    <value>Đi trễ</value>
+  </data>
+  <data name="lblPERCENTAGEOFTOTAL" xml:space="preserve">
+    <value>Tổng %</value>
+  </data>
+  <data name="lblMinTranineeMembers" xml:space="preserve">
+    <value>Số Học Viên Tối Thiểu</value>
+  </data>
+  <data name="lblHANNAH" xml:space="preserve">
+    <value>Hannah</value>
+  </data>
+  <data name="lblForgotPassword" xml:space="preserve">
+    <value>Quên Mật Khẩu</value>
+  </data>
+  <data name="lblCHECKFAIL" xml:space="preserve">
+    <value>Check Fail</value>
+  </data>
+  <data name="lblStt" xml:space="preserve">
+    <value>STT</value>
+  </data>
+  <data name="lblCodeCertificate" xml:space="preserve">
+    <value>Mã Chứng chỉ</value>
+  </data>
+  <data name="ALERT_APPROVE" xml:space="preserve">
+    <value>Approve</value>
+  </data>
+  <data name="ALERT_REJECT" xml:space="preserve">
+    <value>Reject</value>
+  </data>
+  <data name="lblApproved" xml:space="preserve">
+    <value>Đã duyệt</value>
+  </data>
+  <data name="lblBlocked" xml:space="preserve">
+    <value>Đã khóa</value>
+  </data>
+  <data name="lblUnBlocked" xml:space="preserve">
+    <value>Có thể chỉnh sửa</value>
+  </data>
+  <data name="lbl_FORMAT_DATE" xml:space="preserve">
+    <value>dd/MM/yyyy</value>
+  </data>
+  <data name="lbl_TAB_LMS_ASSIGN" xml:space="preserve">
+    <value>Đăng ký từ LMS</value>
+  </data>
+  <data name="lbl_SENDREQUEST" xml:space="preserve">
+    <value>Gửi phê duyệt</value>
+  </data>
+  <data name="lbl_SENT" xml:space="preserve">
+    <value>Đã gửi</value>
+  </data>
+  <data name="lblCANCELAPPROVE" xml:space="preserve">
+    <value>Hủy Phê duyệt</value>
+  </data>
+  <data name="lblGroupTrainee" xml:space="preserve">
+    <value>Nhóm học viên</value>
+  </data>
+  <data name="ACTIVE" xml:space="preserve">
+    <value>Đang hoạt động</value>
+  </data>
+  <data name="INACTIVE" xml:space="preserve">
+    <value>Ngưng hoạt động</value>
+  </data>
+  <data name="lblJobTitle_Occupation" xml:space="preserve">
+    <value>Chức Danh</value>
+  </data>
+  <data name="lblSendMail" xml:space="preserve">
+    <value>Gửi Email</value>
+  </data>
+  <data name="lblCancelRequest" xml:space="preserve">
+    <value>Yêu Cầu Hủy</value>
+  </data>
+  <data name="lblRequest_Date" xml:space="preserve">
+    <value>Ngày gửi</value>
+  </data>
+  <data name="lblDeActive" xml:space="preserve">
+    <value>Không hoạt động</value>
+  </data>
+  <data name="lblExternal" xml:space="preserve">
+    <value>Bên ngoài</value>
+  </data>
+  <data name="lblInternal" xml:space="preserve">
+    <value>Nội bộ</value>
+  </data>
+  <data name="lblFemale" xml:space="preserve">
+    <value>Nữ</value>
+  </data>
+  <data name="lblMale" xml:space="preserve">
+    <value>Nam</value>
+  </data>
+  <data name="lblOthers" xml:space="preserve">
+    <value>Khác</value>
+  </data>
+  <data name="lblResignationDate" xml:space="preserve">
+    <value>Ngày Nghỉ</value>
+  </data>
+  <data name="EMPLOYEE_JOINED_PARTY_DATE" xml:space="preserve">
+    <value>Ngày Vào Đảng</value>
+  </data>
+  <data name="lblContactList" xml:space="preserve">
+    <value>Danh Sách Liên Hệ</value>
+  </data>
+  <data name="lblContactManagement" xml:space="preserve">
+    <value>Quản Lí Liên Hệ</value>
+  </data>
+  <data name="lblContactDetails" xml:space="preserve">
+    <value>Chi Tiết Thông Tin Liên Hệ</value>
+  </data>
+  <data name="lblSend" xml:space="preserve">
+    <value>Gửi</value>
+  </data>
+  <data name="lblSubjectSendMail" xml:space="preserve">
+    <value>Tiêu đề</value>
+  </data>
+  <data name="lblContactInformation" xml:space="preserve">
+    <value>Thông tin Phản hồi</value>
+  </data>
+  <data name="lblReply" xml:space="preserve">
+    <value>Trả lời</value>
+  </data>
+  <data name="KEYWORDS_MAIL" xml:space="preserve">
+    <value>Từ khóa được phép sử dụng</value>
+  </data>
+  <data name="lblScheduleManagement" xml:space="preserve">
+    <value>Quản lí thời gian biểu</value>
+  </data>
+  <data name="lblBackGroundColor" xml:space="preserve">
+    <value>Màu Nền</value>
+  </data>
+  <data name="lblCategory" xml:space="preserve">
+    <value>Loại Bản Tin</value>
+  </data>
+  <data name="lblIcon" xml:space="preserve">
+    <value>Biểu Tượng</value>
+  </data>
+  <data name="lblImage" xml:space="preserve">
+    <value>Hình ảnh</value>
+  </data>
+  <data name="lblMeetingManagement" xml:space="preserve">
+    <value>Quản Lý Cuộc Họp</value>
+  </data>
+  <data name="lblMeetingRoom" xml:space="preserve">
+    <value>Phòng Họp</value>
+  </data>
+  <data name="lblPostBy" xml:space="preserve">
+    <value>Người Đăng</value>
+  </data>
+  <data name="lblPostNews" xml:space="preserve">
+    <value>Bản Tin</value>
+  </data>
+  <data name="lblPostNewsCategory" xml:space="preserve">
+    <value>Loại Bản Tin</value>
+  </data>
+  <data name="lblPostNewsList" xml:space="preserve">
+    <value>Danh Sách Bản Tin</value>
+  </data>
+  <data name="lblPostNotification" xml:space="preserve">
+    <value>Thông Báo</value>
+  </data>
+  <data name="lblPostWelcome" xml:space="preserve">
+    <value>Thông Điệp Chào Mừng</value>
+  </data>
+  <data name="lblTypePostNews" xml:space="preserve">
+    <value>Hình Thức</value>
+  </data>
+  <data name="lblExpectedCost" xml:space="preserve">
+    <value>Chi phí dự kiến</value>
+  </data>
+  <data name="lblTarget" xml:space="preserve">
+    <value>Đối Tượng</value>
+  </data>
+  <data name="lblAwaitSync" xml:space="preserve">
+    <value>Chờ đồng bộ</value>
+  </data>
+  <data name="lblSynchronized" xml:space="preserve">
+    <value>Đã đồng bộ</value>
+  </data>
+  <data name="lblActiveEnroll" xml:space="preserve">
+    <value>Điều chỉnh trạng thái</value>
+  </data>
+  <data name="lblProgramCode" xml:space="preserve">
+    <value>Mã chương trình</value>
+  </data>
+  <data name="lblStatusEnroll" xml:space="preserve">
+    <value>Trạng thái</value>
+  </data>
+  <data name="lblTraineePortal" xml:space="preserve">
+    <value>Đăng ký từ cổng thông tin trực tuyến</value>
+  </data>
+  <data name="HELP_COST_GROUPCOST" xml:space="preserve">
+    <value>Chi phí cần dùng đến trong quá trình đào tạo được lấy từ dữ liệu hệ thống</value>
+  </data>
+  <data name="HELP_COURSE_COMMITMENT" xml:space="preserve">
+    <value>Cam kết thực hiện nếu không hoàn thành sẽ phải bồi hoàn</value>
+  </data>
+  <data name="HELP_COURSE_COURSETYPE" xml:space="preserve">
+    <value>Loại hình chương trình đào tạo hiện có trong hệ thống đào tạo</value>
+  </data>
+  <data name="HELP_COURSE_DEPARTMENT" xml:space="preserve">
+    <value>Phòng / Khoa trong hệ thống hiện có lấy từ dữ liệu hệ thống</value>
+  </data>
+  <data name="HELP_COURSE_GROUPSUBJECT" xml:space="preserve">
+    <value>Nhóm khóa học được lấy từ dữ liệu hệ thống</value>
+  </data>
+  <data name="HELP_COURSE_HANNAH" xml:space="preserve">
+    <value>Người làm nhiệm vụ điều hành, quản lí, phục vụ việc dạy và học ở các cơ sở giáo dục</value>
+  </data>
+  <data name="HELP_COURSE_INPUT_COST" xml:space="preserve">
+    <value>b</value>
+  </data>
+  <data name="HELP_COURSE_INPUT_EXPECTED_COST" xml:space="preserve">
+    <value>c</value>
+  </data>
+  <data name="HELP_COURSE_MAXTRAINEE" xml:space="preserve">
+    <value>Số lượng học viên tối đa trong một lớp học theo nhu cầu phân phối học viên trong lớp cho phù hợp</value>
+  </data>
+  <data name="HELP_COURSE_MENTOR" xml:space="preserve">
+    <value>Người tư vấn và hỗ trợ sinh viên phát huy tối đa khả năng học tập, rèn luyện và nghiên cứu khoa học</value>
+  </data>
+  <data name="HELP_COURSE_MINTRAINEE" xml:space="preserve">
+    <value>Số lượng học viên tối thiểu trong một lớp học theo nhu cầu phân phối học viên trong lớp cho phù hợp</value>
+  </data>
+  <data name="HELP_COURSE_PER_PERSON" xml:space="preserve">
+    <value>Chi phí cá nhân dành cho giáo viên đang giảng dạy khóa học được chỉ định</value>
+  </data>
+  <data name="HELP_COURSE_REGISABLE" xml:space="preserve">
+    <value>Khóa học sẽ là khóa cho học viên tự đăng ký hay mở khóa học bình thường</value>
+  </data>
+  <data name="HELP_EMPLOYEE_COURSE" xml:space="preserve">
+    <value>Danh sách các khóa học mà giáo viên có thể đứng lớp giảng dạy</value>
+  </data>
+  <data name="HELP_EMPLOYEE_DEPARTMENT" xml:space="preserve">
+    <value>Phòng / Khoa trong hệ thống hiện có lấy từ dữ liệu hệ thống</value>
+  </data>
+  <data name="HELP_EMPLOYEE_EID" xml:space="preserve">
+    <value>Mã người dùng để phân biệt với nhiều người trong hệ thống</value>
+  </data>
+  <data name="HELP_EMPLOYEE_EMAIL" xml:space="preserve">
+    <value>Email thường sử dụng nhất của người dùng</value>
+  </data>
+  <data name="HELP_EMPLOYEE_FULLNAME" xml:space="preserve">
+    <value>Họ tên đầy đủ của người dùng</value>
+  </data>
+  <data name="HELP_EMPLOYEE_JOBTITLE" xml:space="preserve">
+    <value>Chức danh hiện có trong hệ thống lấy từ dữ liệu hệ thống</value>
+  </data>
+  <data name="HELP_EMPLOYEE_TARGET" xml:space="preserve">
+    <value>Phân loại đối tượng cố vấn học tập hay thư ký</value>
+  </data>
+  <data name="HELP_EMPLOYEE_TYPE" xml:space="preserve">
+    <value>Phân loại hình thức nội bộ hay bên ngoài</value>
+  </data>
+  <data name="HELP_JOBTITLE_ASSIGNED" xml:space="preserve">
+    <value>Danh sách các khóa học đã được chỉ định lấy từ bên danh sách đã chọn từ bên các khóa học sẵn có trên hệ thống</value>
+  </data>
+  <data name="HELP_JOBTITLE_AVAILABLE" xml:space="preserve">
+    <value>Danh sách các khóa học sẵn có trên hệ thống để đưa vào học trong chức danh được chỉ định</value>
+  </data>
+  <data name="HELP_JOBTITLE_LEVEL" xml:space="preserve">
+    <value>Cấp bậc cao thấp tùy theo chức danh được gán</value>
+  </data>
+  <data name="HELP_JOBTITLE_OCCUPATION" xml:space="preserve">
+    <value>Tên chức danh sẽ được lưu trữ vào hệ thống và gán vào khi tạo người dùng</value>
+  </data>
+  <data name="HELP_JOBTITLE_POSITION" xml:space="preserve">
+    <value>Vị trí chức danh theo từng cấp bậc với tên gọi khác nhau</value>
+  </data>
+  <data name="HELP_SUBJECT_AVERAGECALCULATE" xml:space="preserve">
+    <value>Phương thức tính điểm trung bình cho khóa học có được áp dụng hay không áp dụng </value>
+  </data>
+  <data name="HELP_SUBJECT_CODE" xml:space="preserve">
+    <value>Mã khóa học dùng để phân biệt các khóa học với nhau, tránh việc đặt trùng nhau và theo quy tắc nhất định</value>
+  </data>
+  <data name="HELP_SUBJECT_DURATION" xml:space="preserve">
+    <value>Thời lượng học của khóa học và được tính theo giờ</value>
+  </data>
+  <data name="HELP_SUBJECT_GROUPCOURSE" xml:space="preserve">
+    <value>Nhóm môn học được lấy từ dữ liệu hệ thống</value>
+  </data>
+  <data name="HELP_SUBJECT_LISTINSTRUCTOR" xml:space="preserve">
+    <value>Danh sách giáo viên có trong hệ thống</value>
+  </data>
+  <data name="HELP_SUBJECT_PASSSCORE" xml:space="preserve">
+    <value>Phân loại điểm đạt và xếp loại cho từng mức nhất định</value>
+  </data>
+  <data name="HELP_SUBJECT_RECURRENT" xml:space="preserve">
+    <value>Chu kỳ tái đào tạo của khóa học và dành cho khóa tài đào tạo, nếu không phải là khóa tái đào tạo có thể để mặc định là 0</value>
+  </data>
+  <data name="HELP_SUBJECT_SCORE" xml:space="preserve">
+    <value>Phân loại điểm đạt và xếp loại cho từng mức nhất định</value>
+  </data>
+  <data name="HELP_USER_GROUP_USER" xml:space="preserve">
+    <value>Nhóm người dùng được lấy từ quản trị nhóm người dùng</value>
+  </data>
+  <data name="HELP_USER_INSTRUCTOR" xml:space="preserve">
+    <value>Danh sách giáo viên có trong hệ thống lấy từ quản lý giáo viên</value>
+  </data>
+  <data name="HELP_USER_ROLE" xml:space="preserve">
+    <value>Danh sách các quyền hạn có trong hệ thống lấy từ quản lý quyền</value>
+  </data>
+  <data name="lblEXPORT_POINT" xml:space="preserve">
+    <value>Xuất Bảng Điểm</value>
+  </data>
+  <data name="lblAdvanced" xml:space="preserve">
+    <value>Nâng cao</value>
+  </data>
+  <data name="lblAttendance" xml:space="preserve">
+    <value>Điểm Danh</value>
+  </data>
+  <data name="lblCLEANLOG" xml:space="preserve">
+    <value>Dọn Log</value>
+  </data>
+  <data name="lblGroupTraineeCreate" xml:space="preserve">
+    <value>Tạo Nhóm Học Viên</value>
+  </data>
+  <data name="lblGroupTraineeEdit" xml:space="preserve">
+    <value>Chỉnh Nhóm Học Viên</value>
+  </data>
+  <data name="lblPostNewsManagement" xml:space="preserve">
+    <value>Quản Lý Bài Đăng</value>
+  </data>
+  <data name="lblSystemControl" xml:space="preserve">
+    <value>Hệ Thống</value>
+  </data>
+  <data name="lblJobName" xml:space="preserve">
+    <value>Vai trò/Đơn vị</value>
+  </data>
+  <data name="COURSE_PUBlIC" xml:space="preserve">
+    <value>Công khai</value>
+  </data>
+  <data name="lblMaxGrade" xml:space="preserve">
+    <value>Tổng điểm</value>
+  </data>
+  <data name="lblIngredient" xml:space="preserve">
+    <value>Thành phần</value>
+  </data>
+  <data name="lblExpiryDate" xml:space="preserve">
+    <value>Ngày hết hạn</value>
+  </data>
+  <data name="lblRegistryDate" xml:space="preserve">
+    <value>Ngày đăng ký</value>
+  </data>
+  <data name="lblHOME_CHART" xml:space="preserve">
+    <value>Biểu đồ chương trình đào tạo</value>
+  </data>
+  <data name="lblReminderTitle" xml:space="preserve">
+    <value>Tiêu Đề Nhắc Nhở</value>
+  </data>
+  <data name="lblisExaminer" xml:space="preserve">
+    <value>Giám đốc</value>
+  </data>
+  <data name="lblMonitor" xml:space="preserve">
+    <value>Trưởng phòng</value>
+  </data>
+  <data name="lblExaminer" xml:space="preserve">
+    <value>Giám thị</value>
+  </data>
+  <data name="lblCompanyName" xml:space="preserve">
+    <value>Tên Công Ty</value>
+  </data>
+  <data name="lblCertificateCode" xml:space="preserve">
+    <value>Mã Chứng Chỉ</value>
+  </data>
+  <data name="lblCertificateManagement" xml:space="preserve">
+    <value>Quản Lý Bằng Cấp</value>
+  </data>
+  <data name="lblCertificateName" xml:space="preserve">
+    <value>Tên Chứng Chỉ</value>
+  </data>
+  <data name="lblNationalityName" xml:space="preserve">
+    <value>Tên Quốc Gia</value>
+  </data>
+  <data name="lblRoomName" xml:space="preserve">
+    <value>Tên Phòng</value>
+  </data>
+  <data name="lblAuto" xml:space="preserve">
+    <value>Tự động</value>
+  </data>
+  <data name="lblInstructors" xml:space="preserve">
+    <value>Giảng Viên</value>
+  </data>
+  <data name="lblMarkType" xml:space="preserve">
+    <value>Chấm Điểm</value>
+  </data>
+  <data name="lblRESULTS" xml:space="preserve">
+    <value>Results</value>
+  </data>
+  <data name="lblDept" xml:space="preserve">
+    <value>Phòng</value>
+  </data>
+  <data name="lblFail" xml:space="preserve">
+    <value>Rớt</value>
+  </data>
+  <data name="lblNoPayment" xml:space="preserve">
+    <value>Chưa Thanh Toán</value>
+  </data>
+  <data name="lblPaid" xml:space="preserve">
+    <value>Đã Thanh Toán</value>
+  </data>
+  <data name="lblProcessStepsCourse" xml:space="preserve">
+    <value>Quy Trình Khóa Học</value>
+  </data>
+  <data name="lblCompanyName1" xml:space="preserve">
+    <value>Tên Công Ty</value>
+  </data>
+  <data name="lblAddress" xml:space="preserve">
+    <value>Địa Chỉ</value>
+  </data>
+  <data name="lblEmailTo" xml:space="preserve">
+    <value>Email Mục Đích</value>
+  </data>
+  <data name="lblRoomType" xml:space="preserve">
+    <value>Loại Phòng</value>
+  </data>
+  <data name="lblSubjectMail" xml:space="preserve">
+    <value>Chủ Đề Mail</value>
+  </data>
+  <data name="lblTaxCode" xml:space="preserve">
+    <value>Tax Code</value>
+  </data>
+  <data name="lblContentTemplate" xml:space="preserve">
+    <value>Nội Dung - Mẫu</value>
+  </data>
+  <data name="lblDone" xml:space="preserve">
+    <value>Hoàn Tất</value>
+  </data>
+  <data name="lblListInstructors" xml:space="preserve">
+    <value>Danh Sách Giáo Viên</value>
+  </data>
+  <data name="lblMailExchange" xml:space="preserve">
+    <value>Đồng Bộ Trao Đổi Thư</value>
+  </data>
+  <data name="lblMailTemplate" xml:space="preserve">
+    <value>Mẫu Thư</value>
+  </data>
+  <data name="lblWaiting" xml:space="preserve">
+    <value>Đang Chờ</value>
+  </data>
+  <data name="lblTimeRemind" xml:space="preserve">
+    <value>Nhắc nhở trước (ngày)</value>
+  </data>
+  <data name="lblExaminers" xml:space="preserve">
+    <value>Giám thị</value>
+  </data>
+  <data name="lblRemarks" xml:space="preserve">
+    <value>Remarks</value>
+  </data>
+  <data name="SELECT_COURSE_NAME" xml:space="preserve">
+    <value>Chọn Khóa Học</value>
+  </data>
+  <data name="lblDateOfIssue" xml:space="preserve">
+    <value>Ngày cấp bằng</value>
+  </data>
+  <data name="lblRequestBy" xml:space="preserve">
+    <value>Yêu Cầu Bởi</value>
+  </data>
+  <data name="lblDateApproval" xml:space="preserve">
+    <value>Ngày Phê Duyệt</value>
+  </data>
+  <data name="lblPayment" xml:space="preserve">
+    <value>Thanh toán</value>
+  </data>
+  <data name="lblTotalDuration" xml:space="preserve">
+    <value>Tổng Thời Lượng</value>
+  </data>
+  <data name="lblDateFrom" xml:space="preserve">
+    <value>Từ Ngày</value>
+  </data>
+  <data name="lblDateTo" xml:space="preserve">
+    <value>Đến Ngày</value>
+  </data>
+  <data name="lblStaffID" xml:space="preserve">
+    <value>Mã Nhân Viên</value>
+  </data>
+  <data name="lblParticipants" xml:space="preserve">
+    <value>Người Tham Gia</value>
+  </data>
+</root>

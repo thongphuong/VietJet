@@ -1,0 +1,29 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@using TMS.Core.ViewModels.UserModels
+@model TMS.Core.ViewModels.Courses.PartialIngredient
+
+<son class=" col-md-12 Ingredientfor" data-index="@(Model.Row)" id="son_Detail_Ingredient_@(Model.Row)">
+    <div class="form-group col-md-1 margin-top-10">
+        <a href="javascript:void(0)" data-toggle="tooltip" title="Remove Ingredient" data-index="@(Model.Row)" onclick="removeIngredient(this)"><i class="fas fa-times"></i></a>
+        &nbsp;
+    </div>
+    <div class="form-group col-md-5 margin-top-10">
+        <select class="form-control input-sm default required " data-index="@(Model.Row)" data-toggle="tooltip" title="Ingredients" id="course-detail-Ingredient-select">
+            <option value="-1" disabled selected>-- Ingredient --</option>
+            @if (Model.DictionaryIngredients.Any() || Model.DictionaryIngredients != null)
+            {
+                foreach (var room in Model.DictionaryIngredients)
+                {
+                    <option value="@room.Key">@room.Value</option>
+                }
+            }
+        </select>
+    </div>
+    <div class="form-group col-md-2 margin-top-10">
+        <input type="text" class="form-control input-sm percentIngredient" id="course-detail-Ingredient-percent" pattern="^[1-9][0-9]?$|^100$" />
+    </div>
+    <div class="form-group col-md-4 margin-top-20-md">
+        &nbsp;
+    </div>
+</son>

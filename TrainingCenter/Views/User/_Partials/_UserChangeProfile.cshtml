@@ -1,0 +1,81 @@
+﻿@using RestSharp.Extensions
+@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@using Utilities
+@model TMS.Core.ViewModels.UserModels.ChangeUserProfile
+
+<div class="panel-body">
+    <div class="tab-content">
+        <div class="tab-pane fade  active in" id="home">
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.nameImage, 0)
+            <input type="hidden" id="avatarID" name="ImagePath" value="-1" />
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="profile-sidebar box-shadow">
+                        <p id="showavatar">
+                            @*<img src="@((string.IsNullOrEmpty(Model.nameImage) || Model.nameImage.StartsWith("NoAvata")) ? "/Content/img/NoAvata.png" : string.Format("{0}{1}", UtilConstants.PathImage, Model.nameImage))" class="img-responsive center-block" id="blah2"/>*@
+                            <img src="@(((string.IsNullOrEmpty(Model.nameImage) || Model.nameImage.StartsWith("NoAvata")) ? UtilConstants.PathImage+"NoAvata.png" :
+                                 AppUtils.getAppSetting("AWSLinkS3") + AppUtils.getAppSetting("PathImage").Substring(1) +Model.nameImage))" class="img-responsive center-block" id="blah2" />
+                        </p>
+
+                        <div class="profile-button">
+                            <label class="btn btn-default btn-file">
+                                <i class="fa fa-camera" aria-hidden="true" style="font-size: 22px;"></i> <input type="file" name="ImgFile" id="uploadEditorImage" style="display: none;" />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="panel box-shadow">
+                        <div class="panel-body center-block">
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.FullName) <b class="text-danger"><font color="red">(*)</font></b>
+                                    @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => Model.FullName, null, new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.Instructor)
+                                    @Html.LabelFor(m => m.Instructor, (Model.Instructor.HasValue() ? Model.Instructor : " "), new { @class = "form-control searchText1", @disabled = "disabled" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.UserName)
+                                    @Html.LabelFor(m => m.UserName, Model.UserName, new { @class = "form-control searchText1", @disabled = "disabled" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.Address)
+                                    @Html.TextBoxFor(m => m.Address, Model.Address, new { @class = "form-control searchText1" })
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.Email) <b class="text-danger"><font color="red">(*)</font></b>
+                                    @Html.TextBoxFor(m => m.Email, Model.Email, new { @class = "form-control searchText1" })
+
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.Numbers)
+                                    @Html.TextBoxFor(m => m.Numbers, Model.Numbers, new { @class = "form-control searchText1" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.Role)
+                                    <span class="form-control searchText1" disabled="disabled"><label>@Html.Raw(Model.Role)</label></span>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.GroupUser)
+                                    <span class="form-control searchText1" disabled="disabled"><label>@Html.Raw(Model.GroupUser)</label></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

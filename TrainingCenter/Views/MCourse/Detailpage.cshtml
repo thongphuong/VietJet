@@ -1,0 +1,152 @@
+﻿@using DAL.Entities
+@using DAL.Repositories
+@using DAL.UnitOfWork
+@model CAT_GROUPSUBJECT
+@{
+    int id = ViewBag.id;
+    var mModel = Model;
+    UnitOfWork _uow = new UnitOfWork();
+    IRepository<CAT_GROUPSUBJECT> _repoCAT_GROUPSUBJECT = _uow.Repository<CAT_GROUPSUBJECT>();
+    IRepository<CAT_GROUPSUBJECT_ITEM> _repoCAT_GROUPSUBJECT_ITEM = _uow.Repository<CAT_GROUPSUBJECT_ITEM>();
+    IRepository<Subject> _repoSubject = _uow.Repository<Subject>();
+    IRepository<Course_Type> _repoCourse_Type = _uow.Repository<Course_Type>();
+    IEnumerable<CAT_GROUPSUBJECT> course = _repoCAT_GROUPSUBJECT.Get(a => a.bit_Isactive == true, x => x.OrderBy(a => a.id));
+    IEnumerable<Course_Type> coursetype = _repoCourse_Type.Get(a => a.Course_Type_Id != (int)Constants.CourseType.General, x => x.OrderBy(a => a.str_Name));
+
+    int type_ = -1;
+    var data = _repoCAT_GROUPSUBJECT_ITEM.Get(a => a.id_groupsubject == mModel.id);
+    if (data.Count() > 0)
+    {
+        type_ = (int)data.FirstOrDefault().Subject.int_Course_Type;
+    }
+
+    string listtype = string.Empty;
+    foreach (var item in coursetype)
+    {
+        if (item.Course_Type_Id == type_)
+        {
+            listtype += "<option value='" + @item.Course_Type_Id + "' selected >" + @item.str_Name + "</option>";
+        }
+        else
+        {
+            listtype += "<option value='" + @item.Course_Type_Id + "'  >" + @item.str_Name + "</option>";
+        }
+
+    }
+}
+@functions{
+    public string loadparentcourse(int? parentid, int level, int? parent_id)
+    {
+        UnitOfWork _uow = new UnitOfWork();
+        IRepository<CAT_GROUPSUBJECT> _repoCAT_GROUPSUBJECT = _uow.Repository<CAT_GROUPSUBJECT>();
+        string result = string.Empty;
+        bool parent = false;
+        var data = _repoCAT_GROUPSUBJECT.Get(a => a.bit_Isactive == true);
+        if (parentid == null)
+        {
+            data = data.Where(a => a.bit_Isactive == true && a.parent_id == null);
+            parent = true;
+        }
+        else
+        {
+            data = data.Where(a => a.bit_Isactive == true && a.parent_id == parentid);
+        }
+
+        if (data.Count() == 0)
+            return result;
+        else
+        {
+            foreach (var item in data)
+            {
+                string selected = "";
+                if (item.id == parent_id)
+                {
+                    selected = "selected";
+                }
+                string khoangtrang = "";
+                for (int i = 0; i < level; i++)
+                {
+                    khoangtrang += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                }
+
+                result += "<option value='" + item.id + "' style='font-size:" + (18 - (level + 2)) + "px;' " + selected + " >" + khoangtrang + "+ " + item.str_Name;
+                result += "</option>";
+                result += loadparentcourse(item.id, level + 1, parent_id);
+            }
+        }
+        return result;
+    }
+}
+
+<div class="panel panel-danger list-panel" id="list-panel">
+    <div class="panel-heading list-panel-heading">
+        <h1 class="panel-title list-panel-title"> Detail </h1>
+    </div>
+    <div class="panel-body center-block">
+        <form autocomplete="on" action="@Url.Action("Modify", "MCourse")" method="post" id="UserModify" data-parsley-validate>
+            <input type="hidden" id="hd_id" name="id" value="@id" />
+            <div class="form-group col-lg-12">
+                <label>Parent Course</label>
+                <select disabled class="form-control" name="int_parent" id="int_parent" data-placeholder="-- Parent Course --">
+                    <option></option>
+                    @Html.Raw(loadparentcourse(null, 1, mModel.parent_id))
+                </select>
+            </div>
+            <div class="form-group col-lg-12">
+                <label>Group Course <font color="red">(*)</font></label>
+                <input disabled type="text" name="str_Name" value="@mModel.str_Name" class="form-control">
+            </div>
+            <div class="form-group col-lg-12">
+                <label>Code <font color="red">(*)</font></label>
+                <input disabled type="text" name="str_Code" value="@mModel.str_Code" data-parsley-required-message="Required Fields" required class="form-control">
+            </div>
+
+            <div class="form-group col-lg-12">
+                <label>Type</label>
+                <select disabled class="form-control" name="int_subject_type" id="int_subject_type" data-placeholder="-- Subject Type --" onchange="Changetype(this.value,@id)">
+                    <option></option>
+                    @Html.Raw(listtype)
+                </select>
+            </div>
+
+            <div class="form-group col-lg-12">
+                <label>Subject</label>
+                <select disabled class="form-control" name="int_subject" id="int_subject" data-placeholder="-- Subject --" multiple="multiple">
+                    <option></option>
+                    <optgroup id="showsubject"></optgroup>
+                </select>
+            </div>
+
+            <div class="form-group col-lg-12">
+                <label>Description </label>
+                @Html.TextArea("str_Description", @mModel.str_Description, new { id = "str_Description", @class = "form-control", @rows = "7",@disabled="true" })
+            </div>
+            <div class="divider"></div>
+            <div class="divider"></div>
+            <div class="pull-right pad10R">
+                <a href="javascript:void(0)" onclick="active(0,'create')" class="btn btn-md btn-danger min-width-100">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+        Changetype(@type_,@id);
+        function Changetype(val, id) {
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "/MCourse/ChangetypeReturnSubject",
+                dataType: "json",
+                data: { id_type: val, id: id },
+                success: function (result) {
+                    $("#showsubject").empty();
+                    $("#showsubject").append(result.htmlout);
+                    $('select:not([name$="_length" ])').select2({
+                        width: '100%',
+                        allowClear: true
+                    }).addClass('form-control searchText1');
+                }
+            });
+        }
+
+</script>

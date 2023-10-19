@@ -1,0 +1,67 @@
+﻿
+@model TMS.Core.ViewModels.Notifications.NotificationModel
+@{
+    ViewBag.Title = "Notification";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="him-icon zmdi zmdi-notifications-active"></i> Notifications</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li class="active">Notifications</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="col-md-12" style="margin-top: 10px;">
+    <div class="panel list-panel" id="list-panel">
+        <div class="panel-heading list-panel-heading">
+            <h1 class="panel-title list-panel-title">Notifications list</h1>
+        </div>
+        <div class="panel-body">
+            <table id="Trainee" class="table table-bordered table-striped dataTable no-footer" style="width:100%">
+                <thead>
+                    <tr role="row">
+                        <th style="width:5%;">No.</th>
+                        <th style="width:20%;">Title</th>
+                        <th>Message</th>
+                        <th style="width:20%;">From</th>
+                        <th style="width:15%;">Created date</th>
+                </thead>
+                <tbody></tbody>
+                <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            //datatable serverside
+            var sTable = $("#Trainee").DataTable({
+                "responsive:": true,
+                "searching": false,
+                "columnDefs": [{
+                    "targets": 0,
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                }],
+                "aaSorting": [],
+                "bServerSide": true,
+                "sAjaxSource": "/Home/AjaxHandlerNotification",
+                "bProcessing": true,
+            });
+        });
+    </script>
+}

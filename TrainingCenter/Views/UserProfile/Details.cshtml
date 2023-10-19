@@ -1,0 +1,333 @@
+﻿@model TMS.Core.ViewModels.ViewModel.UserProfileViewModel
+@{
+    ViewBag.ActiveMenu = "System";
+    ViewBag.ActiveSubMenu = "UserProfile";    
+}
+@section headContent{
+    <link href="/css/main.css" rel="stylesheet" type="text/css" />
+}
+@*@section pageTitle {
+    <h1><i class="fa fa-tag"></i>
+        User Profile
+                        <small>Detail</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+        <li><a href="/UserProfile"><i class="fa fa-user"></i>Profile management</a></li>
+        <li class="active">Profile Detail</li>
+    </ol>
+}*@
+<div class="page page-profile ng-scope">
+
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="panel panel-profile">
+                <div class="panel-heading bg-info clearfix">
+                    <a href="" class="pull-left profile">
+                       @* @if (Model.profile.str_Gender == "M")
+                        {
+                            *@<img alt="" src="/img/male_avatar.jpg" class="img-circle img80_80">
+                      @*  }
+                        else
+                        {
+                            <img alt="" src="/img/female_avatar.jpg" class="img-circle img80_80">
+                        }*@
+
+                    </a>
+                    <h3 class="ng-binding">fjf rj</h3>
+                    <p> gd d hdfh fd</p>
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="badge badge-danger">6</span>
+                        <i class="fa fa-envelope-o"></i>
+                        Cras justo odio
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge badge-warning">2</span>
+                        <i class="fa fa-comments-o"></i>
+                        Dapibus ac facilisis in
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge badge-info">1</span>
+                        <i class="fa fa-heart-o"></i>
+                        Morbi leo risus
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge badge-success">3</span>
+                        <i class="fa fa-folder-open-o"></i>
+                        Vestibulum at eros
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="panel mini-box">
+                        <span class="box-icon bg-danger">
+                            <i class="fa fa-puzzle-piece"></i>
+                        </span>
+                        <div class="box-info">
+                            <p class="size-h2">hsfhhdh</p>
+                            <p class="text-muted">Teaching Class</p>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="col-sm-6">
+                    <div class="panel mini-box">
+                        <span class="box-icon bg-warning">
+                            <i class="fa fa-question"></i>
+                        </span>
+                        <div class="box-info">
+                            <p class="size-h2">@Model.profile.Question.Where(m => m.bit_Deleted == false).Count()</p>
+                            <p class="text-muted">Questions</p>
+                        </div>
+                    </div>
+                </div>*@
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="panel mini-box">
+                        <span class="box-icon bg-success">
+                            <i class="fa fa-tag"></i>
+                        </span>
+                        <div class="box-info">
+                            <p class="size-h2">sfsf</p>
+                            <p class="text-muted">Teachable Subjects</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="panel mini-box">
+                        <span class="box-icon bg-info">
+                            <i class="fa fa-check"></i>
+                        </span>
+                        <div class="box-info">
+                            <p class="size-h2">12
+                               </p>
+                            <p class="text-muted">Certificates</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+        <div class="col-md-6">
+
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span>Profile Info</strong></div>
+                <div class="panel-body">
+                    <div class="media">
+                        <div class="media-body">
+                            <ul class="list-unstyled list-info">
+                                <li class="ng-binding">
+                                    <span class="icon glyphicon glyphicon-user"></span>
+                                    <label>User name</label>
+                                   NGUYEN THANH BINH
+                                </li>
+                            @*    <li class="ng-binding">
+                                    <span class="icon glyphicon glyphicon-calendar"></span>
+                                    <label>Birthdate</label>
+                                    @(Model.profile.dtm_Birthdate==null?"":Model.profile.dtm_Birthdate.Value.ToString("dd MMM yyyy"))
+                                </li>
+                                <li>
+                                    <span class="icon glyphicon glyphicon-envelope"></span>
+                                    <label>Email</label>
+                                    @Model.profile.str_Email
+                                </li>
+                                <li>
+                                    <span class="icon glyphicon glyphicon-home"></span>
+                                    <label>Address</label>
+                                    @Model.profile.str_Address
+                                </li>
+                                <li>
+                                    <span class="icon glyphicon glyphicon-earphone"></span>
+                                    <label>Mobile Phone</label>
+                                    @Model.profile.str_Mobile_Phone
+                                </li>
+                                <li>
+                                    <span class="icon glyphicon glyphicon-phone-alt"></span>
+                                    <label>Home Phone</label>
+                                    @Model.profile.str_Home_Phone
+                                </li>
+                                <li>
+                                    <span class="icon glyphicon glyphicon-barcode"></span>
+                                    <label>File No</label>
+                                     @Model.profile.str_File_No
+                                </li>
+                                <li>
+                                    <span class="icon glyphicon glyphicon-qrcode"></span>
+                                    <label>Identity Number</label>
+                                    @Model.profile.str_Identity_Number
+                                </li>*@
+
+                              @*  <li>
+                                    <span class="icon glyphicon glyphicon-bookmark"></span>
+                                    <label>Department</label>
+                                    @(Model.profile.Department==null?"":Model.profile.Department.str_Name)
+                                </li>
+                                <li>
+                                    <span class="icon glyphicon glyphicon-flag"></span>
+                                    <label>Nationality</label>
+                                    @(Model.profile.Nation==null?"":Model.profile.Nation.Nation_Name)
+                                </li>*@
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+        <div class="box box-danger">
+            <div class="box-header">
+                <h3 class="box-title">Subjects List</h3>
+                <div class="box-tools pull-right">
+                    <div class="btn-group" data-toggle="btn-toggle">
+                        <button type="button" class="btn btn-success btn-xs" data-toggle="on" id="btAddMoreSubject" >Manage subjects</button>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+                <table id="defaultTable" class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 20px">#</th>
+                            <th>Subject name
+                            </th>
+                            <th style="width: 100px">Number of Class
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="SubjectDict">
+                     @*   @foreach (var item in @Model.profile.Subject)
+                        {
+                            <tr>
+                                <td></td>
+                                <td>
+                                    @Html.DisplayFor(model => item.str_Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(model => item.Class.Count)
+                                </td>
+                            </tr>
+                        }*@
+                    </tbody>
+                </table>
+            </div>
+        </div>
+   
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span>Table - General</strong></div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Project</th>
+                    <th>Manager</th>
+                    <th>Status</th>
+                    <th>Progress</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td><span class="color-success"><i class="fa fa-level-up"></i></span>TWLT</td>
+                    <td>Amery Lee</td>
+                    <td><span class="label label-info">Pending</span></td>
+                    <td>
+                        <div class="progressbar-xs no-margin progress ng-isolate-scope" value="55">
+                            <div class="progress-bar" ng-class="type &amp;&amp; 'progress-bar-' + type" ng-transclude="" style="width: 55%;"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><span class="color-success"><i class="fa fa-level-up"></i></span>A16Z</td>
+                    <td>Romayne Carlyn</td>
+                    <td><span class="label label-primary">Due</span></td>
+                    <td>
+                        <div class="progressbar-xs no-margin progress ng-isolate-scope" value="34" type="success">
+                            <div class="progress-bar progress-bar-success" ng-class="type &amp;&amp; 'progress-bar-' + type" ng-transclude="" style="width: 34%;"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><span class="color-warning"><i class="fa fa-level-down"></i></span>DARK</td>
+                    <td>Marybeth Joanna</td>
+                    <td><span class="label label-success">Due</span></td>
+                    <td>
+                        <div class="progressbar-xs no-margin progress ng-isolate-scope" value="68" type="info">
+                            <div class="progress-bar progress-bar-info" ng-class="type &amp;&amp; 'progress-bar-' + type" ng-transclude="" style="width: 68%;"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><span class="color-info"><i class="fa fa-level-up"></i></span>Q300</td>
+                    <td>Jonah Benny</td>
+                    <td><span class="label label-danger">Blocked</span></td>
+                    <td>
+                        <div class="progressbar-xs no-margin progress ng-isolate-scope" value="52" type="warning">
+                            <div class="progress-bar progress-bar-warning" ng-class="type &amp;&amp; 'progress-bar-' + type" ng-transclude="" style="width: 52%;"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td><span class="color-danger"><i class="fa fa-level-down"></i></span>RVNG</td>
+                    <td>Daly Royle</td>
+                    <td><span class="label label-warning">Suspended</span></td>
+                    <td>
+                        <div class="progressbar-xs no-margin progress ng-isolate-scope" value="77" type="danger">
+                            <div class="progress-bar progress-bar-danger" ng-class="type &amp;&amp; 'progress-bar-' + type" ng-transclude="" style="width: 77%;"></div>
+                        </div>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+
+    </div>
+
+
+</div>
+
+@*<script>
+    $('#btAddMoreSubject').click(function () {
+        window.location.href = "/UserProfile/ManageSubjects/" + $(this).data('id');
+    });
+    $(document).ready(function () {
+        $('#defaultTable')
+            .DataTable(
+            {
+                "bFilter": false,
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "bPaginate": false,
+                "bInfo": false,
+                "fnDrawCallback": function (oSettings) {
+                    /* Need to redo the counters if filtered or sorted */
+                    if (oSettings.bSorted || oSettings.bFiltered) {
+                        for (var i = 0, iLen = oSettings.aiDisplay.length ; i < iLen ; i++) {
+                            $('td:eq(0)', oSettings.aoData[oSettings.aiDisplay[i]].nTr).html(i + 1);
+                        }
+                    }
+                },
+                "aoColumnDefs": [
+                    { "bSortable": false, "aTargets": [0] }
+                ],
+                "aaSorting": [[1, 'asc']]
+            });
+    });
+</script>*@

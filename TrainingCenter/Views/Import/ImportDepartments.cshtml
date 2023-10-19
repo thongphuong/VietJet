@@ -1,0 +1,12 @@
+﻿@using System.Collections.Concurrent
+
+@{
+    ViewBag.Title = "ImportDepartments";
+}
+
+<h2>ImportDepartments</h2>
+@using (Html.BeginForm("importJobTitle","Import",FormMethod.Post,new Dictionary<string, object>{ { "enctype", "multipart/form-data"} }))
+{
+    <input type="file" name="postedFile" class="form-control"/>
+    <input type="submit"/>
+}

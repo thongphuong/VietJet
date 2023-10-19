@@ -1,0 +1,865 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@using TMS.Core.ViewModels.UserModels
+@model TMS.Core.ViewModels.Schedule.ScheduleModify
+@{
+    ViewBag.Title = "Modify";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var data = (UserModel)HttpContext.Current.Session["UserA"];
+}
+<style>
+    textarea {
+        overflow-y: scroll;
+        resize: none; /* Remove this if you want the user to resize the textarea */
+    }
+</style>
+
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fas fa-database"></i> @Resource.lblMasterData - @Resource.lblScheduleManagement @(Model.Id == null ? Resource.lblCreate : Resource.lblEdit)</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblMasterData</li>
+                <li class="active">@Resource.lblScheduleManagement @(Model.Id == null ? Resource.lblCreate : Resource.lblEdit)</li>
+            </ol>
+        </div>
+    </div>
+}
+
+
+<div class="panel">
+    <div class="panel-heading">
+        <h1 class="panel-title list-panel-title">
+            <i class="fas fa-pencil-alt font-small-byhoa" aria-hidden="true"></i> @(Model.Id == null ? Resource.lblCreate : Resource.lblEdit)
+        </h1>
+    </div>
+    <div class="panel-body">
+        <ul class="nav nav-tabs">
+            <li class="tabmanual active">
+                <a href="#manual" data-toggle="tab" aria-expanded="false" id="tabmanual">@Resource.lblManual</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade  active in" id="manual">
+                @using (Html.BeginForm("Modify", "Schedule", FormMethod.Post, new { id = "createform" }))
+                {
+                    @Html.HiddenFor(m => m.Id)
+                    <div class="row" style="margin-top: 10px">
+                        <div class="col-md-12">
+                            <div class="panel box-shadow">
+                                <div class="panel-body center-block">
+                                    <div class="table-responsive">
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <div class="form-group col-md-12">
+                                                    <label>@Resource.lblReminderTitle <font color="red">(*)</font></label>
+                                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
+                                                </div>
+                                                @*<div class="form-group col-md-12">
+                                                        <label>@Resource.lblMethod</label><font color="red">(*)</font>
+                                                        @Html.DropDownListFor(m => m.MethodId, new SelectList(Model.Methods, "Key", "Value", Model.MethodId), "", new { @class = "form-control", @data_placeholder = "-- " + Resource.lblMethod + " --", @onchange = "onchangeMethod(this)" })
+                                                        @Html.ValidationMessageFor(m => m.MethodId, null, new { @class = "text-danger" })
+                                                    </div>*@
+                                                <div id="divRemind" class="form-group col-md-12" @(Model.Catmail_code != "SendMailReminderCourse" && Model.Catmail_code != "SendMailReminderFinalCourse" ? "" : "hidden")>
+                                                    <label>@Resource.lblType <font color="red">(*)</font></label>
+                                                    @Html.DropDownListFor(m => m.TypeId, new SelectList(Model.Types, "Key", "Value", Model.TypeId), "", new { @class = "form-control", @data_placeholder = "-- " + Resource.lblMethod + " --", @onchange = "onchangeType(this)" })
+                                                    @Html.ValidationMessageFor(m => m.TypeId, null, new { @class = "text-danger" })
+                                                </div>
+                                                <div id="divRepeat" @(Model.Catmail_code != "SendMailReminderCourse" && Model.Catmail_code != "SendMailReminderFinalCourse"? (Model.TypeId != (int)UtilConstants.ScheduleType.Repeat ? "hidden" : "") : "hidden")>
+
+                                                    <div class="form-group col-md-6">
+                                                        <label>@Resource.lblTime <font color="red">(*)</font></label>
+                                                        <input type="number" class="form-control frmFilter" name="TimeRepeat" id="txtTimeRepeat" value="@Model.TimeRepeat" />
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label>Time Mark <font color="red">(*)</font></label>
+                                                        @Html.DropDownListFor(m => m.TimeMarkId, new SelectList(Model.TimeMark, "Key", "Value", Model.TimeMarkId), "", new { @class = "form-control", @data_placeholder = "-- Time Mark --" })
+                                                        @Html.ValidationMessageFor(m => m.TimeMarkId, null, new { @class = "text-danger" })
+                                                    </div>
+
+                                                </div>
+                                                <div id="divPeriodic" @((Model.Catmail_code != "SendMailReminderCourse" && Model.Catmail_code != "SendMailReminderFinalCourse") || Model.TypeId != (int)UtilConstants.ScheduleType.Periodic ? "hidden" : "")>
+
+                                                    <div class="form-group col-md-6">
+                                                        <label>DayOfWeek</label><font color="red">(*)</font>
+                                                        <select id="selectDay" class="form-control  input-sm default classInstructorSubject  list-height-150" multiple="multiple" placeholder="--@Resource.lblMethod">
+                                                            @if (Model.DayOfWeek != null)
+                                                            {
+                                                                foreach (var day in Model.DayOfWeek)
+                                                                {
+                                                                    if (Model.TypeId == (int)UtilConstants.ScheduleType.Periodic)
+                                                                    {
+                                                                        <option value="@(day.Key)" @(Model.DayValues.Contains(day.Key) ? "class=" + "active" + "" : "")>@(day.Value)</option>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option value="@(day.Key)">@(day.Value)</option>
+                                                                    }
+
+                                                                }
+                                                            }
+                                                        </select>
+                                                        @*@Html.ListBoxFor(m => m.ListDay, new MultiSelectList(Model.DayOfWeek, "Key", "Value", Model.ListDay),"", new { @class = "form-control  input-sm default classInstructorSubject  list-height-150", @data_placeholder = "-- " + Resource.lblMethod + " --", @multiple = "multiple", @id = "selectDay" })
+                                                            @Html.ValidationMessageFor(m => m.ListDay, null, new { @class = "text-danger" })*@
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label>@Resource.lblTime <font color="red">(*)</font></label>
+                                                        <input type="text" class="form-control  time " name="TimePeriodic" value="@Model.TimePeriodic" />
+                                                    </div>
+                                                    @if (Model.DayValues != null)
+                                                    {
+                                                        foreach (var day in Model.DayValues)
+                                                        {
+                                                            <input type="hidden" name="DayValues" value="@day" id="input_@day" />
+                                                        }
+                                                    }
+
+                                                </div>
+                                                <div id="divSetCalendar" @((Model.Catmail_code != "SendMailReminderCourse" && Model.Catmail_code != "SendMailReminderFinalCourse") || Model.TypeId != (int)UtilConstants.ScheduleType.SetCalendar  ? "hidden" : "")>
+                                                    @if (Model.TypeId == (int)UtilConstants.ScheduleType.SetCalendar)
+                                                    {
+                                                        <div class="form-group col-md-6">
+                                                            <label>@Resource.lblDate <font color="red">(*)</font></label>
+                                                            <input required="required" type="text" name="DateCalendar" class="form-control frmFilter date" id="txtDate" value="@Model.DateCalendar" />
+
+                                                        </div>
+                                                        @*<div class="form-group col-md-6">
+                                                                <label>@Resource.lblTime</label><font color="red">(*)</font>
+                                                                <input type="text" class="form-control frmFilter time" name="TimeCalendar" value="@Model.TimeCalendar" />
+                                                            </div>*@
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="form-group col-md-6">
+                                                            <label>@Resource.lblDate <font color="red">(*)</font></label>
+                                                            <input required="required" type="text" name="DateCalendar" class="form-control frmFilter date" id="txtDate" />
+                                                        </div>
+
+                                                    }
+                                                </div>
+                                                <div id="TimeRemind" @(Model.Catmail_code == "SendMailReminderCourse" || Model.Catmail_code == "SendMailReminderFinalCourse"? "" : "hidden")>
+                                                    <div class="form-group col-md-6">
+                                                        <label>@Resource.lblTimeRemind <font color="red">(*)</font></label>
+                                                        <input type="number" class="form-control frmFilter" name="TimeRemind" id="txtTimeRemind" value="@Model.TimeRemind" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6 ">
+                                                <div class="form-group col-md-12" id="divTemplateMail" @*@(Model.MethodId == (int)UtilConstants.ScheduleMethod.Mail ? "" : "hidden")*@>
+                                                    <label>Template Mail</label>
+                                                    @Html.DropDownListFor(m => m.TemplateId, new SelectList(Model.TemplateMails, "Key", "Value", Model.TemplateId), "", new { @class = "form-control ", @data_placeholder = "-- Template Mail --", @onchange = "onchangeTemplateMail(this)", @id = "txtTemplateId" })
+                                                    @Html.ValidationMessageFor(m => m.TemplateId, null, new { @class = "text-danger" })
+                                                </div>
+                                                <div class="form-group col-md-12">
+                                                    <label>@Resource.lblContent</label><br />
+
+                                                    <textarea class="form-control" id="txtContent" style="overflow-y: scroll" name="Content" rows="5" cols="5" @(Model.TemplateId != null ? "readonly" : "")>@(Model.TemplateId != null ? Model.TeamplateContent : Model.Content)</textarea>
+                                                </div>
+                                                <input type="hidden" name="Catmail_code" id="Catmail_code" value="@Model.Catmail_code"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="frmFilter">
+                        <div class="col-md-12">
+                            <div class="panel box-shadow">
+                                <div class="panel-body center-block">
+                                    <div class="table-responsive">
+
+                                        <div class="row">
+                                            <div class="form-group col-md-3">
+                                                <label>@Resource.lblSend @Resource.lblTo</label><font color="red">(*)</font>
+                                                @Html.DropDownListFor(m => m.UserTypeId, new SelectList(Model.UserTypes, "Key", "Value", Model.UserTypeId), "", new { @class = "form-control frmFilter", @data_placeholder = "-- " + @Resource.lblSend + @Resource.lblTo + " --", @onchange = "onchangeTypeSend(this.value)" })
+
+                                                @Html.ValidationMessageFor(m => m.UserTypeId, null, new { @class = "text-danger" })
+                                            </div>
+
+                                            <div class="col-md-3 margin-top-30" style="display:none">
+                                                <label>&nbsp;</label>
+                                                <input class="checkbox frmFilter" type="checkbox" id="IsAll" name="IsAll" @(Model.IsAll != null && Model.IsAll.Equals("on") ? "checked" : "") />&nbsp;<label>
+                                                    @Resource.lblAll
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-top: 10px;" id="divUser" @(Model.IsAll != null && Model.IsAll.Equals("on") ? "hidden" : "")>
+                                            <div class="col-md-12">
+                                                <hr />
+                                            </div>
+                                            <div class="col-md-12" style="margin-top: 10px; ">
+                                                <div id="divUserName">
+                                                    <div class="col-md-1">
+                                                        <label>@Resource.SYS_USERNAME</label>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <input type="text" name="userName" class="form-control frmFilter" placeholder="@Resource.SYS_USERNAME">
+                                                    </div>
+                                                </div>
+                                                <div id="divFirstName">
+                                                    <div class="col-md-1">
+                                                        <label>@Resource.lblFirstName</label>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <input type="text" name="firstName" class="form-control frmFilter" placeholder="@Resource.lblFirstName" />
+                                                    </div>
+                                                </div>
+                                                <div id="divLastName">
+                                                    <div class="col-md-1">
+                                                        <label>@Resource.lblLastName</label>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <input type="text" name="lastName" id="lastName" class="form-control frmFilter" placeholder="@Resource.lblLastName">
+                                                    </div>
+                                                </div>
+
+                                                <div id="divCourse" style="display:none;">
+                                                    <div class="col-md-1">
+                                                        <label>@Resource.lblCourse</label>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        @Html.DropDownListFor(m => m.CourseListID, new SelectList(Model.CourseList, "Key", "Value", Model.CourseList), "", new { @class = "form-control frmFilter", @data_placeholder = "-- " + @Resource.lblCourseList + " --", @onchange = "OnChangeCourseList(this.value)" })
+
+                                                        @*<select class="form-control frmFilter" id="CourseListID" name="CourseListID" data-placeholder="--  @Resource.lblGroupTrainee  --">
+                                                                <option></option>
+                                                                @if (Model.CourseList != null)
+                                                                {
+                                                                    foreach (var item in Model.CourseList)
+                                                                    {
+                                                                        <option value="@item.Key">@item.Value </option>
+                                                                    }
+                                                                }
+                                                            </select>*@
+                                                    </div>
+                                                </div>
+                                                <div id="divSubject" style="display:none;">
+                                                    <div class="col-md-1">
+                                                        <label>@Resource.lblSubject</label>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <select class="form-control frmFilter" id="ddl_subject" name="ddl_subject" @*multiple="multiple"*@ data-placeholder="--@Resource.lblSubjectList--">                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div id="divGroupTrainee" style="display:none;">
+                                                    <div class="col-md-1">
+                                                        <label>@Resource.lblGroupTrainee</label>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        @*@Html.DropDownListFor(m => m.GroupTrainees, new SelectList("Value", Model.GroupTrainees), "", new { @class = "form-control frmFilter", @data_placeholder = "-- " + @Resource.lblGroupTrainee + " --" })*@
+
+                                                        <select class="form-control frmFilter" id="GroupTraineesID" name="GroupTraineesID" data-placeholder="--  @Resource.lblGroupTrainee  --">
+                                                            <option></option>
+                                                            @if (Model.GroupTrainees != null)
+                                                            {
+                                                                foreach (var item in Model.GroupTrainees)
+                                                                {
+                                                                    <option value="@item.Key">@item.Value </option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12" style="margin-top: 20px; ">
+                                                <div id="divEmail">
+                                                    <div class="col-md-1">
+                                                        <label>@Resource.lblEmail</label>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <input type="text" name="emailUser" id="emailUser" class="form-control frmFilter" placeholder="@Resource.lblEmail">
+                                                    </div>
+                                                </div>
+
+                                                <div id="divPhone">
+                                                    <div class="col-md-1">
+                                                        <label>@Resource.lblPhone</label>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <input type="text" name="phoneUser" id="phoneUser" class="form-control frmFilter" placeholder="@Resource.lblPhone">
+                                                    </div>
+                                                </div>
+
+                                                <div id="divGroupUser">
+                                                    <div class="col-md-1">
+                                                        <label>@Resource.lblGroupUser</label>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        @*@Html.DropDownListFor(m => m.GroupUsers, new SelectList(Model.GroupUsers, "Key", "Value", Model.GroupUsers), "", new { @multiple = "multiple", @class = "form-control frmFilter", @data_placeholder = "-- " + @Resource.lblGroupUser + " --" })*@
+                                                        <select class="form-control frmFilter" id="GroupUsersID" name="GroupUsersID" data-placeholder="-- @Resource.lblGroupUser --">
+                                                            <option></option>
+                                                            @Html.Raw(Model.GroupUsers)
+                                                            @if (Model.GroupUsers != null)
+                                                            {
+                                                                foreach (var item in Model.GroupUsers)
+                                                                {
+                                                                    <option value="@item.Key">@item.Value </option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @* <div class="col-md-12" style="margin-top: 10px;">
+                                                <div id="divDepartment">
+                                                        <div class="col-md-1">
+                                                            <label>@Resource.lblDepartment</label>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <select class="form-control frmFilter" id="DepartmentList" name="DepartmentList" data-placeholder="-- @Resource.lblDepartment --">
+                                                                <option></option>
+                                                                @Html.Raw(Model.Departments)
+                                                                @if (Model.Departments != null)
+                                                                {
+                                                                    foreach (var item in Model.Departments)
+                                                                    {
+                                                                        <option value="@item.Key">@item.Value </option>
+                                                                    }
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    @if (data.ConfigSite.Contains(Model.CheckPrerequisite))
+                                                    {
+                                                        <div id="divPrerequsite" @(Model.UserTypeId == (int)UtilConstants.UserType.UserSystem ? "hidden" : "")>
+                                                            <div class="col-md-1">
+                                                                <label>Pre-Requisite</label>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <select class="form-control frmFilter" id="Prerequisite" name="Prerequisite" data-placeholder="-- Pre-Pequisite --">
+                                                                    <option></option>
+                                                                    @if (Model.Prerequisite != null)
+                                                                    {
+                                                                        foreach (var item in Model.Prerequisite)
+                                                                        {
+                                                                            <option value="@item.Key">@item.Value </option>
+                                                                        }
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                    }
+
+                                                                                    <div id="divFullName">
+                                                                                        <div class="col-md-1">
+                                                                                            <label>@Resource.lblFullName</label>
+                                                                                        </div>
+                                                                                        <div class="col-md-3">
+                                                                                            <input type="text" name="FullName" class="form-control frmFilter" />
+                                                                                        </div>
+
+                                                                                    </div>
+
+                                                                                </div> *@
+
+                                            <div class="col-md-12" style="margin-top: -10px;">
+                                                <div id="divJobtitle" @(Model.UserTypeId == (int)UtilConstants.UserType.UserSystem ? "hidden" : "")>
+                                                    <div class="col-md-1">
+                                                        <label>@Resource.lblJobTitle</label>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <select class="form-control frmFilter" id="JobtitleList" name="JobtitleList" data-placeholder="-- @Resource.lblJobTitle_Occupation --">
+                                                            <option></option>
+                                                            @if (Model.JobTitles != null)
+                                                            {
+                                                                foreach (var item in Model.JobTitles)
+                                                                {
+                                                                    <option value="@item.Key">@item.Value </option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                @*@if (data.ConfigSite.Contains(Model.CheckGroupTrainee))
+                                                    {
+                                                        <div id="divGroupTrainee" @(Model.UserTypeId == (int)UtilConstants.UserType.UserSystem ? "hidden" : "")>
+                                                            <div class="col-md-1">
+                                                                <label>@Resource.lblGroupTrainee</label>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <select class="form-control frmFilter" id="GroupTrainee" name="GroupTrainee" data-placeholder="-- Group Trainee --">
+                                                                    <option></option>
+                                                                    @if (Model.GroupTrainees != null)
+                                                                    {
+                                                                        foreach (var item in Model.GroupTrainees)
+                                                                        {
+                                                                            <option value="@item.Key">@item.Value </option>
+                                                                        }
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                    }*@
+                                                <div id="divEid" @(Model.UserTypeId == (int)UtilConstants.UserType.UserSystem ? "hidden" : "")>
+                                                    <div class="col-md-1">
+                                                        <label>@Messege.EID</label>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <input type="text" name="EID" class="form-control frmFilter" />
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-11"></div>
+                                            <div class="col-md-1">
+                                                <button type="button" class="btn btn-primary pull-right" id="btFilter">
+                                                    <i class="fa fa-search"></i> @Resource.lblSearch
+                                                </button>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <hr />
+                                            </div>
+                                            <div class="col-md-6" style="margin-top: 10px;">
+                                                <div class="" id="list-panel">
+                                                    <div class="panel-heading list-panel-heading">
+                                                        <h1 class="panel-title list-panel-title">@Resource.lblAvailableTrainee</h1>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <table id="tbUser" class="table table-striped table-bordered" style="width: 100%">
+                                                            <thead>
+                                                                <tr role="row">
+                                                                    <th style="width: 5%;">@Resource.lblStt</th>
+                                                                    <th style="width: 40%;">@Resource.lblFullName</th>
+                                                                    <th style="width: 50%;">@Resource.lblDepartment</th>
+                                                                    <th style="width: 5%;"><input type="checkbox" name="select_all" value="1" id="cbUser"></th>
+                                                            </thead>
+                                                            <tbody></tbody>
+                                                            <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1" style="margin-top: 10px;">
+                                                <div class="authorization-edit-btnNav float-left">
+                                                    <input type="button" class="btn btn-default" data-id="1" name="bu_ab_alarm_btnRight" id="role-edit-btnRight" onclick=" checktrainee(this) " value="@Html.Raw(">")" />
+                                                    <div class="clear"></div>
+                                                    <input type="button" class="btn btn-default" name="bu_ab_alarm_btnLeft" value="@Html.Raw("<")" id="role-edit-btnLeft" onclick=" removetrainee() " />
+                                                    <div class="clear"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5" style="margin-top: 10px;">
+                                                <div class="" id="list-panel">
+                                                    <div class="panel-heading list-panel-heading">
+                                                        <h1 class="panel-title list-panel-title">
+                                                            @Resource.lblAssignTrainee&nbsp;<label class="getQuantity"></label>
+                                                        </h1>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <table id="AssignTrainee" class="table table-striped table-bordered" style="width: 100%">
+                                                            <thead>
+                                                                <tr role="row">
+                                                                    <th style="width: 5%;">@Resource.lblStt</th>
+                                                                    <th style="width: 40%;">@Resource.lblFullName</th>
+                                                                    <th style="width: 50%;">@Resource.lblDepartment</th>
+                                                                    <th style="width: 5%;"><input type="checkbox" name="select_all" value="1" id="Assign" onchange=" checkAll(this) "></th>
+                                                            </thead>
+                                                            <tbody role="alert" aria-live="polite" aria-relevant="all">
+                                                                @if (Model.GetUsers != null)
+                                                                {
+                                                                    var index = 0;
+                                                                    foreach (var user in Model.GetUsers)
+                                                                    {
+                                                                        index++;
+                                                                        <tr role="row" class="odd">
+                                                                            <td class="text-center">@index</td>
+                                                                            <td>@user.FullName</td>
+                                                                            <td>@user.Department</td>
+                                                                            <td class="text-center"><input type="checkbox" class="frmFilter" id="@(Model.UserTypeId == (int) UtilConstants.UserType.UserSystem ? "NUserId[]" : "NEmployeeId[]" )" name="@(Model.UserTypeId == (int) UtilConstants.UserType.UserSystem ? "NUserId[]" : "NEmployeeId[]" )" value="@user.Id"></td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="row" id="btndiv">
+            <div class="action-form text-right">
+                @if (User.IsInRole("/Employee/Modify"))
+                {
+                    <label for="submitSave" class="btn btn-primary"><i class="fas fa-save"></i>&nbsp;@Resource.lblSave</label>
+                    <input type="button" id="submitSave" class="btn btn-primary hidden" value="@Resource.lblSave" onclick="actionSubmit()" />
+                }
+                <a onclick="goBack()" class="btn btn-default"><i class="fas fa-sign-out-alt"></i>&nbsp;@Resource.BACK</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        var sTable;
+        var sTable2;
+        var sTable3;
+
+        $(document).ready(function () {
+
+            $('#txtDate').datetimepicker();
+
+            $('.time').datetimepicker({
+                format: "HH:mm"
+            });
+            var x = '@Model.Id';
+            if (x == null || x == '' || x == undefined) {
+                onchangeTypeSend(0);
+            }
+            else {
+                onchangeTypeSend(@Model.UserTypeId);
+            }
+        });
+        var count = 1;
+        $("#btFilter").on("click", function () {
+            if (count == 1) {
+                var customRowssTable = [
+                    {
+                        "targets": 0,
+                        "className": "text-center"
+                    },
+                    {
+                        "targets": 3,
+                        "className": "text-center",
+                        "orderable": false,
+                    }
+                ];
+                sTable = initDataTable2("#tbUser", "/Schedule/AjaxHandlerAvailable", customRowssTable);
+                count++;
+            }
+            else {
+                sTable.draw();
+            }
+        });
+
+        $(".checkbox").change(function() {
+            if (this.checked) {
+                $('#divUser').hide();
+            } else {
+                $('#divUser').show();
+            }
+        });
+
+
+        function onchangeTypeSend(id) {
+            var user = $('#AssignTrainee > tbody ').find("input[name='NUserId[]']");
+            var parentTrUser = $(user).closest('tr');
+
+            var employee = $('#AssignTrainee > tbody ').find("input[name='NEmployeeId[]']");
+            var parentTrEmployee = $(employee).closest('tr');
+            //0 = User he thong
+            var value = id;
+            if (value == 0) {
+                parentTrUser.show();
+                parentTrEmployee.hide();
+                $('#divPrerequsite').hide();
+                $('#divJobtitle').hide();
+                $('#divEid').hide();
+                $('#Prerequisite').val(0);
+                $('#divGroupTrainee').hide();
+                $('#divCourse').hide();
+                $('#divSubject').hide();
+                $('#divUserName').show();
+                $('#divFirstName').show();
+                $('#divLastName').show();
+                $('#divEmail').show();
+                $('#divPhone').show();
+                $('#divGroupUser').show();
+            } else {
+                parentTrUser.hide();
+                parentTrEmployee.show();
+                $('#divCourse').show();
+                $('#divSubject').show();
+                $('#divPrerequsite').show();
+                $('#divJobtitle').show();
+                $('#divGroupTrainee').show();
+                $('#divEid').show();
+                $('#divUserName').hide();
+                $('#divFirstName').hide();
+                $('#divLastName').hide();
+                $('#divEmail').hide();
+                $('#divPhone').hide();
+                $('#divGroupUser').hide();
+            }
+        }
+        function onchangeTemplateMail(id) {
+            var teamplateId = $('#txtTemplateId').val();
+            $.ajax({
+                type: 'POST',
+                url: "/Schedule/TemplateMail",
+                //datatype: 'json',
+                data: { id: teamplateId },
+                success: function (result) {
+                    if (result.value == "") {
+                        $('#txtContent').val("");
+                        $('#txtContent').prop('readonly', false);
+
+                    } else {
+                        if (result.code != "" && (result.code == "SendMailReminderCourse" || result.code == "SendMailReminderFinalCourse" )) {
+                            $("#divRemind").attr('hidden', true);
+                            $("#divRepeat").attr('hidden', true);
+                            $("#divPeriodic").attr('hidden', true);
+                            $("#divSetCalendar").attr('hidden', true);
+                            $("#TimeRemind").attr('hidden', false)
+                            $("#TimeMarkId").val(2);
+                            $("#txtTimeRepeat").val(1);
+                        }
+                        else {
+                            $("#divRemind").attr('hidden', false);
+                            $("#divRepeat").attr('hidden', false);
+                            $("#divPeriodic").attr('hidden', true);
+                            $("#divSetCalendar").attr('hidden', true);
+                            $("#TimeRemind").attr('hidden', true)
+                            $("#txtTimeRemind").val(0);
+                            $("#TimeMarkId").val(0);    
+                        }
+                        $('#txtContent').val(result.value);
+                        $('#txtContent').prop('readonly', true);
+                        $("#Catmail_code").val(result.code);
+                    }
+                },
+                complete: function () {
+                }
+            });
+        }
+        function onchangeMethod(id) {
+            var value = id.value;
+            var divTemplate = $('#divTemplateMail');
+            if (value == 2) // 2 == Method Mail
+            {
+                divTemplate.show();
+                onchangeTemplateMail();
+            } else {
+                divTemplate.hide();
+                //$('#txtTemplateId').select2().select2('val', "");
+                  //  $("#txtTemplateId").find('option').removeAttr("selected");
+                $('#txtContent').val("");
+                $('#txtContent').prop('readonly', false);
+
+            }
+        }
+
+        function onchangeType(id) {
+            var value = id.value;
+            if (value == 0) {
+                @*$('#divRepeat').empty();
+                $('#divRepeat').append('' +
+                    '<div class="form-group col-md-6" >' +
+                    '<label>@Resource.lblTime (s)</label><font color="red">(*)</font>' +
+                    '<input type="number" class="form-control frmFilter" name="TimeRepeat"  />' +
+                    '</div>'
+                    + '');*@
+                $('#divSetCalendar').hide();
+                $('#divPeriodic').hide();
+                $('#divRepeat').show();
+            } else if (value == 1) {
+                @*$('#divSetCalendar').empty();
+                $('#divSetCalendar').append('' +
+                    '<div class="form-group col-md-6">'
+                    + '<label>@Resource.lblDate</label><font color="red">(*)</font>'
+                    + '<input required="required" type="text" name="DateCalendar" class="form-control frmFilter date" id="txtDate" />'
+                    + '</div>'
+                    + '<div class="form-group col-md-6">'
+                    + '<label>@Resource.lblTime</label><font color="red">(*)</font>'
+                    + '<input type="text" class="form-control frmFilter time" name="TimeCalendar" />'
+                    + '</div>'
+                    + '');*@
+                $('#txtDate').datetimepicker();
+
+                $('#divSetCalendar').find('.time').datetimepicker({
+                    format: "HH:mm"
+                });
+                $('#divSetCalendar').show();
+                $('#divRepeat').hide();
+                $('#divPeriodic').hide();
+            } else if (value == 2) {
+                $('#divPeriodic').show();
+                $('#divRepeat').hide();
+                $('#divSetCalendar').hide();
+            }
+
+        }
+
+        $('#selectDay').on('click', 'option', function() {
+            var $this = $(this);
+            if (!$this.hasClass('active')) {
+                $this.addClass('active');
+                var input = '<input type="hidden" name="DayValues" value="' + $this.val() + '" id="input_' + $this.val() + '" />';
+                $('#divPeriodic').append(input);
+            } else {
+
+                $this.removeClass('active');
+                $this.removeAttr('selected');
+                $('#input_' + $this.val()).remove();
+            }
+        });
+        // Handle click on checkbox to set state of "Select all" control
+        $('#AssignTrainee tbody').on('change', 'input[type="checkbox"]', function() {
+
+            // If checkbox is not checked
+            if (!this.checked) {
+                var el = $('#Assign').get(0);
+                // If "Select all" control is checked and has 'indeterminate' property
+                if (el && el.checked && ('indeterminate' in el)) {
+                    // Set visual state of "Select all" control
+                    // as 'indeterminate'
+                    el.indeterminate = true;
+                }
+            }
+        });
+
+        function checkAll(ele) {
+            var checkboxes = ele.closest('table').getElementsByTagName("input");
+            if (ele.checked) {
+                for (var i = 0; i < checkboxes.length; i++) {
+                    if (checkboxes[i].type == 'checkbox') {
+                        checkboxes[i].checked = true;
+                    }
+                }
+            } else {
+                for (var i = 0; i < checkboxes.length; i++) {
+                    if (checkboxes[i].type == 'checkbox') {
+                        checkboxes[i].checked = false;
+                    }
+                }
+            }
+        }
+
+
+        // Handle click on checkbox to set state of "Select all" control
+        $('#tbUser tbody').on('change', 'input[type="checkbox"]', function() {
+
+            // If checkbox is not checked
+            if (!this.checked) {
+                var el = $('#cbUser').get(0);
+                // If "Select all" control is checked and has 'indeterminate' property
+                if (el && el.checked && ('indeterminate' in el)) {
+                    // Set visual state of "Select all" control
+                    // as 'indeterminate'
+                    el.indeterminate = true;
+                }
+            }
+        });
+        $('#cbUser').on('click', function() {
+            // Get all rows with search applied
+            var rows = sTable.rows({ 'search': 'applied' }).nodes();
+            // Check/uncheck checkboxes for all rows in the table
+            $('input[type="checkbox"]', rows).prop('checked', this.checked);
+        });
+
+        function checktrainee() {
+            var input = $("input[name='id2[]']:checked");
+            var parentTr = $(input).closest('tr');
+            var typeUser = $('#UserTypeId').val();
+            if (typeUser == 0) {
+                parentTr.find('input').attr('name', 'NUserId[]').attr('id', 'NUserId[]').removeAttr('checked');
+            } else if (typeUser == 1) {
+                parentTr.find('input').attr('name', 'NEmployeeId[]').attr('id', 'NEmployeeId[]').removeAttr('checked');
+            }
+            $('#AssignTrainee > tbody:last-child').append(parentTr);
+        }
+
+        function removetrainee() {
+
+            var usertype = $('#UserTypeId').val();
+            var input;
+            var parentTr;
+            if (usertype == 0) {
+                input = $("input[name='NUserId[]']:checked");
+                parentTr = $(input).closest('tr');
+                parentTr.remove();
+            }
+            else if (usertype == 1) {
+                input = $("input[name='NEmployeeId[]']:checked");
+                parentTr = $(input).closest('tr');
+                parentTr.remove();
+            }
+            sTable.draw();
+        }
+
+        function actionSubmit() {
+            spinner.open();
+            var form = $("#createform").serializeArray();
+            var dataUser = "";
+            var dataEmp = "";
+            var inputUser = $("input[name='NUserId[]']");
+            var inputEmp = $("input[name='NEmployeeId[]']");
+            inputUser.each(function() {
+                dataUser += $(this).val() + ",";
+            });
+            inputEmp.each(function() {
+                dataEmp += $(this).val() + ",";
+            });
+            form.push({ name: "NUserId", value: dataUser });
+            form.push({ name: "NEmployeeId", value: dataEmp });
+            $.ajax({
+                type: 'POST',
+                url: "/Schedule/Modify",
+                datatype: 'json',
+                data: form,
+                success: function(data) {
+                    if (data.result) {
+                        notify.alert(data.message, 'SUCCESS', TITLE_STATUS_SUCCESS);
+                        window.location.href = '/Schedule/Index';
+                    } else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                },
+                complete: function() {
+                    spinner.close();
+                }
+            });
+        }
+
+        function OnChangeCourseList(val) {
+            var vals = $("#Id").select("val");
+                if (val!="") {
+                    $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: "/Schedule/ChangeCourseReturnSubjectResult",
+                    dataType: "json",
+                    data: { courseId: val },
+                    success: function (result) {
+                        $('#ddl_subject').empty();
+                        $('#ddl_subject').append("<option></option>");
+                        $('#ddl_subject').prop('selectedIndex', 0);
+                        if (result.value_null == "0") {
+                            $('#ddl_subject').append(result.value_option);
+                            //$('#ddl_subject').selectpicker('refresh');
+                        }
+                        else {
+                            $('#ddl_subject').append("<option></option>");
+                        }
+                    }
+                });
+                }
+
+
+
+            else {
+                $('#ddl_subject').empty();
+                $('#ddl_subject').prop('selectedIndex', 0);
+            }
+            };
+
+    </script>
+
+}

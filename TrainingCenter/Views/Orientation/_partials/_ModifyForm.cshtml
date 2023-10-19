@@ -1,0 +1,187 @@
+﻿@using TMS.Core.Utils
+@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Orientation.OrientationModifyViewModel
+
+<div class="modal fade" id="modal-editor" role="dialog">
+    <div class="modal-dialog modal-lg">
+        @using (Html.BeginForm("ModifyForm", "Orientation", FormMethod.Post))
+        {
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="panel-heading list-panel-heading">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">@Resource.lblInformationPotentialSuccessor</h4>
+                    </div>
+               
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        formatDatetimepicker('.datepicker', '@Resource.lblLanguage');
+                    });
+                </script>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <div class="box-shadow" style="margin-top: 40px;">
+                                @if (string.IsNullOrEmpty(Model.Trainee.avatar) || Model.Trainee.avatar.StartsWith("NoAvata"))
+                                {
+                                    <img src="@(UtilConstants.PathImage + "NoAvata.png")" class="img-responsive center-block" />
+                                }
+                                else
+                                {
+                                    <img src="@(UtilConstants.PathImage + Model.Trainee.avatar)" class="img-responsive center-block" />
+                                }
+                                <input hidden value="@(Model.Trainee.Id)" id="empID" name="empID" />
+                                <input hidden value="@ViewBag.JobID" id="jobID" name="jobID" />
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="panel">
+                                <div class="panel-body center-block">
+                                    <div class=" col-md-12">
+                                        <h3>@(Model.Trainee.FirstName) @(Model.Trainee.LastName)</h3>
+                                    </div>
+                                    <div class=" col-md-6">
+                                        <b>@Messege.EID:</b>
+                                        @(Model.Trainee.str_Staff_Id)
+                                    </div>
+                                    <div class=" col-md-6">
+                                        <b>PassPort No:</b>
+                                        @(Model.Trainee.Passport)
+                                    </div>
+                                    <div class=" col-md-6">
+                                        <b>ID:</b>
+                                        @(Model.Trainee.PersonalId)
+                                    </div>
+                                    <div class=" col-md-6">
+                                        <b>@Resource.lblDateOfBirth:</b>
+                                        @*@(Model.Trainee?.dtm_Birthdate != null ? DateUtil.DateToString(Model.Trainee?.dtm_Birthdate?.Value, " dd/MM/yyyy") : "")*@
+
+                                    </div>
+                                    <div class=" col-md-6">
+                                        <b>@Resource.lblGender:</b>
+                                        @*@(Model.Trainee.Gender.HasValue && UtilConstants.GenderDictionary().ContainsKey(Model.Trainee.Gender.Value) ? UtilConstants.GenderDictionary()[Model.Trainee.Gender.Value] : " ")*@
+
+                                    </div>
+                                    <div class=" col-md-6">
+                                        <b>@Resource.lblPlaceOfBirth:</b>
+                                        @(Model.Trainee.str_Place_Of_Birth ?? " ")
+
+                                    </div>
+                                    <div class=" col-md-6">
+                                        <b>Email:</b>
+                                        @(Model.Trainee.str_Email ?? " ")
+
+                                    </div>
+                                    <div class=" col-md-6">
+                                        <b>@Resource.lblNationality:</b>
+                                        @(Model.Trainee.Nation ?? " ")
+
+                                    </div>
+                                    <div class=" col-md-6">
+                                        <b>@Resource.lblPhone:</b>
+                                        @(Model.Trainee.str_Cell_Phone ?? " ")
+
+                                    </div>
+                                    <div class=" col-md-6">
+                                        <b>@Resource.lblDateOfJoin:</b>
+                                        @(Model.Trainee.dtm_Join_Date != null ? DateUtil.DateToString(Model.Trainee.dtm_Join_Date, " dd/MM/yyyy") : "")
+
+                                    </div>
+                                    <div class=" col-md-6">
+                                        <b>@Resource.lblJobTitle_Occupation:</b>
+                                        @(Model.Trainee.JobTitle.Name ?? " ")
+                                        <input hidden id="JobTitleID" name="JobTitleID" value="@(Model.Trainee.JobTitle.Name ?? " ")"/>
+                                    </div>
+                                    <div class=" col-md-6">
+                                        <b>@Resource.lblType:</b>
+
+                                        @if (Model.Trainee.bit_Internal)
+                                        {
+                                            <span>Internal</span>
+                                        }
+                                        else
+                                        {
+                                            <span>External</span>
+                                        }
+                                    </div>
+                                    <div class=" col-md-6">
+                                        <b>@Resource.lblDepartment:</b>
+                                        @(Model.Trainee.Department.Name ?? " ")
+                                    </div>
+                                    <div class=" col-md-6">
+                                        <b>@Resource.lblCompany:</b>
+                                        @(Model.Trainee.Company_Id.HasValue ? Model.Trainee.Company.str_Name : "Chưa có thông tin")
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                        </div>
+                        <div class="col-md-9">
+                            @*@(Model.Trainee?.Trainee?.str_Staff_Id ?? "ko co du lieu")*@
+                            <div class="panel-body center-block">
+                                <div class="col-md-2">
+                                    <label>@Resource.lblKindOfSuccessor</label>
+                                </div>
+                                <div class="col-md-4 control-label">
+                                    <select id="IdKindOfSuccessor" required="required" name="IdKindOfSuccessor" class="form-control" data-placeholder="-- Select Kind Of Successor --">
+                                        <option value=""></option>
+                                        @if (Model.OrientationKindOfSuccessorList != null)
+                                        {
+                                            foreach (var m in Model.OrientationKindOfSuccessorList)
+                                            {
+                                                <option value="@m.Key">@m.Value</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <b>@Resource.lblCompletedExpectationDate</b>
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" id="ExpectedDate" name="ExpectedDate" class="form-control datepicker" placeholder="@DateTime.Now" />
+                                </div>
+                            </div>
+                            <div class="panel-body center-block">
+                                <div class="col-md-2">
+                                    <b>@Resource.lblRemark</b>
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.TextAreaFor(m => m.Remark, new Dictionary<string, object>() { { "class", "form-control" }, { "placeholder", "Your remark" } })
+                                    @Html.ValidationMessageFor(m => m.Remark, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+
+                        </div>
+                        <div class="col-md-9">
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12 text-right">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> @Resource.lblSave</button>
+                            <button type="button" class="btn btn-secondary btn-default" data-dismiss="modal">@Resource.lblCancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@*@section Scripts{
+        <link href="~/Content/css/timepicker/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css" />
+        <script src="/Scripts/bootstrap-datetimepicker.min.js"></script>
+    }*@
+

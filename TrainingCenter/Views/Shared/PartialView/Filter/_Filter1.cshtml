@@ -1,0 +1,92 @@
+﻿@using TMS.Core.App_GlobalResources
+@model IEnumerable<DAL.Entities.Course>
+    @using (Html.BeginForm("AjaxHandleListResultHasInsert", "Course", FormMethod.Post,new {id = "frmFilter" }))
+    {
+    <div class="col-md-12">
+        <div class="panel  list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title">@Resource.lblFilter</h1>
+            </div>
+            <div class="panel-body">
+                <div class="row col-md-12">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>@Resource.lblCourseCode</label>
+                        </div>
+                        <div class="col-md-2">
+                            @Html.TextBox("coursecode", null, new { @class = "form-control frmFilter", @id = "coursecode" , @placeholder = @Resource.lblCourseCode })
+                        </div>
+
+                        <div class="col-md-1">
+                            <label>@Resource.lblTime</label>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right date-picker frmFilter" name="DateFrom" id="DateFrom"  placeholder=@Resource.lblStartDate>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right date-picker frmFilter" name="DateTo" id="DateTo" placeholder=@Resource.lblEndDate>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="button" id="btFiltercourse" name="btFiltercourse" class="btn btn-primary " onclick="filtercourse()">@Resource.lblFilter</button>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <b>@Resource.lblCourseName</b>
+                        </div>
+                        <div class="col-md-8">
+                            <select class="form-control selectpicker frmFilter" id="CourseList" name="CourseList" data-placeholder="-- @Resource.lblCourseList @*(@Resource.lblCode - @Resource.lblName)*@ --">
+                                <option></option>
+                                @foreach (var variable in Model)
+                                {
+                                <option value="@variable.Id">@variable.Code - @variable.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary pull-right" id="btFilter">
+                                <i class="fa fa-search"></i> @Resource.lblSearch
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function filtercourse() {
+            var form = $("#frmFilter2").serialize();
+            $.ajax({
+                type: "POST",
+                url: "/Course/Filtercourse",
+                datatype: "json",
+                data: form,
+                success: function (result) {
+                    $("#CourseList").empty();
+                    $("#CourseList").prop("selectedIndex", 0);
+                    $("#CourseList").append(result.value_option);
+                    $("#CourseList").datepicker("refresh");
+                }
+            });
+        }
+    </script>
+
+
+    }

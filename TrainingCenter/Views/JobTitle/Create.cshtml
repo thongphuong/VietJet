@@ -1,0 +1,407 @@
+﻿@using TMS.Core.Utils
+@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Jobtitles.JobtitleModifyViewModel
+@{
+    var getvalue = System.Configuration.ConfigurationManager.AppSettings["HiddenLevelPosition"];
+    var check = string.IsNullOrEmpty(getvalue) || int.Parse(getvalue) != 1 ? false : true;
+}
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-header"><i class="fas fa-database"></i> @Resource.lblMasterData - @Resource.lblJobTitle_Occupation @Resource.lblCreate</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li> @Resource.lblMasterData</li>
+                <li class="active">@Resource.lblJobTitle_Occupation @Resource.lblCreate</li>
+            </ol>
+        </div>
+    </div>
+}
+<div class="panel" id="list-panel">
+    <div class="panel-heading ">
+        <h1 class="panel-title list-panel-title"> @Resource.lblCreate </h1>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm("Create", "JobTitle", FormMethod.Post, new { id = "createform" }))
+        {
+            <input type="text" name="AssignedSubjectsList" id="AssignedSubjectsList" value="@Model.AssignedSubjects" hidden="hidden" />
+            <input type="text" name="assignedSubjects" id="assignedSubjects" hidden="hidden" />
+            <div class="row">
+                @if (Model.check_hidden_level_position == false)
+                {
+
+                    <div class="col-md-12">
+                        @if (check != true)
+                        {
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <label>@Resource.lblJobLevel <font color="red">(*)</font></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="input-group col-md-12">
+                                            <select class="form-control " id="jobheaders" name="JobHeaderId" data-placeholder="select item"></select>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-secondary" type="button" id="btn-editor-add-header" title="Add item" onclick="jobTitle.newHeader() "><i class="fa fa-plus-circle"></i></button>
+                                            </span>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.JobHeaderId, null, new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        @*<div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label>@Resource.lblPosition</label><span class="text-danger">(*)</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="input-group col-md-12">
+                                        <input type="hidden" value="@Model.JobPositionId" id="positionId" />
+                                        <select class="form-control" id="JobPositions" name="JobPositionId" data-placeholder="select item"></select>
+
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.JobPositionId, null, new {@class = "text-danger"})
+                                </div>
+                            </div>
+                        </div>*@
+                    </div>
+                }
+
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>@Resource.lblJobTitle_Occupation <font color="red">(*)</font></label>
+                            </div>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label>@Resource.lblActive</label>
+                            </div>
+                            <div class="col-md-8">
+                                @Html.DropDownListFor(m => m.IsActive, new SelectList(Model.YesNoDictionary, "Key", "Value", Model.IsActive), new Dictionary<string, object> { { "class", "form-control" }, { "readonly", "readonly" }, { "data-placeholder", "--- select option ---" } })
+                                @Html.ValidationMessageFor(m => m.IsActive, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label>@Resource.lblDescription</label>
+                            </div>
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @rows = "7" })
+                                @Html.ValidationMessageFor(m => m.Description, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <h4><label>@Resource.lblAvailableSubject</label></h4>
+                            <div class="form-group row">
+                                <div class="col-md-8">
+                                    <input type="text" id="FilterCodeOrName" name="FilterCodeOrName" placeholder="Code or Name" class="form-control" />
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" id="btFilter" class="btn btn-primary center-block legitRipple" onclick=" FilterSubject() ">@Resource.lblFilter</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4><label>@Resource.lblAssignedSubject</label></h4>
+                            <hr />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <div id="avalibleSubjects" class="multiselect default form-control" style="overflow:auto;height:500px">
+                                    <ul>
+
+                                        <li id="liCheckAll">
+                                            <input value="-1" multiple="" type="checkbox" id="checkAll"><label class="label_thuan" for="checkAll">&nbsp;Check All</label>
+                                        </li>
+
+                                        <ul id="available">
+                                            @if (Model.AssignedSubjects != null)
+                                            {
+
+                                                foreach (var item in Model.Subjects.OrderBy(a => a.Value).Where(a => !Model.AssignedSubjects.Any(x => x == a.Key)))
+                                                {
+                                                    @*<option data-id="@item.Key" value="@item.Key">@item.Value</option>*@
+                                                    <li>
+                                                        <input class="availableFunc" data-id="@item.Key" multiple="" value="@item.Key" name="subject" id="subject_@item.Key" type="checkbox" /><label class="label_thuan" for="subject_@item.Key">@item.Value</label>
+                                                    </li>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                foreach (var item in Model.Subjects.OrderBy(a => a.Value))
+                                                {
+                                                    @*<option data-id="@item.Key" value="@item.Key">@item.Value</option>*@
+                                                    <li>
+                                                        <input class="availableFunc" data-id="@item.Key" data-value="@item.Value" multiple="" value="@item.Key" name="subject" id="subject_@item.Key" type="checkbox" /><label class="label_thuan" for="subject_@item.Key">@item.Value</label>
+                                                    </li>
+                                                }
+                                            }
+                                        </ul>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 text-center margin-top-30">
+                            <div class="form-group">
+                                <a class="btn" name="bu_ab_alarm_btnRight" id="role-edit-btnRight"><i class="fa fa-arrow-right"></i></a>
+                            </div>
+                            <div class="form-group">
+                                <a class="btn" name="bu_ab_alarm_btnLeft" id="role-edit-btnLeft"><i class="fa fa-arrow-left"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="multiselect default form-control" style="overflow:auto;height:500px">
+                                    <ul>
+                                        <li id="liAssignedCheckAll">
+                                            <input value="-1" multiple="" type="checkbox" id="AssignedcheckAll"><label class="label_thuan" for="AssignedcheckAll">&nbsp;Check All</label>
+                                        </li>
+                                        <ul id="assign">
+                                            @if (Model.AssignedSubjects != null)
+                                            {
+                                                foreach (var item in Model.Subjects.Where(a => Model.AssignedSubjects.Any(x => x == a.Key)))
+                                                {
+                                                    @*<option data-id="@item.Key" value="@item.Key">@item.Value</option>*@
+                                                    <li>
+                                                        <input class="AssignedFunc" data-id="@item.Key" multiple="" value="@item.Key" name="subject" id="subject_@item.Key" type="checkbox" /><label class="label_thuan" for="subject_@item.Key">@item.Value</label>
+                                                    </li>
+                                                }
+                                            }
+                                        </ul>
+                                    </ul>
+                                </div>
+                                @Html.ValidationMessageFor(m => m.AssignedSubjects, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="divider"></div>
+                <div class="form-group col-md-12">
+                    <div id="messageout">
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="row">
+            <div class="action-form text-right">
+                @{if (User.IsInRole("/JobTitle/Create")) // neu co
+                    {
+                        <a href="javascript:void(0)" class="btn btn-primary legitRipple" id="submit" onclick="save()"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                    }
+                }
+                <a onclick="goBack()" class="btn btn-default legitRipple"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<style>
+    .label_thuan{
+        color: rgba(0,0,0,0.5);
+        font-size:1.2em;
+    }
+</style>
+
+@section scripts{
+    <script src="~/Scripts/js/app.js"></script>
+    <script>
+
+        var history_temp = [];
+        $(document).on('change', 'input.availableFunc', function () {
+            var value = $(this).val();
+            if ($(this).prop("checked") == true) {
+                history_temp.push(value);
+            } else {
+                var index = history_temp.indexOf(value);
+                if (index > -1) {
+                     history_temp.splice(index, 1);
+                }
+            }           
+        });
+        $(function () {
+            //jobTitle.loadHeader();
+            //jobTitle.loadPosition();
+            if ($('input.availableFunc').length < 1) {
+                $('#liCheckAll').prop('hidden', true);
+            }
+            else {
+                $('#liCheckAll').prop('hidden', false);
+            }
+
+            if ($('input.AssignedFunc').length < 1) {
+                $('#liAssignedCheckAll').prop('hidden', true);
+            }
+            else {
+                $('#liAssignedCheckAll').prop('hidden', false);
+            }
+            $('#role-edit-btnRight').click(function () {
+                //var selectedOptions = $('#avalibleSubjects').find('ul li input:checked');
+                //$('#assignedSubjects').append(selectedOptions);
+                var listchecked = $('input.availableFunc:checked');
+                for (var i = 0; i < listchecked.length; i++) {
+                    var dataid = $(listchecked[i]).data("id");
+                    //console.log($(listchecked[i]).next());
+                    
+                    var name = $(listchecked[i]).next().closest('label').text();
+
+                    $("#assign").append("<li><input type='hidden' class='availablesubject' name='availablesubject' id='availablesubject' value='" + dataid + "' /><input data-id='" + dataid + "' class='AssignedFunc' value='" + dataid + "' type='checkbox' id='subject_" + dataid + "'/><label class='label_thuan' for='subject_" + dataid + "'>" + name + "</label></li>");
+                    $(listchecked[i]).parent().remove();
+                }
+                $('.availableFunc').attr('checked', false);
+
+                if ($('input.availableFunc').length < 1) {
+                    $('#checkAll').prop('checked', false);
+                    $('#liCheckAll').prop('hidden', true);
+                }
+                else {
+                    $('#liCheckAll').prop('hidden', false);
+                    $('#checkAll').prop('checked', false);
+                }
+
+                if ($('input.AssignedFunc').length < 1) {
+                    $('#liAssignedCheckAll').prop('hidden', true);
+                    $('#AssignedcheckAll').prop('checked', false);
+                }
+                else {
+                    $('#liAssignedCheckAll').prop('hidden', false);
+                    $('#AssignedcheckAll').prop('checked', false);
+                }
+
+
+            });
+            $('#role-edit-btnLeft').click(function () {
+                //var selectedOptions = $('#assignedSubjects').find(':selected');
+                //$('#avalibleSubjects').append(selectedOptions);
+                var listchecked = $('input.AssignedFunc:checked');
+                for (var i = 0; i < listchecked.length; i++) {
+                    var dataid = $(listchecked[i]).data("id");
+                    // console.log($(listchecked[i]).next());
+                    var name = $(listchecked[i]).next().closest('label').text()
+
+                    $("#available").append("<li><input data-id='" + dataid + "' class='availableFunc' value='" + dataid + "' type='checkbox' id='subject_" + dataid + "'/><label class='label_thuan' for='subject_" + dataid + "'>" + name + "</label></li>");
+
+                    $(listchecked[i]).parent().remove();
+                }
+                $('.AssignedFunc').attr('checked', false);
+
+                if ($('input.availableFunc').length < 1) {
+                    $('#checkAll').prop('checked', false);
+                    $('#liCheckAll').prop('hidden', true);
+                }
+                else {
+                    $('#liCheckAll').prop('hidden', false);
+                    $('#checkAll').prop('checked', false);
+                }
+
+                if ($('input.AssignedFunc').length < 1) {
+                    $('#liAssignedCheckAll').prop('hidden', true);
+                    $('#AssignedcheckAll').prop('checked', false);
+                }
+                else {
+                    $('#liAssignedCheckAll').prop('hidden', false);
+                    $('#AssignedcheckAll').prop('checked', false);
+                }
+            });
+                        $('#checkAll').change(function () {
+                var $this = $(this);
+                var isChecked = $this.prop('checked');
+                $this.parent().closest('ul').find('li input.availableFunc').prop('checked', isChecked)
+            });
+            $('#AssignedcheckAll').change(function () {
+                var $this = $(this);
+                var isChecked = $this.prop('checked');
+                $this.parent().closest('ul').find('li input.AssignedFunc').prop('checked', isChecked)
+            });
+
+        });
+
+
+
+     function save() {
+            // $('#assignedSubjects option').prop('selected', true);
+            var listchecked = $('input.AssignedFunc');
+            var array = [];
+            for (var i = 0; i < listchecked.length; i++) {
+                var dataid = $(listchecked[i]).data("id");
+                array.push(dataid);
+            }
+            $("#AssignedSubjectsList").val(array);
+            $('#createform').submit();
+        }
+
+
+        function FilterSubject() {
+            var filterCodeOrName = $('#FilterCodeOrName').val();
+            var listSubjects = "";
+            $("input.availablesubject").each(function () {
+                listSubjects += $(this).val() + ",";
+            })
+            listSubjects = listSubjects.length > 0 ? listSubjects.substring(0,listSubjects.length - 1): listSubjects;
+            $.ajax({
+                type: 'POST',
+                url: "/JobTitle/FilterSubject",
+                datatype: 'json',
+                data: { filterCodeOrName: filterCodeOrName, listSubjects: listSubjects },
+                success: function (result) {
+                    $('#avalibleSubjects').empty();
+                    $('#avalibleSubjects').append(result.value);
+                    
+                },
+                complete: function () {
+                    if ($('input.availableFunc').length < 1) {
+                        $('#liCheckAll').prop('hidden', true);
+                    }
+                    else {
+                        $('#liCheckAll').prop('hidden', false);
+                    }
+                    $('input.availableFunc').each(function () {
+                        if (history_temp.includes($(this).val())) {
+                            $(this).prop('checked', true);
+                        }
+                    });  
+                    $('#checkAll').change(function () {
+                        var $this = $(this);
+                        var isChecked = $this.prop('checked');
+                        $this.parent().closest('ul').find('li input.availableFunc').prop('checked', isChecked)
+                      });
+                }
+            });
+        }
+
+        $('#FilterCodeOrName').bind("enterKey", function (e) {
+            FilterSubject();
+        });
+        $('#FilterCodeOrName').keyup(function (e) {
+            if (e.keyCode == 13) {
+                $(this).trigger("enterKey");
+            }
+        });
+    </script>
+}

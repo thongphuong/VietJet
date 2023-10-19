@@ -1,0 +1,598 @@
+﻿@using TMS.Core.App_GlobalResources;
+
+@{
+    ViewBag.Title = "Job Tiltle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var getvalue = System.Configuration.ConfigurationManager.AppSettings["HiddenLevelPosition"];
+    var check = true; //string.IsNullOrEmpty(getvalue) || int.Parse(getvalue) != 1 ? false : true;
+}
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fas fa-database"></i>  @Resource.lblMasterData - @Resource.lblJobTitle_Occupation</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li> @Resource.lblMasterData</li>
+                <li class="active">@Resource.lblJobTitle_Occupation</li>
+            </ol>
+        </div>
+    </div>
+}
+
+@using (Html.BeginForm("importJobTitle", "Import", FormMethod.Post, new Dictionary<string, object> { { "enctype", "multipart/form-data" }, { "class", "col-md-12 collapse" }, { "id", "frmImport" } }))
+{
+    <div class="form-group">
+        <div class="panel list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title">@Resource.lblImport @Resource.lblJobTitle_Occupation</h1>
+            </div>
+            <div class="panel-body">
+                <div class="col-md-8">
+                    <input type="file" name="postedFile" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <input type="submit" class="btn btn-primary" value="@Resource.lblImport" />
+                    <a href="/Template/ExcelFile/JobtitleTemplate.xlsx" class="btn btn-primary">Download Template</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12" id="frmFilter">
+        <div class="panel list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title">
+                    <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> @Resource.lblList
+                    <p class="btn-group pull-right">
+                        @if (User.IsInRole("/Jobtitle/Create"))
+                        {
+                            <a href="/Jobtitle/Create" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-plus" aria-hidden="true"></i> @Resource.lblADDNEW</a>
+                        }
+                    </p>
+                </h1>
+            </div>
+            <div class="panel-body table-responsive">
+                <div id="panel-search" class="collapse panel">
+                    <form action="@Url.Action("AjaxHandler", "JobTitle")" method="POST" id="frmFilter">
+                        <div class="panel-body">
+                            <div class="col-md-8">
+                                <input type="text" name="fullname" id="fullname" class="form-control frmFilter" placeholder="@Resource.lblSearchByJobtitle" />
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary pull-right" id="btFilter">
+                                    <i class="fa fa-search"></i> @Resource.lblSearch
+                                </button>
+
+                            </div>
+                        </div>
+                    </form>
+                    <br />
+                </div>
+                <p class="pull-right" data-toggle="collapse" data-target="#panel-search" style="cursor:pointer;" id="call-panel-search"><i class="fa fa-search"></i> @Messege.Search</p>
+                <table class="table table-bordered table-striped" id="datatable">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%;">@Resource.lblStt</th>
+                            @if (check != true)
+                            {
+                                <th>@Resource.lblJobLevel</th>
+                                <th>@Resource.lblPosition</th>
+                            }
+                            <th>@Resource.lblJobTitle</th>
+                            <th>@Resource.lblStatus</th>
+                            <th>@Resource.lblOptions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                </table>
+            </div>
+            <!--
+            <div class="panel-body">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#Jobtitle" data-toggle="tab" aria-expanded="false">@Resource.lblJobTitle_Occupation</a>
+                    </li>
+                    @if (check == false)
+                    {
+                        <li class="">
+                            <a href="#Level" data-toggle="tab" aria-expanded="false">@Resource.lblJobLevel</a>
+                        </li>
+                        <li class="">
+                            <a href="#Position" data-toggle="tab" aria-expanded="false"> @Resource.lblPosition</a>
+                        </li>
+                    }
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade active in" id="Jobtitle">
+                        <div class="col-md-12" style="margin-top: 10px;">
+                            <div class="panel list-panel" id="list-panel">
+                                <div class="panel-heading list-panel-heading">
+                                    <h1 class="panel-title list-panel-title">
+                                        <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> @Resource.lblList
+                                        <p class="btn-group pull-right">
+                                            @if (User.IsInRole("/Jobtitle/Create"))
+                                            {
+                                                <a href="/Jobtitle/Create" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-plus" aria-hidden="true"></i> @Resource.lblADDNEW</a>
+                                            }
+                                        </p>
+                                    </h1>
+                                </div>
+                                <div class="panel-body table-responsive">
+                                    <div id="panel-search" class="collapse panel">
+                                        <form action="@Url.Action("AjaxHandler", "JobTitle")" method="POST" id="frmFilter">
+                                            <div class="panel-body">
+                                                <div class="col-md-8">
+                                                    <input type="text" name="fullname" id="fullname" class="form-control frmFilter" placeholder="@Resource.lblSearchByJobtitle" />
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <button type="submit" class="btn btn-primary pull-right" id="btFilter">
+                                                        <i class="fa fa-search"></i> @Resource.lblSearch
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <br />
+                                    </div>
+                                    <p class="pull-right" data-toggle="collapse" data-target="#panel-search" style="cursor:pointer;" id="call-panel-search"><i class="fa fa-search"></i> @Messege.Search</p>
+
+                                    <table class="table table-bordered table-striped" id="datatable">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 5%;">@Resource.lblStt</th>
+                                                @if (check == false)
+                                                {
+                                                    <th>@Resource.lblJobLevel</th>
+                                                    <th>@Resource.lblPosition</th>
+                                                }
+                                                <th>@Resource.lblJobName</th>
+                                                <th>@Resource.lblStatus</th>
+                                                <th>@Resource.lblOptions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="Level">
+                        <div class="col-md-12" style="margin-top: 10px;">
+                            <div class="panel list-panel" id="list-panel">
+                                <div class="panel-heading list-panel-heading">
+                                    <h1 class="panel-title list-panel-title">
+                                        <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> @Resource.lblList
+                                        <p class="btn-group pull-right">
+                                            @if (User.IsInRole("/Jobtitle/Create"))
+                                            {
+                                                <a href="javascript:void(0)" onclick="actionNewHeader()" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-plus" aria-hidden="true"></i> @Resource.lblADDNEW</a>
+                                            }
+                                        </p>
+                                    </h1>
+                                </div>
+                                <div class="panel-body table-responsive">
+                                    <div id="panel-search2" class="collapse panel">
+                                        <form action="@Url.Action("AjaxHandlerLevel", "JobTitle")" method="POST" id="frmFilter1">
+                                            <div class="panel-body">
+                                                <div class="col-md-8">
+                                                    <input type="text" name="levelname" id="levelname" class="form-control frmFilter" placeholder="@Resource.lblJobLevel" />
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <button type="submit" class="btn btn-primary pull-right" id="btFilter">
+                                                        <i class="fa fa-search"></i> @Resource.lblSearch
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <br />
+                                    </div>
+                                    <p class="pull-right" data-toggle="collapse" data-target="#panel-search2" style="cursor:pointer;" id="call-panel-search2"><i class="fa fa-search"></i> @Messege.Search</p>
+                                    <table class="table table-bordered table-striped" id="datatable1" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 5%;">@Resource.lblStt</th>
+                                                <th>@Resource.lblJobLevel</th>
+                                                <th>@Resource.lblDescription</th>
+                                                <th>@Resource.lblStatus</th>
+                                                <th>@Resource.lblOptions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="Position">
+                        <div class="col-md-12" style="margin-top: 10px;">
+                            <div class="panel list-panel" id="list-panel">
+                                <div class="panel-heading list-panel-heading">
+                                    <h1 class="panel-title list-panel-title">
+                                        <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> @Resource.lblList
+                                        <p class="btn-group pull-right">
+                                            @if (User.IsInRole("/Jobtitle/Create"))
+                                            {
+                                                <a href="javascript:void(0)" onclick=" actionNewPosition() " class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-plus" aria-hidden="true"></i> @Resource.lblADDNEW</a>
+                                            }
+                                        </p>
+                                    </h1>
+                                </div>
+                                <div class="panel-body table-responsive">
+                                    <div id="panel-search3" class="collapse panel">
+                                        <form action="@Url.Action("AjaxHandlerPosition", "JobTitle")" method="POST" id="frmFilter2">
+                                            <div class="panel-body">
+                                                <div class="col-md-8">
+                                                    <input type="text" name="positionname" id="positionname" class="form-control frmFilter" placeholder="@Resource.lblPosition" />
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <button type="submit" class="btn btn-primary pull-right" id="btFilter2">
+                                                        <i class="fa fa-search"></i> @Resource.lblSearch
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <br />
+                                    </div>
+                                    <p class="pull-right" data-toggle="collapse" data-target="#panel-search3" style="cursor:pointer;" id="call-panel-search3"><i class="fa fa-search"></i> @Messege.Search</p>
+                                    <table class="table table-bordered table-striped" id="datatable2" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 5%;">@Resource.lblStt</th>
+                                                <th>@Resource.lblPosition</th>
+                                                <th>@Resource.lblDescription</th>
+                                                <th>@Resource.lblStatus</th>
+                                                <th>@Resource.lblOptions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            -->
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/js/app.js"></script>
+    <script>
+        var stableLevel;
+        var stablePosition;
+        var sTable;
+        $(document).ready(function () {
+
+            $('#frmFilter').submit(function (e) {
+                sTable.draw();
+                e.preventDefault();
+            });
+
+            $('#frmFilter1').submit(function (e) {
+                stableLevel.draw();
+                e.preventDefault();
+            });
+            $('#frmFilter2').submit(function (e) {
+                stablePosition.draw();
+                e.preventDefault();
+            });
+
+            $('#btFilter1').click(function () {
+                stableLevel.draw();
+            });
+            $('#btFilter2').click(function () {
+                stablePosition.draw();
+            });
+
+
+            var customRow = [
+               {
+                   "targets": 2,
+                   "className": "text-center"
+               }, {
+                   "targets": 3,
+                   "className": "text-center"
+               }
+            ];
+            var customRowLevel = [
+                 {
+                     "targets": 3,
+                     "className": "text-center"
+                 }, {
+                     "targets": 4,
+                     "className": "text-center"
+                 }
+            ];
+            var customRowPosition = [
+                {
+                    "targets": 3,
+                    "className": "text-center"
+                }, {
+                    "targets": 4,
+                    "className": "text-center"
+                }
+            ];
+            $(".line_50").addClass("active");
+
+            sTable = initDataTable('#datatable', '/JobTitle/AjaxHandler', customRow);
+
+            stableLevel = initDataTable('#datatable1', '/JobTitle/AjaxHandlerLevel', customRowLevel);
+
+            //stablePosition = initDataTable('#datatable2', '/JobTitle/AjaxHandlerPosition', customRowPosition);
+        });
+
+
+        function actionNewHeader() {
+            spinner.open();
+            $.ajax({
+                url: '/Jobtitle/CreateHeader',
+                success: function (response) {
+                    var $modal = $(response).modal('show');
+                    $modal.on('submit', 'form', function (e) {
+                        proccessFormInModal1($modal);
+                        e.preventDefault();
+                    });
+                    $modal.on('hidden.bs.modal', function () { $(this).remove(); });
+                },
+                error: function (response) {
+                    response.alert(response);
+                },
+                complete: function () {
+                    spinner.close();
+                }
+            });
+        }
+
+        //function actionNewPosition() {
+        //    spinner.open();
+        //    $.ajax({
+        //        url: '/Jobtitle/CreatePosition',
+        //        success: function (response) {
+        //            var $modal = $(response).modal('show');
+        //            $modal.on('submit', 'form', function (e) {
+        //                proccessFormInModal2($modal);
+        //                e.preventDefault();
+        //            });
+        //            $modal.on('hidden.bs.modal', function () { $(this).remove(); });
+
+        //        },
+        //        error: function (response) {
+        //            response.alert(response);
+        //        },
+        //        complete: function () {
+
+        //            spinner.close();
+        //        }
+        //    });
+        //}
+
+        function ModifyHeader(id) {
+            spinner.open();
+            $.ajax({
+                url: '/Jobtitle/ModifyHeader',
+                data: { id: id },
+                success: function (response) {
+                    var $modal = $(response).modal('show');
+                    $modal.on('submit', 'form', function (e) {
+                        proccessFormInModal1($modal);
+                        e.preventDefault();
+                    });
+                    $modal.on('hidden.bs.modal', function () { $(this).remove(); });
+
+                },
+                error: function (response) {
+                    response.alert(response);
+                },
+                complete: function () {
+
+                    spinner.close();
+                }
+            });
+        }
+        //function ModifyPosition(id) {
+        //    spinner.open();
+        //    $.ajax({
+        //        url: '/Jobtitle/ModifyPosition',
+        //        data: { id: id },
+        //        success: function (response) {
+        //            var $modal = $(response).modal('show');
+        //            $modal.on('submit', 'form', function (e) {
+        //                proccessFormInModal2($modal);
+        //                e.preventDefault();
+        //            });
+        //            $modal.on('hidden.bs.modal', function () { $(this).remove(); });
+
+        //        },
+        //        error: function (response) {
+        //            response.alert(response);
+        //        },
+        //        complete: function () {
+
+        //            spinner.close();
+        //        }
+        //    });
+        //}
+        function proccessFormInModal1($modal) {
+            var $this = $modal.find('form');
+            var formData = $this.serialize();
+            $.ajax({
+                url: $this.attr('action'),
+                data: formData,
+                type: 'POST',
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, 'SUCCESS', TITLE_STATUS_SUCCESS);
+                        $modal.on('hidden.bs.modal', function () { $(this).remove(); stableLevel.draw(); });
+                        $modal.modal('hide');
+                    } else {
+                        notify.alert(data.message, 'Warning', TITLE_STATUS_DANGER);
+                    }
+                },
+                complete: function () {
+                    spinner.close();
+                }
+            });
+        }
+        function proccessFormInModal2($modal) {
+            var $this = $modal.find('form');
+            var formData = $this.serialize();
+            $.ajax({
+                url: $this.attr('action'),
+                data: formData,
+                type: 'POST',
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, 'SUCCESS', TITLE_STATUS_SUCCESS);
+                        $modal.on('hidden.bs.modal', function () { $(this).remove(); stablePosition.draw(); });
+                        $modal.modal('hide');
+                    } else {
+                        notify.alert(data.message, 'Warning', TITLE_STATUS_DANGER);
+                    }
+                },
+                complete: function () {
+                    spinner.close();
+                }
+            });
+        }
+        function Set_Participate_Jobtitle(isParticipate, id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/JobTitle/SubmitSetParticipateJobtitle",
+                datatype: 'json',
+                data: { isParticipate: isParticipate, id: id },
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, "ERROR", TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    sTable.draw();
+                    spinner.close();
+                }
+            });
+        }
+        function Set_Participate_LevelJobtitle(isParticipate, id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/JobTitle/SubmitSetParticipateLevelJob",
+                datatype: 'json',
+                data: { isParticipate: isParticipate, id: id },
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(data.message, "ERROR", TITLE_STATUS_DANGER);
+                    }
+                }, complete: function () {
+                    stableLevel.draw();
+                    spinner.close();
+                }
+            });
+        }
+        //function Set_Participate_PositionJobtitle(isParticipate, id) {
+        //    spinner.open();
+        //    $.ajax({
+        //        type: 'POST',
+        //        url: "/JobTitle/SubmitSetParticipatePositionJob",
+        //        datatype: 'json',
+        //        data: { isParticipate: isParticipate, id: id },
+        //        success: function (data) {
+        //            if (data.result) {
+        //                notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+        //            } else {
+        //                notify.alert(data.message, "ERROR", TITLE_STATUS_DANGER);
+        //            }
+        //        }, complete: function () {
+        //            stablePosition.draw();
+        //            spinner.close();
+        //        }
+        //    });
+        //}
+        @if (User.IsInRole("/JobTitle/delete"))
+        {
+            <text>
+            function calldelete(id) {
+                notify.confirm('@Messege.DELETE_JOBTITLE', "warning", 2, deletesubmit, id);
+            }
+            function calldelete1(id) {
+                notify.confirm('Are you sure to delete job level?', "warning", 2, deletesubmitLevel, id);
+            }
+            function calldelete2(id) {
+                 notify.confirm('Are you sure to delete job position', "warning", 2, deletesubmitPosition, id);
+                }
+            function deletesubmit(id) {
+                spinner.open();
+                $.ajax({
+                    type: 'POST',
+                    url: "/JobTitle/delete",
+                    datatype: 'json',
+                    data: { id: id },
+                    success: function (data) {
+                        if (data.result) {
+                            notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                        } else {
+                            notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                        }
+                    }, complete: function () {
+                        sTable.draw();
+                        spinner.close();
+
+                    }
+                });
+            }
+            function deletesubmitLevel(id) {
+                spinner.open();
+                $.ajax({
+                    type: 'POST',
+                    url: "/JobTitle/DeleteLevel",
+                    datatype: 'json',
+                    data: { id: id },
+                    success: function (data) {
+                        if (data.result) {
+                            notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                        } else {
+                            notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                        }
+                    }, complete: function () {
+                        stableLevel.draw();
+                        spinner.close();
+
+                    }
+                });
+            }
+            //function deletesubmitPosition(id) {
+            //    spinner.open();
+            //    $.ajax({
+            //        type: 'POST',
+            //        url: "/JobTitle/DeletePosition",
+            //        datatype: 'json',
+            //        data: { id: id },
+            //        success: function (data) {
+            //            if (data.result) {
+            //                notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+            //            } else {
+            //                notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+            //            }
+            //        }, complete: function () {
+            //            stablePosition.draw();
+            //            spinner.close();
+
+            //        }
+            //    });
+            //}
+            </text>
+        }
+    </script>
+}

@@ -1,0 +1,91 @@
+﻿@using System
+@using System.Linq
+@model System.Collections.Generic.IEnumerable<TMS.Core.ViewModels.ViewModel.RoleMenus.MenuViewModel>
+    @{
+        var parentId = Convert.ToInt32(ViewData["id"]);
+    }
+@foreach (var menuItem in Model.Where(a => a.ParentId == parentId).OrderBy(a => a.MenuIndex))
+        {
+            var itemModel = menuItem;
+<div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="heading@(itemModel.Id)">
+        <div class="menu-item">
+            <span role="button" data-toggle="collapse" data-parent="#accordion" href="#content@(itemModel.Id)" aria-expanded="true" aria-controls="content@(itemModel.Id)">
+                @itemModel.MenuTitle
+
+            </span>
+            <span class="editMenu"><i class="fa fa-pencil"></i></span>
+            <span class="addMenu" data-parentid="@itemModel.Id"><i class="fa fa-plus"></i></span>
+            <span class="deleteMenu" data-id="@itemModel.Id"><i class="fa fa-trash"></i></span>
+        </div>
+        <div class="editor form-group clearfix">
+            <input type="hidden" value="@itemModel.Id" id="menu-id" data-value="@itemModel.Id" />
+            <div class="col-md-3">
+                <input type="text" class="form-control" id="menu-url" value="@itemModel.Url" data-value="@itemModel.Url" placeholder="menu url" />
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" id="menu-title" value="@itemModel.MenuTitle" data-value="@itemModel.MenuTitle" placeholder="menu title" />
+            </div>
+            <div class="col-md-3">
+                <div class="input-group">
+                    <input type="text" class="form-control input-icon" id="menu-icon" value="@itemModel.Icon" data-value="@itemModel.Icon" placeholder="menu icon">
+                    <span class="input-group-addon"><i id="icon-preview" class="@(itemModel.Icon ?? "fa fa-caret-right" )"></i></span>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <input type="text" value="@menuItem.MenuIndex" id="menu-index" class="form-control" placeholder="Index" data-value="@itemModel.MenuIndex" />
+            </div>
+            <div class="col-md-2">
+                <span class="btn btn-primary saveItem" data-parentid="" title="Save"><i class="fa fa-save"></i></span>
+                <span class="btn btn-default cancelModify" title="Cancel"><i class="fa fa-undo"></i></span>
+            </div>
+        </div>
+    </div>
+    <div id="content@(itemModel.Id)" class="panel-collapse collapse menu-content" data-value="@(itemModel.Id)" role="tabpanel" aria-labelledby="heading@(itemModel.Id)">
+        <div class="panel-body">
+            @foreach (var item in Model.Where(a => a.ParentId == itemModel.Id).OrderBy(a => a.MenuIndex))
+            {
+                <div class="menu-group">
+                    <div class="menu-item">
+                        <div class="col-md-4">
+                            @item.MenuTitle
+                        </div>
+                        <div class="col-md-8">
+                            <button class="editMenu btn"><i class="fa fa-pencil"></i></button>
+                            <button class="addMenu btn" data-parentid="@item.Id"><i class="fa fa-plus"></i></button>
+                            <button class="deleteMenu btn" data-id="@item.Id"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="editor form-group clearfix">
+                        <input type="hidden" value="@item.Id" id="menu-id" data-value="@item.Id" />
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="menu-url" value="@item.Url" placeholder="menu url" data-value="@item.Url" />
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="menu-title" value="@item.MenuTitle" placeholder="menu title" data-value="@item.MenuTitle" />
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control input-icon" id="menu-icon" value="@item.Icon" placeholder="menu icon" data-value="@item.Icon">
+                                <span class="input-group-addon"><i id="icon-preview" class="@(item.Icon ?? "fa fa-caret-right" )"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <input type="text" value="@item.MenuIndex" id="menu-index" class="form-control" placeholder="Menu Index" data-value="@item.MenuIndex" />
+                        </div>
+                        <div class="col-md-2">
+                            <span class="btn btn-primary saveItem" title="Save" data-parentid="@itemModel.Id"><i class="fa fa-save"></i></span>
+                            <span class="btn btn-default cancelModify" title="Cancel"><i class="fa fa-undo"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                if (Model.Any(x => x.ParentId == item.Id))
+                {
+                    @Html.Partial("_partials/_MenuRender", Model, new ViewDataDictionary { { "id", item.Id } })
+                }
+            }
+        </div>
+    </div>
+</div>
+        }

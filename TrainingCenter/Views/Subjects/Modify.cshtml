@@ -1,0 +1,959 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@model TMS.Core.ViewModels.Subjects.SubjectDetailModifyModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var i = 0;
+    var countrow = 0;
+}
+<style>
+    .list-height-over {
+        overflow-y: scroll;
+        max-height: 400px;
+    }
+
+    ul {
+        list-style-type: circle !important;
+    }
+</style>
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-book"></i>  @Resource.lblSubjectManagement - @(!Model.Id.HasValue ? @Resource.lblCreate : @Resource.lblEdit)</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li>@Resource.lblSubjectManagement</li>
+                <li class="active">@(!Model.Id.HasValue ? @Resource.lblCreate : @Resource.lblEdit)</li>
+            </ol>
+        </div>
+    </div>
+}
+<div class="panel list-panel">
+    <div class="panel-heading list-panel-heading">
+        <h1 class="panel-title list-panel-title"><i class="fas fa-pencil-alt font-small-byhoa" aria-hidden="true"></i> @(!Model.Id.HasValue ? @Resource.lblCreate : @Resource.lblEdit)</h1>
+    </div>
+    <div class="panel-body center-block">
+
+        @using (Html.BeginForm("Modify", "Subjects", FormMethod.Post, new { id = "createform" }))
+        {
+            if (Model.levelsubject == 2)
+            {
+                <div class="tab-pane fade  active in" id="home">
+                    <input type="hidden" name="Id" value="@Model.Id" id="editor-Id" />
+                    <input type="hidden" name="levelsubject" value="2" id="levelsubject" />
+                    <div class="col-md-12">
+                        <div class="col-md-6 row">
+                            <!-- Name -->
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label>@Resource.lblSubjectName <font color="red">(*)</font></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="hidden" value="-1" id="editor-index" />
+                                    @Html.TextBoxFor(m => m.Name, (object)new { @class = "form-control", id = "editor-Name", placeholder = @Resource.lblName, @Required = "Required" })
+                                    @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <!--End Name -->
+                            <!-- Recurrent -->
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label>@Resource.lblRecurrent (@Resource.lblMonth) <font color="red">(*)</font></label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.Recurrent, new { @class = "form-control", id = "editor-Recurrent", placeholder = @Resource.lblRecurrent, @Required = "Required" })
+                                    @Html.ValidationMessageFor(m => m.Recurrent, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <!--End Recurrent -->
+
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label> @Resource.lblGroupCourse</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <select name="ListGroupCourses" id="ListGroupCourses" class="form-control select createform" multiple="multiple">
+                                        @if (Model.GroupCourses != null)
+                                        {
+                                            foreach (var role in Model.GroupCourses)
+                                            {
+                                                <option value="@role.Key" @(Model.ListGroupCourses != null && Model.ListGroupCourses.Contains(role.Key) ? "selected" : "")>@role.Value</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+
+                                </div>
+                                <div class="col-md-8">
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label>@Resource.lblListInstructors</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" id="Filter_Instructor" name="Filter_Instructor" placeholder="@Messege.EIDGV / @Resource.lblName" class="form-control" />
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" id="btFilter" class="btn btn-primary center-block legitRipple pull-right" onclick="FilterInstructor()">@Resource.lblFilter</button>
+                                </div>
+                            </div>
+                            <div id="divAdvanced" class="collapse">
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <select class="form-control frmFilter" name="DepartmentId" id="DepartmentId" data-placeholder="-- @Resource.lblDepartment --">
+                                            <option></option>
+                                            @Html.Raw(Model.Departments)
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.DropDownList("JobTitleId", Model.JobTitles, "", new { @class = "form-control combobox frmFilter", data_placeholder = "-- " + @Resource.lblJobTitle_Occupation + " --" })
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" id="btFilterhidden" class="btn btn-primary center-block legitRipple pull-right" onclick="FilterInstructor()">@Resource.lblFilter</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+
+                                </div>
+                                <div class="col-md-6">
+                                </div>
+                                <div class="col-md-2">
+                                    <a onclick=" Advanced() " class="pull-right" data-toggle="collapse" data-target="#divAdvanced" style="cursor: pointer;" id="txtAdvanced">Advanced</a>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 ">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label>@Resource.lblSubjectCode <font color="red">(*)</font></label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.Code, Model.Id.HasValue ? (object)new { @class = "form-control", id = "editor-Code", placeholder = @Resource.lblSubjectCode, @Required = "Required", @readonly = "readonly" } : (object)new { @class = "form-control", id = "editor-Code", placeholder = @Resource.lblSubjectCode, @Required = "Required" })
+                                    @Html.ValidationMessageFor(m => m.Code, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label>@Resource.lblRelevantTrainingDepartment</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <select class="form-control searchText1 select2-hidden-accessible" re="" name="int_khoidaotao" id="int_khoidaotao" data-placeholder="-- Department --" multiple="" tabindex="-1" aria-hidden="true">
+                                        <option></option>
+                                        @foreach (var item in Model.ListRelevalDeparment)
+                                        {
+                                            <option value="@item.Id" @(Model.SubjectTrainingCenter.Contains(item.Id) ? "selected" : "")>@item.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label>@Resource.lblDuration (Hours) <font color="red">(*)</font></label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.Duration, new { @class = "form-control", placeholder = @Resource.lblDuration, @required = "required", id = "editor-Duration" })
+                                    @Html.ValidationMessageFor(m => m.Duration, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label>@Resource.lblAverageCalculate <font color="red">(*)</font></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <select id="editor-IsAverageCaculate" @(Model.IsEdit == false ? "disabled" : "") required="required" name="IsAverageCaculate" class="form-control" data-placeholder="-- Select an option --">
+                                        @if (Model.Id == null)
+                                        {
+                                            foreach (var m in Model.AverageStatus)
+                                            {
+                                                <option value="@m.Key" @(m.Key == (int)UtilConstants.BoolEnum.Yes ? "selected" : "")>@m.Value</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            foreach (var m in Model.AverageStatus)
+                                            {
+                                                <option value="@m.Key" @(Model.IsAverageCaculate == m.Key ? "selected" : "")>@m.Value</option>
+                                            }
+                                        }
+
+                                    </select>
+                                    <input type="hidden" name="IsAverageCaculate" value="@Model.IsAverageCaculate" />
+                                </div>
+                            </div>
+                            <div id="hiddenCalculated" @(Model.IsAverageCaculate == 0 ? "hidden" : "")>
+                                <div class="form-group row" style="display:none">
+                                    <div class="col-md-4">
+                                        <label>@Resource.lblPassScore <font color="red">(*)</font></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.TextBoxFor(m => m.PassScore, new { @class = "form-control", placeholder = @Resource.lblPassScore, id = "editor-PassScore" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-4 control-label">@Resource.lblSubjectScore <font color="red">(*)</font></label>
+                                    <div class="col-sm-8">
+                                        @if (Model.SubjectScores != null && Model.SubjectScores.Count() > 0)
+                                        {
+                                            <div id="tab_logic">
+
+                                                @foreach (var record in Model.SubjectScores.OrderByDescending(a => a.point_from))
+                                                {
+                                                    countrow++;
+                                                    <div id='addr@(countrow)'>
+                                                        <div class="row form-group">
+                                                            <input type="hidden" id="Subject_Score_hd_id" name="Subject_Score_hd_id" value="@record.id" />
+                                                            <div class="col-sm-5">
+                                                                <input type="number" id="point_from" name="point_from" placeholder="Point From" class="form-control" value="@record.point_from" readonly="readonly" />
+                                                            </div>
+                                                            <div class="col-sm-7">
+                                                                <input type="text" id="grade_name" name="grade_name" placeholder="Grade Name" class="form-control" value="@record.grade" readonly="readonly" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                <div id='addr@(countrow + 1)'></div>
+                                            </div>
+
+                                            <a id="add_row" class="btn btn-default">+</a>
+                                            <a id='delete_row' class="btn btn-default">-</a>
+                                        }
+                                        else
+                                        {
+                                            <div id="tab_logic">
+                                                <div id='addr0'>
+                                                    <div class="row form-group">
+                                                        <input type="hidden" id="Subject_Score_hd_id" name="Subject_Score_hd_id" value="-1" />
+                                                        <div class="col-sm-5">
+                                                            <input type="number" id="point_from" name="point_from" placeholder="Point From" class="form-control" value="90" />
+                                                        </div>
+                                                        <div class="col-sm-7">
+                                                            <input type="text" id="grade_name" name="grade_name" placeholder="Grade Name" class="form-control" value="Distinction" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id='addr1'>
+                                                    <div class="row form-group">
+                                                        <input type="hidden" id="Subject_Score_hd_id" name="Subject_Score_hd_id" value="-1" />
+                                                        <div class="col-sm-5">
+                                                            <input type="number" id="point_from" name="point_from" placeholder="Point From" class="form-control" value="80" />
+                                                        </div>
+                                                        <div class="col-sm-7">
+                                                            <input type="text" id="grade_name" name="grade_name" placeholder="Grade Name" class="form-control" value="Pass" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id='addr2'></div>
+                                            </div>
+                                            <a id="add_row" class="btn btn-default">+</a>
+                                            <a id='delete_row' class="btn btn-default">-</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-6 row">
+                            <div id="group-instructors">
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div id="subjectlist" class="authorization-edit-lstBox2 list-height-over"></div>
+                                        @*<select id="InstructorAbility" required="required" name="InstructorAbility" class="form-control input-sm default classInstructorSubject intructor_dura list-height-300" data-placeholder="-- @Resource.lblTeachers --" multiple="multiple">
+                                                @if (Model.Instructors != null)
+                                                {
+                                                    foreach (var m in Model.Instructors)
+                                                    {
+                                                        //var allowance = Model.ListInstructors.FirstOrDefault(a=>a.Id == m.Id).Allowance
+                                                        <option value="@m.Key" @(Model.ListInstructors != null && Model.ListInstructors.Any(x => x.InstructorId == m.Key) ? "selected class=active" : "")>@m.Value</option>
+                                                    }
+                                                }
+
+                                            </select>*@
+                                        @Html.ValidationMessageFor(m => m.ListInstructors, null, new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6 authorization-edit-lstBox2 list-height-over">
+                            <div class="form-group " id="listInstruct"></div>
+                            <div class="form-group " id="listSubject_edit">
+                                @*list-height-300*@
+                                @if (Model.ListInstructors != null)
+                                {
+                                    for (var j = 0; j < Model.ListInstructors.Count(); j++)
+                                    {
+
+                                        var subjectInstructor = Model.ListInstructors.ElementAt(j);
+                                        <input class="intructorId" type="hidden" name="intructorId" id="intructorId" value="@subjectInstructor.InstructorId" />
+                                        <div class="row insdura_@(subjectInstructor.InstructorId) subjectInstructor" id="subjectInstructor">
+                                            <input type="hidden" value="@subjectInstructor.Id" name="ListInstructors[@j].Id" id="editor-insdra-id" />
+
+                                            <div class="form-group col-md-6">
+                                                <label>@Resource.lblInstructor</label>
+                                                <input class="" type="hidden" name="ListInstructors[@j].SubjectId" id="editor-insdra-subjectId" value="@subjectInstructor.SubjectId" />
+                                                <input class="" type="hidden" name="ListInstructors[@j].InstructorId" id="editor-insdra-instructorId" value="@subjectInstructor.InstructorId" />
+                                                <input class="instructorValue" type="hidden" id="editor-insdra-id" name="ListInstructors[@j].Id" value="@subjectInstructor.Id" />
+                                                <input type="text" id="editor-insdra-instructorName" class="form-control input-sm name" readonly="readonly" value="@subjectInstructor.InstructorEID-@subjectInstructor.Name" /> @*placeholder="@subjectInstructor.Name"*@
+                                            </div>
+                                            <div class="form-group  col-md-6">
+                                                <label>@Resource.lblTrainingAllowance</label>
+                                                <input type="number" class="form-control input-sm" data-index="@j" id="editor-insdra-allowance" name="ListInstructors[@j].Allowance" value="@subjectInstructor.Allowance">
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @*<div id="boxresult">
+                                @if (Model != null && Model.subject != null)
+                                {
+                                    <div class="col-md-6">
+                                        <label class="col-sm-4 control-label">Result</label>
+                                        <div class="col-sm-8">
+                                            <div id="tab_logic">
+                                                @foreach (var record in Model.subject.Subject_Score.OrderByDescending(a => a.point_from))
+                                                {
+                                                    countrow++;
+                                                    <div id='addr@(countrow)'>
+                                                        <div class="row form-group">
+                                                            <a href="javascript:void(0)" onclick="removeresult(@record.id)" style="position: absolute; right: 3px;cursor:pointer;z-index:1;">
+                                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                                </a>
+                                                            <input type="hidden" id="Subject_Score_hd_id" name="Subject_Score_hd_id" value="@record.id" />
+                                                            <div class="col-sm-5">
+                                                                <input type="number" id="point_from" name="point_from" placeholder="Point From" class="form-control" value="@record.point_from" />
+                                                            </div>
+                                                            <div class="col-sm-7">
+                                                                <input type="text" id="grade_name" name="grade_name" placeholder="Grade Name" class="form-control" value="@record.grade" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                <div id='addr@(countrow + 1)'></div>
+                                            </div>
+                                            <a id="add_row" class="btn btn-default">+</a>
+                                            <a id='delete_row' class="btn btn-default">-</a>
+                                        </div>
+                                    </div>
+                                }
+                            </div>*@
+                    </div>
+
+                    @*<div class="panel  list-panel" id="hidden_subjectscore" @(Model.IsAverageCaculate == 0 ? "hidden" : "hidden")>
+                            <div class="panel-heading list-panel-heading">
+                                <h1 class="panel-title list-panel-title">
+                                    @Resource.lblListSubjectScores
+
+                                    <p class="btn-group pull-right">
+
+                                        <button class="btn btn-success btn-xs dropdown-toggle legitRippley" id="add-item" type="button" onclick="subject.addScore(subjectScores)"><i class="fa fa-plus" aria-hidden="true"></i> @Resource.lblADDNEW</button>
+                                    </p>
+                                </h1>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table id="table-scores" class="table table-hover table-hover table-dynamic table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>@Resource.lblStt</th>
+                                                <th>@Resource.lblGrade</th>
+                                                <th>@Resource.lblPoint</th>
+                                                <th>@Resource.lblActions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>*@
+                </div>
+            }
+            else if (Model.levelsubject == 1)
+            {
+                <div class="tab-pane fade  active in" id="home">
+                    <input type="hidden" name="Id" value="@Model.Id" id="editor-Id" />
+                    <input type="hidden" name="levelsubject" value="1" id="levelsubject" />
+                    <div class="col-md-12">
+                        <div class="col-md-6 row">
+                            <!-- Name -->
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label>@Resource.lblSubjectName <font color="red">(*)</font></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="hidden" name="Name_Temp" value="@Model.Name" />
+                                    <input type="hidden" value="-1" id="editor-index" />
+
+                                    @Html.TextBoxFor(m => m.Name, (object)new { @class = "form-control", id = "editor-Name", placeholder = @Resource.lblName, @Required = "Required" })
+                                    @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <!--End Name -->
+
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label>Relevant Training Department @*<font color="red">(*)</font>*@</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <select class="form-control searchText1 select2-hidden-accessible" re="" name="int_khoidaotao" id="int_khoidaotao" data-placeholder="-- Relevant Training Department --" multiple="" tabindex="-1" aria-hidden="true">
+                                        <option></option>
+                                        @foreach (var item in Model.ListRelevalDeparment)
+                                        {
+                                            <option value="@item.Id" @(Model.SubjectTrainingCenter.Contains(item.Id) ? "selected" : "")>@item.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 ">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label>@Resource.lblSubjectCode <font color="red">(*)</font></label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.Code, Model.Id.HasValue ? (object)new { @class = "form-control", id = "editor-Code", placeholder = @Resource.lblSubjectCode, @Required = "Required", @readonly = "readonly" } : (object)new { @class = "form-control", id = "editor-Code", placeholder = @Resource.lblSubjectCode, @Required = "Required" })
+                                    @Html.ValidationMessageFor(m => m.Code, null, new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label>@Resource.lblAverageCalculate <font color="red">(*)</font></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <select id="editor-IsAverageCaculate" @*onchange=" CalculatedClick(this) "*@ required="required" name="IsAverageCaculate" class="form-control" data-placeholder="-- Select an option --">
+                                        @if (Model.Id == null)
+                                        {
+                                            foreach (var m in Model.AverageStatus)
+                                            {
+                                                <option value="@m.Key" @(m.Key == (int)UtilConstants.BoolEnum.Yes ? "selected" : "")>@m.Value</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            foreach (var m in Model.AverageStatus)
+                                            {
+                                                <option value="@m.Key" @(Model.IsAverageCaculate == m.Key ? "selected" : "")>@m.Value</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label>@Resource.lblSubjectType @*<font color="red">(*)</font>*@</label>
+                            </div>
+                            <div class="col-md-10">
+                                <div id="typesubject0">
+                                    @if (Model.ListSubjectChild != null && Model.ListSubjectChild.Count() > 0)
+                                    {
+                                        var rowindex = 0;
+                                        foreach (var item in Model.ListSubjectChild)
+                                        {
+                                            <div class="row form-group" data-index="@rowindex">
+                                                <input type="hidden" id="type_subject_hd" name="type_subject_hd" value="-1">
+                                                <div class="col-sm-6">
+                                                    <select class="form-control select2-hidden-accessible searchText1" name="int_subject_type_edỉt" id="int_subject_type_edỉt" data-index="@rowindex" data-placeholder="-- Subject Type --" tabindex="-1" aria-hidden="true">
+                                                        <option value="@item.CoursetypeID"> @item.CoursetypeName</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <select class="form-control select2-hidden-accessible searchText1" name="int_GroupSubject_id_edỉt" id="int_GroupSubject_id_edỉt" data-placeholder="-- Group Course --" multiple="multiple" tabindex="-1" aria-hidden="true">
+                                                        <option></option>
+                                                        @Html.Raw(Model.HtmlGroupSubject)
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row form-group" data-index="@rowindex">
+                                                <div class="col-sm-6">
+                                                    <input type="number" id="type_duration_edỉt" name="type_duration_edỉt" value="@item.Duration" disabled placeholder="Duration (Hours)" class="form-control">
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <input type="number" id="type_Recurrent_edỉt" name="type_Recurrent_edỉt" value="@item.Recurrent" disabled placeholder="Recurrent (Month)" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="row form-group certificate_style" data-index="@rowindex">
+                                                <div class="col-sm-6">
+                                                    <input type="text" id="CertificateName1" name="CertificateName1" value="@item.CertificateName" placeholder="Certificate" class="form-control">
+                                                </div>
+                                                <div class="col-sm-6 certificate_style">
+                                                    <input type="text" id="CertificateCode1" name="CertificateCode1" value="@item.CertificateCode" placeholder="Code Certificate No" class="form-control">
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            rowindex++;
+                                        }
+                                    }
+                                </div>
+                                <div id="tab_logicx">
+                                    <div id='typesubject1'>
+                                    </div>
+                                </div>
+                                <a id="add_typesubject" class="btn btn-default legitRipple">+</a>
+                                <a id="delete_typesubject" class="btn btn-default legitRipple">-</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                    </div>
+                </div>
+            }
+        }
+        <div class="row">
+            <div class="action-form text-right">
+                @if (User.IsInRole("/Subjects/Create") && (!Model.Id.HasValue || Model.IsUsed))
+                {
+                    @*<button type="submit" class="btn btn-primary" id="save"><i class="fa fa-floppy-o" aria-hidden="true"></i> @Resource.lblSave</button>*@
+                    <a class="btn btn-primary" id="saveA" onclick="submit()"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                }
+                <a onclick="goBack()" class="btn btn-default"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+    <script src="~/Scripts/js/app.js"></script>
+
+    <script>
+         var pageSize = 14;
+        var pageIndex = 0;
+        var processing;
+         var history_temp = [];
+        $(document).ready(function () {
+            $("#editor-IsAverageCaculate").change();
+            //CalculatedClick(this);
+            checkTrainee();
+        });
+        // active menu
+        //line_#id of parent node
+        @if(Model.SubjectScores!=null && Model.SubjectScores.Count() > 0)
+        {
+
+        }
+        else
+        {
+            countrow++;
+        }
+        var i = @(countrow + 1);
+        $("#add_row").click(function () {
+
+            $('#addr' + i).html("<div class='row form-group'>  <input type='hidden' id='Subject_Score_hd_id' name='Subject_Score_hd_id' value='-1' /><div class='col-sm-5'> <input type='number' id='point_from' name='point_from' placeholder='Point From' class='form-control' /> </div> <div class='col-sm-7'> <input type='text' id='grade_name' name='grade_name' placeholder='Grade Name' class='form-control' /> </div> </div>");
+
+            $('#tab_logic').append('<div id="addr' + (i + 1) + '"></div>');
+            i++;
+        });
+        $("#delete_row").click(function () {
+            if (i > 1) {
+                $("#addr" + (i - 1)).html('');
+                i--;
+            }
+        });
+
+        function Advanced() {
+            if ($("#divAdvanced").css('display') == 'none') {
+                $("#btFilter").css('display', 'none');
+                $("#txtAdvanced").html("Hidden");
+            }
+            else {
+                $("#btFilter").css('display', 'block');
+                $("#txtAdvanced").html("Advanced");
+            }
+        };
+
+        var subjectScores = {};
+        $(function() {
+            $(".line_220").addClass("active");
+            //subjectScores = $('#table-scores').DataTable({
+            //    "order": [[2, "desc"]],
+            //    "sortable": false,
+            //    "paging":5,
+            //    "columnDefs": [
+            //        {
+            //            "targets": 0,
+            //            "data": null,
+            //            "sortable": false,
+            //            render: function(data, type, row, meta) {
+            //                var html = '';
+            //                html += '<input name="SubjectScoreModels[' + meta.row + '].Id" value="' + (row.Id == null ? "-1" : row.Id) + '" type="hidden"/>';
+            //                html += parseInt(meta.row) + meta.settings._iDisplayStart + 1;
+            //                return html;
+            //            }
+            //        },
+            //        {
+            //            "targets": 1,
+            //            "data": "Grade",
+            //            "sortable": false,
+            //            render: function(data, type, row, meta) {
+            //                var html = '';
+            //                html += '<input name="SubjectScoreModels[' + meta.row + '].Grade" value="' + (row.Grade == null ? "" : row.Grade) + '" type="hidden"/>';
+            //                html += row.Grade;
+            //                return html;
+            //            }
+
+            //        },
+            //        {
+            //            "targets": 2,
+            //            "data": "Point",
+            //            "sortable": false,
+            //            render: function(data, type, row, meta) {
+            //                var html = '';
+            //                html += '<input name="SubjectScoreModels[' + meta.row + '].Point" value="' + (row.Point == null ? "" : row.Point) + '" type="hidden"/>';
+            //                html += row.Point;
+            //                return html;
+            //            }
+            //        },
+            //        {
+            //            "targets": 3,
+            //            "data": null,
+            //            "sortable": false,
+            //            render: function(data, type, row, meta) {
+            //                var html = '';
+            //                html += '<a href="javascript:void(0)" onclick="subject.addScore(subjectScores,this)"><i class="fa fa-pencil-square-o"></i></a>';
+            //                html += '<a href="javascript:void(0)" onclick="subject.removeScore(subjectScores,this)" ><i class="fa fa-trash"></i></a>';
+            //                return html;
+            //            }
+            //        }
+            //    ],"fnCreatedRow": function (nRow, aData, iDisplayIndex) {
+            //        $(nRow).attr('id', aData._id);
+            //        if (aData.shared) {
+            //            $(nRow).addClass('success');
+            //        }
+            //        $(nRow).addClass('contact-row');
+            //    }
+            //});
+            //subject.loadScores(@Model.Id, subjectScores);
+            $('#createform').submit(function() {
+                subjectScores.page.len(9999);
+            });
+
+            var i = 1;
+            $("#add_typesubject").click(function () {
+                $('#typesubject' + i).html("" +
+                    "<div class='row form-group'>  " +
+                        "<input type='hidden' id='type_subject_hd' name='type_subject_hd' value='-1' />" +
+                        "<div class='col-sm-6'> " +
+                            "<select class='form-control select2-hidden-accessible searchText1' name='int_subject_type_' id='int_subject_type_' data-index='"+i+"' data-placeholder='-- Subject Type --' aria-hidden='true'> " +
+                                 "<option></option>  @Html.Raw(Model.HtmlSubjectType) </select> "+
+                    "</div>" +
+                    "<div class='col-sm-6'>" +
+                            " <select class='form-control select2-hidden-accessible searchText1' name='int_GroupSubject_id_' id='int_GroupSubject_id_' data-placeholder='-- Group Course --'  multiple='multiple' aria-hidden='true'> <option></option>  @Html.Raw(Model.HtmlGroupSubject)</select>"+
+                        " </div> " +
+                    "</div>" +
+                    "<div class='row form-group certificate_style_"+i+"'>"+
+                         "<div class='col-sm-6'> " +
+                               "<input type='number' id='type_duration' name='type_duration' placeholder='Duration (Hours)' class='form-control' /> " +
+                         "</div>" +
+                         "<div class='col-sm-6'> " +
+                               "<input type='number' id='type_Recurrent' name='type_Recurrent' placeholder='Recurrent (Month)' class='form-control' /> " +
+                         "</div>  " +
+                    "</div>" +
+                    "<div class='row form-group certificate_style_"+i+"'>"+
+                         "<div class='col-sm-6'> " +
+                               "<input type='text' id='CertificateName' name='CertificateName' placeholder='Certificate' class='form-control' /> " +
+                         "</div>" +
+                         "<div class='col-sm-6'> " +
+                               "<input type='text' id='CertificateCode' name='CertificateCode' placeholder='Code Certificate No' class='form-control' /> " +
+                         "</div>  " +
+                    "</div>" +
+                    "<hr/>");
+
+                $('#tab_logicx').append('<div id="typesubject' + (i + 1) + '"></div>');
+                i++;
+
+                $('select:not([name$="_length" ])').select2({
+                    width: '100%',
+                    allowClear: true
+                }).addClass('form-control searchText1');
+
+            });
+            $("#delete_typesubject").click(function () {
+                if (i > 1) {
+                    $("#typesubject" + (i - 1)).html('');
+                    i--;
+                }
+            });
+
+        });
+       $(document).on('change', 'input[name="InstructorAbility"]', function() {
+            var $this = $(this);
+            var value = $(this).val();
+            var allowance = $(this).data('allowance');
+            if ($(this).prop("checked") == true) {
+                history_temp.push(value);
+            } else {
+                var index = history_temp.indexOf(value);
+                if (index > -1) {
+                     history_temp.splice(index, 1);
+                }
+            }
+            optionclick($this, value, allowance);
+        });
+        $('#subjectlist').on('change', 'li', function () {
+            //console.log($(this));
+        //    var $this = $(this);
+        //    var value = $(this).val();
+        //    var allowance = $(this).data('allowance');
+
+        //    optionclick($this, value, allowance);
+        });
+        var index = @i;
+        var valueselect = 0;
+        var data__ = "";
+        $("#editor-insdra-allowance").each(function (i,v) {
+            valueselect = $(v).val();
+        });
+        function optionclick(ddlInstructor, subjectId, allowance ) {
+
+            var $tr = ddlInstructor.closest('div');
+
+            //var rowIndex = $tr.data('index');
+            var idins = ddlInstructor.val();
+            var nameins = ddlInstructor.data("name");
+            //var $instructorList = $tr.find('.lstList');
+            var $subjectList = $('#listSubject_edit');
+
+            var rowId = $subjectList.data('index') == undefined ? 0 : $subjectList.data('index');
+
+            if (ddlInstructor.is(":checked")) {
+
+                ddlInstructor.addClass('active');
+               // ddlInstructor.data('none', false);
+               var loacalallowance = 0;
+                if ($tr.find('.instructorValue').length == 0) {
+                    loacalallowance = allowance;
+                }
+
+                var htmlInstructor = '<div class="row insdura_' + idins + ' subjectInstructor"><input class="intructorId" type="hidden" name="intructorId" id="intructorId" value="'+idins+'"/>';
+                htmlInstructor += '<div class="form-group col-md-6"><label>@Resource.lblInstructor</label>' +
+                    '<input class="instructorValue" id="editor-insdra-instructorId" type="hidden" name="ListInstructors[' + rowId + '].InstructorId" value="' + idins + '"/> <input class="" id="editor-insdra-subjectId" type="hidden" name="ListInstructors[' + rowId + '].SubjectId" value="' + subjectId + '"/> <input type="text" id="editor-insdra-instructorName" class="form-control input-sm" readonly="readonly"  value="' + nameins + '"/></div>';
+                htmlInstructor += '<div class="form-group col-md-6"><label>@Resource.lblTrainingAllowance</label>  <input type="number" data-index="' + rowId + '" class="form-control input-sm" id="editor-insdra-allowance" name="ListInstructors[' + rowId + '].Allowance" value="' + valueselect  + '"></div>';
+                htmlInstructor += '</div>';
+
+                $subjectList.append(htmlInstructor);
+                rowId++;
+                $subjectList.data('index', rowId);
+                if (rowId == 0) {
+                     valueselect = loacalallowance;
+                }
+            } else {
+
+                ddlInstructor.removeClass('active');
+                //ddlInstructor.data('none', true);
+                //ddlInstructor.removeAttr('checked');
+                $('.insdura_' + idins).remove();
+                 if (rowId > 0) {
+                       rowId--;
+                }
+
+                $subjectList.data('index', rowId);
+            }
+
+            var countarray = 0;
+            var $root = $('.subjectInstructor');
+            $.each($root, function (i, o) {
+                var $this = $(this);
+                $this.find('#editor-insdra-id').attr("name", "ListInstructors[" + countarray + "].Id");
+                $this.find('#editor-insdra-subjectId').attr("name", "ListInstructors[" + countarray+"].SubjectId");
+                $this.find('#editor-insdra-instructorId').attr("name", "ListInstructors[" + countarray + "].InstructorId");
+                $this.find('#editor-insdra-allowance').attr("name", "ListInstructors[" + countarray + "].Allowance");
+                countarray++;
+            });
+
+        }
+        $("#editor-IsAverageCaculate").on("change", function () {
+            var value = $(this).val();
+            if (value == "0") {
+                $('#hiddenCalculated').attr("hidden",true);
+                $('#hidden_subjectscore').attr("hidden",true);
+
+                $('#editor-PassScore').val(80);
+                //$("#delete_row").click();
+            } else {
+                $('#hiddenCalculated').removeAttr("hidden");
+                $('#hidden_subjectscore').attr("hidden",false);
+                //$('#hidden_subjectscore').removeAttr("hidden");
+                $('#editor-PassScore').val(80);
+                //$("#add_row").click();
+            }
+        });
+        //function CalculatedClick(id) {
+        //    debugger
+        //    var value = id.value;
+        //    if (value == "0") {
+        //        $('#hiddenCalculated').attr("hidden",true);
+        //        $('#hidden_subjectscore').attr("hidden",true);
+
+        //        $('#editor-PassScore').val(80);
+        //    } else {
+        //        $('#hiddenCalculated').removeAttr("hidden");
+        //        $('#hidden_subjectscore').attr("hidden",false);
+        //        //$('#hidden_subjectscore').removeAttr("hidden");
+        //        $('#editor-PassScore').val(80);
+        //    }
+
+        //}
+
+        function submit() {
+            $('#saveA').hide();
+            spinner.open();
+            var form = $("#createform").serialize();
+            $.ajax({
+                type : 'POST',
+                url : '/Subjects/Modify',
+                data : form,
+                dataType : 'json',
+                success : function(data) {
+                    if (data.result) {
+                        notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                        window.location.href = "/Subjects/index";
+                    } else {
+                        notify.alert(data.message, "ERROR", TITLE_STATUS_DANGER);
+                    }
+                },
+                complete: function() {
+                    $('#saveA').show();
+                    spinner.close();
+                }
+            });
+        }
+        function FilterInstructor() {
+           checkTrainee(); 
+        }
+
+        function getDataInstructor() {
+            var $root = $('#createform');
+            var rs = {
+                Filter_Instructor: $root.find('#Filter_Instructor').val(),
+                DepartmentId: $root.find('#DepartmentId').val(),
+                JobTitleId: $root.find('#JobTitleId').val(),
+                Instructors: []
+            }
+            var $instructor = $root.find('div.subjectInstructor');
+            $.each($instructor, function(i, o) {
+                var $this = $(this);
+                var id = $this.find('#editor-insdra-instructorId').val();
+                rs.Instructors.push(id);
+            });
+            return rs;
+        }
+        function checkTrainee() {
+            var form = getDataInstructor();
+            $.ajax({
+                type: 'POST',
+                @{if(Model.Id  != null)
+                    {
+                        @:url: "/Subjects/AjaxHandlerListSelectInstructor/" + @Model.Id +"",
+                     }
+                else
+                {
+                @:url: "/Subjects/AjaxHandlerListSelectInstructor",
+                }
+                }
+
+                datatype: 'json',
+                data:  { pageIndex: pageIndex, pageSize: pageSize, form:form},
+                success: function (data) {
+                    $("#subjectlist").html('');
+                    $("#subjectlist").append(data);
+                    $("#checkAll").on("change", function () {
+                        var checklist_select = [];
+                        $(".intructorId").each(function (i, v) {
+                            checklist_select.push($(v).val());
+                        });
+                        $(".InstructorAbility").prop('checked', $(this).prop("checked"));
+                        $(".InstructorAbility").each(function (i,c) {
+                            if ($(this).prop("checked") == false) {
+                                        $(c).trigger('change');
+                                }
+                                else if ($(this).prop("checked") == true) {
+                                    if (!checklist_select.includes($(c).val())) {
+                                            $(c).trigger('change');
+                                    }
+                                }
+                            });
+                        // $(".InstructorAbility").prop('checked', $(this).prop("checked"));
+                    });
+                    var checklist_select = [];
+                    $(".intructorId").each(function (i, v) {
+                        checklist_select.push($(v).val());
+                    });
+                    $("input[name='InstructorAbility']").each(function (i, v) {
+                    if (history_temp.includes($(this).val())) {
+                        $(this).prop("checked", true);
+                    }
+                    if ($(this).prop("checked") == false) {
+                            $(this).trigger('change');
+                    }
+                    else if ($(this).prop("checked") == true) {
+                        if (!checklist_select.includes($(this).val())) {
+                                $(this).trigger('change');
+                        }
+                    }
+                });
+                }
+            });
+        }
+
+        $('#Filter_Instructor').bind("enterKey", function(e) {
+            FilterInstructor();
+        });
+        $('#Filter_Instructor').keyup(function(e) {
+            if (e.keyCode == 13) {
+                $(this).trigger("enterKey");
+            }
+        });
+        $(document).on('change', '#editor-insdra-allowance', function () {
+            if ($(this).data("index") == 0) {
+                valueselect = parseInt($(this).val());
+            }
+        });
+
+        function scrollList(e) {
+            if (processing)
+                return false;
+            if ((e.scrollTop + e.clientHeight) >= $(e)[0].scrollHeight && !processing) {
+                processing = true;
+                pageIndex++;
+                checkTrainee();
+            }
+        }
+    </script>
+}
+
+

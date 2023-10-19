@@ -1,0 +1,145 @@
+﻿@using TMS.Core.App_GlobalResources
+@{
+    ViewBag.Title = "ChangePass";
+    Layout = "~/Views/Shared/_LayoutCus.cshtml";
+    
+}
+
+<form class="form-horizontal bordered-row" action="@Url.Action("ChangePass", "Customer")" method="post" id="changepass" data-parsley-validate>
+    <div class="panel">
+        <div class="panel-body">
+            <h3 class="title-hero">
+                @ViewBag.Title
+            </h3>
+
+            <div id="MessageBox" class="alert alert-danger" hidden>
+
+            </div>
+            <div id="MessageSucessBox" class="alert alert-success" hidden>
+
+            </div>
+            <div  class="alert alert-success" >
+                <p>Password must contain at least 8 characters, including uppercase, lowercase letters, special characters and numbers.</p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">@Resource.lblOldPass</label>
+                        <div class="col-sm-4">
+                            <input type="password" name="pass"  data-parsley-required-message="Required Fields"   class="form-control">
+                        </div>
+                      
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">@Resource.lblNewPass</label>
+                        <div class="col-sm-4">
+                            <input type="password" name="newpass"  data-parsley-required-message="Required Fields" required class="form-control">
+                        </div>
+                       
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">@Resource.lblNewPassComfirm</label>
+                        <div class="col-sm-4">
+                            <input type="password" name="newpasscom"  data-parsley-required-message="Required Fields" required class="form-control">
+                        </div>
+                       
+                    </div>
+                   
+                </div>
+            </div>
+            <div class="pull-right">
+                <button type="button" class="btn btn-md btn-primary min-width-100 pad10R" id="sub" >@Resource.lblSubmit</button>
+            </div>
+            <div class="clear"></div>
+
+        </div>
+    </div>
+</form>
+
+@section Script{
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#sub").click(function () {
+            var postData = $("#changepass").serializeArray();
+            var formURL = $("#changepass").attr("action");
+            if (checkForm(postData)) {
+                $.ajax(
+           {
+               url: formURL,
+               type: "POST",
+               data: postData,
+               success: function (data, textStatus, jqXHR) {
+                   //data: return data from server
+                   if (data.result == true) {
+                       bootbox.alert(data.messege, function(){
+                           window.location.href = '@Url.Action("Index","Home")';
+                       })
+                   } else {
+                       showMessage(data.messege);
+                   }
+               },
+               error: function (jqXHR, textStatus, errorThrown) {
+                   //if fails      
+               }
+           });
+            }
+        })
+    })
+
+    function checkForm()
+    {
+        var pass = ($('input[name="pass"]').val());
+        var newpass = ($('input[name="newpass"]').val());
+        var newpasscom = ($('input[name="newpasscom"]').val());
+
+        if (pass == "") {
+            showMessage("Error: Old password cannot be blank!");
+            $('input[name="pass"]').focus();
+            return false;
+        }
+      
+
+        if (newpass != "" && newpass == newpasscom) {
+            if (newpass.length < 8) {
+                showMessage("Error: Password must contain at least 8 characters!");
+                $('input[name="newpass"]').focus();
+                return false;
+            }
+        
+            re = /[0-9]/;
+            if (!re.test(newpass)) {
+                showMessage("Error: password must contain at least one number (0-9)!");
+                $('input[name="newpass"]').focus();
+                return false;
+            }
+            re = /[a-z]/;
+            if (!re.test(newpass)) {
+                showMessage("Error: password must contain at least one lowercase letter (a-z)!");
+                $('input[name="newpass"]').focus();
+                return false;
+            }
+            re = /[A-Z]/;
+            if (!re.test(newpass)) {
+                showMessage("Error: password must contain at least one uppercase letter (A-Z)!");
+                $('input[name="newpass"]').focus();
+                return false;
+            }
+            
+            var reraw = '@Html.Raw("#?!$@%^&*-")';
+            re =@Html.Raw("/[#?!$@%^&*-]/");
+            if (!re.test(newpass)) {
+                showMessage("Error: password must contain at least one special charater ("+reraw+")!");
+                $('input[name="newpass"]').focus();
+                return false;
+            }
+        } else {
+            showMessage("Error: Please check that you've entered and confirmed your password!");
+            $('input[name="newpasscom"]').focus();
+            return false;
+        }
+        return true;
+    }
+
+</script>
+}

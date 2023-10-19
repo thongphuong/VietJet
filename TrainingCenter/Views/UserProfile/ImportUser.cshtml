@@ -1,0 +1,206 @@
+﻿
+@model List<TMS.Core.ViewModels.ViewModel.ImportUserViewModel>
+
+@{
+    ViewBag.Title = "Create";
+    ViewBag.ActiveMenu = "System";
+    ViewBag.ActiveSubMenu = "UserProfile";
+}
+@section pageTitle {
+    <h1><i class="fa fa-user"></i>
+        User Profile
+                        <small>Import User</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+        <li><a href="/UserProfile"><i class="fa fa-user"></i>User Profile</a></li>
+        <li class="active">Import User</li>
+    </ol>
+}
+@section headContent{
+    <link href="/js/plugins/bootstrap-fileinput-master/css/fileinput.css" rel="stylesheet" type="text/css" />
+    <script src="/js/plugins/bootstrap-fileinput-master/js/fileinput.js" type="text/javascript"></script>
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+
+
+            <div class="box-header">
+                <h3 class="box-title">Import User</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <form action="/UserProfile/UploadUserList" method="post" enctype="multipart/form-data">
+                            <div class="form-group col-md-12">
+                                <label for="contactFile">Upload File (xlsx):</label>
+
+                                <input type="file" name="userFile" id="userFile" style="width: auto; border: 0; font-weight: bold" class="file" data-show-preview="false" />
+                                <img id="Loading1" src="~/Images/loading.GIF" alt="" style="position: relative; top: 6px; display: none" />
+                                @if (!string.IsNullOrEmpty(ViewBag.OperationMessage))
+                                {
+                                    <br />
+                                    <span class="message-error"><i>@ViewBag.OperationMessage</i></span>
+                                }
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+
+                @using (Html.BeginForm("ImportUser", "UserProfile", FormMethod.Post, new { @id = "ImportUserForm", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                     
+                    if (Html.ViewData.ModelState.IsValid != null && !Html.ViewData.ModelState.IsValid)
+                    {
+                    <div class="callout callout-danger">
+                        @Html.ValidationSummary(true)
+                    </div>
+                    }
+
+                    if (Model != null)
+                    {     <hr />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="defaultTable" class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20px; text-align: center">#
+                                        </th>
+                                        <th>File No
+                                        </th>
+                                        <th>Email
+                                        </th>
+                                        <th>First name
+                                        </th>
+                                        <th>Last name
+                                        </th>
+                                        <th>Gender
+                                        </th>
+                                        <th>Title
+                                        </th>
+                                        <th>Birthdate
+                                        </th>
+                                        <th>ID number
+                                        </th>
+                                        <th>Address
+                                        </th>
+                                        <th>Mobile Phone
+                                        </th>
+                                        <th>Home Phone
+                                        </th>
+                                        <th>Join Date
+                                        </th>
+                                        <th>Department
+                                        </th>
+                                        <th>Nationality
+                                        </th>
+                                        <th>Is Trainer
+                                        </th>
+                                        <th>Status
+                                        </th>
+                                        @* <th></th>*@
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < Model.Count; i++)
+                                    {
+                                        <tr>
+                                            <td style="text-align: center">@(i + 1)</td>
+                                            <td>
+                                                @Model[i].user.str_File_No
+                                                @Html.HiddenFor(m => Model[i].user.str_File_No)
+                                            </td>
+                                            <td>
+                                                @Model[i].user.str_Email
+                                                @Html.HiddenFor(m => Model[i].user.str_Email)
+                                            </td>
+
+                                            <td>
+                                                @Model[i].user.str_Firstname
+                                                @Html.HiddenFor(m => Model[i].user.str_Firstname)
+                                            </td>
+                                            <td>
+                                                @Model[i].user.str_Lastname
+                                                @Html.HiddenFor(m => Model[i].user.str_Lastname)
+                                            </td>
+                                            <td>
+                                                @Model[i].user.str_Gender
+                                                @Html.HiddenFor(m => Model[i].user.str_Gender)
+                                            </td>
+                                            <td>
+                                                @Model[i].user.str_Current_Title
+                                                @Html.HiddenFor(m => Model[i].user.str_Current_Title)
+                                            </td>
+                                            <td>
+                                                @Model[i].user.dtm_Birthdate
+                                                @Html.HiddenFor(m => Model[i].user.dtm_Birthdate)
+                                            </td>
+                                            <td>
+                                                @Model[i].user.str_Identity_Number
+                                                @Html.HiddenFor(m => Model[i].user.str_Identity_Number)
+                                            </td>
+                                            <td>
+                                                @Model[i].user.str_Address
+                                                @Html.HiddenFor(m => Model[i].user.str_Address)
+                                            </td>
+                                            <td>
+                                                @Model[i].user.str_Mobile_Phone
+                                                @Html.HiddenFor(m => Model[i].user.str_Mobile_Phone)
+                                            </td>
+                                            <td>
+                                                @Model[i].user.str_Home_Phone
+                                                @Html.HiddenFor(m => Model[i].user.str_Home_Phone)
+                                            </td>
+                                            <td>
+                                                @Model[i].user.dtm_Join_Date
+                                                @Html.HiddenFor(m => Model[i].user.dtm_Join_Date)
+                                            </td>
+                                            <td>
+                                                @Model[i].user.int_Current_Department_Id
+                                                @Html.HiddenFor(m => Model[i].user.int_Current_Department_Id)
+                                            </td>
+                                            <td>
+                                                @Model[i].user.str_Nationality
+                                                @Html.HiddenFor(m => Model[i].user.str_Nationality)
+                                            </td>
+                                            <td>
+                                                @Model[i].user.bit_Teacher
+                                                @Html.HiddenFor(m => Model[i].user.bit_Teacher)
+                                            </td>
+                                            <td>
+                                                @Model[i].status
+                                                @Html.HiddenFor(m => Model[i].status)
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    }
+
+                }
+            </div>
+
+            <div class="box-footer">
+                @if (Model != null)
+                {
+                    <button type="button" class="btn btn-primary" id="ImportButton">Import</button> 
+                }
+                <button type="button" class="btn btn-default" id="btBack">Back</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#ImportButton').click(function () {
+        $('#ImportUserForm').submit();
+    });
+    $('#btBack').click(function () {
+        window.location.href = '/Userprofile/';
+    });
+</script>

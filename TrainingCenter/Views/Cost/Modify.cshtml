@@ -1,0 +1,233 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Cost.CostModel
+
+@{
+    ViewBag.Title = "Modify";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fas fa-database"></i>   @Resource.lblMasterData - @Resource.lblCost @(!Model.Id.HasValue ? @Resource.lblCreate : @Resource.lblEdit)</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblMasterData</li>
+                <li class="active">@Resource.lblCost @(!Model.Id.HasValue ? @Resource.lblCreate : @Resource.lblEdit)</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="panel" id="list-panel">
+    <div class="panel-heading">
+        <h1 class="panel-title list-panel-title"><i class="fas fa-pencil-alt font-small-byhoa" aria-hidden="true"></i> @(!Model.Id.HasValue ? @Resource.lblCreate : @Resource.lblEdit)</h1>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm("Modify", "Cost", FormMethod.Post, new { @class = "form-horizontal bordered-row", id = "createform" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                @Html.HiddenFor(model => model.Id)
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <label class="control-label col-md-2">@Resource.lblCode <font color="red">(*)</font></label>
+                    <div class="col-md-6">
+                        @if (!string.IsNullOrEmpty(Model.Code) && (Model.Code.Equals("C001") || Model.Code.Equals("C002")))
+                        {
+                            @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        }
+                        else
+                        {
+                            @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control" } })
+                        }
+
+                        @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                </div>
+                @*<div class="form-group">
+                    <label class="control-label col-md-2">@Resource.COST_GROUPCOST <font color="red">(*)</font></label>                   
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(m => m.GroupCostId, new SelectList(Model.GroupCosts, "Key", "Value", Model.GroupCostId), new { @class = "form-control", @data_placeholder = "--" + @Resource.COST_GROUPCOST + "--" })
+                        @Html.ValidationMessageFor(m => m.GroupCostId, null, new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                        <a href="javascript:void(0)" onclick="actionShowModifyGroupCost()"><i class="fas fa-edit" aria-hidden="true"></i>@Resource.lblEdit</a>
+                        &nbsp;|&nbsp;
+                        <a href="javascript:void(0)" onclick="actionShowModifyGroupCost(-1)"><i class="fa fa-plus" aria-hidden="true"></i>@Resource.lblADDNEW</a>
+                    </div>
+                </div>*@
+                <div class="form-group">
+                    <label class="control-label col-md-2">@Resource.lblCostName <font color="red">(*)</font></label>
+                    <div class="col-md-6">
+                        @if (!string.IsNullOrEmpty(Model.Code) && (Model.Code.Equals("C001") || Model.Code.Equals("C002")))
+                        {
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        }
+                        else
+                        {
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        }
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2">@Resource.lblDescription </label>
+                    <div class="col-md-6">
+                        @Html.TextAreaFor(m => m.Description, 6, 40, new { id = "txtDescription", @class = "form-control", placeholder = @Resource.lblDescription })
+                        @Html.ValidationMessageFor(m => m.Description, null, new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="action-form text-right">
+                @{
+                    if (User.IsInRole("/Cost/Modify"))
+                    {
+                        <a href="javascript:void(0)" class="btn btn-primary  legitRipple" id="submit" onclick="submit()"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                    }
+                }
+                <a onclick="goBack()" class="btn btn-default  legitRipple"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            @*<div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>*@
+            <div class="modal-body">
+                <label>@(string.Format(Messege.DELETE_OBJECT,Resource.COST_GROUPCOST))</label>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div id="messageout2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="Modal_Footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/js/app.js"></script>
+<script type="text/javascript">
+        function submit() {
+            $("#submit").hide();
+                spinner.open();
+                var form = $("#createform").serialize();
+                $.ajax({
+                    type: 'POST',
+                    url: "/Cost/Modify",
+                    datatype: 'json',
+                    data: form,
+                    success: function(data) {
+                        if (data.result) {
+                            notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                            window.location.href = '/Cost';
+                        } else {
+                            notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                        }
+                    },
+                    complete: function () {
+                        $("#submit").show();
+                        spinner.close();
+                    }
+                });
+            }
+
+        function actionShowModifyGroupCost(id) {
+             id = id == -1 ? id :  $('#GroupCostId').val();
+            spinner.open();
+            $.ajax({
+                url: '/Cost/ModifyGroupCost/' + id,
+                success: function (response) {
+                    var $modal = $(response).modal('show');
+                    $modal.on('submit', 'form', function (e) {
+                        actionModifyGroupCost($modal);
+                        //e.preventDefault();
+                        return false;
+                    });
+                },
+                complete: function () {
+                    spinner.close();
+                }
+            });
+        }
+        function actionModifyGroupCost($modal) {
+            var $this = $modal.find('form');
+            var formData = $this.serializeArray();
+            var data = mergArrayObject(formData);
+            $.ajax({
+                url: $this.attr('action'),
+                data: data,
+                type: 'POST',
+                success: function (response) {
+                    if (response.result) {
+                        loadGroupCost();
+                        $modal.on('hidden.bs.modal', function () { $(this).remove(); });
+                        $modal.modal('hide');
+                        notify.alert(response.message, 'Notification', TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(response.message, 'Warning', TITLE_STATUS_DANGER);
+                    }
+                },
+                complete: function () {
+                    spinner.close();
+                }
+            });
+        }
+        function calldelete(id) {
+            notify.confirm('@(string.Format(Messege.DELETE_OBJECT,Resource.COST_GROUPCOST))', 'Confirm', TITLE_STATUS_WARNING, actionDeleteGroupCost, id);
+        }
+        function actionDeleteGroupCost(id) {
+            $.ajax({
+                url: "/Cost/DeleteGroupCost",
+                type: 'POST',
+                datatype: 'json',
+                data: { id: id },
+                success: function (response) {
+                    if (response.result) {
+                        loadGroupCost();
+                        $('.modal').modal('hide');
+                        notify.alert(response.message, 'Notification', TITLE_STATUS_SUCCESS);
+                    } else {
+                        notify.alert(response.message, 'Warning', TITLE_STATUS_DANGER);
+                    }
+                },
+                complete: function () {
+                    spinner.close();
+                }
+            });
+        }
+
+        function loadGroupCost() {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/Cost/filterGroupCost",
+                datatype: 'json',
+                success: function (result) {
+                    $('#GroupCostId').empty();
+                    $('#GroupCostId').prop('selectedIndex', 0);
+                    $('#GroupCostId').append(result.value_option);
+                },complete : function() {
+                    spinner.close();
+                }
+            });
+        }
+      
+</script>
+}

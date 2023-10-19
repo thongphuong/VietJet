@@ -1,0 +1,49 @@
+﻿
+@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@model TMS.Core.ViewModels.Notifications.NotificationModel
+
+
+<input type="hidden" value="@Model.Count" id="hd_count_mess" />
+
+@foreach (var item in Model.NotificationDetail)
+{
+    string time = DateUtil.DateToString(item.datesend, "dd/MM/yyyy hh:mm");
+    if (item.datesend != null &&
+        (DateTime.Now.Day == item.datesend.Value.Day &&
+        DateTime.Now.Month == item.datesend.Value.Month &&
+        DateTime.Now.Year == item.datesend.Value.Year))
+    {
+        TimeSpan span = (DateTime.Now - item.datesend.Value);
+        if (span.Hours == 0 && span.Minutes == 0)
+        {
+            time = "Now";
+        }
+        else
+        {
+            if (span.Hours == 0 && span.Minutes > 0)
+            {
+                time = string.Format("{0} minutes", span.Minutes);
+            }
+            else if (span.Hours > 0)
+            {
+                time = string.Format("{0}h{1}m", span.Hours, span.Minutes);
+            }
+        }
+    }
+
+    <a href="@(item.Notification.URL ?? "javascript:void(0)" )" class="list-group-item  @(item.status == (int)UtilConstants.NotificationStatus.Show ? "active2" : "")" onclick="viewnotification(@item.id)">
+        <i class="zmdi zmdi-comment-more"></i>
+        <b>@item.Notification.Message</b>
+        <br />
+        <i>@item.Notification.MessageContent </i>
+        <br />
+        <span class="text-muted small text-left">
+            <b>
+                <em>@((item.USER.FIRSTNAME.ToUpper() ?? " ") + " " + (item.USER.LASTNAME.ToUpper() ?? ""))</em>
+            </b>
+            <b><em>@time</em></b>
+        </span>
+    </a>
+}
+

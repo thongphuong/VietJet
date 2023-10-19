@@ -1,0 +1,145 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Subjects.SubjectDetailModifyModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var i = 0;
+}
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-book"></i>  @Resource.lblSubjectManagement - @Resource.lblSubjectList</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblSubjectManagement</li>
+                <li class="active">@Resource.lblCreate</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="panel list-panel" id="list-panel">
+    <div class="panel-heading list-panel-heading">
+        <h1 class="panel-title list-panel-title">@Resource.lblCreate</h1>
+    </div>
+    <div class="panel-body center-block ">
+
+        @using (Html.BeginForm("Create", "Subjects", FormMethod.Post, new { id = "createform" }))
+        {
+        <div class="row">
+            <input type="hidden" name="Id" value="@Model.Id" id="editor-Id" />
+            <div class="col-md-12">
+                <div class="col-md-6 row">
+                    <!-- Name -->
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label>@Resource.lblSubjectName <font color="red">(*)</font></label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="hidden" name="Name_Temp" value="@Model.Name" />
+                            <input type="hidden" value="-1" id="editor-index" />
+
+                            @Html.TextBoxFor(m => m.Name, (object)new { @class = "form-control", id = "editor-Name", placeholder = @Resource.lblName, @Required = "Required" })
+                            @Html.ValidationMessageFor(m => m.Name, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <!--End Name -->
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label>@Resource.lblSubject <font color="red">(*)</font></label>
+                        </div>
+                        <div class="col-md-8">
+                           
+                            <select class="form-control frmFilter" multiple="multiple" name="SubjectIdList" id="SubjectIdList" data-placeholder="-- @Resource.lblSubject --">
+                                <option></option>
+                                @if (Model.SubjectDetails.Count() > 0)
+                                {
+                                    foreach (var item in Model.SubjectDetails)
+                                    {
+                                        <option value="@item.Id" @(Model.SubjectIdList != null && Model.SubjectIdList.Contains(item.Id) ? "selected": "") >@(item.Code + " - " + item.Name) </option>
+                                    }
+
+                                }
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 ">
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label>@Resource.lblSubjectCode <font color="red">(*)</font></label>
+                        </div>
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(m => m.Code, Model.Id.HasValue ? (object)new { @class = "form-control", id = "editor-Code", placeholder = @Resource.lblSubjectCode, @Required = "Required", @readonly = "readonly" } : (object)new { @class = "form-control", id = "editor-Code", placeholder = @Resource.lblSubjectCode, @Required = "Required" })
+                            @Html.ValidationMessageFor(m => m.Code, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label>Relevant Training Department @*<font color="red">(*)</font>*@</label>
+                        </div>
+                        <div class="col-md-8">
+                            <select class="form-control searchText1 select2-hidden-accessible" re="" name="int_khoidaotao" id="int_khoidaotao" data-placeholder="-- Relevant Training Department --" multiple="" tabindex="-1" aria-hidden="true">
+                                <option></option>
+                                @foreach (var item in Model.ListRelevalDeparment)
+                                {
+                                    <option value="@item.Id" @(Model.SubjectTrainingCenter.Contains(item.Id) ? "selected" : "")>@item.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+           
+        }
+        <div class="row">
+            <div class="action-form text-right">
+                @if (User.IsInRole("/Subjects/Create"))
+                {
+                    @*<button type="submit" class="btn btn-primary" id="save"><i class="fa fa-floppy-o" aria-hidden="true"></i> @Resource.lblSave</button>*@
+                    <a class="btn btn-primary" id="saveA" onclick="create()"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                }
+
+                <a onclick="goBack()" class="btn btn-default"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+@section Scripts{
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+    <script src="~/Scripts/js/app.js"></script>
+    <script type="text/javascript">
+        function create() {
+            $('#saveA').hide();
+            spinner.open();
+            var form = document.getElementById('createform');
+            var formData = new FormData(form);
+            $.ajax({
+                type: 'POST',
+                url: "/Subjects/Create",
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                        window.location.href = "/Subjects/Group";
+                    } else {
+                        notify.alert(data.message, "ERROR", TITLE_STATUS_DANGER);
+                    }
+                },
+                complete: function() {
+                    $('#saveA').show();
+                    spinner.close();
+                }
+            });
+        }
+    </script>
+}
+
+

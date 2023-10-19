@@ -1,0 +1,12 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Orientation.OrientationViewModel
+@{
+    <select id="editorJob" name="editorJob" required="required" @(Model.Id != 0 ? "disable": "")   class="form-control" data-placeholder="-- @Resource.lblFuturePosition --">
+        <option value=""></option>
+        @foreach (var m in Model.JobList)
+        {
+            <option value="@m.Id" @(Model.JobFuture == m.Id ? "selected" : "") class="text-blue">@m.Name</option>
+        }
+    </select>
+    //<input type="hidden" id="JobFutureId" value="-1" />
+}

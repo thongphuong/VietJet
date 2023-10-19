@@ -1,0 +1,200 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Room.RoomModels
+
+@{
+    ViewBag.Title = "Modify";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fas fa-database"></i>   @Resource.lblMasterData - @Resource.lblRoom @(!Model.Id.HasValue ? @Resource.lblCreate : @Resource.lblEdit)</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblMasterData</li>
+                <li class="active">@Resource.lblRoom @(!Model.Id.HasValue ? @Resource.lblCreate : @Resource.lblEdit)</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="panel">
+    <div class="panel-heading">
+        <h1 class="panel-title list-panel-title"><i class="fas fa-pencil-alt font-small-byhoa" aria-hidden="true"></i> @(!Model.Id.HasValue ? @Resource.lblCreate : @Resource.lblEdit)</h1>
+    </div>
+    <div class="panel-body">
+        <ul class="nav nav-tabs">
+            <li class="tabmanual active">
+                <a href="#manual" data-toggle="tab" aria-expanded="false" id="tabmanual">@Resource.lblManual</a>
+            </li>
+            <li class="tabimport">
+                <a href="#import" data-toggle="tab" aria-expanded="false" id="tabimport">@Resource.lblImport</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade  active in" id="manual">
+                @using (Html.BeginForm("Modify", "Room", FormMethod.Post, new { @class = "form-horizontal bordered-row", id = "createform" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="row" style="margin-top: 20px">
+                        @Html.HiddenFor(model => model.Id)
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group" style="margin-left:5px">
+                            <label class="col-md-2">@Resource.lblCode <font color="red">(*)</font></label>
+                            @*@Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                            <div class="col-md-4">
+                                @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+                            </div>
+                            <label class="col-md-2">@Resource.lblRoomName <font color="red">(*)</font></label>
+                            <div class="col-md-4">
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-left:5px">
+                            <label class="col-md-2">@Resource.lblNoSeats</label>
+                            <div class="col-md-4">
+                                @Html.EditorFor(model => model.Capacity, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Capacity, "", new { @class = "text-danger" })
+                            </div>
+                            <label class="col-md-2">@Resource.lblEquipment</label>
+                            <div class="col-md-4">
+                                @*<select multiple="multiple" class="form-control" id="strEquipment" name="strEquipment" data-placeholder="------- @Resource.lblEquipment ---------">
+                                    @{
+                                        var option = new List<string>();
+
+                                        if (!string.IsNullOrEmpty(Model.Equipment))
+                                        {
+                                            option = Model.Equipment.Split(new[] { ", " }, StringSplitOptions.None).ToList();
+                                        }
+                                    }
+                                    <option @(option.Contains("Máy chiếu") ? "selected" : "" ) value="Máy chiếu">Máy chiếu</option>
+                                    <option @(option.Contains("Điều hòa") ? "selected" : "") value="Điều hòa">Điều hòa</option>
+                                    <option @(option.Contains("Âm thanh") ? "selected" : "") value="Âm thanh">Âm thanh</option>
+                                </select>*@
+                                @Html.EditorFor(model => model.Equipment, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Equipment, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-left:5px">
+                            <label class="col-md-2">@Resource.lblArea</label>
+                            <div class="col-md-4">
+                                @Html.EditorFor(model => model.Area, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Area, "", new { @class = "text-danger" })
+                            </div>
+                            <label class="col-md-2">@Resource.lblLocation</label>
+                            <div class="col-md-4">
+                                @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-left:5px;">
+                            <label class="col-md-2">Room Type</label>
+                            <div class="col-md-4">
+                                <select class="form-control" id="Is_Meeting" name="Is_Meeting" data-placeholder="------- Room Type ---------" >
+                                    <option value="0">------- Room Type ---------</option>
+                                    @{
+                                        if (Model.room_type != null)
+                                        {
+                                            foreach (var item in Model.room_type)
+                                            {
+                                                <option @(ViewBag.roomId == item.Key ? "selected" : "") value="@item.Key">@item.Value</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                                @*<input class="form-control" type="checkbox" @(Model != null && Model.Is_Meeting == true ? "checked" : "") id="check_Meeting" name="check_Meeting" />*@
+                                @*&nbsp;
+                                    <label>
+                                        Is Meeting Room
+                                    </label>*@
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="row">
+                    <div class="action-form text-right">
+                        @{if (User.IsInRole("/Room/Modify")) // neu co
+                            {
+                                <a href="javascript:void(0)" class="btn btn-primary  legitRipple" id="submit" onclick="create()"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                            }
+                        }
+                        <a onclick="goBack()" class="btn btn-default legitRipple"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="import" style="margin-top: 20px">
+                @using (Html.BeginForm("ImportRoom", "Room", FormMethod.Post, new Dictionary<string, object> { { "enctype", "multipart/form-data" }, { "id", "importroom" } }))
+                {
+                    <div class="form-group col-md-12">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-8">
+                            <input type="file" name="postedFile" id="postedFile" class="form-control" />
+                        </div>
+                        <div class="col-md-3">
+                            <input type="button" class="btn btn-primary" value="@Resource.lblImport" id="Import" />
+                            <a href="~/Template/ExcelFile/TMS-Room-DHDN.xlsx" class="btn btn-primary">@Resource.lblDownloadTemplate</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#Import").click(function () {
+                var formdata = new FormData();
+                var totalFiles = document.getElementById("postedFile").files.length;
+                var file = document.getElementById("postedFile").files[0];
+                formdata.append("postedFile", file);
+                $.ajax({
+                    type: "POST",
+                    url: "/Room/ImportRoom",
+                    data: formdata,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (data.result) {
+                            notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                            window.location.href = "/Room/Index";
+                        } else {
+                            notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                        }
+                    }
+                });
+            });
+        })
+        function create() {
+            spinner.open();
+            $('#submit').hide();
+            var form = document.getElementById('createform');
+            var formData = new FormData(form);
+            $.ajax({
+                type: 'POST',
+                url: "/Room/Modify",
+                contentType: false,
+                processData: false,
+                data: formData,
+                //datatype: 'json',
+                success: function (data) {
+                    if (!data.result) {
+                        notify.alert(data.message, "WARNING", TITLE_STATUS_DANGER);
+                    } else {
+                        notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                        window.location.href = "/Room/Index/";
+                    }
+                },
+                complete: function () {
+                    spinner.close();
+                    $('#submit').show();
+                }
+            });
+        }
+    </script>
+}

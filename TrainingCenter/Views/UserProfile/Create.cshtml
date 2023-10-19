@@ -1,0 +1,251 @@
+﻿@model TrainingCenter.Models.ViewModel.UserProfileViewModel
+
+@{
+    ViewBag.Title = "Create";
+    ViewBag.ActiveMenu = "System";
+    ViewBag.ActiveSubMenu = "UserProfile";
+}
+@*@section pageTitle {
+    <h1><i class="fa fa-user"></i>
+        User Profile
+                        <small>Create Profile</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+        <li><a href="/UserProfile"><i class="fa fa-user"></i>User management</a></li>
+        <li class="active">Create User</li>
+    </ol>
+}*@
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+
+            @using (Html.BeginForm("Create", "UserProfile", FormMethod.Post, new { @id = "CreateProfileForm", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+               
+                <div class="box-header">
+                    <h3 class="box-title">Profile Detail</h3>
+                </div> 
+       
+                <div class="box-body">
+                    @if (Html.ViewData.ModelState.IsValid != null && !Html.ViewData.ModelState.IsValid)
+                    {
+                        <div class="callout callout-danger">
+                            @Html.ValidationSummary(true)
+                        </div>
+                    }
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            @Html.LabelFor(model => model.profile.UserName, "Username")
+                            @Html.TextBoxFor(model => model.profile.UserName, new { @class = "form-control", placeholder = "Username" })
+                        </div>
+                        <div class="form-group col-md-3">
+                            @Html.LabelFor(model => model.password, "Deafult Password")
+                            @Html.TextBoxFor(model => model.password, new { @class = "form-control", placeholder = "Default Password", type = "Password" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.profile.str_Fullname, "Full name")
+                            @Html.TextBoxFor(model => model.profile.str_Fullname, new { @class = "form-control", placeholder = "First name" })
+                        </div>
+                      
+                    </div>              
+
+                    <div class="row">
+                      
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.profile.str_Email, "Email")
+                            @Html.TextBoxFor(model => model.profile.str_Email, new { @class = "form-control", placeholder = "Company email" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.profile.int_Group_Roles_Id, "Group Role")
+                            @Html.DropDownListFor(model => model.profile.int_Group_Roles_Id, (SelectList)ViewBag.GroupRole, "- - - Select - - -", new { @class = "form-control" })
+                        </div>   
+                    </div>
+                  
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.profile.Department_Id, "Department")
+                            @Html.DropDownListFor(model => model.profile.Department_Id, (SelectList)ViewBag.Current_Department_Id, "- - - Select - - -", new { @class = "form-control" })
+                        </div>   
+                    </div>
+                </div>
+    
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default" id="btCancel">Cancel</button>
+                </div>
+
+            }
+        </div>
+    </div>
+</div>
+<script>
+    $("#btCancel").click(function () {
+        window.location.href = "/UserProfile";
+    });
+
+
+    $(document).ready(function () {
+
+        $("#profile_dtm_Birthdate").inputmask("dd MMM yyyy", { "placeholder": "dd MMM yyyy" });
+        $("#profile_dtm_Birthdate").datepicker({
+            format: 'dd MMM yyyy'
+        });
+        $("#profile_dtm_Join_Date").inputmask("dd MMM yyyy", { "placeholder": "dd MMM yyyy" });
+        $("#profile_dtm_Join_Date").datepicker({
+            format: 'dd MMM yyyy'
+        });
+        $('#CreateProfileForm')
+        // IMPORTANT: You must declare .on('init.field.bv')
+        // before calling .bootstrapValidator(options)
+            .on('init.field.bv', function (e, data) {
+                // data.bv      --> The BootstrapValidator instance
+                // data.field   --> The field name
+                // data.element --> The field element
+
+                var $parent = data.element.parents('.form-group'),
+                    $icon = $parent.find('.form-control-feedback[data-bv-icon-for="' + data.field + '"]'),
+                    options = data.bv.getOptions(),                      // Entire options
+                    validators = data.bv.getOptions(data.field).validators; // The field validators
+
+                if (validators.notEmpty && options.feedbackIcons && options.feedbackIcons.required) {
+                    // The field uses notEmpty validator
+                    // Add required icon
+                    $icon.addClass(options.feedbackIcons.required).show();
+                }
+            }).bootstrapValidator({
+                // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+                feedbackIcons: {
+                    required: 'glyphicon glyphicon-asterisk',
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                live: 'enabled',
+                message: 'This value is not valid',
+                submitButtons: 'button[type="submit"]',
+                fields: {
+                    "profile.UserName": {
+                        message: 'The Username is not valid',
+                        validators: {
+                            notEmpty: {
+                                message: 'The Username is required and cannot be empty'
+                            },
+                            stringLength: {
+                                min: 0,
+                                max: 50,
+                                message: 'The Username must be less than 50 characters long'
+                            }
+                        }
+                    },
+                    "profile.str_Firstname": {
+                        message: 'The First name is not valid',
+                        validators: {
+                            notEmpty: {
+                                message: 'The First name  is required and cannot be empty'
+                            },
+                            stringLength: {
+                                min: 0,
+                                max: 100,
+                                message: 'The First name  must be less than 100 characters long'
+                            }
+                        }
+                    },
+                    "profile.str_Lastname": {
+                        message: 'The Last name is not valid',
+                        validators: {
+                            notEmpty: {
+                                message: 'The Last name is required and cannot be empty'
+                            },
+                            stringLength: {
+                                min: 0,
+                                max: 100,
+                                message: 'The Last name must be less than 100 characters long'
+                            }
+                        }
+                    },
+                    "profile.str_Id_Certificate_Number": {
+                        message: 'The Identity Number is not valid',
+                        validators: {
+                            stringLength: {
+                                min: 0,
+                                max: 50,
+                                message: 'The Identity Number must be less than 100 characters long'
+                            }
+                        }
+                    },
+                    "password": {
+                        validators: {
+                            notEmpty: {
+                                message: 'The Password is required and cannot be empty'
+                            }
+                        }
+                    },
+                    "profile.str_File_No": {
+                        message: 'The Staff ID is not valid',
+                        validators: {
+                            stringLength: {
+                                min: 0,
+                                max: 10,
+                                message: 'The Staff ID must be less than 10 characters long'
+                            }
+                        }
+                    },
+                    "profile.str_Email": {
+                        validators: {
+                            emailAddress: {
+                                message: 'The value is not a valid email address'
+                            }
+                        }
+                    },
+                    "profile.str_Home_Phone": {
+                        message: 'The Home phone is not valid',
+                        validators: {
+                            stringLength: {
+                                min: 0,
+                                max: 20,
+                                message: 'The Home phone must be less than 20 characters long'
+                            }
+                        }
+                    },
+                    "profile.str_Mobile_Phone": {
+                        message: 'The Mobile phone is not valid',
+                        validators: {
+                            stringLength: {
+                                min: 0,
+                                max: 20,
+                                message: 'The Mobile phone must be less than 20 characters long'
+                            }
+                        }
+                    },
+                    "profile.str_Current_Title": {
+                        message: 'The position is not valid',
+                        validators: {
+                            stringLength: {
+                                min: 0,
+                                max: 50,
+                                message: 'The position must be less than 50 characters long'
+                            }
+                        }
+                    }
+                    //"profile.int_Current_Department_Id": {
+                    //    message: 'The Last name is not valid',
+                    //    validators: {
+                    //        notEmpty: {
+                    //            message: 'The Last name is required and cannot be empty'
+                    //        }
+                    //    }
+                    //}
+
+                }
+
+            });
+    });
+
+
+</script>

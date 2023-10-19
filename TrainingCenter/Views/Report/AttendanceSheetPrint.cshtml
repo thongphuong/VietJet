@@ -1,0 +1,217 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.ReportModels.AttendanceSheetModelRp
+
+@{
+    ViewBag.Title = "AttendanceSheetPrint";
+    //List<sp_GetSubjectResult_Result> course = ViewBag.returnreport;
+   
+    int count = 0;
+}
+
+
+<style>
+    #reportpage table > thead > tr > th,
+    #reportpage .table > thead > tr > th,
+    #reportpage table > tbody > tr > th,
+    #reportpage .table > tbody > tr > th,
+    #reportpage table > tfoot > tr > th,
+    #reportpage .table > tfoot > tr > th,
+    #reportpage table > thead > tr > td,
+    #reportpage .table > thead > tr > td,
+    #reportpage table > tbody > tr > td,
+    #reportpage .table > tbody > tr > td,
+    #reportpage table > tfoot > tr > td,
+    #reportpage .table > tfoot > tr > td {
+        border: 1px solid #000;
+        color: black;
+    }
+
+    .text-left {
+        text-align: left;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-right {
+        text-align: right;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-center {
+        text-align: center;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .header-title {
+        color: black;
+        font-weight: bold;
+    }
+
+    .td_course {
+        padding-left: 10px;
+        background: #ccc;
+    }
+
+    .footer_date {
+        color: black;
+        padding-top: 20px;
+        font-style: italic;
+        margin-bottom: -20px;
+    }
+
+    h4 {
+        color: black;
+    }
+</style>
+
+<link href="~/Content/assets/css/vietjet-print.css" rel="stylesheet" media="print" />
+@*<div class="col-sm-3 text-left">
+    <img src="~/Content/assets/img/report/logoreport.png" style="width: 40%;" />
+</div>*@
+   @*     <div class="col-sm-6 text-right">
+        <div class="col-sm-5 text-center pull-right">
+            FORM: VJC-VTC-F-010 <br />
+            ISS 01/REV 02<br />
+            1/1/2017
+        </div>
+    </div>
+    <div class="col-sm-12 text-center" style="margin-bottom:50px">
+        <h2 class="header-title">COURSE RESULT</h2>
+    </div>*@
+<div class="col-sm-12 text-center">
+    <table width="100%" border="1">
+        <tr>
+            <td width="20%">
+                <div class="col-sm-12 text-center">
+                    <img src="~/Content/assets/img/report/logoreport.png" style="width: 80%; margin-top: 12px;" />
+                </div>
+            </td>
+            <td colspan="1">
+                <div class="col-sm-12 text-center">
+                    <h2 class="header-title">ATTENDANCE SHEET</h2>
+                </div>
+            </td>
+            <td width="20%">
+                <div class="col-sm-12 text-right pull-right" style="text-align:right">
+                    <label>FORM: @Model.header[0]</label><br />
+                    <label>@Model.header[1]</label><br />
+                    <label>@Model.header[2]</label>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="col-sm-12">
+    <div class="col-sm-2">
+        <h4>@Resource.lblCourseName:</h4>
+    </div>
+    <div class="col-sm-5">
+        <h4><b>@(Model.CourseName)</b></h4>
+    </div>
+    <div class="col-sm-2">
+        <h4>@Resource.lblCourseCode:</h4>
+    </div>
+    <div class="col-sm-3">
+        <h4><b>@(Model.CourseCode)</b></h4>
+    </div>
+</div>
+<div class="col-sm-12">
+    <div class="col-sm-2">
+        <h4>@Resource.lblSubjectName:</h4>
+    </div>
+    <div class="col-sm-5">
+        <h4><b>@(Model.SubjectDetailName)</b></h4>
+    </div>
+    <div class="col-sm-2">
+        <h4>@Resource.lblDuration (hours):</h4>
+    </div>
+    <div class="col-sm-3">
+        <h4><b>@(Model.SubjectDetailDuration)</b></h4>
+    </div>
+</div>
+<div class="col-sm-12">
+    <div class="col-sm-2">
+        <h4>@Resource.lblVenue:</h4>
+    </div>
+    <div class="col-sm-5">
+        <h4><b>@(Model.Venue)</b></h4>
+    </div>
+    <div class="col-sm-2">
+        <h4>@Resource.lblDate:</h4>
+    </div>
+    <div class="col-sm-3">
+        <h4><b>@(Model.TimeFrom) - @(Model.TimeTo)</b></h4>
+    </div>
+</div>
+
+<div class="col-sm-12">
+    <b>@Resource.lblNote </b>: Trainees must sign for attendance. If any trainee is absent, instructor must cross (X) to the respestive box.
+</div>
+<div class="col-sm-12 text-center">
+    <table width="100%" border="1">
+        <tr>
+            <th rowspan="2" class="text-center" width="5%">@Resource.lblStt</th>
+            <th rowspan="2" class="text-center" width="25%">@Resource.lblFullName</th>
+            <th rowspan="2" class="text-center" width="10%">@Messege.EID</th>
+            <th rowspan="2" class="text-center" width="10%">Dept</th>
+
+            @for (var i = 0; i < 3; i++)
+            {
+                <th colspan="2" class="text-center" width="10%">Day ...</th>
+            }
+            
+        </tr>
+        <tr>
+
+            @for (var i = 0; i < 3; i++)
+            {
+                <th class="text-center">AM</th>
+                <th class="text-center">PM</th>
+            }
+
+        </tr>
+
+        @foreach (var item in Model.Trainees)
+        {
+            count++;
+            <tr>
+                <td class="text-center">@(count)</td>
+                <td class="text-left">@(item.FullName)</td>
+                <td class="text-center">@(item.Eid)</td>
+                <td class="text-center">@(item.DepartmentCode)</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        }
+        @*@foreach (var item in course.OrderByDescending(a=> a.score))
+            {
+                count++;
+                var courseresult = _repoCourse_Result.Get(a => a.Trainee_Id == item.traineeid && a.Course_Detail_Id == item.course_detail_id, a => a.OrderByDescending(b => b.Course_Result_Id)).FirstOrDefault();
+                <tr>
+                    <td class="text-center">@(count)</td>
+                    <td class="text-left">@(item?.fullName)</td>
+                    <td class="text-center">@(item?.staffId)</td>
+                    <td class="text-center">@(item?.deptCode)</td>
+                    <td class="text-center" width="10%">@(courseresult != null ? (courseDetails.Subject?.bit_Average_Calculate == true ? courseresult?.First_Check_Score.ToString() : (courseresult?.First_Check_Result == "P" ? "Pass":"Fail")):"")</td>
+                    <td class="text-center" width="10%">@(courseresult != null ? (courseDetails.Subject?.bit_Average_Calculate == true ? courseresult?.Re_Check_Score.ToString() : (courseresult?.Re_Check_Result == "P" ? "Pass" : "Fail")) : "")</td>
+                    <td class="text-center">@(item?.grade)</td>
+                    <td class="text-center">@(courseresult != null ? courseresult?.Remark : "")</td>
+                </tr>
+            }*@
+    </table>
+</div>
+
+<div class="col-sm-12 text-right pull-right">@Resource.lblRecords: @count</div>
+<div class="col-sm-12 text-left">
+   <h4>@Messege.Instructor:</h4>
+   <br/>
+</div>
+<div class="col-sm-12" align="left">
+    <b>NAME </b>: .............................................................................<b>SIGNATURE</b>: .............................................................................<b>DATE</b>: .............................................................................
+    <br />
+    <br />
+    <b>NAME </b>: .............................................................................<b>SIGNATURE</b>: .............................................................................<b>DATE</b>: .............................................................................
+</div>

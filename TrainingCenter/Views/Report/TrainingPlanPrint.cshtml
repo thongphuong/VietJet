@@ -1,0 +1,371 @@
+﻿@using DocumentFormat.OpenXml.Drawing.Diagrams
+@using RestSharp.Extensions
+@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@using System.Globalization;
+
+@model TMS.Core.ViewModels.ReportModels.TrainingPlanPrint
+@{
+    ViewBag.Title = "TrainingPlanPrint";
+
+}
+<style>
+    #reportpage table > thead > tr > th,
+    #reportpage .table > thead > tr > th,
+    #reportpage table > tbody > tr > th,
+    #reportpage .table > tbody > tr > th,
+    #reportpage table > tfoot > tr > th,
+    #reportpage .table > tfoot > tr > th,
+    #reportpage table > thead > tr > td,
+    #reportpage .table > thead > tr > td,
+    #reportpage table > tbody > tr > td,
+    #reportpage .table > tbody > tr > td,
+    #reportpage table > tfoot > tr > td,
+    #reportpage .table > tfoot > tr > td {
+        border: 1px solid #000;
+        color: black;
+    }
+
+    .text-left {
+        text-align: left;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-right {
+        text-align: right;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .text-center {
+        text-align: center;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .header-title {
+        color: black;
+        font-weight: bold;
+    }
+
+    .td_course {
+        padding-left: 10px;
+        background: #ccc;
+    }
+
+    .footer_date {
+        color: black;
+        padding-top: 20px;
+        font-style: italic;
+    }
+
+    pre {
+        display: block;
+        padding: 5px;
+        color: black;
+        word-break: break-all;
+        word-wrap: break-word;
+        background-color: transparent;
+        border: 0;
+        border-radius: 0px;
+        font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
+        font-size: 15px;
+        line-height: 1.42857143;
+    }
+</style>
+
+<link href="~/Content/assets/css/vietjet-print.css" rel="stylesheet" media="print" />
+<div class="col-sm-3 text-left" style="display:none;">
+    <img src="~/Content/assets/img/report/logoreport.png" style="width: 40%;" />
+</div>
+
+
+@{ NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
+    nfi.CurrencyDecimalSeparator = ".";
+    nfi.CurrencyGroupSeparator = ",";
+    nfi.CurrencySymbol = ""; }
+<div class="col-sm-12 text-center">
+    <table width="100%" border="1">
+        <tr>
+            <td width="20%">
+                <div class="col-sm-12 text-center">
+                    <img src="~/Content/assets/img/report/logoreport.png" style="width: 80%;margin-top: 12px;" />
+                </div>
+            </td>
+            <td colspan="1">
+                <div class="col-sm-12 text-center">
+                    @{
+
+                        var count_course = 0;
+                        var name_course = "";
+                    }
+                    @foreach (var item_course in Model.Courses)
+                    {
+                        if (count_course == 0)
+                        {
+                            name_course = string.Format("TRAINING PLAN FOR {0} REV...", item_course.Code.Split('-')[0]);
+                            <h4 class="header-title"> @name_course</h4>
+                        }
+                        count_course++;
+                    }
+
+                    @*<h4 class="header-title">COURSE NAME: .....................</h4>*@
+                    @*<h4 class="header-title">TIME: FROM @DateUtil.DateToString(course.FirstOrDefault().dtm_StartDate, "dd/MM/yyyy") TO @DateUtil.DateToString(course.FirstOrDefault().dtm_EndDate, "dd/MM/yyyy") </h4>*@
+                </div>
+            </td>
+            <td width="20%">
+                <div class="col-sm-12 text-right pull-right" style="text-align:right">
+                    <label>FORM: @Model.Title[0]</label><br />
+                    <label>@Model.Title[1]</label><br />
+                    <label>@Model.Title[2]</label>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="col-sm-12 text-center">
+    <table width="100%" border="1"> 
+        <tr>
+            <th rowspan="2" class="text-center" style="width:1%">@Resource.lblStt</th>
+            <th rowspan="2" class="text-center" style="width:12%">@Resource.lblCourse/@Resource.lblSubjects</th>
+            <th rowspan="2" class="text-center" style="width:2%">@Resource.lblMethod</th>
+            <th rowspan="2" class="text-center" style="width:2%">@Resource.lblStatus</th>
+            <th colspan="2" class="text-center" style="width:4%">@Resource.lblDuration</th>
+            <th rowspan="2" class="text-center" style="width:15%">@Resource.lblTrainingDate</th>
+            @*<th rowspan="2" class="text-center" style="width:15%">@Resource.lblInstructors / <br> @Resource.lblExaminers</th>*@
+            <th rowspan="2" class="text-center" style="width:5%">Instructor(s)</th>
+            <th rowspan="2" class="text-center" style="width:5%">Examiner(s)</th>
+            <th rowspan="2" class="text-center" style="width:2%">@Resource.lblNumberOfParticipants</th>
+            <th rowspan="2" class="text-center" style="width:8%">@Resource.lblVenue</th>
+            <th rowspan="2" class="text-center" style="width:25%">@Resource.lblRemark</th>
+        </tr>
+        <tr>
+            <th class="text-center" style="width:2%">@Resource.lblHours</th>
+            <th class="text-center" style="width:2%">@Resource.lblDays</th>
+        </tr>
+
+        @{
+            var count = 1;
+
+        }
+        @foreach (var item in Model.Courses)
+        {
+            double? countHouse = 0;
+            double? countDate = 0;
+            <tr>
+                <td colspan="12" class="text-left td_course"> <h4 class="header-title" style="text-transform: uppercase;">@item.Code &nbsp; - &nbsp; @item.Name </h4></td>
+            </tr>
+
+            foreach (var itemSubject in item.Course_Detail.Where(a => a.IsActive == true && a.IsDeleted == false).OrderByDescending(a => a.type_leaning == (int)UtilConstants.LearningTypes.OfflineOnline).ThenByDescending(a => a.type_leaning == (int)UtilConstants.LearningTypes.Offline).ThenByDescending(a => a.type_leaning == (int)UtilConstants.LearningTypes.Online).ThenBy(a => a.dtm_time_from).ThenBy(a => (object)a.time_from).ThenBy(a => (object)a.time_to))
+            {
+                //Xu ly khi Course la cRo
+                if (itemSubject.type_leaning == (int)UtilConstants.LearningTypes.OfflineOnline && itemSubject.Course_Blended_Learning.Where(a => a.Course_Detail_Id == itemSubject.Id && a.IsActive == true && a.IsDeleted == false).Count() > 0)
+                {
+                    int countxxx = 0;
+                    int Rowspan = 0;
+                    Rowspan = (int)itemSubject.Course_Blended_Learning.Where(a => a.Course_Detail_Id == itemSubject.Id && a.IsActive == true && a.IsDeleted == false).ToList().Count();
+                    foreach (var Course_Blended in itemSubject.Course_Blended_Learning.Where(a => a.Course_Detail_Id == itemSubject.Id && a.IsActive == true && a.IsDeleted == false).ToList())
+                    {
+                        if (itemSubject != null)
+                        {
+                            string date = (itemSubject.dtm_time_from.HasValue ? itemSubject.dtm_time_from.Value.ToString("dd/MM/yyyy") : "") + " - " + (itemSubject.dtm_time_to.HasValue ? itemSubject.dtm_time_to.Value.ToString("dd/MM/yyyy") : "");
+                            var itemInstructor = itemSubject.Course_Detail_Instructor.Where(a => a.Course_Detail_Id == itemSubject.Id && a.Type == (int)UtilConstants.TypeInstructor.Instructor);
+                            var dration = (float)(Course_Blended.Duration.HasValue ? Course_Blended.Duration : 0) / (float)8;
+                            countHouse += (Course_Blended.Duration.HasValue ? Course_Blended.Duration : 0);
+                            countDate += Math.Round(dration, 1);
+                            <tr>
+                                @if (countxxx < 1)
+                                {
+                                    <td rowspan="@Rowspan">@(count)</td>
+                                    <td rowspan="@Rowspan" class="text-left">
+                                        @(itemSubject.SubjectDetail.Name)
+                                    </td>
+                                    <td rowspan="@Rowspan" class="text-left">cRo</td>
+
+                                }
+                                <td class="text-left"> @Course_Blended.LearningType</td>
+                                <td>
+                                    @((Course_Blended.Duration.HasValue ? Course_Blended.Duration : 0))
+                                </td>
+
+                                <td>
+                                    @((dration % 1 == 0 ? dration.ToString() : Math.Round(dration, 1).ToString("f1", nfi)))
+                                </td>
+                                <td>
+                                    @(Course_Blended.DateFrom.Value.ToString("dd/MM/yyyy") + " - " + Course_Blended.DateTo.Value.ToString("dd/MM/yyyy"))
+                                </td>
+
+                                @if (countxxx < 1 && itemInstructor.Any())
+                                {
+
+                                    var name = "";
+                                    foreach (var item2 in itemInstructor)
+                                    {
+                                        name += item2.Trainee.LastName.Trim() + " " + item2.Trainee.FirstName.Trim() + "<br/>";
+
+                                    }
+                                    <td rowspan="@Rowspan" class="text-center">
+                                        @Html.Raw(name)
+                                    </td>
+
+                                }
+                                @if (Course_Blended.LearningType != "Online" && Course_Blended.LearningType != "Classroom")
+                                {
+                                    <td class="text-center">
+                                        @(Course_Blended.Trainee != null ? Course_Blended.Trainee.LastName + " " + Course_Blended.Trainee.FirstName : " - ")
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="text-center">
+                                        @(" - ")
+                                    </td>
+                                }
+                                @*<td class="text-center" style="width:5%;">
+
+                                    </td>*@
+
+                                @if (countxxx < 1)
+                                {
+                                    <td rowspan="@Rowspan">
+                                        @(itemSubject.Course.NumberOfTrainee)
+
+                                    </td>
+                                }
+                                <td class="text-center">@(Course_Blended.RoomId.HasValue ? Course_Blended.Room.str_Name : "")</td>
+                                @if (countxxx < 1)
+                                {
+                                    <td rowspan="@Rowspan" style="text-align:left;"><p style="word-wrap:break-word; word-break:break-word;white-space:pre-line">@(string.IsNullOrEmpty(itemSubject.str_remark) ? "" : itemSubject.str_remark)</p></td>
+                                }
+
+
+                            </tr>
+                            countxxx++;
+                        }
+                    }
+                }
+                //Xu Ly Khi Course la cR va eL
+                else
+                {
+                    if (itemSubject != null)
+                    {
+                        string date = (itemSubject.dtm_time_from.HasValue ? itemSubject.dtm_time_from.Value.ToString("dd/MM/yyyy") : "") + " - " + (itemSubject.dtm_time_to.HasValue ? itemSubject.dtm_time_to.Value.ToString("dd/MM/yyyy") : "");
+                        var itemInstructor = itemSubject.Course_Detail_Instructor.Where(a => a.Course_Detail_Id == itemSubject.Id && a.Type == (int)UtilConstants.TypeInstructor.Instructor);
+                        var examiner = itemSubject.Course_Detail_Instructor.FirstOrDefault(a => a.Course_Detail_Id == itemSubject.Id && a.Type == (int)UtilConstants.TypeInstructor.Hannah);
+                        countHouse += (itemSubject.SubjectDetail.Duration.HasValue ? itemSubject.SubjectDetail.Duration : 0);
+                        countDate += ((float)(itemSubject.SubjectDetail.Duration.HasValue ? itemSubject.SubjectDetail.Duration : 0) / (float)8);
+                        <tr>
+                            <td>@(count)</td>
+                            <td class="text-left">
+                                @(itemSubject.SubjectDetail.Name)
+                            </td>
+                            <td class="text-center">@(itemSubject.type_leaning == 1 ? "eL" : itemSubject.type_leaning == 0 ? "cR" : "cRo")</td>
+                            <td class="text-center">@(itemSubject.type_leaning == (int)UtilConstants.LearningTypes.Online ? "Online" : "Classroom")</td>
+                            <td>@(itemSubject.SubjectDetail.Duration.HasValue ? itemSubject.SubjectDetail.Duration : 0)</td>
+                            <td>
+                                @((((float)(itemSubject.SubjectDetail.Duration.HasValue ? itemSubject.SubjectDetail.Duration : 0) / (float)8) % 1 == 0) ? (((float)(itemSubject.SubjectDetail.Duration.HasValue ? itemSubject.SubjectDetail.Duration : 0)) / (float)8).ToString() : Math.Round(Convert.ToDecimal(((float)(itemSubject.SubjectDetail.Duration.HasValue ? itemSubject.SubjectDetail.Duration : 0) / (float)8)), 2).ToString("f2",
+                    nfi))
+                            </td>
+                            <td>@date</td>
+                            <td class="text-center">
+                                @if (itemInstructor.Any())
+                                {
+                                    var name = "";
+                                    foreach (var item2 in itemInstructor)
+                                    {
+                                        name += item2.Trainee.LastName.Trim() + " " + item2.Trainee.FirstName.Trim() + "<br/>";
+
+                                    }
+                                    @Html.Raw(name) <br />
+                                    @*@(examiner != null ? "/" + examiner.Trainee.LastName + " " + examiner.Trainee.FirstName : "")*@
+                                }
+                            </td>
+                            <td class="text-center">
+                                @(examiner != null ? examiner.Trainee.LastName + " " + examiner.Trainee.FirstName : " - ")
+                            </td>
+
+
+                            <td>
+                                @(itemSubject.Course.NumberOfTrainee)
+                            </td>
+
+                            <td class="text-center">@(itemSubject.RoomId.HasValue ? itemSubject.Room.str_Name : "")</td>
+                            @*<td style="width:5%;">@(item_subject?.Room?.str_Name)</td>
+                                <td style="width:5%;">@(item_subject?.type_leaning != null ? (item_subject?.type_leaning == 1) ? "eL" : "C" : null)</td>*@
+                            @*<td style="width:10%;">@(item_subject?.Room?.str_Name)</td>*@
+                            <td style="text-align:left; "><p style="word-wrap:break-word; word-break:break-word;white-space:pre-line">@itemSubject.str_remark</p></td>
+                        </tr>
+                    }
+                }
+                count++;
+            }
+
+
+
+            //Xu ly cuoi cung, xuat Total
+            <tr>
+                <td colspan="4"><h5 class="header-title">@Resource.lblTOTAL:</h5></td>
+                <td><h6 class="header-title">@countHouse</h6></td>
+                <td>
+                    <h6 class="header-title">
+                        @(countDate % 1 == 0 ? countDate.ToString() : Convert.ToDecimal(countDate).ToString("f2", nfi))
+                    </h6>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        }
+
+
+    </table>
+</div>
+
+<div class="col-sm-12 text-left">
+    <h5 class="header-title">
+        Notes: eL (Online): e-Learning, cR (Offline): ClassRoom Learning, Exam: Examination. Classroom training will start from 08:30 to 12:00 in the morning, and from 13:15 to 16:45 in the afternoon (Local time: UTC+7).
+    </h5>
+</div>
+@*<div class="col-sm-12 text-right footer_date">
+        <h4 class="header-title">Ho Chi Minh City,...................................................</h4>
+    </div>*@
+<div class="col-sm-6 text-center">
+    <p>
+        <h4 class="header-title">
+            Approved by
+        </h4>
+    </p>
+    <p>
+        <h4 class="header-title">
+            HEAD OF TRAINING
+        </h4>
+    </p>
+    <p>Date .....................................</p>
+</div>
+@*<div class="col-sm-4 text-center">
+        <p>
+            <h4 class="header-title">
+                Verified by
+            </h4>
+        </p>
+        <p>
+            <h4 class="header-title">
+                HEAD OF DEPARTMENT
+            </h4>
+        </p>
+        <p>Date .....................................</p>
+    </div>*@
+<div class="col-sm-6 text-center">
+    <p>
+        <h4 class="header-title">
+            Prepared by
+        </h4>
+    </p>
+    <p>
+        <h4 class="header-title">
+            <font color="red">@*@trainingcenter*@ PLANNING TEAM</font>
+        </h4>
+    </p>
+    <p>Date .....................................</p>
+</div>

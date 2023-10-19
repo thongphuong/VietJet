@@ -1,0 +1,362 @@
+﻿@using DAL.Entities
+@using DAL.Repositories
+@using DAL.UnitOfWork
+@using TMS.Core.Utils
+@using TrainingCenter.Serveices
+@using Newtonsoft.Json
+@{
+    ViewBag.Title = "SurveyDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var DbContext = new EFDbContext();
+    UnitOfWork _uow = new UnitOfWork(DbContext);
+    var data_question = ViewBag.DataQuestion;
+    var data_member = ViewBag.DataUser;
+
+    var qs = data_question["question"];
+    var response_rank = data_member["response_rank"];
+    var response_text = data_member["response_text"];
+    int id_survey = ViewBag.Idsurvey;
+    int id_member = ViewBag.Idmember;
+    int courseDetailID = ViewBag.coursedetailId;
+
+    IRepository<Trainee> _repoTrainee = _uow.Repository<Trainee>();
+    var traineeItem = _repoTrainee.Get(id_member);
+    IRepository<Course_Detail> _repoCourseDetail = _uow.Repository<Course_Detail>();
+    IRepository<Course_Detail_Instructor> _repoCourseDetaiInstruc = _uow.Repository<Course_Detail_Instructor>();
+    IRepository<Survey> _repoSurvey = _uow.Repository<Survey>();
+    var courseDetailItem = _repoCourseDetail.Get(courseDetailID);
+    var datefrom = courseDetailItem.dtm_time_from != null ? DateUtil.DateToString(courseDetailItem.dtm_time_from, "dd/MM/yyyy") : "";
+    var dateto = courseDetailItem.dtm_time_to != null ? DateUtil.DateToString(courseDetailItem.dtm_time_to, "dd/MM/yyyy") : "";
+    string[] header = GetConfig.ByKey("Survey_Header") != null ? GetConfig.ByKey("Survey_Header").Split(new char[] { ',' }) : new string[] { };
+}
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-list-alt"></i> Survey Detail </h1>
+            <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li>Survey</li>
+                <li class="active">Survey Detail</li>
+            </ol>
+        </div>
+    </div>
+}
+<style>
+    td {
+        border: 1px solid #000 !important;
+        color: black;
+    }
+
+    th {
+        border: 1px solid #000 !important;
+        color: black;
+    }
+</style>
+<div class="col-sm-12" style="margin-bottom:21px; padding-top: 20px; padding-bottom: 20px; padding-left: 30px; padding-right: 15px; ">
+    <div class="col-sm-12">
+        <a id="btnPrint" class="btn btn-danger legitRipple pull-left">Print</a>
+        <a id="btnExport" class="btn btn-danger legitRipple pull-left" value="2" style="margin-left: 10px">Export</a>
+    </div>
+</div>
+<div class="panel panel-danger">
+    <div class="panel-body">
+        <div id="reportpage" style="padding-top: 20px; padding-bottom: 20px; padding-left: 30px; padding-right: 15px; ">
+            <div class="col-sm-12">
+                <div class="col-sm-12 text-center">
+                    <input type="hidden" id="id_survey" name="id_survey" value="@id_survey" />
+                    <input type="hidden" id="id_member" name="id_member" value="@id_member" />
+                    <input type="hidden" id="courseDetailID" name="courseDetailID" value="@courseDetailID" />
+                    <input type="hidden" id="typeExport" name="typeExport" value="2" />
+                    <table width="100%" border="1">
+                        <tr>
+                            <th rowspan="3" width="20%">
+                                <div class="col-sm-12 text-center">
+                                    <img src="~/Content/assets/img/report/logoreport.png" style="width: 80%; margin-top: 12px;" />
+                                </div>
+                            </th>
+                            <td rowspan="3">
+                                <div class="col-sm-12 text-center">
+                                    <h4 class="header-title"><b>COURSE EVALUATION FORM </b></h4>
+                                </div>
+                            </td>
+                            <td width="20%">
+                                <div class="col-sm-12 text-left pull-left">
+                                    <h4>@(header.Any() ? header[0] : string.Empty)</h4>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="20%">
+                                <div class="col-sm-12 text-left pull-left">
+                                    <h4>@(header.Count() > 1 ? header[1] : string.Empty)</h4>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="20%">
+                                <div class="col-sm-12 text-left pull-left">
+                                    <h4>@(header.Count() > 2 ? header[2] : string.Empty)</h4>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-sm-12">
+                    <br />
+                    <div style="width:40%;float:left;">
+                        <div style="width:50%;float:left;">
+                            <h4>Course code:</h4>
+                        </div>
+                        <div style="width:50%;float:right;">
+                            <h4>@(courseDetailItem.Course.Code)</h4>
+                        </div>
+                    </div>
+                    <div style="width:60%;float:right;">
+                        <div style="width:35%;float:left;">
+                            <h4>Course name:</h4>
+                        </div>
+                        <div style="width:65%;float:right;">
+                            <h4>@(courseDetailItem.Course.Name)</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div style="width:40%;float:left;">
+                        <div style="width:50%;float:left;">
+                            <h4>Subject code:</h4>
+                        </div>
+                        <div style="width:50%;float:right;">
+                            <h4>@(courseDetailItem.SubjectDetail.Code)</h4>
+                        </div>
+                    </div>
+                    <div style="width:60%;float:right;">
+                        <div style="width:35%;float:left;">
+                            <h4>Subject name:</h4>
+                        </div>
+                        <div style="width:65%;float:right;">
+                            <h4>@(courseDetailItem.SubjectDetail.Name)</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div style="width: 40%; float: left;">
+                        <div style="width: 50%; float: left;">
+                            <h4>Instructor:</h4>
+                        </div>
+                        <div style="width: 50%; float: right;">
+                            @{
+                                var X = _repoCourseDetaiInstruc.GetAll(a => a.Course_Detail_Id == courseDetailItem.Id && a.Type == (int)UtilConstants.TypeInstructor.Instructor);
+                                var instruc = "";
+                                if (X.Count() != 0)
+                                {
+                                    foreach (var item in X)
+                                    {
+                                        instruc += item.Trainee.LastName + " " + item.Trainee.FirstName + ", ";
+
+                                    }
+                                }
+                                instruc = instruc.Remove(instruc.Length - 2);
+                            }
+                            <h4>@(instruc)</h4>
+                        </div>
+                    </div>
+                    <div style="width: 60%; float: right;">
+                        <div style="width: 35%; float: left;">
+                            <h4>Date:</h4>
+                        </div>
+                        <div style="width: 65%; float: right;">
+                            <h4>@(datefrom + " - " + dateto)</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div style="width: 40%; float: left;">
+                        <div style="width: 50%; float: left;">
+                            <h4>Venue:</h4>
+                        </div>
+                        <div style="width: 50%; float: right;">
+                            <h4>@(courseDetailItem.Course.Venue)</h4>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm-12 text-center">
+                    <br />
+                    <table width="100%" border="1">
+                        <tr>
+                            <th class="text-left" style="width: 50%;">&nbsp; Criteria</th>
+                            <th class="text-center" style="width: 10%;">Strongly <br /> agree <br /> 5</th>
+                            <th class="text-center" style="width: 10%;">Agree<br /><br /> 4</th>
+                            <th class="text-center" style="width: 10%;">Not<br /> sure<br /> 3</th>
+                            <th class="text-center" style="width: 10%;">Disagree<br /><br /> 2</th>
+                            <th class="text-center" style="width: 10%;">Strongly<br /> disagree<br /> 1</th>
+                        </tr>
+                        @{
+                            var no = 1;
+                            var count_rank = 0;
+                            foreach (var item in qs)
+                            {
+                                if (item["name_type"] == "response_rank")
+                                {
+                                    var no_header = no + ".";
+                                    <tr><td height="35" colspan="6" class="text-left" style="font-weight: bold;">&nbsp; @(no_header + " " + item["name"])</td></tr>
+                                    var num = 1;
+                                    foreach (var item1 in item["choise"])
+                                    {
+
+                                        var no_header1 = no + "." + num;
+                                        <tr>
+                                            <td height="35" class="text-left">&nbsp;  @(no_header1 + " " + item1["content"])</td>
+                                            @{
+                                                var check_rank = response_rank[count_rank];
+                                                if (item1["id_question"] == check_rank["question_id"] && item1["id_choice"] == check_rank["choice_id"])
+                                                {
+                                                    int value_rank = Convert.ToInt32(check_rank["rank"].ToString());
+                                                    switch (value_rank)
+                                                    {
+                                                        case 4:
+                                                            <td height="35"><i class="fa fa-check" style="color:green;font-weight:bold;"></i></td>
+                                                            <td height="35"></td>
+                                                            <td height="35"></td>
+                                                            <td height="35"></td>
+                                                            <td height="35"></td>
+                                                            break;
+                                                        case 3:
+                                                            <td height="35"></td>
+                                                            <td height="35"><i class="fa fa-check" style="color:green;font-weight:bold;"></i></td>
+                                                            <td height="35"></td>
+                                                            <td height="35"></td>
+                                                            <td height="35"></td>
+                                                            break;
+                                                        case 2:
+                                                            <td height="35"></td>
+                                                            <td height="35"></td>
+                                                            <td height="35"><i class="fa fa-check" style="color:green;font-weight:bold;"></i></td>
+                                                            <td height="35"></td>
+                                                            <td height="35"></td>
+                                                            break;
+                                                        case 1:
+                                                            <td height="35"></td>
+                                                            <td height="35"></td>
+                                                            <td height="35"></td>
+                                                            <td height="35"><i class="fa fa-check" style="color:green;font-weight:bold;"></i></td>
+                                                            <td height="35"></td>
+                                                            break;
+                                                        case 0:
+                                                            <td height="35"></td>
+                                                            <td height="35"></td>
+                                                            <td height="35"></td>
+                                                            <td height="35"></td>
+                                                            <td height="35"><i class="fa fa-check" style="color:green;font-weight:bold;"></i></td>
+                                                            break;
+                                                        default:
+                                                            <td height="35"></td>
+                                                            <td height="35"></td>
+                                                            <td height="35"></td>
+                                                            <td height="35"></td>
+                                                            <td height="35"></td>
+                                                            break;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <td height="35"></td>
+                                                    <td height="35"></td>
+                                                    <td height="35"></td>
+                                                    <td height="35"></td>
+                                                    <td height="35"></td>
+                                                }
+
+                                            }
+                                        </tr>
+                                        num++;
+                                        count_rank++;
+                                    }
+                                    no++;
+                                }
+
+                            }
+
+                        }
+
+                    </table>
+                    <br />
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                <div class="col-sm-12 text-left">
+                    @{
+                        foreach (var item in qs)
+                        {
+                            if (item["name_type"] == "response_text")
+                            {
+                                        <h4 class="header-title">
+                                            <b>@Html.Raw(item["content"])</b>
+                                            @if (response_text.Count > 0)
+                                            {
+                                            @Html.Raw(response_text[0]["response"])
+                                            }
+
+
+                                        </h4>
+                                
+
+                            }
+                        }
+                    }
+                </div>
+
+            </div>
+            <div class="col-sm-12 text-center">
+                <br />
+                <h4 class="header-title">
+                    <b style="font-style:italic">Thank you for taking the time to help us improve our training.</b>
+                </h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            document.getElementById("btnPrint").onclick = function () {
+                printElement(document.getElementById("reportpage"));
+                window.print();
+            };
+            $('#btnExport').click(function () {
+                exportExcel();
+            });
+        });
+        function exportExcel(o) {
+
+            var params = {
+                idsurvey: $('#id_survey').val(),
+                courseDetailID: $('#courseDetailID').val(),
+                type: $('#typeExport').val(),
+                idmember: $('#id_member').val()
+            };
+            var str = jQuery.param(params);
+            window.location.href = "/Survey/ExportSurveyTotal?" + str;
+        }
+        function printElement(elem) {
+            var domClone = elem.cloneNode(true);
+            var $printSection = document.getElementById("printSection");
+
+            if (!$printSection) {
+                var $printSection = document.createElement("div");
+                $printSection.id = "printSection";
+                document.body.appendChild($printSection);
+            }
+            $printSection.innerHTML = "";
+            $printSection.appendChild(domClone);
+        }
+    </script>
+}

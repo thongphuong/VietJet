@@ -1,0 +1,388 @@
+﻿@using TMS.Core.App_GlobalResources;
+@using TMS.Core.Utils
+@model DAL.Entities.Trainee
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   
+}
+
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-group"></i>  @Resource.lblTraineeManagement - @Resource.lblDetails</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblTraineeManagement</li>
+                <li class="active">@Resource.lblDetails</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="panel ">
+    <div class="panel-heading">
+        <h1 class="panel-title list-panel-title"><i class="fa fa-user-md"></i> @Resource.lblDetails
+            <p class="btn-group pull-right">
+                <a id="btnPrint" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-print" aria-hidden="true"></i>@Resource.lblPrint</a>
+
+            </p>
+        </h1>
+    </div>
+    <div class="panel-body">
+
+        <div class="tab-content">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="profile-sidebar box-shadow">
+                        @if (string.IsNullOrEmpty(Model.avatar)  || Model.avatar.StartsWith("NoAvata"))
+                        {
+                            <img src="@(UtilConstants.PathImage + "NoAvata.png")" class="img-responsive center-block"/>
+                        }
+                        else
+                        {
+                            <img src="@(UtilConstants.PathImage + Model.avatar)" class="img-responsive center-block"/>
+                        }
+                        <div class="profile-username text-center">
+                            <p>@(Model.FirstName != null ? Model.FirstName + " " + Model.LastName : "")</p>
+                        </div>
+                        <div class="profile-job text-center">
+                            <p>@(Model.JobTitle != null && Model.JobTitle.Name != null ? Model.JobTitle.Name : "")</p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="panel box-shadow">
+                        <div class="panel-body center-block">
+
+                             <input type="hidden" name="Id" value="@Model.Id" id="Id" />
+                            <div class="form-group col-lg-12">
+                                <label>@Resource.lblFullName</label><br/>
+                                <input type="text" class="form-control" disabled value="@(Model.FirstName != null ? Model.FirstName + " " + Model.LastName : "")"/>
+                            </div>
+
+
+                            <div class="form-group col-lg-6">
+                                <label>@Messege.EID</label><br/>
+                                <input type="text" class="form-control" disabled value="@(Model.str_Staff_Id != null ? Model.str_Staff_Id : "")"/>
+                            </div>
+                            <div class="form-group col-lg-3">
+                                <label>ID</label><br/>
+                                <input type="text" class="form-control" disabled value="@(Model.PersonalId != null ? Model.PersonalId : "")"/>
+                            </div>
+                            <div class="form-group col-lg-3">
+                                <label>@Resource.lblPassportNo</label><br/>
+                                <input type="text" class="form-control" disabled value="@(Model.Passport != null ? Model.Passport : "")"/>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblDateOfBirth</label><br/>
+                                <input type="text" class="form-control" disabled value="@(Model.dtm_Birthdate != null ? DateUtil.DateToString(Model.dtm_Birthdate.Value, "dd/MM/yyyy") : "")"/>
+
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblGender</label><br/>
+                                <input type="text" class="form-control" disabled value="@(Model.Gender.HasValue && UtilConstants.GenderDictionary().ContainsKey(Model.Gender.Value) ? UtilConstants.GenderDictionary()[Model.Gender.Value] : "")"/>
+
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblPlaceOfBirth</label><br/>
+                                <input type="text" class="form-control" disabled value="@(Model.str_Place_Of_Birth != null ? Model.str_Place_Of_Birth : "" )"/>
+
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblEmail</label><br/>
+                                <input type="text" class="form-control" disabled value="@(Model.str_Email != null ? Model.str_Email : "")"/>
+
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblNationality</label><br/>
+                                <input type="text" class="form-control" disabled value="@(Model.Nation != null ? Model.Nation : "")"/>
+
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblPhone</label><br/>
+                                <input type="text" class="form-control" disabled value="@(Model.str_Cell_Phone != null ? Model.str_Cell_Phone : "")"/>
+
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblDateOfJoin</label><br/>
+                                <input type="text" class="form-control" disabled value="@(Model.dtm_Join_Date != null ? DateUtil.DateToString(Model.dtm_Join_Date, "dd/MM/yyyy") : "")"/>
+
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblJobTitle_Occupation</label><br/>
+                                <input type="text" class="form-control" disabled value="@(Model.JobTitle != null && Model.JobTitle.Name != null ? Model.JobTitle.Name : "")"/>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblType</label><br/>
+
+                                @if (Model.bit_Internal)
+                                {
+                                    <input type="text" class="form-control" disabled value="Internal"/>
+                                }
+                                else
+                                {
+                                    <input type="text" class="form-control" disabled value="External"/>
+                                }
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblDepartment</label><br/>
+                                <input type="text" class="form-control" disabled value="@(Model.Department.Name ?? "")"/>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblCompany</label><br/>
+                                <input type="text" class="form-control" disabled value="@(Model.Company_Id.HasValue ? Model.Company.str_Name : "")"/>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblNonWorkingDay</label><br />
+                                <input type="text" class="form-control" disabled value="@(Model.non_working_day != null ? DateUtil.DateToString(Model.non_working_day, "dd/MM/yyyy") : "")" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <!-----------Jobtitle---------------->
+                    <div class="col-md-12">
+                        <div class="panel  list-panel" id="list-panel">
+                            <div class="panel-heading list-panel-heading">
+                                <h1 class="panel-title list-panel-title">@Resource.lblJobtitleStandard</h1>
+                            </div>
+                            <div class="panel-body">
+                                @{ Html.RenderAction("PartialListJobStandard", "Trainee");}
+                      
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel  list-panel" id="list-panel">
+                        <div class="panel-heading list-panel-heading">
+                            <h1 class="panel-title list-panel-title">@Resource.lblEducation</h1>
+                        </div>
+                        <div class="panel-body">
+                            <table id="Table_Education"  class="table table-striped table-bordered">
+                                <thead class="cf">
+                                <tr role="row">
+                                    <th class="text-center">@Resource.lblStt</th>
+                                    <th>@Resource.lblTime</th>
+                                    <th>@Resource.lblCourse</th>
+                                    <th>@Resource.lblOrganization</th>
+                                    <th>@Resource.lblNote</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel  list-panel" id="list-panel">
+                        <div class="panel-heading list-panel-heading">
+                            <h1 class="panel-title list-panel-title">@Resource.lblTrainingCourses</h1>
+                        </div>
+                        <div class="panel-body">
+                            <table id="Table_Trainee_Courses" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                <thead class="cf">
+                                <tr role="row">
+                                    <th class="text-center">@Resource.lblStt</th>
+                                    <th>@Resource.lblCourseCode</th>
+                                    <th>@Resource.lblCourseName</th>
+                                    <th>@Resource.lblTime</th>
+                                    <th>@Resource.lblCertificate</th>
+                                    <th>@Resource.lblOptions</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12" style="margin-top: 10px;display:none;">
+    <div class="panel panel-default list-panel" id="list-panel">
+        <div class="panel-body">
+            <div id="reportpage" style="padding-top: 20px; padding-bottom: 20px; padding-left: 30px; padding-right: 15px;">
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="hidden">
+    <table id="Table_Trainee_Courses_subject" class="table table-striped table-bordered" style="width:100%">
+        <thead >
+            <tr role="row">
+                <th class="text-center">@Resource.lblStt</th>
+                <th>@Resource.lblTime</th>
+                <th>@Resource.lblSubject</th>
+                <th>@Resource.lblTypeLearning</th>
+                <th>@Resource.lblPoint</th>
+                <th>@Resource.lblGrade</th>
+                <th>@Resource.lblRemark</th>
+                <th>@Resource.lblRefreshCycle</th>
+                <th>@Resource.lblExprieDate</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+    </table>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        function active() {
+            $.ajax({
+                type: "GET",
+                url: "/Trainee/EmployeeProfilePrint/",
+                datatype: "json",
+                data: { id: $("#Id").val(),
+                },
+                success: function (data) {
+                    $('#reportpage').html(data);
+                    printElement(document.getElementById("reportpage"));
+                    window.print();
+                }
+            });
+            //printElement(document.getElementById("reportpage"));
+            //window.print();
+        }
+        $('#btnPrint').on('click', function() {
+            active();
+            //$("#Trainee").DataTable().draw();
+        });
+        function printElement(elem) {
+            var domClone = elem.cloneNode(true);
+            var $printSection = document.getElementById("printSection");
+
+            if (!$printSection) {
+                var $printSection = document.createElement("div");
+                $printSection.id = "printSection";
+                document.body.appendChild($printSection);
+            }
+
+            $printSection.innerHTML = "";
+
+            $printSection.appendChild(domClone);
+        }
+
+
+        $(document).ready(function () {
+            var sTable = $("#Table_Education").dataTable({
+                "responsive:": true,
+                "searching": false,
+                "columnDefs": [{
+                    "targets": 0,
+                    "className": "text-center",
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                }],
+                "aaSorting": [],
+
+                "bServerSide": true,
+                "sAjaxSource": "/Trainee/AjaxHandlerEducation",
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                    aoData.push({ "name": "id", "value": @( ViewContext.RouteData.Values["id"] == null ? "-1" : ViewContext.RouteData.Values["id"].ToString()) });
+                }
+            });
+            /////////////////////////////////////////////////////////////////
+            var sTableTable_Trainee_Courses = $("#Table_Trainee_Courses").DataTable({
+                "responsive:": true,
+                "searching": false,
+                "columnDefs": [{
+                    "targets": 0,
+                    "className": "text-center",
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                }],
+                "aaSorting": [],
+
+                "bServerSide": true,
+                "sAjaxSource": "/Instructor/AjaxHandlerTrainee_Courses",
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                    aoData.push({ "name": "id", "value": @( ViewContext.RouteData.Values["id"] == null ? "-1" : ViewContext.RouteData.Values["id"].ToString()) });
+                },
+                "initComplete": function (settings, json) {
+                    var detailRows = [];
+                    $('#Table_Trainee_Courses tbody').on('click', 'tr td span.expand', function () {
+                        var id = $(this).data('value');
+                        var tr = $(this).closest('tr');
+                        var row = sTableTable_Trainee_Courses.row(tr);
+                        var idx = $.inArray(tr.attr('id'), detailRows);
+
+                        if (row.child.isShown()) {
+                            tr.removeClass('details');
+                            row.child.hide();
+
+                            // Remove from the 'open' array
+                            detailRows.splice(idx, 1);
+                        }
+                        else {
+                            tr.addClass('details');
+
+
+                            row.child(format(id)).show();
+                            // Add to the 'open' array
+                            if (idx === -1) {
+                                detailRows.push(tr.attr('id'));
+                            }
+                        }
+                    });
+                    sTableTable_Trainee_Courses.on('draw', function () {
+                        $.each(detailRows, function (i, id) {
+                            $('#' + id + ' td.details-control').trigger('click');
+                        });
+                    });
+                }
+            });
+
+            /////////////////////////////////////////////////////////////////
+        });
+
+        function format(id) {
+            var table = $("#Table_Trainee_Courses_subject").clone();
+            var sSTable = table.DataTable({
+                "responsive:": true,
+                "searching": false,
+                "pageLength": 900000,
+                "aaSorting": [],
+                "ordering": false,
+                "columnDefs": [{
+                    "targets": 0,
+                    "className": "text-center",
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                }
+            
+                ],
+                "bServerSide": true,
+                "sAjaxSource": "/Instructor/AjaxHandlerSubject2/" + id,
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                    aoData.push({ "name": "id_", "value": @( ViewContext.RouteData.Values["id"] == null ? "-1" : ViewContext.RouteData.Values["id"].ToString()) });
+                }
+            });
+            return table;
+        }
+
+    </script>
+}

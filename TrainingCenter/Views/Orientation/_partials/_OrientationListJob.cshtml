@@ -1,0 +1,15 @@
+﻿@model TMS.Core.ViewModels.Orientation.OrientationListJobTitle
+    
+@{
+    <ul class="tree" id="tree">
+        @foreach (var item in Model.JobList)
+        {
+            {
+                <li data-value="@item.Id" class="action jobTitleOption"> <span>@item.Name</span>
+
+                </li>
+            }
+
+        }
+    </ul>
+}

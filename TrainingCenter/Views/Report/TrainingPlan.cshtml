@@ -1,0 +1,343 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.ReportModels.TrainingPlanModel
+
+@{
+    ViewBag.Title = "Training Plan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fas fa-chart-pie"></i> @Resource.lblTrainingPlan</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblReport</li>
+                <li class="active">@Resource.lblTrainingPlan</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12" style="margin-top: 10px;">
+        <div class="panel  list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title">
+                    <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> @Resource.lblTrainingPlan
+                    <p class="btn-group pull-right">
+                        <a id="btnPrint" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-print" aria-hidden="true"></i> @Resource.lblPrint</a>
+                    </p>
+                    <p class="btn-group pull-right">
+                        <a href="javascript:void(0)" class="btn btn-success btn-xs dropdown-toggle legitRipple" id="btnExport" onclick="document.getElementById('frmFilter').submit();"><i class="fa fa-download" aria-hidden="true"></i> @Resource.lblEXPORT</a>
+                    </p>
+                </h1>
+            </div>
+            <div class="panel-body table-responsive">
+                <div id="panel-search" class="collapse1 panel">
+                    @using (Html.BeginForm("Export", "Report", FormMethod.Post, new { id = "frmFilter" }))
+                    {
+                        <div class="panel-body">
+                            <div class="form-group" id="filterWrapper">
+                                <div class="row col-md-12">
+                                    <div class="row" style="margin-top:10px;">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3">
+                                                <label>@Resource.lblCode</label>
+                                                <input type="text" class="form-control frmFilter" id="coursecode" name="coursecode" placeholder="@Resource.lblCourseCode" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label>@Resource.lblName</label>
+                                                <input class="form-control frmFilter" id="coursename" name="coursename" placeholder="@Resource.lblCourseName" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>@Resource.lblCourseList</label>
+                                                <select class="form-control selectpicker frmFilter" id="CourseList" name="CourseList" multiple="multiple" data-placeholder="@Resource.lblCourse">
+                                                    <option></option>
+                                                    @foreach (var item in Model.DictionaryCourses)
+                                                    {
+                                                        <option value="@item.Key">@item.Value</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top:10px;">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3">
+                                                <label>@Resource.lblStartDate</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control pull-right frmFilter" name="fSearchDate_from" id="fSearchDate_from" placeholder="@Resource.lblStartDate">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label>@Resource.lblEndDate</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control pull-right frmFilter" name="fSearchDate_to" id="fSearchDate_to" placeholder="@Resource.lblEndDate">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-1 pull-right">
+                                                <label>&nbsp;</label>
+                                                <button type="submit" class="btn btn-primary pull-right legitRipple" id="btFilter">
+                                                    <i class="fa fa-search"></i> @Resource.lblSearch
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    }
+                    <br />
+                </div>
+                @*<p class="pull-right" data-toggle="collapse" data-target="#panel-search" style="cursor:pointer;" id="call-panel-search"><i class="fa fa-search"></i> @Messege.Search</p>*@
+                <table id="Trainee" class="table table-striped table-bordered" style="width: 100%">
+                    <thead>
+                        <tr role="row">
+                            <th>@Resource.lblStt</th>
+                            <th>@Resource.lblCourseCode</th>
+                            <th>@Resource.lblCourseName</th>
+                            <th>@Resource.lblFrom</th>
+                            <th>@Resource.lblTo</th>
+                            <th>@Resource.lblStatus</th>
+                    </thead>
+                    <tbody></tbody>
+                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="hidden table-responsive">
+    <table id="subject" class="table table-striped table-bordered" style="width: 100%">
+        <thead>
+            <tr role="row">
+                <th>@Resource.lblStt</th>
+                <th>@Resource.lblSubjectName</th>
+                <th>@Resource.lblMethod</th>
+                <th>@Resource.lblDuration</th>
+                <th>@Resource.lblInstructorName</th>
+                <th>@Resource.lblFrom</th>
+                <th>@Resource.lblTo</th>
+                <th>@Resource.lblRoom</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+    </table>
+</div>
+
+
+<div class="col-md-12" style="margin-top: 10px; display: none;">
+    <div class="panel panel-default list-panel" id="list-panel">
+        <div class="panel-body">
+            <div id="reportpage" style="padding-top: 20px; padding-bottom: 20px; padding-left: 30px; padding-right: 15px;">
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<disv class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div id="messageout">
+            <img src="~/Content/assets/img/report/logoreport1.png" style="display:none;" />
+        </div>
+    </div>
+</disv>*@
+@section Scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            //datatable serverside
+            var sTable;
+            var customRow = [
+                {
+                    'targets': 0,
+                    'className': 'dt-body-center'
+                },{
+                    "targets": 5,
+                    "className": "text-center",
+                }
+            ];
+            sTable = initDataTable("#Trainee", "/Report/AjaxHandler", customRow);
+
+            var detailRows = [];
+            $('#Trainee tbody').on('click', 'tr td span.expand', function() {
+                var id = $(this).data('value');
+                var tr = $(this).closest('tr');
+                var row = sTable.row(tr);
+                var idx = $.inArray(tr.attr('id'), detailRows);
+
+                if (row.child.isShown()) {
+                    tr.removeClass('details');
+                    row.child.hide();
+                    // Remove from the 'open' array
+                    detailRows.splice(idx, 1);
+                } else {
+                    tr.addClass('details');
+                    row.child(format(id)).show();
+                    // Add to the 'open' array
+                    if (idx === -1) {
+                        detailRows.push(tr.attr('id'));
+                    }
+                }
+            });
+            sTable.on('draw', function() {
+                $.each(detailRows, function(i, id) {
+                    $('#' + id + ' td.details-control').trigger('click');
+                });
+            });
+            $('#btFilter').click(function(e) {
+                e.preventDefault();
+                //active();
+                sTable.draw();
+                //$("#reportpage").load(location.href + " #reportpage");
+
+            });
+            formatDatetimepicker('#fSearchDate_from', '@Resource.lblLanguage');
+            formatDatetimepicker('#fSearchDate_to', '@Resource.lblLanguage');
+        });
+
+        function format(id) {
+            var table = $("#subject").clone();
+            var ssSTable = table.DataTable({
+                "responsive:": false,
+                "pageLength": 9999,
+                "searching": false,
+                "columnDefs": [
+                    {
+                        "targets": 0,
+                        "data": null,
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    }
+                ],
+                "aaSorting": [],
+                "bServerSide": true,
+                "sAjaxSource": "/Report/AjaxHandlerSubject/" + id,
+                "bProcessing": true
+            });
+            return table;
+        }
+
+        //function OnChangeCourseList(val) {
+        //    console.log(val.value);
+        //    alert(val.value);
+        //    //    $.ajax({
+        //    //        cache: false,
+        //    //        type: "POST",
+        //    //        url: "/Report/ChangeCourseReturnSubject",
+        //    //        dataType: "json",
+        //    //        data: { id_course: val },
+        //    //        success: function(result) {
+        //    //            $('#ddl_subject').empty();
+        //    //            $('#ddl_subject').prop('selectedIndex', 0);
+        //    //            if (result.value_null == "0") {
+        //    //                $('#ddl_subject').append(result.value_option);
+        //    //            } else {
+        //    //                $('#ddl_subject').append("<option value='-1'>-- Subject --</option>");
+        //    //            }
+        //    //        }
+        //    //    });
+        //}
+
+        document.getElementById("btnPrint").onclick = function () {
+            //var $arr_checked = [];
+            //$("#Trainee input").each(function(index, item) {
+            //    if ($(item).is(":checked")) {
+            //        $arr_checked.push($(item).val());
+            //    }
+            //});
+            //$("#messageout").html('');
+            //if ($arr_checked.length == 0) {
+            //    $("#messageout").append("<div class='alert alert-danger'><a href='javascript:void(0)' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Please choose data</div>");
+            //    return;
+            //}
+            active();
+            //sTable.draw();
+
+
+        }
+        //$('#btnExport').click(function () {
+
+        //    window.location = "/Report/Export";
+        //});
+
+        function active() {
+            //var $arr_checked = [];
+            //$("#Trainee input").each(function(index, item) {
+            //    if ($(item).is(":checked")) {
+            //        $arr_checked.push($(item).val());
+            //    }
+            //});
+            $.ajax({
+                type: "GET",
+                url: "/Report/TrainingPlanPrint/",
+                datatype: "json",
+                data: {
+                    CourseList: $('#CourseList').val(),
+                    coursename: $('#coursename').val(),
+                    coursecode: $('#coursecode').val(),
+                    fSearchDate_from: $('#fSearchDate_from').val(),
+                    fSearchDate_to: $('#fSearchDate_to').val(),
+                },
+                success: function(data) {
+                    $('#reportpage').html(data);
+						var delayInMilliseconds = 1000; //1 second
+						setTimeout(function() {
+							printElement(document.getElementById("reportpage"));
+							window.print();
+						}, delayInMilliseconds);
+                }
+            });
+        }
+
+
+        // Handle click on "Select all" control
+        $('#example-select-all').on('click', function() {
+            // Get all rows with search applied
+            var rows = $("#Trainee").DataTable().rows({ 'search': 'applied' }).nodes();
+            // Check/uncheck checkboxes for all rows in the table
+            $('input[type="checkbox"]', rows).prop('checked', this.checked);
+        });
+        // Handle click on checkbox to set state of "Select all" control
+        $('#Trainee tbody').on('change', 'input[type="checkbox"]', function() {
+            // If checkbox is not checked
+            if (!this.checked) {
+                var el = $('#example-select-all').get(0);
+                // If "Select all" control is checked and has 'indeterminate' property
+                if (el && el.checked && ('indeterminate' in el)) {
+                    // Set visual state of "Select all" control
+                    // as 'indeterminate'
+                    el.indeterminate = true;
+                }
+            }
+        });
+
+        function printElement(elem) {
+            var domClone = elem.cloneNode(true);
+            var $printSection = document.getElementById("printSection");
+
+            if (!$printSection) {
+                var $printSection = document.createElement("div");
+                $printSection.id = "printSection";
+                document.body.appendChild($printSection);
+            }
+
+            $printSection.innerHTML = "";
+
+            $printSection.appendChild(domClone);
+        }
+    </script>
+}

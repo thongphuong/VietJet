@@ -1,0 +1,665 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@model DAL.Entities.Trainee
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-user-md"></i>  @Resource.lblInstructorManagement - @Resource.lblDetails</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblInstructorManagement</li>
+                <li class="active">@Resource.lblDetails</li>
+            </ol>
+        </div>
+
+    </div>
+}
+
+<div class="panel " style="margin-top: 10px;">
+    <div class="panel-heading">
+        <h1 class="panel-title list-panel-title">
+            <i class="fa fa-user-md"></i> @Resource.lblInstructorDetails
+            <p class="btn-group pull-right">
+                <a id="btnPrint" class="btn btn-success btn-xs dropdown-toggle legitRipple"><i class="fa fa-print" aria-hidden="true"></i>@Resource.lblPrint</a>
+
+            </p>
+        </h1>
+    </div>
+    <div class="panel-body">
+
+        <div class="tab-content">
+
+            <div class="row" style="margin-top:10px;">
+                <div class="col-md-3">
+                    <div class="profile-sidebar box-shadow">
+                        
+                        @*@if (string.IsNullOrEmpty(Model.avatar) || Model.avatar.StartsWith("NoAvata"))
+                        {
+                            <img src="@(UtilConstants.PathImage + "NoAvata.png")" class="img-responsive center-block"/>
+                        }
+                        else
+                        {
+                            <img src="@(UtilConstants.PathImage + Model.avatar)" class="img-responsive center-block"/>
+                        }*@
+
+                        <img src="@(UtilConstants.PathImage + ((string.IsNullOrEmpty(Model.avatar) || Model.avatar.StartsWith("NoAvata")) ? "NoAvata.png" : Model.avatar))" class="img-responsive center-block" id="blah2"/>
+
+                        <div class="profile-username text-center">
+                            <p>@(Model.FirstName != null ? (Model.FirstName.Trim() + " " + Model.LastName.Trim()) : "")</p>
+                        </div>
+                        <div class="profile-job text-center">
+                            <p>@(Model.JobTitle != null && Model.JobTitle.Name != null ? Model.JobTitle.Name : "")</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="panel box-shadow">
+                        <div class="panel-body center-block">
+                            <input type="hidden" name="Id" value="@Model.Id" id="Id" />
+                            <div class="form-group col-lg-12">
+                                <label>@Resource.lblFullName</label><br />
+                                <input type="text" class="form-control" disabled value="@(Model.FirstName.Trim() + " " + Model.LastName.Trim())" />
+                            </div>
+
+
+                            <div class="form-group col-lg-6">
+                                <label>@Messege.EIDGV</label><br />
+                                <input type="text" class="form-control" disabled value="@(Model.str_Staff_Id)" />
+                            </div>
+                            <div class="form-group col-lg-3">
+                                <label>ID</label><br />
+                                <input type="text" class="form-control" disabled value="@(Model.PersonalId )" />
+                            </div>
+                            <div class="form-group col-lg-3">
+                                <label>@Resource.lblPassportNo</label><br />
+                                <input type="text" class="form-control" disabled value="@(Model.Passport)" />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblDateOfBirth</label><br />
+                                <input type="text" class="form-control" disabled value="@(Model.dtm_Birthdate != null ? DateUtil.DateToString(Model.dtm_Birthdate.Value," dd/MM/yyyy") : "")" />
+
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblGender</label><br />
+                                <input type="text" class="form-control" disabled value="@(Model.Gender.HasValue && UtilConstants.GenderDictionary().ContainsKey(Model.Gender.Value) ? UtilConstants.GenderDictionary()[Model.Gender.Value] : " ")" />
+
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblPlaceOfBirth</label><br />
+                                <input type="text" class="form-control" disabled value="@(Model.str_Place_Of_Birth)" />
+
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblEmail</label><br />
+                                <input type="text" class="form-control" disabled value="@(Model.str_Email)" />
+
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblNationality</label><br />
+                                <input type="text" class="form-control" disabled value="@(Model.Nation)" />
+
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblPhone</label><br />
+                                <input type="text" class="form-control" disabled value="@(Model.str_Cell_Phone)" />
+
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblDateOfJoin</label><br />
+                                <input type="text" class="form-control" disabled value="@(Model.dtm_Join_Date.HasValue ? Model.dtm_Join_Date.Value.ToString(" dd/MM/yyyy") : "")" />
+
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblJobTitle_Occupation</label><br />
+                                <input type="text" class="form-control" disabled value="@(Model.JobTitle != null ? Model.JobTitle.Name : " ")" />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblType</label><br />
+
+                                @if (Model.bit_Internal.ToString() == "True")
+                                {
+                                    <input type="text" class="form-control" disabled value="Internal" />
+                                }
+                                else
+                                {
+                                    <input type="text" class="form-control" disabled value="External" />
+                                }
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblDepartment</label><br />
+                                <input type="text" class="form-control" disabled value="@(Model.Department != null ? Model.Department.Name : " ")" />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>@Resource.lblCompany</label><br />
+                                <input type="text" class="form-control" disabled value="@(Model.Company != null ? Model.Company.str_Name: " ")" />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-----------Jobtitle---------------->
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-12">
+                    <div class="panel  list-panel" id="list-panel">
+                        <div class="panel-heading list-panel-heading">
+                            <h1 class="panel-title list-panel-title">@Resource.lblJobtitleStandard</h1>
+                        </div>
+                        <div class="panel-body">
+                            @{ Html.RenderAction("PartialListJobStandard", "Trainee");}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-----------CONTRACT---------------->
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-12">
+                    <div class="panel  list-panel" id="list-panel">
+                        <div class="panel-heading list-panel-heading">
+                            <h1 class="panel-title list-panel-title">@Resource.lblContract</h1>
+                        </div>
+                        <div class="panel-body">
+                            <table id="Table_Contract" class="table table-striped table-bordered">
+                                <thead class="cf">
+                                    <tr role="row">
+                                        <th class="text-center">@Resource.lblStt</th>
+                                        <th class="text-left">@Resource.lblContractNo</th>
+                                        <th>@Resource.lblExprieDate</th>
+                                        <th>@Resource.lblDescription</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!------EDUCATION------>
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-12">
+                    <div class="panel  list-panel" id="list-panel">
+                        <div class="panel-heading list-panel-heading">
+                            <h1 class="panel-title list-panel-title">@Resource.lblEducation</h1>
+                        </div>
+                        <div class="panel-body">
+                            <table id="Table_Education" class="table table-striped table-bordered">
+                                <thead class="cf">
+                                    <tr role="row">
+                                        <th class="text-center">@Resource.lblStt</th>
+                                        <th>@Resource.lblTime</th>
+                                        <th>@Resource.lblCourse</th>
+                                        <th>@Resource.lblOrganization</th>
+                                        <th>@Resource.lblNote</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!----------TRAINING COURSES--------->
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-12">
+                    <div class="panel  list-panel" id="list-panel">
+                        <div class="panel-heading list-panel-heading">
+                            <h1 class="panel-title list-panel-title">@Resource.lblTrainingCourses</h1>
+                        </div>
+                        <div class="panel-body">
+                            <table id="Table_Trainee_Courses" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                <thead class="cf">
+                                    <tr role="row">
+                                        <th></th>
+                                        <th class="text-center">@Resource.lblStt</th>
+                                        <th>@Resource.lblCourseCode</th>
+                                        <th>@Resource.lblCourseName</th>
+                                        <th>@Resource.lblTime</th>
+                                        <th>@Resource.lblCertificate</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--TRAINING COMPETENCY-->
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-12">
+                    <div class="panel  list-panel" id="list-panel">
+                        <div class="panel-heading list-panel-heading">
+                            <h1 class="panel-title list-panel-title">@Resource.lblTRAININGCOMPETENCY</h1>
+                        </div>
+                        <div class="panel-body">
+                            <table id="TBL_TRAINING_COMPETENCY" class="table table-striped table-bordered dt-responsive" style="width:100%">
+                                <thead >
+                                    <tr role="row">
+                                        <th>@Resource.lblStt</th>
+                                        <th>@Resource.lblCode</th>
+                                        <th>@Resource.lblSubjectName</th>
+                                     </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--SUBJECTS-->
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-12">
+                    <div class="panel  list-panel" id="list-panel">
+                        <div class="panel-heading list-panel-heading">
+                            <h1 class="panel-title list-panel-title">@Resource.lblCONDUCTEDCOURSES</h1>
+                        </div>
+                        <div class="panel-body">
+                            <table id="Table_Subjects" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                <thead class="cf">
+                                    <tr role="row">
+                                        <th></th>
+                                        <th class="text-center">@Resource.lblStt</th>
+                                        <th>@Resource.lblCode</th>
+                                        <th>@Resource.lblSubjectName</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        
+    </div>
+   
+</div>
+<div class="col-md-12" style="margin-top: 10px;display:none;">
+    <div class="panel panel-default list-panel" id="list-panel">
+        <div class="panel-body">
+            <div id="reportpage" style="padding-top: 20px; padding-bottom: 20px; padding-left: 30px; padding-right: 15px;">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="hidden">
+    <table id="Table_Trainee_Courses_subject" class="table table-striped table-bordered" style="width:100%">
+        <thead >
+            <tr role="row">
+                <th class="text-center">@Resource.lblStt</th>
+                <th>@Resource.lblTime</th>
+                <th>@Resource.lblSubject</th>
+                <th>@Resource.lblTypeLearning</th>
+                <th>@Resource.lblPoint</th>
+                <th>@Resource.lblGrade</th>
+                <th>@Resource.lblRemark</th>
+                <th>@Resource.lblRefreshCycle</th>
+                <th>@Resource.lblExprieDate</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+    </table>
+</div>
+<div class="hidden">
+    <table id="Table_Subjects_Course" class="table table-striped table-bordered" style="width:100%">
+        <thead >
+            <tr role="row">
+                <th class="text-center">@Resource.lblStt</th>
+                <th>@Resource.lblCode</th>
+                <th>@Resource.lblCourse</th>
+                <th>@Resource.lblFrom</th>
+                <th>@Resource.lblTo</th>
+                <th>@Resource.lblRoom</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    select {
+        color: #000 !important;
+    }
+
+    .bootstrap-timepicker-widget table td input {
+        min-width: 55px;
+        margin: 0;
+        text-align: center;
+    }
+
+    #tableProgram td {
+        border: 0;
+    }
+
+    .mysymbol {
+        font-size: 16px;
+        color: green;
+    }
+</style>
+
+
+
+
+@section Scripts{
+    
+    <script type="text/javascript">
+        
+        function active() {
+            $.ajax({
+                type: "GET",
+                url: "/Instructor/EmployeeProfilePrint/",
+                datatype: "json",
+                data: { 
+                    id: $("#Id").val()
+                },
+                success: function (data) {
+                    $('#reportpage').html(data);
+                    printElement(document.getElementById("reportpage"));
+                    window.print();
+                }
+            });
+        }
+        $('#btnPrint').on('click', function() {
+            active();
+            //$("#Trainee").DataTable().draw();
+        });
+        function printElement(elem) {
+            var domClone = elem.cloneNode(true);
+            var $printSection = document.getElementById("printSection");
+
+            if (!$printSection) {
+                var $printSection = document.createElement("div");
+                $printSection.id = "printSection";
+                document.body.appendChild($printSection);
+            }
+
+            $printSection.innerHTML = "";
+
+            $printSection.appendChild(domClone);
+        }
+
+        $(document).ready(function () {
+            /////////////////////////////////////////////////////////////////
+            var sTableTable_Education = $("#Table_Education").dataTable({
+                "responsive:": true,
+                "searching": false,
+                "columnDefs": [{
+                    "targets": 0,
+                    "className": "text-center",
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                }],
+                "aaSorting": [],
+                "bServerSide": true,
+                "sAjaxSource": "/Instructor/AjaxHandlerEducation",
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                    aoData.push({ "name": "id", "value": @( ViewContext.RouteData.Values["id"] == null ? "-1" : ViewContext.RouteData.Values["id"].ToString()) });
+                },
+            });
+            /////////////////////////////////////////////////////////////////
+            var sTableTable_Contract = $("#Table_Contract").dataTable({
+                "responsive:": true,
+                "searching": false,
+                "columnDefs": [{
+                    "targets": 0,
+                    "className": "text-center",
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                }],
+                "aaSorting": [],
+
+                "bServerSide": true,
+                "sAjaxSource": "/Instructor/AjaxHandlerContract",
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                    aoData.push({ "name": "id", "value": @(ViewContext.RouteData.Values["id"] == null ? "-1" : ViewContext.RouteData.Values["id"].ToString())});
+                },
+            });
+            /////////////////////////////////////////////////////////////////
+            var sTableTBL_TRAINING_COMPETENCY = $("#TBL_TRAINING_COMPETENCY").dataTable({
+                "responsive:": true,
+                "searching": false,
+                "columnDefs": [{
+                    "targets": 0,
+                    "className": "text-center",
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                }],
+                //"aaSorting": [],
+
+                "bServerSide": true,
+                "sAjaxSource": "/Instructor/AjaxHandlerTrainingCompetecy",
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                    aoData.push({ "name": "id", "value": @(ViewContext.RouteData.Values["id"] == null ? "-1" : ViewContext.RouteData.Values["id"].ToString())});
+                },
+            });
+            /////////////////////////////////////////////////////////////////
+            var sTableTable_Trainee_Courses = $("#Table_Trainee_Courses").DataTable({
+                "responsive:": true,
+                "searching": false,
+                "columnDefs": [{
+                    "targets": 1,
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                }],
+                "aaSorting": [],
+
+                "bServerSide": true,
+                "sAjaxSource": "/Instructor/AjaxHandlerTrainee_Courses",
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                    aoData.push({ "name": "id", "value": @(ViewContext.RouteData.Values["id"] == null ? "-1" : ViewContext.RouteData.Values["id"].ToString())});
+                },
+                "initComplete": function (settings, json) {
+                    var detailRows = [];
+                    $('#Table_Trainee_Courses tbody').on('click', 'tr td span.expand', function () {
+                        var id = $(this).data('value');
+                        var tr = $(this).closest('tr');
+                        var row = sTableTable_Trainee_Courses.row(tr);
+                        var idx = $.inArray(tr.attr('id'), detailRows);
+
+                        if (row.child.isShown()) {
+                            tr.removeClass('details');
+                            row.child.hide();
+
+                            // Remove from the 'open' array
+                            detailRows.splice(idx, 1);
+                        }
+                        else {
+                            tr.addClass('details');
+
+
+                            row.child(format(id)).show();
+                            // Add to the 'open' array
+                            if (idx === -1) {
+                                detailRows.push(tr.attr('id'));
+                            }
+                        }
+                    });
+                    sTableTable_Trainee_Courses.on('draw', function () {
+                        $.each(detailRows, function (i, id) {
+                            $('#' + id + ' td.details-control').trigger('click');
+                        });
+                    });
+                }
+            });
+
+            /////////////////////////////////////////////////////////////////
+            // chua lam
+            var sTableTable_Subjects = $("#Table_Subjects").DataTable({
+                "responsive:": true,
+                "searching": false,
+                "columnDefs": [{
+                    "targets": 1,
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                }],
+                "aaSorting": [],
+
+                "bServerSide": true,
+                "sAjaxSource": "/Instructor/AjaxHandlerTable_Subjects",
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                    aoData.push({ "name": "id", "value": @(ViewContext.RouteData.Values["id"] == null ? "-1" : ViewContext.RouteData.Values["id"].ToString())});
+                },
+                "initComplete": function (settings, json) {
+                    var detailRows = [];
+                    $('#Table_Subjects tbody').on('click', 'tr td span.expand', function () {
+                        var id = $(this).data('value');
+                        var instructor = $(this).data('instructor');
+                        var tr = $(this).closest('tr');
+                        var row = sTableTable_Subjects.row(tr);
+                        var idx = $.inArray(tr.attr('id'), detailRows);
+
+                        if (row.child.isShown()) {
+                            tr.removeClass('details');
+                            row.child.hide();
+
+                            // Remove from the 'open' array
+                            detailRows.splice(idx, 1);
+                        }
+                        else {
+                            tr.addClass('details');
+
+
+                            row.child(formatgetcourse(id)).show();
+                            // Add to the 'open' array
+                            if (idx === -1) {
+                                detailRows.push(tr.attr('id'));
+                            }
+                        }
+                    });
+                    sTableTable_Subjects.on('draw', function () {
+                        $.each(detailRows, function (i, id) {
+                            $('#' + id + ' td.details-control').trigger('click');
+                        });
+                    });
+                }
+            });
+
+
+
+        });
+
+       
+
+        function format(id) {
+            var table = $("#Table_Trainee_Courses_subject").clone();
+            var sSTable = table.DataTable({
+                "responsive:": true,
+                "pageLength": 900000,
+                "searching": false,
+                "columnDefs": [{
+                    "targets": 0,
+                    "className": "text-center",
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                }
+
+                ],
+                "ordering": false,
+                "aaSorting": [],
+                "bServerSide": true,
+                "sAjaxSource": "/Instructor/AjaxHandlerSubject2/" + id,
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                    aoData.push({ "name": "id_", "value": @(ViewContext.RouteData.Values["id"] == null ? "-1" : ViewContext.RouteData.Values["id"].ToString())});
+                },
+            });
+            return table;
+        }
+        function formatgetcourse(id) {
+            var table = $("#Table_Subjects_Course").clone();
+            var sSTable = table.DataTable({
+                "responsive:": true,
+                 "pageLength": 900000,
+                "searching": false,
+                "columnDefs": [{
+                    "targets": 0,
+                    "className": "text-center",
+                    "data": null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                }],
+                "aaSorting": [],
+                "bServerSide": true,
+                "sAjaxSource": "/Instructor/AjaxHandlerCourse2/" + id,
+                "bProcessing": true,
+                "fnServerParams": function (aoData) {
+                    aoData.push({ "name": "id_", "value": @(ViewContext.RouteData.Values["id"] == null ? "-1" : ViewContext.RouteData.Values["id"].ToString())});
+                },
+            });
+            return table;
+        }
+
+        $('#btnExport').click(function () {
+            var $arr_checked = [];
+            $("#TBL_TRAINING_COMPETENCY input").each(function (index, item) {
+                if ($(item).is(":checked")) {
+                    $arr_checked.push($(item).val());
+                }
+            });
+            //$("#messageout").html('');
+            //if ($arr_checked.length == 0) {
+            //    $("#messageout").append("<div class='alert alert-danger'><a href='javascript:void(0)' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Please choose data</div>");
+            //    return;
+            //}
+            window.location = "/Template/Report/ExportCost";
+        });
+    </script>
+}

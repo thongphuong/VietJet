@@ -1,0 +1,547 @@
+﻿@model IEnumerable<TrainingCenter.Models.Group_Roles>
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.ActiveMenu = "System";
+    ViewBag.ActiveSubMenu = "Group";
+}
+
+@*@section pageTitle {
+    <h1><i class="fa fa-user"></i>
+        Group
+                        <small>Management</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+        <li class="active"><i class="fa fa-users" style="margin-right: 5px;"></i>Group management</li>
+    </ol>
+}*@
+
+@*<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-danger">
+            <div class="box-header">
+                <h3 class="box-title">Group List</h3>
+                <div class="box-tools pull-right" data-toggle="tooltip">
+                    <div class="btn-group" data-toggle="btn-toggle" id="functionMenu">
+                        <button class="btn btn-primary" id="btCreate">
+                            <i class="fa fa-plus"></i>
+                            Create Group
+                        </button>
+                        <button class="btn btn-success" id="btRefreshPage">
+                            <i class="fa fa-refresh"></i>
+                            Refresh Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="box-body table-responsive">
+                <table id="defaultTable" class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th rowspan="2"></th>
+                            <th rowspan="2">Group Name
+                            </th>
+                            <th colspan="11">Permission on Functions
+                            </th>
+
+                        </tr>
+                        <tr>
+                            <th>User Profile
+                            </th>
+                            <th>User Group
+                            </th>
+                            <th>Department
+                            </th>
+                            <th>Subject
+                            </th>
+                            <th>Job Title
+                            </th>
+                            <th>Room
+                            </th>
+                            <th>Course
+                            </th>
+                            <th>Question
+                            </th>
+                            <th>Class
+                            </th>
+                            <th>Configuration
+                            </th>
+                            <th>Register Trainee
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr data-id="@item.Id">
+                                <td></td>
+                                <td class="colGroupName">
+                                    @Html.DisplayFor(modelItem => item.str_Group_Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.bit_UserProfile, new { @class = "icheckbox" })
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.bit_Group, new { @class = "icheckbox" })
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.bit_Department)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.bit_Subject)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.bit_JobTitle)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.bit_Room)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.bit_Course)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.bit_Question)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.bit_Class)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.bit_Configuration)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.bit_RegisterTrainee)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+</div>
+
+<div class="modal fade" id="dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>*@
+
+<div class="nav-tabs-custom" id="mainTabs">
+    <ul class="nav nav-tabs pull-right ui-sortable-handle">
+        <li class="pull-left header"><i class="fa fa-link"></i>Group Management</li>
+    </ul>
+    <div class="tab-content padding">
+        <div class="chart tab-pane active" id="mainTab" style="position: relative;">
+            <div class="filtering" style="margin-bottom: 10px;">
+                <form>
+                    Group Name:
+                <input type="text" name="fName" id="fName" style="width: 200px" />
+                    <button type="submit" id="btFilter">Search</button>
+                </form>
+            </div>
+            <div id="MainTable" class="row " style="width:100%; margin:0px;"></div>
+        </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //Prepare jtable plugin
+        $('#MainTable').jtable({
+            title: 'Group List',
+            selecting: true,
+            //selectingCheckboxes: true,
+            paging: true, //Enable paging
+            pageSize: 25, //Set page size (default: 10)
+            sorting: true, //Enable sorting
+            defaultSorting: 'str_Group_Name ASC', //Set default sorting
+            actions: {
+                listAction: '/Group/GetList',
+                deleteAction: '/Group/Delete',
+                updateAction: '/Group/Update',
+                createAction: '/Group/Create'
+            },
+            fields: {
+                Id: {
+                    key: true,
+                    create: false,
+                    edit: false,
+                    list: false
+                },
+
+
+                Records: {
+                    title: '',
+                    width: '2%',
+                    sorting: false,
+                    edit: false,
+                    create: false,
+                    display: function (RecordData) {
+                        //Create an image that will be used to open child table
+                        var $img = $('<img src="/Content/Images/blueStar.png" title="External Record"  class="detailIcon"/>');
+                        //Open child table when user clicks the image
+                        $img.click(function () {
+                            $('#MainTable').jtable('openChildTable',
+                                    $img.closest('tr'), //Parent row
+                                    {
+                                        title: RecordData.record.str_Group_Name + ' - Records',
+                                        actions: {
+                                            listAction: '/Group/FunctionList?Group_Id=' + RecordData.record.Id,
+                                            deleteAction: '/Group/RemoveFunction?Group_Id=' + RecordData.record.Id,                                           
+                                            createAction: '/Group/AddFunction'
+                                        },
+                                        fields: {
+                                            Group_Id: {
+                                                type: 'hidden',
+                                                defaultValue: RecordData.record.Id
+                                            },
+                                            Id: {                                                                                        
+                                                list: false,
+                                                options: '/Group/GetFunctionOption',
+                                                create: true,
+                                                key:true
+                                            },
+                                            Name: {
+                                                title: 'Function',
+                                                create: false,
+                                                edit: false
+                                            },
+                                            Description: {
+                                                title: 'Description',
+                                                create: false,
+                                                edit: false
+                                            }
+                                        }
+                                    }, function (data) { //opened handler
+                                        data.childTable.jtable('load');
+                                    });
+                        });
+                        //Return image to show on the person row
+                        return $img;
+                    }
+                },
+
+
+
+                str_Group_Name: {
+                    title: 'Name'
+                },                
+                bit_UserProfile: {
+                    title: 'Account',                 
+                    type: 'checkbox',
+                    width:'5%',
+                    values: { 'false': 'No', 'true': 'Yes' },
+                    defaultValue: 'true',
+                    display: function (data) {
+                        if (data.record.bit_UserProfile == true || data.record.bit_UserProfile == 'true')
+                            return '<input type="checkbox" disabled="disabled" checked="checked" />';
+                        else
+                            return '<input type="checkbox" disabled="disabled" />';
+                    }
+                },
+                bit_Subject: {
+                    title: 'Subject',
+                    type: 'checkbox',
+                    width: '5%',
+                    values: { 'false': 'No', 'true': 'Yes' },
+                    defaultValue: 'true',
+                    display: function (data) {
+                        if (data.record.bit_Subject == true || data.record.bit_Subject == 'true')
+                            return '<input type="checkbox" disabled="disabled" checked="checked" />';
+                        else
+                            return '<input type="checkbox" disabled="disabled" />';
+                    }
+                },
+                bit_Room: {
+                    title: 'Room',
+                    type: 'checkbox',
+                    width: '5%',
+                    values: { 'false': 'No', 'true': 'Yes' },
+                    defaultValue: 'true',
+                    display: function (data) {
+                        if (data.record.bit_Room == true || data.record.bit_Room == 'true')
+                            return '<input type="checkbox" disabled="disabled" checked="checked" />';
+                        else
+                            return '<input type="checkbox" disabled="disabled" />';
+                    }
+                },
+                bit_Course: {
+                    title: 'Course',
+                    type: 'checkbox',
+                    width: '5%',
+                    values: { 'false': 'No', 'true': 'Yes' },
+                    defaultValue: 'true',
+                    display: function (data) {
+                        if (data.record.bit_Course == true || data.record.bit_Course == 'true')
+                            return '<input type="checkbox" disabled="disabled" checked="checked" />';
+                        else
+                            return '<input type="checkbox" disabled="disabled" />';
+                    }
+                },
+                bit_Report: {
+                    title: 'Report',
+                    type: 'checkbox',
+                    width: '5%',
+                    values: { 'false': 'No', 'true': 'Yes' },
+                    defaultValue: 'true',
+                    display: function (data) {
+                        if (data.record.bit_Report == true || data.record.bit_Report == 'true')
+                            return '<input type="checkbox" disabled="disabled" checked="checked" />';
+                        else
+                            return '<input type="checkbox" disabled="disabled" />';
+                    }
+                },
+                bit_Group: {
+                    title: 'Group',
+                    type: 'checkbox',
+                    width: '5%',
+                    values: { 'false': 'No', 'true': 'Yes' },
+                    defaultValue: 'true',
+                    display: function (data) {
+                        if (data.record.bit_Group == true || data.record.bit_Group == 'true')
+                            return '<input type="checkbox" disabled="disabled" checked="checked" />';
+                        else
+                            return '<input type="checkbox" disabled="disabled" />';
+                    }
+                },
+                bit_Trainee: {
+                    title: 'Trainee',
+                    type: 'checkbox',
+                    width: '5%',
+                    values: { 'false': 'No', 'true': 'Yes' },
+                    defaultValue: 'true',
+                    display: function (data) {
+                        if (data.record.bit_Trainee == true || data.record.bit_Trainee == 'true')
+                            return '<input type="checkbox" disabled="disabled" checked="checked" />';
+                        else
+                            return '<input type="checkbox" disabled="disabled" />';
+                    }
+                },
+                bit_Configuration: {
+                    title: 'Configuration',
+                    type: 'checkbox',
+                    width: '5%',
+                    values: { 'false': 'No', 'true': 'Yes' },
+                    defaultValue: 'true',
+                    display: function (data) {
+                        if (data.record.bit_Configuration == true || data.record.bit_Configuration == 'true')
+                            return '<input type="checkbox" disabled="disabled" checked="checked" />';
+                        else
+                            return '<input type="checkbox" disabled="disabled" />';
+                    }
+                },               
+                bit_JobTitle: {
+                    title: 'Job Title',
+                    type: 'checkbox',
+                    width: '5%',
+                    values: { 'false': 'No', 'true': 'Yes' },
+                    defaultValue: 'true',
+                    display: function (data) {
+                        if (data.record.bit_JobTitle == true || data.record.bit_JobTitle == 'true')
+                            return '<input type="checkbox" disabled="disabled" checked="checked" />';
+                        else
+                            return '<input type="checkbox" disabled="disabled" />';
+                    }
+                },
+                bit_Department: {
+                    title: 'Department',                 
+                    type: 'checkbox',
+                    width: '5%',
+                    values: { 'false': 'No', 'true': 'Yes' },
+                    defaultValue: 'true',
+                    display: function (data) {
+                        if (data.record.bit_Department == true || data.record.bit_Department == 'true')
+                            return '<input type="checkbox" disabled="disabled" checked="checked" />';
+                        else
+                            return '<input type="checkbox" disabled="disabled" />';
+                    }
+                },
+                bit_Recurrent: {
+                    title: 'Recurrent',
+                    type: 'checkbox',
+                    width: '5%',
+                    values: { 'false': 'No', 'true': 'Yes' },
+                    defaultValue: 'true',
+                    display: function (data) {
+                        if (data.record.bit_Recurrent == true || data.record.bit_Recurrent == 'true')
+                            return '<input type="checkbox" disabled="disabled" checked="checked" />';
+                        else
+                            return '<input type="checkbox" disabled="disabled" />';
+                    }
+                },
+                bit_RegisterTrainee: {
+                    title: 'Assign',
+                    type: 'checkbox',
+                    width: '5%',
+                    values: { 'false': 'No', 'true': 'Yes' },
+                    defaultValue: 'true',
+                    display: function (data) {
+                        if (data.record.bit_RegisterTrainee == true || data.record.bit_RegisterTrainee == 'true')
+                            return '<input type="checkbox" disabled="disabled" checked="checked" />';
+                        else
+                            return '<input type="checkbox" disabled="disabled" />';
+                    }
+                },
+                bit_Instructor: {
+                    title: 'Recurrent',
+                    type: 'checkbox',
+                    width: '5%',
+                    values: { 'false': 'No', 'true': 'Yes' },
+                    defaultValue: 'true',
+                    display: function (data) {
+                        if (data.record.bit_Instructor == true || data.record.bit_Instructor == 'true')
+                            return '<input type="checkbox" disabled="disabled" checked="checked" />';
+                        else
+                            return '<input type="checkbox" disabled="disabled" />';
+                    }
+                },
+                bit_Approve: {
+                    title: 'Approve',
+                    type: 'checkbox',
+                    width: '5%',
+                    values: { 'false': 'No', 'true': 'Yes' },
+                    defaultValue: 'true',
+                    display: function (data) {
+                        if (data.record.bit_Approve == true || data.record.bit_Approve == 'true')
+                            return '<input type="checkbox" disabled="disabled" checked="checked" />';
+                        else
+                            return '<input type="checkbox" disabled="disabled" />';
+                    }
+                }
+
+
+            },
+            //Initialize validation logic when a form is created
+            formCreated: function (event, data) {
+                data.form.find('input[name="str_Name"]').addClass('validate[required]');
+                data.form.validationEngine();
+            },
+            //Validate form when it is being submitted
+            formSubmitting: function (event, data) {
+                return data.form.validationEngine('validate');
+            },
+            //Dispose validation logic when form is closed
+            formClosed: function (event, data) {
+                data.form.validationEngine('hide');
+                data.form.validationEngine('detach');
+            }
+
+        });
+        //Re-load records when user click 'load records' button.
+        $('#btFilter').click(function (e) {
+            e.preventDefault();
+            $('#MainTable').jtable('load', {
+                fName: $('#fName').val()
+            });
+        });
+
+        //Load all records when page is first shown
+        $('#btFilter').click();
+        //Load person list from server
+        //$('#MainTable').jtable('load');
+    });
+
+
+
+
+    //$("#btCreate").click(function () {
+    //    window.location.href = "/Group/Create";
+    //});
+    //$("#btRefreshPage").click(function () {
+    //    location.reload();
+    //});
+
+    //$(document).ready(function () {
+
+    //    var table = $('#defaultTable').DataTable({
+    //        "bLengthChange": false,
+    //        "fnDrawCallback": function (oSettings) {
+    //            /* Need to redo the counters if filtered or sorted */
+    //            if (oSettings.bSorted || oSettings.bFiltered) {
+    //                for (var i = 0, iLen = oSettings.aiDisplay.length ; i < iLen ; i++) {
+    //                    $('td:eq(0)', oSettings.aoData[oSettings.aiDisplay[i]].nTr).html(i + 1);
+    //                }
+    //            }
+    //        },
+    //        "aoColumnDefs": [
+    //            { "bSortable": false, "aTargets": [0] }
+    //        ],
+    //        "aaSorting": [[1, 'asc']]
+    //    });
+    //    $('#defaultTable tbody').on('click', 'tr', function () {
+    //        if (!$(this).hasClass('selected')) {
+    //            table.$('tr.selected').removeClass('selected');
+    //            $(this).addClass('selected');
+    //            $('#functionMenu').find('#btDelete').remove();
+    //            $('#functionMenu').find('#btEdit').remove();
+    //            $('#functionMenu').find('#btDetail').remove();
+    //            if (typeof $('tr.selected').data("id") != "undefined") {
+    //                $('#functionMenu').prepend("<button class='btn btn-danger' id='btDelete'><i class='fa fa-times'></i> Delete</button>"
+    //                    + "<button class='btn btn-warning' id='btEdit'><i class='fa fa fa-pencil'></i> Edit</button>");
+    //            }
+    //        }
+    //    });
+
+    //    $(document).on("click", '#btEdit', function () {
+    //        window.location.href = "/Group/Edit/" + $('#defaultTable .selected').data("id");
+    //    });
+
+
+
+
+
+    //    $(document).on("click", '#btDelete', function () {
+    //        //window.location.href("/UserProfile/Delete/" + $('#defaultTable .selected').data("id"));            
+    //        setPopUpInform('Confirm Delete',
+    //            '<p>You are about to delete Group, this procedure is irreversible.</p>'
+    //            + '<p>Do you want to proceed?</p><p>Group name: <strong>' + $('tr.selected').find('.colGroupName').text() + '</strong></p>',
+    //            'Cancel,Delete');
+    //        $('#dialog').modal('show');
+
+    //    });
+
+    //    $(document).on('click', '#deletePop', function () {
+    //        var selectedRow = $('tr.selected');
+    //        $.ajax({
+    //            cache: false,
+    //            type: "POST",
+    //            url: "/Group/ajaxDelete",
+    //            dataType: "json",
+    //            data: { Id: selectedRow.data('id') },
+    //            success: function (result) {
+    //                if (result.code == "Success") {
+    //                    table.rows(selectedRow).remove().draw();
+    //                    $('#functionMenu').find('#btDelete').remove();
+    //                    $('#functionMenu').find('#btEdit').remove();
+    //                    $('#functionMenu').find('#btDetail').remove();
+    //                }
+    //                else {
+    //                    setPopUpInform('Delete Fail',
+    //            '<p>' + result.message + '</p>',
+    //            'Close');
+    //                    setTimeout(function () { $('#dialog').modal('show'); }, 200)
+    //                    //$('#ShowPopUp').click();
+    //                }
+    //            }
+    //        });
+    //    });
+    //});
+
+</script>
+
+

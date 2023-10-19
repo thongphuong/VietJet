@@ -1,0 +1,124 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Mail.SendMailViewModels
+@{
+    ViewBag.Title = "Modify";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/CKEditor/ckeditor.js"></script>
+@section breadcrumb{
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-header"><i class="fa fa-cogs"></i> @Resource.lblSystemManagement - @Resource.lblMailExchange @Resource.lblDetails</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblSystemManagement</li>
+                <li class="active">@Resource.lblMailExchange @Resource.lblDetails</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="panel list-panel" id="list-panel">
+    <div class="panel-heading list-panel-heading">
+        <h1 class="panel-title list-panel-title"><i class="fas fa-list font-small-byhoa" aria-hidden="true"></i> @Resource.lblDetails </h1>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm("SendMailModify", "Mail", FormMethod.Post, new { @class = "form-horizontal bordered-row", id = "createform" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.Id)
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row" style="margin-top:10px">
+                        <div class="col-md-6">
+                            <label class="col-md-6">@Resource.lblEmail @*<font color="red">(*)</font>*@</label>
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-6">@Resource.lblSubjectMail</label>
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="display:none">
+                        <div class="col-md-12">
+                            @*<div class="col-md-6">
+                                    <label class="col-md-6">Name <font color="red">(*)</font></label>
+                                    <div class="col-md-6">
+                                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>*@
+                            <div class="col-md-12" style="display:none">
+                                <label class="col-md-2">@Resource.lblCode</label>
+                                <div class="col-md-4">
+                                    @Html.EditorFor(model => model.FlagSend, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.FlagSend, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px">
+                        <div class="col-md-12">
+                            <label class="col-md-6">@Resource.lblContentTemplate</label>
+                            <div class="col-md-12 panel-primary" style="">
+                                @Html.TextAreaFor(model => model.TemplateMail, new { @id = "TemplateMail", @class = "form-control", @rows = "500", @style = "border:solid 1px #df3333" })
+                                @Html.ValidationMessageFor(model => model.TemplateMail, "", new { @class = "text-danger" })
+                            </div>
+                            <script>
+                            CKEDITOR.replace("TemplateMail");
+                            </script>
+                        </div>
+                    </div>
+                </div>            
+            </div>
+        }
+        <div class="row">
+            <div class="action-form text-right">
+                <a href="javascript:void(0)" class="btn btn-primary  legitRipple" id="submit" onclick="submit()" style="display: none"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                <a onclick="goBack()" class="btn btn-default  legitRipple"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        //$(document).ready(function () {
+        //    $("#TemplateMail").ckeditor();
+        //});
+        function submit() {
+            spinner.open();
+            var xxx = $("#TemplateMail").val(CKEDITOR.instances['TemplateMail'].getData());
+            var form = $("#createform").serialize();
+            $.ajax({
+                type: 'POST',
+                url: "/Mail/SendMailModify",
+                datatype: 'json',
+                data: form,
+                success: function (data) {
+                    if (data.result) {
+                        window.location.href = '/Mail/SendMail';
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                    }
+                    else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                }
+                , complete: function () {
+
+                    spinner.close();
+                }
+            });
+        }
+    </script>
+
+}

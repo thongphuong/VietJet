@@ -1,0 +1,1579 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.Utils
+@using TMS.Core.ViewModels.UserModels
+
+@model TMS.Core.ViewModels.Courses.AssignTraineeModel
+@{
+    ViewBag.Title = "AssignTrainee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var data = (UserModel)HttpContext.Current.Session["UserA"];
+}
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-graduation-cap"></i>  @Resource.lblCourseManagement - @Resource.lblAssignTrainee</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblCourseManagement</li>
+                <li class="active">@Resource.lblAssignTrainee</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div id="frmFilter">
+        <form action="javascript:void(0);" id="formFilter">
+            <div class="col-md-12">
+                <div class="panel list-panel">
+                    <div class="panel-heading list-panel-heading">
+                        <h1 class="panel-title list-panel-title">@Resource.lblFilter</h1>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row col-md-12">
+                            <div class="row" style="margin-top: 10px;">
+                                <input type="hidden" value="@(ViewContext.RouteData.Values["Id"])" id="hdcourseid" name="hdcourseid" class="form-control frmFilter" />
+                                <div class="col-md-2">
+                                    <label>@Resource.lblCourseCode</label>
+                                </div>
+                                <div class="col-md-2">
+                                    @Html.TextBox("coursecode", null, new { @class = "form-control", @placeholder = Resource.lblCourseCode })
+                                </div>
+                                <div class="col-md-1">
+                                    <label>@Resource.lblFromTo</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" class="form-control pull-right" name="fSearchDate_from" id="fSearchDate_from" placeholder="@Resource.lblStartDate">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" class="form-control pull-right" name="fSearchDate_to" id="fSearchDate_to" placeholder="@Resource.lblEndDate">
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <button type="submit" id="btFiltercourse" class="btn btn-primary" onclick=" filterAssign() ">@Resource.lblFilterCourse</button>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row" style="margin-top: 10px;">
+                                <div class="row col-md-12">
+                                    <div class="col-md-2">
+                                        <label>@Resource.lblCourse</label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <select class="frmFilter" id="CourseList" name="CourseList" onchange=" OnChangecourseId(this.value) " data-placeholder="-- @Resource.lblCourse --">
+                                            <option></option>
+                                            @*
+                                                <text id="showcourseId" name="showcourseId"></text>*@
+                                            @*@foreach (var item in cour)
+                                                {
+                                                <option value="@item.Course_Id">@item.str_Name</option>
+                                                }*@
+                                        </select>
+
+                                    </div>
+                                </div>
+                                @*@using (Html.BeginForm("ImportAssignTrainees", "Import", FormMethod.Post, new Dictionary<string, object> { { "enctype", "multipart/form-data" } }))
+                                    {
+                                        <div class="col-md-7" style="margin-top: 10px;">
+                                            <div class="col-md-1"><label>@Resource.lblImport</label></div>
+                                            <div class="col-md-11">
+                                                <div class="col-md-7">
+                                                    <input type="file" name="postedFile" class="form-control" />
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <input type="submit" m class="btn btn-primary" value="Import" />
+                                                    <a href="/Template/ExcelFile/DepartmentTemplate.xlsx" class="btn btn-primary">Download Template</a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    }*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="col-md-12"></div>
+        <div class="col-md-12">
+            @using (Html.BeginForm("SubmitAddAssignTrainee", "Course", FormMethod.Post, new { id = "createform" }))
+            {
+                <input type="hidden" id="courseId" name="courseId" class="form-control frmFilter" />
+                <input type="hidden" id="RemarkTrainee" name="RemarkTrainee" class="form-control frmFilter" />
+                <input type="hidden" id="type" name="type" class="form-control frmFilter" />
+                <input type="hidden" id="approveType" name="approveType" value="@((int)UtilConstants.ApproveType.AssignedTrainee)" class="form-control frmFilter" />
+                <input type="hidden" id="traineeId" name="traineeId" class="form-control frmFilter" />
+                <input type="hidden" id="fsubmitType" name="fsubmitType" class="frmFilter" value="@(Model.ProcessStep ? (int)UtilConstants.BoolEnum.Yes : (int)UtilConstants.BoolEnum.No)" />
+                <div class="panel list-panel">
+                    <div class="panel-body">
+                        <ul class="nav nav-tabs">
+                            @*<li class="tabTrainee active ">
+                                    <a href="#TRAINEE" data-toggle="tab" aria-expanded="false" id="tabTrainee">@Resource.lblTRAINEE</a>
+                                </li>*@
+                            <li class="tabExtentTrainee active">
+                                <a href="#EXTENTTRAINEE" data-toggle="tab" aria-expanded="false" id="tabExtentTrainee">@Resource.lblEXTENTTRAINEE</a>
+                            </li>
+                            @*<li class="tabLMSAssign">
+                                    <a href="#LMSASSIGN" data-toggle="tab" aria-expanded="false" id="tabLMSAssign">@Resource.lbl_TAB_LMS_ASSIGN</a>
+                                </li>*@
+                            <li class="">
+                                <a href="#IMPORTTRAINEE" data-toggle="tab" aria-expanded="false">@Resource.lblImport</a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane fade" id="TRAINEE">
+                                <div class="col-md-12">
+                                    <hr />
+                                </div>
+                                <div class="col-md-12" style="margin-top: 10px;">
+                                    <div class="col-md-1">
+                                        <label>@Resource.lblDepartment</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select class="form-control frmFilter" id="DepartmentList" name="DepartmentList" data-placeholder="-- @Resource.lblDepartment --" onchange=" Changedepartment(this.value) ">
+                                            <option></option>
+                                            @Html.Raw(Model.Departments)
+                                            @*@if (Model.Departments != null)
+                                                {
+                                                    foreach (var item in Model.Departments)
+                                                    {
+                                                        <option value="@item.Key">@item.Value </option>
+                                                    }
+                                                }*@
+                                        </select>
+                                    </div>
+                                    @if (data.ConfigSite.Contains(Model.CheckPrerequisite))
+                                    {
+                                        <div class="col-md-1">
+                                            <label>Pre-Requisite</label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="form-control frmFilter" id="Prerequisite" name="Prerequisite" data-placeholder="-- Pre-Pequisite --">
+                                                <option></option>
+                                                @if (Model.Prerequisite != null)
+                                                {
+                                                    foreach (var item in Model.Prerequisite)
+                                                    {
+                                                        <option value="@item.Key">@item.Value </option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    }
+                                    <div class="col-md-1">
+                                        <label>@Resource.lblFullName</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        @Html.TextBox("FullName", null, new { @class = "form-control frmFilter" })
+                                    </div>
+                                </div>
+                                <div class="col-md-12" style="margin-top: 10px;">
+                                    <div class="col-md-1">
+                                        <label>@Resource.lblJobTitle_Occupation</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select class="form-control frmFilter" id="JobtitleList" name="JobtitleList" data-placeholder="-- @Resource.lblJobTitle_Occupation --">
+                                            <option></option>
+                                            @if (Model.JobTitles != null)
+                                            {
+                                                foreach (var item in Model.JobTitles)
+                                                {
+                                                    <option value="@item.Key">@item.Value </option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    @if (data.ConfigSite.Contains(Model.CheckGroupTrainee))
+                                    {
+                                        <div class="col-md-1">
+                                            <label>@Resource.lblGroupTrainee</label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="form-control frmFilter" id="GroupTrainee" name="GroupTrainee" data-placeholder="-- Group Trainee --">
+                                                <option></option>
+                                                @if (Model.GroupTrainees != null)
+                                                {
+                                                    foreach (var item in Model.GroupTrainees)
+                                                    {
+                                                        <option value="@item.Key">@item.Value </option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    }
+                                    <div class="col-md-1">
+                                        <label>@Messege.EID</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        @Html.TextBox("EID", null, new { @class = "form-control frmFilter" })
+                                    </div>
+                                </div>
+                                <div class="col-md-11"></div>
+                                <div class="col-md-1">
+                                    <button type="button" id="btFilter" class="btn btn-primary">@Resource.lblSearch</button>
+                                </div>
+                                <div class="col-md-12">
+                                    <hr />
+                                </div>
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-6" style="margin-top: 10px;">
+                                        <div class="panel" id="list-panel">
+                                            <div class="panel-heading list-panel-heading">
+                                                <h1 class="panel-title list-panel-title">@Resource.lblAvailableTrainee</h1>
+                                            </div>
+                                            <div class="panel-body">
+                                                <table id="Trainee" class="table table-striped table-bordered" style="width: 100%">
+                                                    <thead>
+                                                        <tr role="row">
+                                                            <th style="width: 5%;">@Resource.lblStt</th>
+                                                            <th>@Messege.EID</th>
+                                                            <th>@Resource.lblFullName</th>
+                                                            <th>@Resource.lblDepartment</th>
+                                                            <th>@Resource.lblJobTitle</th>
+                                                            <th style="width: 5%;"><input type="checkbox" name="select_all" value="1" id="example-select-all"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1" style="margin-top: 10px;">
+                                        @if (User.IsInRole("/Course/AssignTrainee")) // neu co
+                                        {
+
+                                            <div class="authorization-edit-btnNav float-left">
+                                                <input style="display: none" type="button" class="btn btn-default" data-id="1" name="bu_ab_alarm_btnRight" id="role-edit-btnRight" onclick="checktrainee(this) " value="@Html.Raw(">")" />
+                                                <div class="clear"></div>
+                                                <input type="button" class="btn btn-default" name="bu_ab_alarm_btnLeft" value="@Html.Raw("<")" id="role-edit-btnLeft" onclick="removetrainee()" style="display: none" />
+                                                <div class="clear"></div>
+                                            </div>
+                                        }
+
+                                    </div>
+                                    <div class="col-md-6" style="margin-top: 10px;">
+                                        <div class="panel" id="list-panel">
+                                            <div class="panel-heading list-panel-heading">
+                                                <h1 class="panel-title list-panel-title">
+                                                    @Resource.lblAssignTrainee&nbsp;<label class="getQuantity"></label>
+                                                </h1>
+                                            </div>
+                                            <div class="panel-body">
+                                                <table id="AssignTrainee" class="table table-striped table-bordered" style="width: 100%">
+                                                    <thead>
+                                                        <tr role="row">
+                                                            <th style="width: 5%;">@Resource.lblStt</th>
+                                                            <th>@Messege.EID</th>
+                                                            <th>@Resource.lblFullName</th>
+                                                            <th style="width: 5%;"><input type="checkbox" name="select_all" value="1" id="example-select-all-Assign"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                                </table>
+
+                                            </div>
+                                            @*@if (data.ConfigSite.Contains(UtilConstants.KEY_SENT_EMAIL_THAIVJ))
+                                                {
+                                                    <button style="display: none" type="button" id="responsable" name="checkResp" class="btn btn-primary" onclick=" SubmitSentMail() ">Send Email</button>
+                                                }*@
+                                            <div style="display: none" class="btnRequest">
+                                                @*@if (Model.ProcessStep)
+                                                    {
+                                                       <div class='panel-body'><input type='button' class='btn btn-danger' value='Submit' onclick='SubmitRequest()' /></div>
+
+                                                    }*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12" style="margin-top: 10px;">
+                                        <div class="panel" id="list-panel">
+                                            <div class="panel-heading list-panel-heading">
+                                                <h1 class="panel-title list-panel-title">@Resource.lblTraineeParticipateSubject</h1>
+                                            </div>
+                                            <div class="panel-body">
+                                                <table id="AssignTraineeSubject" class="table table-striped table-bordered">
+                                                    <thead>
+                                                        <tr role="row">
+                                                            <th>@Resource.lblStt</th>
+                                                            <th>@Resource.lblFullName</th>
+                                                            <th>@Resource.lblSubject</th>
+                                                            <th>@Resource.lblParticipate</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="tab-pane fade active in" id="EXTENTTRAINEE">
+                                <div class="col-md-12">
+                                    <hr />
+                                </div>
+                                <div class="col-md-12" style="margin-top: 10px;">
+                                    <div class="col-md-1">
+                                        <label>@Resource.lblDepartment</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select class="form-control frmFilter" id="
+                                                " name="DepartmentList2" data-placeholder="-- @Resource.lblDepartment --" onchange=" Changedepartment2(this.value) ">
+                                            <option></option>
+                                            @Html.Raw(Model.Departments)
+                                            @*@if (Model.Departments != null)
+                                                {
+                                                    foreach (var item in Model.Departments)
+                                                    {
+                                                        <option value="@item.Key">@item.Value </option>
+                                                    }
+                                                }*@
+                                        </select>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label>@Messege.EID</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        @Html.TextBox("EID2", null, new { @class = "form-control frmFilter" })
+                                    </div>
+                                    @if (data.ConfigSite.Contains(UtilConstants.KEY_PREREQUISITE))
+                                    {
+                                        <div class="col-md-1">
+                                            <label>Pre-Requisite</label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="form-control frmFilter" id="Prerequisite2" name="Prerequisite2" data-placeholder="-- Pre-Requisite --">
+                                                <option></option>
+                                                @if (Model.Prerequisite != null)
+                                                {
+                                                    foreach (var item in Model.Prerequisite)
+                                                    {
+                                                        <option value="@item.Key">@item.Value </option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    }
+                                    <div class="col-md-1">
+                                        <label>@Resource.lblFullName</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        @Html.TextBox("FullName2", null, new { @class = "form-control frmFilter" })
+                                    </div>
+                                </div>
+                                <div class="col-md-12" style="margin-top: 10px;">
+                                    <div class="col-md-1">
+                                        <label>@Resource.lblJobTitle</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select class="form-control frmFilter" id="JobtitleList2" name="JobtitleList2" data-placeholder="-- @Resource.lblJobTitle_Occupation --">
+                                            <option></option>
+                                            @if (Model.JobTitles != null)
+                                            {
+                                                foreach (var item in Model.JobTitles)
+                                                {
+                                                    <option value="@item.Key">@item.Value </option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    @if (true)//data.ConfigSite.Contains(UtilConstants.KEY_GROUP_TRAINEE))
+                                    {
+                                        <div class="col-md-1">
+                                            <label>Group Trainee</label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="form-control frmFilter" id="GroupTrainee2" name="GroupTrainee2" data-placeholder="-- Group Trainee --">
+                                                <option></option>
+                                                @if (Model.GroupTrainees != null)
+                                                {
+                                                    foreach (var item in Model.GroupTrainees)
+                                                    {
+                                                        <option value="@item.Key">@item.Value </option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    }
+                                    <div class="col-md-4">
+                                        <button type="button" id="btFilter2"  onclick="clickGetCourse();" class="btn btn-primary pull-right"><i class="fa fa-search"></i> @Resource.lblSearch</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-11"></div>
+                                <div class="row" style="margin-top: 10px;">
+                                    <div class="col-md-6" style="margin-top: 20px;">
+                                        <div class="panel" id="list-panel">
+                                            <div class="panel-heading list-panel-heading">
+                                                <h1 class="panel-title list-panel-title">@Resource.lblAvailableTrainee</h1>
+                                            </div>
+                                            <div class="panel-body" style="overflow-x:scroll">
+                                                <table id="Trainee2" class="table table-striped table-bordered" style="width: 100%; ">
+                                                    <thead>
+                                                        <tr id="checktest" role="row">
+                                                            <th style="width: 5%;">@Resource.lblStt</th>
+                                                            <th>@Messege.EID</th>
+                                                            <th>@Resource.lblFullName</th>
+                                                            @*<th>@Resource.lblDepartment</th>*@
+                                                            <th>@Resource.lblJobTitle</th>
+                                                            <th>@Resource.lblEmail</th>
+                                                            <th>Remarks</th>
+                                                            <th style="width: 5%;"><input type="checkbox" name="select_all2" value="1" id="example-select-all2" /></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1" style="margin-top: 20px;">
+                                        @if (User.IsInRole("/Course/AssignTrainee")) // neu co
+                                        {
+                                            <div class="authorization-edit-btnNav float-left">
+                                                <input type="button" class="btn btn-default" data-id="2" name="bu_ab_alarm_btnRight" value="@Html.Raw(">")" id="role-edit-btnRight2" onclick=" addtrainee2(this) " style="display: none" />
+                                                <div class="clear"></div>
+                                                <input type="button" class="btn btn-default" name="bu_ab_alarm_btnLeft" value="@Html.Raw("<")" id="role-edit-btnLeft2" onclick=" removetrainee() " style="display: none" />
+                                                <div class="clear"></div>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="col-md-5" style="margin-top: 20px;">
+                                        <div class="panel" id="list-panel">
+                                            <div class="panel-heading list-panel-heading">
+                                                <h1 class="panel-title list-panel-title">
+                                                    @Resource.lblAssignTrainee&nbsp;<label class="getQuantity"></label>
+                                                </h1>
+                                            </div>
+                                            <div class="panel-body" style="overflow-x:scroll">
+                                                <table id="AssignTrainee2" class="table table-striped table-bordered" style="width: 100%">
+                                                    <thead>
+                                                        <tr role="row">
+                                                            <th style="width: 5%;">@Resource.lblStt</th>
+                                                            <th>@Messege.EID</th>
+                                                            <th>@Resource.lblFullName</th>
+                                                            @*<th>@Resource.lblDepartment</th>*@
+                                                            <th>@Resource.lblJobTitle</th>
+                                                            <th>@Resource.lblEmail</th>
+                                                            <th>Remarks</th>
+                                                            <th style="width: 10%;"><input type="checkbox" name="select_all2" value="1" id="example-select-all-Assign2"></th>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                                </table>
+                                                @*@if (data.ConfigSite.Contains(UtilConstants.KEY_SENT_EMAIL_THAIVJ))
+                                                    {
+                                                        <button style="display: none" type="button" id="responsable1" name="checkResp" class="btn btn-primary" onclick=" SubmitSentMail() ">Send Email</button>
+                                                    }*@
+                                            </div>
+                                            <div style="display: none" class="btnRequest">
+                                                @*@if (Model.ProcessStep)
+                                                    {
+                                                       <div class='panel-body'><input type='button' class='btn btn-danger' value='Submit' onclick='SubmitRequest()' /></div>
+                                                    }*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12" style="margin-top: 10px;">
+                                        <div class="panel" id="list-panel">
+                                            <div class="panel-heading list-panel-heading">
+                                                <h1 class="panel-title list-panel-title">@Resource.lblTraineeParticipateSubject</h1>
+                                            </div>
+                                            <div class="panel-body table-responsive">
+                                                <table id="AssignTraineeSubject2" class="table table-striped table-bordered" style="width: 100%">
+                                                    <thead>
+                                                        <tr role="row">
+                                                            <th>@Resource.lblStt</th>
+                                                            <th>@Resource.lblFullName</th>
+                                                            <th>@Resource.lblSubject</th>
+                                                            <th>@Resource.lblParticipate</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12" style="margin:10px 0 10px 0;">
+                                        <label>Note</label>
+                                        @*<textarea class="form-control" cols="20" id="txt_NOTE" name="Note" rows="4"></textarea>*@
+                                        @Html.TextArea("str_Remark", new { name = "str_Remark", id = "str_Remark", @class = "form-control", @rows = "4",@cols = 20 })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="LMSASSIGN">
+                                @Html.Partial("_Partials/_LmsAssign")
+                            </div>
+                            <div id="IMPORTTRAINEE" class="tab-pane fade">
+                                @using (Html.BeginForm("ImportAssignTrainees", "Import", FormMethod.Post, new Dictionary<string, object> { { "enctype", "multipart/form-data" }, { "id", "importassign" } }))
+                                {
+                                    <div class="form-group">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-8">
+                                            <input onchange="Review()" onclick="clearVal()" type="file" name="postedFile" id="postedFile" class="form-control" />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="/Template/ExcelFile/AssignTrainee_Template.xlsx" class="btn btn-primary">@Resource.lblDownloadTemplate</a>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!--Modal review-->
+<div id="divPreviewPopup" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>@Resource.lblFileImport</h4>
+            </div>
+            <div class="modal-body">
+                <table id="FileImport" class="table table-striped table-bordered">
+                    <thead>
+                        <tr role="row">
+                            <th>@Resource.TRAINEE_EID</th>
+                            <th>@Resource.lblName</th>
+                            <th>@Resource.lblRemark</th>
+                            <th>@Resource.lblStatus</th>
+</thead>
+                    <tbody></tbody>
+                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" value="@Resource.lblImport" id="Import" />
+                <button type="button" class="btn btn-goback" data-dismiss="modal">@Resource.lblClose</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal addtrainee-->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header panel-oran">
+                <button type="button" class="close btnClose" data-dismiss="modal">&times;</button>
+                <div class="panel-heading list-panel-heading">
+                    <h5 class="modal-title panel-title list-panel-title" id="modal-header">@Resource.lblWARNING</h5>
+                </div>
+            </div>
+            <div class="modal-body">
+                <label id="lblmyModal"></label>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="@Resource.lblAssignTrainee" class="btn btn-primary" id="btnassign" />
+                <button type="button" class="btn btn-secondary btnClose" data-dismiss="modal">@Resource.lblClose</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--END Modal addtrainee -->
+<div class="modal fade" id="myModalRequest" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p id="lblModelMessage"></p>
+                <label>Note</label>
+                <textarea class="form-control" name="txtNote" id="txtNote" rows="5"></textarea>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div id="messageout">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="Modal_FooterRequest">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+            var sTable;
+            var sTable2;
+            var sTable3;
+            var sTable_tab2;
+            var sTable2_tab2;
+            var sTable3_tab2;
+            var sTable_tabLMS;
+        
+        var hash = window.location.hash;
+        if (!hash) {
+            filterAssign();
+        }
+            $(document).ready(function() {
+                $('form').on('keyup keypress', function (e) {
+                    if ($(e.target).attr('id') != "str_Remark") {
+                         var keyCode = e.keyCode || e.which;
+                          if (keyCode === 13) {
+                            e.preventDefault();
+                            return false;
+                          }
+                    }                 
+                });
+
+
+                var customRowssTable = [
+                     {
+                         "targets": 0 ,
+                         "className": "text-center"
+                     },
+                 {
+                    "targets": -1,
+                    "className": "text-center",
+                    "sortable": false,
+                 }
+                ];
+                var customRowsTable2 = [
+                   {
+                       "targets": 0 ,
+                       "className": "text-center"
+                },
+                  {
+                    "targets": -1,
+                    "className": "text-center",
+                    "sortable": false,
+                 }
+                ];
+
+                var customRowssTable3 = [
+                   {
+                       "targets": 0 ,
+                       "className": "text-center"
+                    },
+                   {
+                       "targets": 3,
+                       "className": "text-center"
+                   }
+                ];
+                //sTable = initDataTableMaxPageLength("#Trainee","/Course/AjaxHandlerAvailableSubject",customRowssTable);
+                //sTable2 = initDataTableMaxPageLength("#AssignTrainee","/Course/AjaxHandlerAssignTrainee",customRowsTable2);
+                //sTable3 = initDataTable("#AssignTraineeSubject","/Course/AjaxHandlerAssignTraineeSubject",customRowssTable3);
+
+
+
+                sTable_tab2 = initDataTableMaxPageLength("#Trainee2","/Course/AjaxHandlerAvailableSubject2",customRowssTable);
+                sTable2_tab2 = initDataTableMaxPageLength("#AssignTrainee2","/Course/AjaxHandlerAssignTrainee",customRowsTable2);
+                sTable3_tab2 = initDataTable("#AssignTraineeSubject2","/Course/AjaxHandlerAssignTraineeSubject",customRowssTable3);
+
+
+                var customRowssTableLms = [
+                   {
+
+                       'targets': 5,
+                            'searchable': false,
+                            'orderable': false,
+                            "className": "text-center"
+                   }
+                ];
+                /*Tab LMS Assign*/
+                //sTable_tabLMS = initDataTable("#LMSAssginTable","/Course/AjaxHandlerLMSAssign",customRowssTableLms);
+
+
+                formatDatetimepicker('#fSearchDate_from', '@Resource.lblLanguage');
+                formatDatetimepicker('#fSearchDate_to', '@Resource.lblLanguage');
+                $("#Import").click(function () {
+                    spinner.open();
+                    var courrseId = $("#courseId").val();
+                    var submitType = $("#fsubmitType").val();
+                    var formdata = new FormData();
+                    var totalFiles = document.getElementById("postedFile").files.length;
+                    var file = document.getElementById("postedFile").files[0];
+                    formdata.append("postedFile", file);
+                    formdata.append("courrseId", courrseId);
+                    formdata.append("submitType", submitType);
+                    $.ajax({
+                        type: "POST",
+                        url: "/Import/ImportAssignTrainees",
+                        data: formdata,
+                        dataType: 'json',
+                        contentType: false,
+                        processData: false,
+                        success: function(data) {
+                            if (data.result) {
+                               
+                                //notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                                $("#postedFile").val("");
+                                $("#divPreviewPopup").modal("hide");
+
+                            } else {
+                                notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                            }
+                        }, complete: function () {
+                            spinner.close();
+                            LoadDataTable();
+                        }
+                    });
+                });
+
+                $(".btnClose").click(function() {
+                    $('#lblmyModal').val("");
+                    $('#btnassign').off("click");
+
+                });
+
+
+
+                $("#EID").pressEnter(function() {
+                    $('#btFilter').trigger('click');
+                });
+                $("#FullName").pressEnter(function() {
+                    $('#btFilter').trigger('click');
+                });
+
+                //$("#tabTrainee").click(function(e) {
+                //    LoadDataTable();
+                //});
+                $("#tabExtentTrainee").click(function (e) {
+                   sTable2_tab2.draw();
+                });
+                $("#tabLMSAssign").click(function(e) {
+                    LoadDataTable();
+                });
+                $('#btFilter').click(function(e) {
+                    var courseId = $('#courseId').val();
+                    if (courseId != "") {
+
+                        LoadDataTable();
+                        $("#responsable").css("display", "block");
+                        $("#responsable1").css("display", "block");
+                        $('.getQuantity').empty();
+                        $('#btnassign').off("click");
+                        $('.btnRequest').css('display', 'block');
+                        $('#role-edit-btnRight').css('display', 'block');
+                        $('#role-edit-btnRight2').css('display', 'block');
+                        $('#role-edit-btnLeft').css('display', 'block');
+                        $('#role-edit-btnLeft2').css('display', 'block');
+                    } else {
+                        notify.alert("@string.Format(Messege.VALIDATION_COURSE_FILTER,Resource.lblCourse)", "Notification",TITLE_STATUS_WARNING);
+                        $('.btnRequest').css('display', 'none');
+                        $('#role-edit-btnRight').css('display', 'none');
+                        $('#role-edit-btnRight2').css('display', 'none');
+                        $('#role-edit-btnLeft').css('display', 'none');
+                        $('#role-edit-btnLeft2').css('display', 'none');
+                    }
+
+                });
+                $("#EID2").pressEnter(function () {
+
+                    $('#btFilter2').trigger('click');
+                });
+                $("#FullName2").pressEnter(function () {
+
+                    $('#btFilter2').trigger('click');
+                });
+                $("#coursecode").pressEnter(function () {
+
+                    $('#btFiltercourse').trigger('click');
+                });
+                $('#btFilter2').click(function (e) {
+                   
+                    var courseId = $('#courseId').val();
+                    if (courseId != "") {
+                        LoadDataTable();
+                        $("#responsable").css("display","block");
+                        $("#responsable1").css("display","block");
+                        $('.getQuantity').empty();
+                        $('#btnassign').off("click");
+                        $('.btnRequest').css('display', 'block');
+                        $('#role-edit-btnRight').css('display', 'block');
+                        $('#role-edit-btnRight2').css('display', 'block');
+                        $('#role-edit-btnLeft').css('display', 'block');
+                        $('#role-edit-btnLeft2').css('display', 'block');
+                    } else {
+                        notify.alert("@string.Format(Messege.VALIDATION_COURSE_FILTER,Resource.lblCourse)", "Notification",TITLE_STATUS_WARNING);
+                        $('.btnRequest').css('display', 'none');
+                        $('#role-edit-btnRight').css('display', 'none');
+                        $('#role-edit-btnRight2').css('display', 'none');
+                        $('#role-edit-btnLeft').css('display', 'none');
+                        $('#role-edit-btnLeft2').css('display', 'none');
+                    }
+                });
+                $("#EID3").pressEnter(function() {
+                    $('#btFilter3').trigger('click');
+                });
+                $("#FullName3").pressEnter(function() {
+                    $('#btFilter3').trigger('click');
+
+                });
+                $('#btFilter3').click(function(e) {
+                    var courseId = $('#courseId').val();
+                    if (courseId != "") {
+                        LoadDataTable();
+                        $('#btnLmsAssign').css('display', 'block');
+
+                        $('.btnRequest').css('display', 'block');
+                    } else {
+                        notify.alert("@string.Format(Messege.VALIDATION_COURSE_FILTER,Resource.lblCourse)", "Notification",TITLE_STATUS_WARNING);
+                        $('#btnLmsAssign').css('display', 'none');
+                    }
+
+                });
+
+
+                // Handle click on "Select all" control
+                $('#example-select-all').on('click', function() {
+                    // Get all rows with search applied
+                    var rows = sTable.rows({ 'search': 'applied' }).nodes();
+                    // Check/uncheck checkboxes for all rows in the table
+                    $('input[type="checkbox"]', rows).prop('checked', this.checked);
+                });
+                // Handle click on checkbox to set state of "Select all" control
+                $('#Trainee tbody').on('change', 'input[type="checkbox"]', function() {
+                    // If checkbox is not checked
+                    if (!this.checked) {
+                        var el = $('#example-select-all').get(0);
+                        // If "Select all" control is checked and has 'indeterminate' property
+                        if (el && el.checked && ('indeterminate' in el)) {
+                            // Set visual state of "Select all" control
+                            // as 'indeterminate'
+                            el.indeterminate = true;
+                        }
+                    }
+                });
+                // Handle click on "Select all" control
+                $('#example-select-all2').on('click', function() {
+                    // Get all rows with search applied
+                    var rows = sTable_tab2.rows({ 'search': 'applied' }).nodes();
+                    // Check/uncheck checkboxes for all rows in the table
+                    $('input[type="checkbox"]', rows).prop('checked', this.checked);
+                });
+                // Handle click on checkbox to set state of "Select all" control
+                $('#Trainee2 tbody').on('change', 'input[type="checkbox"]', function() {
+                    // If checkbox is not checked
+                    if (!this.checked) {
+                        var el = $('#example-select-all2').get(0);
+                        // If "Select all" control is checked and has 'indeterminate' property
+                        if (el && el.checked && ('indeterminate' in el)) {
+                            // Set visual state of "Select all" control
+                            // as 'indeterminate'
+                            el.indeterminate = true;
+                        }
+                    }
+                });
+                // Handle click on "Select all" control
+                $('#example-select-all-Assign').on('click', function() {
+                    // Get all rows with search applied
+                    var rows = sTable2.rows({ 'search': 'applied' }).nodes();
+                    // Check/uncheck checkboxes for all rows in the table
+                    $('input[type="checkbox"]', rows).prop('checked', this.checked);
+                });
+                // Handle click on checkbox to set state of "Select all" control
+                $('#AssignTrainee tbody').on('change', 'input[type="checkbox"]', function() {
+                    // If checkbox is not checked
+                    if (!this.checked) {
+                        var el = $('#example-select-all-Assign').get(0);
+                        // If "Select all" control is checked and has 'indeterminate' property
+                        if (el && el.checked && ('indeterminate' in el)) {
+                            // Set visual state of "Select all" control
+                            // as 'indeterminate'
+                            el.indeterminate = true;
+                        }
+                    }
+                });
+                // Handle click on "Select all" control
+                $('#example-select-all-Assign2').on('click', function() {
+                    // Get all rows with search applied
+                    var rows = sTable2_tab2.rows({ 'search': 'applied' }).nodes();
+                    // Check/uncheck checkboxes for all rows in the table
+                    $('input[type="checkbox"]', rows).prop('checked', this.checked);
+                });
+                // Handle click on checkbox to set state of "Select all" control
+                $('#AssignTrainee2 tbody').on('change', 'input[type="checkbox"]', function() {
+                    // If checkbox is not checked
+                    if (!this.checked) {
+                        var el = $('#example-select-all-Assign2').get(0);
+                        // If "Select all" control is checked and has 'indeterminate' property
+                        if (el && el.checked && ('indeterminate' in el)) {
+                            // Set visual state of "Select all" control
+                            // as 'indeterminate'
+                            el.indeterminate = true;
+                        }
+                    }
+                });
+                // Handle click on "Select all" control
+                $('#example-select-all-Assign3').on('click', function() {
+                    // Get all rows with search applied
+                    var rows = sTable_tabLMS.rows({ 'search': 'applied' }).nodes();
+                    // Check/uncheck checkboxes for all rows in the table
+                    $('input[type="checkbox"]', rows).prop('checked', this.checked);
+                });
+                // Handle click on checkbox to set state of "Select all" control
+                $('#LMSAssginTable tbody').on('change', 'input[type="checkbox"]', function() {
+                    // If checkbox is not checked
+                    if (!this.checked) {
+                        var el = $('#example-select-all-Assign3').get(0);
+                        // If "Select all" control is checked and has 'indeterminate' property
+                        if (el && el.checked && ('indeterminate' in el)) {
+                            // Set visual state of "Select all" control
+                            // as 'indeterminate'
+                            el.indeterminate = true;
+                        }
+                    }
+                });
+                //$('#fSearchDate_from').daterangepicker({
+                //    format: 'DD MMM YYYY'
+                //});
+                //$('#fSearchDate_to').daterangepicker({
+                //    format: 'DD MMM YYYY'
+                //});
+                if (hash) {
+                var tags = $('.nav-tabs li');
+                tags.removeClass('active');
+                $('.nav-tabs li a[href="#EXTENTTRAINEE"]').parent().addClass('active');
+                $('#TRAINEE').removeClass('in active');
+                $('#EXTENTTRAINEE').addClass('in active');
+                var url_string = window.location.href;
+                var url = new URL(url_string);
+                var code = url.searchParams.get("code");
+                    $('#coursecode').val(code);
+                    //$('#hdcourseid').val();
+                filterAssign();
+            }
+
+            });
+            $(".line_310").addClass("active");
+
+            function checkButton() {
+                var id = $('#courseId').val();
+                    $("#courseId").val(id);
+                    $.ajax({
+                        type: "POST",
+                        url: "/Course/CheckStatusAssign",
+                        datatype: 'json',
+                        data: { courseId: id },
+                        success: function (data) {
+                            if (data.result) {
+                                $(".btnRequest").html("");
+                                $(".btnRequest").append(data.data);
+                            } else {
+                                $(".btnRequest").html("");
+                            }
+                        },
+                        complete : function() {
+                        }
+                    });
+                //if(check == false)
+                //{
+                //    var $btnRequest = $('#btnRequest');
+                //    var htmldata = "<div class='panel' id='btnRequest'>";
+                //    htmldata += '<div class="panel-body">';
+                //    htmldata +=  '<input type="button" class="btn btn-danger"  value="Submit" onclick="callrequest()" /></div></div>"';
+                //    $btnRequest.append(htmldata);
+                //}
+
+            }
+            function filterAssign() {
+                var form = $('#formFilter').serialize();
+                $.ajax({
+                    type: 'POST',
+                    url: "/Course/FilterAssign",
+                    datatype: 'json',
+                    data: form,
+                    success: function(result) {
+                        $('#CourseList').empty();
+                        $('#CourseList').prop('selectedIndex', 0);
+                        $('#CourseList').append(result.value_option);
+                        //$('#CourseList').select2();
+                        if (hash) {
+                            $('#CourseList').prop('selectedIndex', 1);
+                            $('#CourseList').select2();
+                            OnChangecourseId($('#CourseList').val());
+                            //$('#btFilter2').click();
+                            LoadDataTable();
+                        }
+                    },
+                    complete: function() {
+                    }
+                });
+            }
+
+            function OnChangecourseId(id) {
+                $("#courseId").val(id);
+
+                if (id != "-1") {
+                    $("#btFilter").show();
+                    $("#btFilter2").show();
+                } else {
+                    $("#btFilter").hide();
+                    $("#btFilter2").hide();
+                }
+            }
+
+            function clickGetCourse() {
+                var courseID = $("#CourseList option:selected").val();
+                showRemarkAssign(courseID);
+            }
+
+        function showRemarkAssign(courseID) {
+                $.ajax({
+                    type: 'POST',
+                    url: "/Course/ShowRemarkAssign",
+                    datatype: 'json',
+                    data: { courseID: courseID },
+                    success: function (result) {
+                        $("textarea[name=str_Remark]").text(result);
+                        $("textarea[name=str_Remark]").val(result);
+                    }
+                });
+            }
+            //function Import() {
+
+            //    var form = $("#importassign").serialize();
+            //    var file = document.getElementById("FileImport");
+            //    var formData = new FormData(file);
+            //    //if ($forms.valid()) {
+            //    $.ajax({
+            //        type: 'POST',
+            //        url: "/Import/ImportAssignTrainees",
+            //        datatype: 'json',
+            //        data: formData,
+            //        success: function (data) {
+            //            $("#Trainee").DataTable().draw();
+            //            $("#LMSAssginTable").DataTable().draw();
+            //            $("#AssignTrainee").DataTable().draw();
+            //            $("#AssignTraineeSubject").DataTable().draw();
+            //            $("#Trainee2").DataTable().draw();courseId
+            //            $("#AssignTrainee2").DataTable().draw();
+            //            $("#AssignTraineeSubject2").DataTable().draw();
+            //        }
+            //    });
+
+            //    // }
+            //}{
+        var l = "";
+
+        function checktrainee(e) {
+                 var arr = [];
+                 $("input[name='id2[]']:checked").each(function (i, v) {
+                    var trainee = $(v).val();
+                    var remark = $(v).parents('tr').last().addClass('active').find("#remark").val();
+                    arr.push('{"idTrainee":"' + trainee + '","remarkTrainee":"' + remark + '"}');
+                });
+                $("#RemarkTrainee").val(arr.join(","));
+                var type = $(e).data("id");
+                $('input[name="type"]').val(type);
+                var form = $("#createform").serialize();
+                $.ajax({
+                    type: 'POST',
+                    url: "/Course/WarningAssignTranee",
+                    datatype: 'json',
+                    data: form,
+                    success: function(data) {
+                        if (data.result) {
+                            $('#lblmyModal').html(data.message).text();
+                            $("#btnassign").on("click", function() {
+                                if (type == 1) {
+                                    addtrainee();
+                                } else if (type == 2) {
+                                    addtrainee2();
+                                } else if (type == 3) {
+                                    SubmitLmsAssign();
+                                }
+                            });
+                            $("#myModal").modal();
+                        } else {
+                            var typecheck = @((int) UtilConstants.TypeCheck.Checked);
+                            if (data.type == typecheck) {
+                                $('#lblmyModal').html(data.message).text();
+                                $("#btnassign").on("click", function() {
+                                    if (type == 1) {
+                                        addtrainee();
+                                    } else if (type == 2) {
+                                        addtrainee2();
+                                    } else if (type == 3){
+                                        SubmitLmsAssign();
+                                    }
+                                });
+                                $("#myModal").modal();
+                            } else {
+                                if (type == 1) {
+                                    addtrainee();
+                                } else if (type == 2) {
+                                    addtrainee2();
+                                } else if (type == 3){
+                                    SubmitLmsAssign();
+                                }
+                            }
+                        }
+                    },
+                    complete: function() {
+                        spinner.close();
+                        $('#example-select-all2').prop('checked', false);
+                    }
+                });
+            }
+
+            function addtrainee() {
+                var form = $("#createform").serialize();
+                spinner.open();
+                //if ($forms.valid()) {
+                $.ajax({
+                    type: 'POST',
+                    url: "/Course/SubmitAddAssignTrainee",
+                    datatype: 'json',
+                    data: form,
+                    success: function(data) {
+                        if (data.result) {
+                            LoadDataTable();
+                            notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                            $('.getQuantity').html(data.data).text();
+                            //$('.getQuantity').append(data.data);
+                        } else {
+                            notify.alert(data.message, "ERROR", TITLE_STATUS_DANGER);
+                        }
+                    },
+                    complete: function() {
+                        $('#btnassign').off("click");
+                        $("#myModal").modal("hide");
+                        spinner.close();
+
+                    }
+                });
+
+                // }
+            }
+            function LoadDataTable() {
+                $("#traineeId").val("");
+                 checkButton();
+                if ($("li.tabTrainee").hasClass("active")) {
+                    sTable.draw();
+                    sTable2.draw();
+                    sTable3.draw();
+                }
+                else if ($("li.tabExtentTrainee").hasClass("active")) {
+                    sTable_tab2.draw();
+                    sTable2_tab2.draw();
+                    sTable3_tab2.draw();
+                }
+                else if ($("li.tabLMSAssign").hasClass("active")) {
+                    sTable_tabLMS.draw();
+                }
+
+
+            }
+
+            function removetrainee() {
+                var form = $("#createform").serialize();
+                spinner.open();
+                $.ajax({
+                    type: 'POST',
+                    url: "/Course/SubmitRemoveAssignTrainee",
+                    datatype: 'json',
+                    data: form,
+                    success: function(data) {
+                        if (data.result) {
+                            LoadDataTable();
+                            //notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                            $('.getQuantity').html(data.data).text();
+                            //$('.getQuantity').append(data.data);
+                        } else {
+                            notify.alert(data.message, "ERROR", TITLE_STATUS_DANGER);
+                        }
+                    },
+                    complete: function() {
+                        spinner.close();
+                         $('#example-select-all-Assign2').prop('checked', false);
+                    }
+                });
+            }
+
+        function addtrainee2() {
+                var arr = [];
+                 $("input[name='id2[]']:checked").each(function (i, v) {
+                    var trainee = $(v).val();
+                    var remark = $(v).parents('tr').last().addClass('active').find("#remark").val();
+                    arr.push('{"idTrainee":"' + trainee + '","remarkTrainee":"' + remark + '"}');
+                });
+                $("#RemarkTrainee").val(arr.join(","));
+                var form = $("#createform").serialize();
+                spinner.open();
+                $.ajax({
+                    type: 'POST',
+                    url: "/Course/SubmitAddAssignTrainee2",
+                    datatype: 'json',
+                    data: form,
+                    success: function(data) {
+                        if (data.result) {
+                            
+                            //notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                            //$('.getQuantity').html(data.data).text();
+                            //$('.getQuantity').append(data.data);
+                        } else {
+                            notify.alert(data.message, "ERROR", TITLE_STATUS_DANGER);
+                        }
+
+                    },
+                    complete: function() {
+                        $("#myModal").modal("hide");
+                        $('#btnassign').off("click");
+                        LoadDataTable();
+                        spinner.close();
+                    }
+                });
+
+            }
+
+            function detail(id) {
+                $("#traineeId").val(id);
+                if ($("li.tabTrainee").hasClass("active")) {
+                    sTable3.draw();
+                }
+                else if ($("li.tabExtentTrainee").hasClass("active")) {
+                    sTable3_tab2.draw();
+                }
+            }
+
+            function Set_Participate_Subject(isParticipate, id) {
+                spinner.open();
+                $.ajax({
+                    type: 'POST',
+                    url: "/Course/SubmitSetParticipateSubject",
+                    datatype: 'json',
+                    data: { isParticipate: isParticipate, id: id },
+                    success: function(data) {
+                        if (data.result) {
+
+                            notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                        } else {
+
+                            notify.alert(data.message, "ERROR", TITLE_STATUS_DANGER);
+                        }
+
+                    },
+                    complete: function() {
+                        //LoadDataTable();
+                        sTable3_tab2.draw();
+                        spinner.close();
+                    }
+                });
+            }
+
+            function SubmitTrinhKi() {
+                spinner.open();
+                var form = $("#createform").serialize();
+                $.ajax({
+                    type: 'POST',
+                    url: "/Course/SubmitTrinhKi",
+                    datatype: 'json',
+                    data: form,
+                    success: function(data) {
+                        $("#messageout").html('');
+                        $("#messageout").append(data);
+                        sTable.draw();
+                        sTable2.draw();
+                        sTable3.draw();
+                    },
+                    complete: function() {
+                        spiner.close();
+                    }
+                });
+
+            }
+
+            function Changedepartment(val, id) {
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: "/Course/ChangeDepartmentReturnJobtitle",
+                    dataType: "json",
+                    data: { id_department: val, id: id },
+                    success: function(result) {
+                        $("#showjobtitle").empty();
+                        $("#showjobtitle").append(result.htmlout);
+                        $('select:not([name$="_length" ])').select2({
+                            width: '100%',
+                            allowClear: true
+                        }).addClass('form-control searchText1');
+                    }
+                });
+            }
+
+            function Changedepartment2(val, id) {
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: "/Course/ChangeDepartmentReturnJobtitle",
+                    dataType: "json",
+                    data: { id_department: val, id: id },
+                    success: function(result) {
+                        $("#showjobtitle2").empty();
+                        $("#showjobtitle2").append(result.htmlout);
+                        $('select:not([name$="_length" ])').select2({
+                            width: '100%',
+                            allowClear: true
+                        }).addClass('form-control searchText1');
+                    }
+                });
+            }
+
+            function SubmitLmsAssign() {
+                spinner.open();
+                var form = $("#createform").serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "/Course/SubmitLmsAssign",
+                    dataType: "json",
+                    data: form,
+                    success: function(data) {
+                        if (data.result) {
+                            LoadDataTable();
+                            notify.alert(data.message, "SUCCESS", TITLE_STATUS_SUCCESS);
+                        } else {
+                            notify.alert(data.message, "ERROR", TITLE_STATUS_DANGER);
+                        }
+                    },
+                    complete: function() {
+                        $("#myModal").modal("hide");
+                        $('#btnassign').off("click");
+                        spinner.close();
+                    }
+                });
+            }
+            function checkTraineeLmsAssign(e) {
+                var form = $("#createform").serialize();
+                $.ajax({
+                    type: 'POST',
+                    url: "/Course/WarningAssignTranee",
+                    datatype: 'json',
+                    data: form,
+                    success: function(data) {
+                        if (data.result) {
+                            $('#lblmyModal').html(data.message).text();
+                            $("#btnassign").on("click", function() {
+                                SubmitLmsAssign();
+                            });
+                            $("#myModal").modal();
+                        } else {
+                            $('#lblmyModal').html(data.message).text();
+                            $("#btnassign").on("click", function() {
+                                SubmitLmsAssign();
+                            });
+                            $("#myModal").modal();
+                        }
+
+                    },
+                    complete: function () {
+                    }
+                });
+            }
+
+            function SubmitSentMail() {
+
+                var courseId = $("#courseId").val();
+                if(courseId == "")
+                {
+                    notify.alert("@Messege.NO_DATA", 'Warning', TITLE_STATUS_DANGER);
+                }
+                else{
+                    spinner.open();
+                    $.ajax({
+                        type: 'POST',
+                        url: "/Approve/SentAssignTrainee",
+                        datatype: 'json',
+                        data: { courseId: courseId },
+                        success: function (data) {
+                            if (data.result) {
+                                notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                            } else {
+                                notify.alert(data.message, 'Warning', TITLE_STATUS_DANGER);
+                            }
+                        },
+                        complete: function() {
+                            spinner.close();
+                        }
+                    });
+                }
+            }
+
+
+
+            function SubmitRequest(selector) {
+
+                $("#myModalRequest").modal("show");
+                $("#Modal_FooterRequest").empty();
+                $('#txtNote').val("");
+               
+                $("#lblModelMessage").text("");
+                $("#lblModelMessage").text("@Messege.WARNING_REQUEST");
+                $("#Modal_FooterRequest").append("<input type='button' class='btn btn-danger' value='@Resource.lblSubmit' onclick='acctionSendRequest(this)' /><button type='button' class='btn btn-primary' data-dismiss='modal'>Close</button>");
+            }
+
+            function acctionSendRequest() {
+                var courseId = $("#courseId").val();
+                var note = $('#txtNote').val();
+                var type = $('#approveType').val();
+                var remark = $('#str_Remark').val();
+                spinner.open();
+                $.ajax({
+                    type: 'POST',
+                    url: "/Course/SubmitRequest",
+                    datatype: 'json',
+                    data: { courseId: courseId, type: type, note: note, remarkassign: remark },
+                    success: function (data) {
+                        if (data.result) {
+                            notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                            $('.btnRequest').css('display', 'none');
+                        }
+                        else {
+                            notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                        }
+
+                    }, complete: function () {
+                        $("#myModalRequest").modal("hide");
+                        spinner.close();
+                    }
+                });
+            }
+
+            $.fn.pressEnter = function(fn) {
+
+                return this.each(function() {
+                    $(this).bind('enterPress', fn);
+                    $(this).keyup(function(e) {
+                        if (e.keyCode == 13) {
+                            $(this).trigger("enterPress");
+                        }
+                    });
+                });
+            };
+        $(".line_6").addClass("active");
+
+        //Preview Import
+        var html;
+        function Review() {
+            spinner.open();
+            var formdata = new FormData();
+            var fileInput = document.getElementById('postedFile');
+            for (i = 0; i < fileInput.files.length; i++) {
+                var sfilename = fileInput.files[i].name;
+                formdata.append(sfilename, fileInput.files[i]);
+            }
+            //$("#postedFile").val("");
+
+            $.ajax({
+            url: '/Course/CheckFile',
+            type: "POST",
+            contentType: false, // Not to set any content header
+            processData: false, // Not to process data
+            data: formdata,
+            async: false,
+                success: function (obj) {
+                if (obj.result) {
+                    var x = JSON.parse(obj.data);
+
+                    if ($("#FileImport").find("tbody").html() != "") {
+                        html.destroy();
+                         html =  $('#FileImport').DataTable({
+                        "search": false,
+                        "data": x,
+                        "columns": [
+                            { "data": "Eid" },
+                            { "data": "Name" },
+                            { "data": "Remark" },
+                            { "data": "Status" },
+                        ]
+                    });
+                    }
+                    else {
+                        html =  $('#FileImport').DataTable({
+                        "search": false,
+                        "data": x,
+                        "columns": [
+                            { "data": "Eid" },
+                            { "data": "Name" },
+                            { "data": "Remark" },
+                            { "data": "Status" },
+                        ]
+                    });
+                    }
+                    var tt = checkFail();
+                    if (tt) {
+                        $("#Import").css("display", "none")
+                    }
+                    else {
+                           $("#Import").css("display", "")
+                    }
+                    spinner.close();
+
+                }
+                else {
+                    notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                    spinner.close();
+            },
+                error: function (err) {
+                    spinner.close()
+            }
+            });
+            $("#divPreviewPopup").modal();
+
+        }
+        function clearVal() {
+            $("#postedFile").val("");
+        }
+        function checkFail() {
+            var check = false
+            $("#FileImport").find("p").each(function () {
+                if ($(this).hasClass("text-danger")) {
+                    check = true;
+                    return check;
+                }
+            })
+            return check
+        }
+    </script>
+    <script>
+        var List
+        $(document).on("change", ".TraineeRemark", function () {
+
+            $("input[name='idAssign[]']").each(function (i, v) {
+                var trainee = $(v).val();
+                var remark = $(v).parents('tr').last().addClass('active').find("#TraineeRemark").val();
+                if (remark != null && remark != "" && remark != 'undefined') {
+                    List += '{ "idTrainee":"' + trainee + '","remarkTrainee":"' + remark + '"},';
+                }
+
+            });
+            $("#RemarkTrainee").val(List);
+        })
+
+                                //    $(document).on('change', '.tytrongnguoixuly', function () {
+                                //    const box = $(this).closest('.box-cauhinh')
+                                //    const idnguoidung = box.find('.idnguoidung').val()
+                                //    if ($(this).val()) {
+                                //        arrTyTrong[idnguoidung] = $(this).val()
+                                //        return
+                                //    }
+                                //})
+
+    </script>
+}
+

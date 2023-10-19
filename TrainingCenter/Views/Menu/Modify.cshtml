@@ -1,0 +1,240 @@
+﻿@using TMS.Core.App_GlobalResources
+@using TMS.Core.ViewModels.ViewModel.RoleMenus
+@model GroupFunctionViewModel
+@{
+    ViewBag.Title = "Modify";
+}
+<style>
+    select.default {
+        height: 300px;
+    }
+</style>
+<h2>Modify</h2>
+@using (Html.BeginForm("Modify", "Menu", FormMethod.Post))
+{
+    @Html.HiddenFor(a => a.Id)
+        
+    <div class="row">
+        <div class="col-md-6 form-group">
+            @Html.LabelFor(a => a.Name, new {@class = "col-md-4"})
+            <div class="col-md-8">
+                @Html.TextBoxFor(a => a.Name, new {@class = "form-control"})
+                @Html.ValidationMessageFor(a => a.Name, null, new {@class = "text-danger"})
+            </div>
+        </div>
+        <div class="col-md-6 form-group">
+            @Html.LabelFor(a => a.DefaultUrl, new {@class = "col-md-4"})
+            <div class="col-md-8">
+                @Html.TextBoxFor(a => a.DefaultUrl, new {@class = "form-control"})
+                @Html.ValidationMessageFor(a => a.DefaultUrl, null, new {@class = "text-danger"})
+            </div>
+        </div>
+
+
+    </div>
+    <div class="row">
+        <div class="col-md-6 form-group">
+            @Html.LabelFor(a => a.IsActive, new { @class = "col-md-4" })
+            <div class="col-md-8">
+                @Html.CheckBoxFor(a => a.IsActive, new { @class = "form-control" })
+                @Html.ValidationMessageFor(a => a.IsActive, null, new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="list-panel">
+        <div class="col-md-12 form-group">
+            <div class="col-md-5">
+                @Html.LabelFor(a => a.ListFunctions)
+                <select name="Functions" class="form-control default" multiple="multiple" id="ListFunctions">
+                    @if (Model.CurrentFunctions != null)
+                    {
+                        foreach (var func in Model.ListFunctions)
+                        {
+                            if (!Model.CurrentFunctions.Contains(func.Key))
+                            {
+                                <option value="@func.Key">@func.Value</option>
+                            }
+                        }
+                    }
+                </select>
+                @Html.ValidationMessageFor(a => a.ListFunctions, null, new {@class = ""})
+            </div>
+            <div class="col-md-2 margin-top-30 text-center">
+                <button onclick=" assign() " type="button" class="btn btn-danger">>></button>
+                <div class="clearfix"></div>
+                <button onclick=" remove() " type="button" class="btn btn-default"><<</button>
+            </div>
+            <div class="col-md-5">
+                @Html.LabelFor(a => a.CurrentFunctions)
+                <select name="CurrentFunctions" class="form-control default" multiple="multiple" id="MenuFunctions">
+                    @foreach (var func in Model.ListFunctions)
+                    {
+                        if (Model.CurrentFunctions.Contains(func.Key))
+                        {
+                            <option value="@func.Key" @(Model.CurrentFunctions.Contains(func.Key) ? "selected" : "")>@func.Value</option>
+                        }
+                    }
+                </select>
+                @Html.ValidationMessageFor(a => a.CurrentFunctions, null, new {@class = ""})
+            </div>
+
+        </div>
+        <div class="col-md-12 form-group text-right">
+            <input type="submit" value="Save" id="btnSubmit" class="btn btn-primary"/>
+        </div>
+        <hr />
+        </div>
+}
+<div>
+    @using (Html.BeginForm("AjaxHandler", "TestServices", FormMethod.Post, new { id = "frmFilter" }))
+    {
+
+        <div class="col--md-12">
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" name="furl" id="furl" class="form-control frmFilter" placeholder="@Resource.lblCourseCode" />
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary pull-right" id="btFilter">
+                        <i class="fa fa-search"></i> @Resource.lblSearch
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="panel-body">
+                <table id="data-table" class="table table-striped table-bordered">
+                    <thead>
+                        <tr role="row">
+                            <th>@Resource.lblStt</th>
+                            <th>Name</th>
+                            <th>Url</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                @Html.HiddenFor(a => a.FunctionId, new { id = "FunctionId" })
+                <div class="col-md-6 form-group">
+                    @Html.LabelFor(a => a.FunctionName, new { @class = "col-md-4" })
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(a => a.FunctionName, new { @class = "form-control", id = "FunctionName" })
+                        @Html.ValidationMessageFor(a => a.Name, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6 form-group">
+                    @Html.LabelFor(a => a.FunctionUrlName, new { @class = "col-md-4" })
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(a => a.FunctionUrlName, new { @class = "form-control", id = "FunctionUrlName" })
+                        @Html.ValidationMessageFor(a => a.FunctionUrlName, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6 form-group">
+                    @Html.LabelFor(a => a.FunctionActionType, new { @class = "col-md-4" })
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(a => a.FunctionActionType, new { @class = "form-control", id = "FunctionActionType" })
+                        @Html.ValidationMessageFor(a => a.FunctionUrlName, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 form-group text-right">
+            <input type="button" value="Save" onclick="saveFunction()" class="btn btn-primary" />
+        </div>
+
+    }
+</div>
+
+
+@section Scripts
+{
+    <script>
+        var sTable;
+        $(document).ready(function() {
+            var customRow = [
+                { "targets": 0 }
+            ];
+            sTable = initDataTable("#data-table", "/TestServices/AjaxHandler", customRow);
+            $("#frmFilter").submit(function (e) {
+                sTable.draw();
+                e.preventDefault();
+            });
+        });
+
+        function modifyfunction(id) {
+            $.ajax({
+                type: 'POST',
+                url: "/TestServices/LoadFunction",
+                datatype: 'json',
+                data: { id: id },
+                success: function (data) {
+                    if (data.result) {
+                        $("#FunctionId").val(data.Id);
+                        $("#FunctionName").val(data.Name);
+                        $("#FunctionUrlName").val(data.UrlName); 
+                        $("#FunctionActionType").val(data.ActionType);
+                    } else {
+                        $("#FunctionId").val("");
+                        $("#FunctionName").val("");
+                        $("#FunctionUrlName").val("");
+                        $("#FunctionActionType").val("");
+                    }
+                   
+                }
+            });
+        }
+        function saveFunction() {
+            var form = $("#frmFilter").serialize();
+            $.ajax({
+                type: 'POST',
+                url: "/TestServices/Modify",
+                datatype: 'json',
+                data: form,
+                success: function (data) {
+                    if (data.result) {
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                        $("#FunctionName").val("");
+                        $("#FunctionUrlName").val("");
+                        $("#FunctionActionType").val("");
+                    }
+                    else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                }
+                , complete: function () {
+                    sTable.draw();
+                }
+            });
+        }
+        function assign() {
+            var $menuFunctions = $('#MenuFunctions');
+            var $ListFunctions = $('#ListFunctions');
+            var listFunctions = $ListFunctions.find('option:selected');
+            $menuFunctions.append(listFunctions.clone());
+            listFunctions.remove();
+        }
+
+        function remove() {
+            var $menuFunctions = $('#MenuFunctions');
+            var $ListFunctions = $('#ListFunctions');
+            var listFunctions = $menuFunctions.find('option:selected');
+            $ListFunctions.append(listFunctions.clone());
+            listFunctions.remove();
+        }
+
+        $(function() {
+            $('#btnSubmit').click(function() {
+                $('#MenuFunctions option').prop('selected', true);
+            });
+            $('#Icon').change(function() {
+                $('#preview-icon').attr('class', $(this).val());
+            });
+        })
+    </script>
+}

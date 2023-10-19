@@ -1,0 +1,154 @@
+﻿@using TMS.Core.App_GlobalResources
+@model TMS.Core.ViewModels.Mail.MailViewModels
+@{
+    ViewBag.Title = "Modify";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/CKEditor/ckeditor.js"></script>
+@section breadcrumb{
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-header"><i class="fas fa-database"></i> @Resource.lblMasterData - @Resource.lblMailTemplate @(!Model.Id.HasValue ? @Resource.lblCreate : @Resource.lblEdit)</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblMasterData</li>
+                <li class="active">@Resource.lblMailTemplate @(!Model.Id.HasValue ? @Resource.lblCreate : @Resource.lblModify)</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="panel list-panel" id="list-panel">
+    <div class="panel-heading list-panel-heading">
+        <h1 class="panel-title list-panel-title"><i class="fas fa-pencil-alt font-small-byhoa" aria-hidden="true"></i> @(!Model.Id.HasValue ? @Resource.lblCreate : @Resource.lblEdit) </h1>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm("Modify", "Mail", FormMethod.Post, new { @class = "form-horizontal bordered-row", id = "createform" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.Id)
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="col-md-6">@Resource.lblEmailTo @*<font color="red">(*)</font>*@</label>
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @if (Model.Id != null)
+                        {
+                            <div class="col-md-4">
+                                <label class="col-md-6">@Resource.lblCode</label>
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-4">
+                                <label class="col-md-6">@Resource.lblCode</label>
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control"} })
+                                    @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        }
+                        <div class="col-md-4">
+                            <label class="col-md-6">@Resource.lblSubjectMail</label>
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.Subject_Mail, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Subject_Mail, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="row" style="display:none">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                    <label class="col-md-6">Name <font color="red">(*)</font></label>
+                                    <div class="col-md-6">
+                                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            <div class="col-md-12" style="display:none">
+                                <label class="col-md-2">Code</label>
+                                <div class="col-md-4">
+                                    @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+                    <div class="row" style="margin-top:10px">
+                        <div class="col-md-12">
+                            <label class="col-md-6">Content-Template</label>
+                            <div class="col-md-12 panel-primary" style="">
+                                @Html.TextAreaFor(model => model.TemplateMail, new { @id = "TemplateMail", @class = "form-control", @rows = "500", @style = "border:solid 1px #df3333" })
+                                @Html.ValidationMessageFor(model => model.TemplateMail, "", new { @class = "text-danger" })
+                            </div>
+                            <script>
+                            CKEDITOR.replace("TemplateMail");
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-left">
+                        <label style="margin-top: 5px"> -- @Resource.KEYWORDS_MAIL --</label><br />
+                        @Html.Raw(Model.KeyTagMail)
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="action-form text-right">
+                @{ if (User.IsInRole("/Mail/Modify"))
+                    {
+                        <a href="javascript:void(0)" class="btn btn-primary  legitRipple" id="submit" onclick="submit()"><i class="fas fa-save" aria-hidden="true"></i> @Resource.lblSave</a>
+                    }
+                }
+                <a onclick="goBack()" class="btn btn-default  legitRipple"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> @Resource.lblBack</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/Content/Js/tree/jquery.treegrid.min.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        //$(document).ready(function () {
+        //    $("#TemplateMail").ckeditor();
+        //});
+        function submit() {
+            spinner.open();
+            var xxx = $("#TemplateMail").val(CKEDITOR.instances['TemplateMail'].getData());
+            var form = $("#createform").serialize();
+            $.ajax({
+                type: 'POST',
+                url: "/Mail/Modify",
+                datatype: 'json',
+                data: form,
+                success: function (data) {
+                    if (data.result) {
+                        window.location.href = '/Mail';
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                    }
+                    else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+                }
+                , complete: function () {
+
+                    spinner.close();
+                }
+            });
+        }
+    </script>
+}

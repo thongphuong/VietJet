@@ -1,0 +1,146 @@
+﻿@model TrainingCenter.Models.Class
+
+@{
+    ViewBag.ActiveMenu = "Training";
+    ViewBag.ActiveSubMenu = "Class";
+    ViewBag.Title = "Create";
+}
+
+@section pageTitle {
+    <h1><i class="fa fa-user"></i>
+        Class
+                        <small>Create Class</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+        <li><a href="/Class"><i class="fa fa-puzzle-piece"></i>Class management</a></li>
+        <li class="active">Create Class</li>
+    </ol>
+}
+@using (Html.BeginForm("Create", "Class", FormMethod.Post, new { @id = "CreateClassForm", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+   
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">Class Detail</h3>
+                </div>
+
+                <div class="box-body">
+                    @if (ViewBag.Message != null)
+                    {
+                        <div class="callout callout-danger">                            
+                            @ViewBag.Message
+                        </div>
+                    }
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group col-md-12">
+                                @Html.LabelFor(model => model.Course_Id, "Course")
+                                @Html.DropDownListFor(model => model.Course_Id, (SelectList)ViewBag.CourseList, "- - - Select - - -", new { @class = "form-control" })
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                @Html.LabelFor(model => model.Subject_Id, "Subject")
+                                @Html.DropDownListFor(model => model.Subject_Id, (SelectList)ViewBag.SubjectList, "- - - Select - - -", new { @class = "form-control" })
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                @Html.LabelFor(model => model.Subject_Id, "Start Date")
+                                @Html.TextBoxFor(model => model.dtm_Start_Date, new { @class = "form-control", placeholder = "Start Date", id = "dtpStartDate" })
+                            </div>
+                            <div class="form-group col-md-12">
+                                @Html.LabelFor(model => model.Subject_Id, "End Date")
+                                @Html.TextBoxFor(model => model.dtm_End_Date, new { @class = "form-control", placeholder = "End Date", id = "dtpEndDate" })
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                @Html.LabelFor(model => model.Teacher_Id, "Trainer")
+                                @Html.DropDownListFor(model => model.Teacher_Id, (SelectList)ViewBag.TeacherList, "- - - Select - - -", new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="box-footer ">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-default" id="btCancel">Cancel</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $("#btCancel").click(function () {
+        window.location.href = "/Class";
+    });
+
+    $(document).ready(function () {
+
+        $("#dtpStartDate").inputmask("dd MMM yyyy", { "placeholder": "dd MMM yyyy" });
+        $("#dtpStartDate").datepicker({
+            format: 'dd MMM yyyy'
+        });
+
+        $("#dtpEndDate").inputmask("dd MMM yyyy", { "placeholder": "dd MMM yyyy" });
+        $("#dtpEndDate").datepicker({
+            format: 'dd MMM yyyy'
+        });
+
+        $('#CreateClassForm')
+        // IMPORTANT: You must declare .on('init.field.bv')
+        // before calling .bootstrapValidator(options)
+            .on('init.field.bv', function (e, data) {
+                // data.bv      --> The BootstrapValidator instance
+                // data.field   --> The field name
+                // data.element --> The field element
+
+                var $parent = data.element.parents('.form-group'),
+                    $icon = $parent.find('.form-control-feedback[data-bv-icon-for="' + data.field + '"]'),
+                    options = data.bv.getOptions(),                      // Entire options
+                    validators = data.bv.getOptions(data.field).validators; // The field validators
+
+                if (validators.notEmpty && options.feedbackIcons && options.feedbackIcons.required) {
+                    // The field uses notEmpty validator
+                    // Add required icon
+                    $icon.addClass(options.feedbackIcons.required).show();
+                }
+            }).bootstrapValidator({
+                // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+                feedbackIcons: {
+                    required: 'glyphicon glyphicon-asterisk',
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                live: 'enabled',
+                message: 'This value is not valid',
+                submitButtons: 'button[type="submit"]',
+                fields: {
+                    "Course_Id": {
+                        message: 'The Course is not valid',
+                        validators: {
+                            notEmpty: {
+                                message: 'The Course is required and cannot be empty'
+                            }
+                        }
+                    },
+                    "Subject_Id": {
+                        message: 'The Subject is not valid',
+                        validators: {
+                            notEmpty: {
+                                message: 'The Subject is required and cannot be empty'
+                            }
+                        }
+                    }
+                }
+
+            });
+    });
+
+
+</script>

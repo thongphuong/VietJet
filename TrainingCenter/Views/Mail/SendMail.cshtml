@@ -1,0 +1,154 @@
+﻿@using TMS.Core.App_GlobalResources
+
+@{
+    ViewBag.Title = "SendMail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section breadcrumb{
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-cogs"></i> @Resource.lblSystemManagement - @Resource.lblMailExchange</h1>
+            <ol class="breadcrumb">
+                <li><a href="/">@Resource.lblHome</a></li>
+                <li>@Resource.lblSystemManagement</li>
+                <li class="active">@Resource.lblMailExchange</li>
+            </ol>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12" style="margin-top: 10px;">
+        <div class="panel list-panel" id="list-panel">
+            <div class="panel-heading list-panel-heading">
+                <h1 class="panel-title list-panel-title">
+                    <i class="fas fa-list-ul font-small-byhoa" aria-hidden="true"></i> @Resource.lblList
+                    @*<p class="btn-group pull-right">
+                        <a href="javascript:void(0)" class="btn btn-success btn-xs dropdown-toggle legitRipple" id="btnExport" onclick="document.getElementById('createform').submit();"><i class="fa fa-download" aria-hidden="true"></i> @Resource.lblEXPORT</a>
+                    </p>*@
+                </h1>
+            </div>
+            <div class="panel-body table-responsive">
+                <div id="panel-search" class="collapse panel">
+                    <form action="@Url.Action("AjaxHandler", "Mail")" method="POST" id="frmFilter">
+                        <div class="panel-body">
+                            <div class="col--md-12">
+                                <div class="col-md-3">
+                                    <label>@Resource.lblEmail</label>
+                                    <input type="text" name="MailName" id="MailName" class="form-control frmFilter" placeholder="@Resource.lblEmail" />
+                                </div>
+                                <div class="col-md-5">
+                                    <label>@Resource.lblSubjectMail</label>
+                                    <input type="text" name="MailSubject" id="MailSubject" class="form-control frmFilter" placeholder="@Resource.lblSubjectMail" />
+                                </div>
+                                <div class="col-md-3">
+                                    <label>@Resource.lblStatus</label>
+                                    <select name="status" id="status" class="form-control frmFilter" data-placeholder="-- @Resource.lblStatus --">
+                                        <option></option>
+                                        <option value="0">@Resource.lblWaiting</option>
+                                        <option value="1">@Resource.lblDone</option>
+                                        <option value="2">@Resource.lblError</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-1 pull-right">
+                                    <label>&nbsp;</label>
+                                    <button type="submit" class="btn btn-primary pull-right legitRipple" id="btFilter">
+                                        <i class="fa fa-search"></i> @Resource.lblSearch
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <br />
+                </div>
+                <p class="pull-right" data-toggle="collapse" data-target="#panel-search" style="cursor:pointer;" id="call-panel-search"><i class="fa fa-search"></i> @Messege.Search</p>
+                <div class="col-lg-12">
+                    <ul class="list-inline text-center">
+                        <li>
+                            <h5><i class="zmdi zmdi-circle" style="color: #8B9999;"></i>&nbsp; @ViewBag.chuagui - Waiting</h5>
+                        </li>
+                        <li>
+                            <h5><i class="zmdi zmdi-circle" style="color: #e51c23;"></i>&nbsp; @ViewBag.loi - @Resource.lblError</h5>
+                        </li>
+                        <li>
+                            <h5><i class="zmdi zmdi-circle" style="color: #4caf50;"></i>&nbsp; @ViewBag.dagui - Done </h5>
+                        </li>
+                    </ul>
+                </div>
+                <table class="table table-bordered table-striped" id="datatable">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%;">@Resource.lblStt</th>
+                            <th>Email To</th>
+                            @*<th>@Resource.lblCode</th>*@
+                            <th>Subject Mail</th>
+                            <th>Content</th>
+                            <th>@Resource.lblStatus</th>
+                            <th>@Resource.lblOptions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tbody role="alert" aria-live="polite" aria-relevant="all"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var sTable;
+        $(function () {
+            $('#frmFilter').submit(function (e) {
+                sTable.draw();
+                e.preventDefault();
+            });
+            var customRow = [
+                {
+
+                    "targets": 0,
+                    "className": "text-center",
+                },
+                {
+
+                    "targets": 4,
+                    "className": "text-center",
+                },
+                {
+
+                    "targets": 5,
+                    "className": "text-center",
+                }
+            ];
+            $(".line_50").addClass("active");
+            sTable = initDataTable('#datatable', '/Mail/AjaxHandlerSendMail', customRow);
+
+        });
+
+        function callupdate(id) {
+            notify.confirm('Do you want to resend ?', 'Confirm', TITLE_STATUS_WARNING, updatesubmit, id);
+        }
+        function updatesubmit(id) {
+            spinner.open();
+            $.ajax({
+                type: 'POST',
+                url: "/Mail/UpdateStatus",
+                datatype: 'json',
+                data: { id: id },
+                success: function (data) {
+                    if (data.result) {
+                        sTable.draw();
+                        notify.alert(data.message, 'Success', TITLE_STATUS_SUCCESS);
+                    }
+                    else {
+                        notify.alert(data.message, 'Error', TITLE_STATUS_DANGER);
+                    }
+
+                }, complete: function () {
+                    spinner.close();
+                }
+            });
+        }
+    </script>
+}
